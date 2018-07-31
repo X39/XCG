@@ -1,0 +1,278 @@
+#include "Parser.h"
+#include <stdio.h>
+
+unsigned int ident(const char * input, unsigned int offset) {
+	unsigned int i = 0;
+	for (; (input[offset + i] >= 'a' && input[offset + i] <= 'z') || (input[offset + i] >= 'A' && input[offset + i] <= 'Z'); i++);
+	return i;
+}
+void skip(const char * input, unsigned int * offset)
+{
+	while (input[*offset] != '\0')
+	{
+		switch (input[*offset])
+		{
+			case ' ':
+			case '\n':
+			case '\t':
+			case '\r':
+				++*offset;
+				break;
+			default:
+				return;
+		}
+	}
+}
+//EBNF = { STATEMENT };
+bool EBNF_start(const char * input, unsigned int * offset) { return STATEMENT_start(input, offset); }
+void EBNF(const char * input, unsigned int * offset, PASTNODE parent)
+{
+	PASTNODE thisnode;
+	if (!astnode_push_new(parent, &thisnode))
+	{
+		printf("Out Of Memory");
+		return;
+	}
+	thisnode->type = 1;
+	while (STATEMENT_start(input, offset))
+	{
+		STATEMENT(input, offset, thisnode);
+	}
+}
+//STATEMENT = '[a-zA-Z]+' '=' EXPRESSION ';' ;
+bool STATEMENT_start(const char * input, unsigned int * offset) {
+	return input[*offset] >= 'a' && input[*offset] <= 'z' || input[*offset] >= 'A' && input[*offset] <= 'Z';
+}
+void STATEMENT(const char * input, unsigned int * offset, PASTNODE parent)
+{
+	PASTNODE thisnode;
+	unsigned int len;
+	if (!astnode_push_new(parent, &thisnode))
+	{
+		printf("Out Of Memory");
+		return;
+	}
+	thisnode->type = 2;
+	if ((len = ident(input, *offset)) > 0)
+	{
+		thisnode->length = len;
+		thisnode->stroffref = input + *offset;
+		*offset += len;
+		skip(input, offset);
+	}
+	else
+	{
+		printf("Expected IDENT at %u", *offset);
+		return;
+	}
+	if (input[*offset] == '=')
+	{
+		++*offset;
+		skip(input, offset);
+	}
+	else
+	{
+		printf("Expected = at %u", *offset);
+		return;
+	}
+	if (EXPRESSION_start(input, offset))
+	{
+		EXPRESSION(input, offset, thisnode);
+		skip(input, offset);
+	}
+	else
+	{
+		printf("Expected EXPRESSION at %u", *offset);
+		return;
+	}
+	if (input[*offset] == ';')
+	{
+		++*offset;
+		skip(input, offset);
+	}
+	else
+	{
+		printf("Expected ; at %u", *offset);
+		return;
+	}
+}
+//EXPRESSION = { EXPL0 };
+bool EXPRESSION_start(const char * input, unsigned int * offset) { return EXPL0_start(input, offset); }
+void EXPRESSION(const char * input, unsigned int * offset, PASTNODE parent)
+{
+	//PASTNODE thisnode;
+	//if (!astnode_push_new(parent, &thisnode))
+	//{
+	//	printf("Out Of Memory");
+	//	return;
+	//}
+	//thisnode->type = 3;
+	while (EXPL0_start(input, offset))
+	{
+		EXPL0(input, offset, parent);
+	}
+}
+//EXPL0 = EXPL1 [ '|' EXPRESSION ];
+bool EXPL0_start(const char * input, unsigned int * offset) { return EXPL1_start(input, offset); }
+void EXPL0(const char * input, unsigned int * offset, PASTNODE parent)
+{
+	PASTNODE thisnode;
+	if (!astnode_push_new(parent, &thisnode))
+	{
+		printf("Out Of Memory");
+		return;
+	}
+	thisnode->type = 4;
+	if (EXPL1_start(input, offset))
+	{
+		EXPL1(input, offset, thisnode);
+		skip(input, offset);
+	}
+	else
+	{
+		printf("Expected EXPL1 at %u", *offset);
+		return;
+	}
+
+	if (input[*offset] == '|')
+	{
+		*offset += 2;
+		skip(input, offset);
+
+		if (EXPRESSION_start(input, offset))
+		{
+			EXPRESSION(input, offset, thisnode);
+			skip(input, offset);
+		}
+		else
+		{
+			printf("Expected EXPRESSION at %u", *offset);
+			return;
+		}
+	}
+}
+//EXPL1 = '(' EXPRESSION ')' | '[' EXPRESSION ']' | '{' EXPRESSION '}' | tokenident | stateident;
+bool EXPL1_start(const char * input, unsigned int * offset) {
+	return input[*offset] == '(' || input[*offset] == '[' || input[*offset] == '{' || input[*offset] == '\'' || input[*offset] >= 'a' && input[*offset] <= 'z' || input[*offset] >= 'A' && input[*offset] <= 'Z';
+}
+void EXPL1(const char * input, unsigned int * offset, PASTNODE parent)
+{
+	PASTNODE thisnode;
+	unsigned int len;
+	if (!astnode_push_new(parent, &thisnode))
+	{
+		printf("Out Of Memory");
+		return;
+	}
+	thisnode->type = 5;
+	if (input[*offset] == '(')
+	{
+		thisnode->type = 6;
+		*offset += 1;
+		skip(input, offset);
+
+		if (EXPRESSION_start(input, offset))
+		{
+			EXPRESSION(input, offset, thisnode);
+			skip(input, offset);
+		}
+		else
+		{
+			printf("Expected EXPRESSION at %u", *offset);
+			return;
+		}
+		if (input[*offset] == ')')
+		{
+			*offset += 1;
+			skip(input, offset);
+		}
+		else
+		{
+			printf("Expected ')' at %u", *offset);
+			return;
+		}
+	}
+	else if (input[*offset] == '{')
+	{
+		thisnode->type = 7;
+		*offset += 1;
+		skip(input, offset);
+
+		if (EXPRESSION_start(input, offset))
+		{
+			EXPRESSION(input, offset, thisnode);
+			skip(input, offset);
+		}
+		else
+		{
+			printf("Expected EXPRESSION at %u", *offset);
+			return;
+		}
+		if (input[*offset] == '}')
+		{
+			*offset += 1;
+			skip(input, offset);
+		}
+		else
+		{
+			printf("Expected '}' at %u", *offset);
+			return;
+		}
+	}
+	else if (input[*offset] == '[')
+	{
+		thisnode->type = 8;
+		*offset += 1;
+		skip(input, offset);
+
+		if (EXPRESSION_start(input, offset))
+		{
+			EXPRESSION(input, offset, thisnode);
+			skip(input, offset);
+		}
+		else
+		{
+			printf("Expected EXPRESSION at %u", *offset);
+			return;
+		}
+		if (input[*offset] == ']')
+		{
+			*offset += 1;
+			skip(input, offset);
+		}
+		else
+		{
+			printf("Expected ']' at %u", *offset);
+			return;
+		}
+	}
+	else if (input[*offset] == '\'')
+	{
+		thisnode->type = 9;
+		len = 1;
+		thisnode->stroffref = input + *offset;
+		++*offset;
+		while (input[*offset] != '\0' && input[*offset] != '\'')
+		{
+			len++;
+			++*offset;
+		}
+		len++;
+		++*offset;
+		thisnode->length = len;
+		skip(input, offset);
+	}
+	else if ((len = ident(input, *offset)) > 0)
+	{
+		thisnode->type = 10;
+		thisnode->length = len;
+		thisnode->stroffref = input + *offset;
+		*offset += len;
+		skip(input, offset);
+	}
+	else
+	{
+		printf("Expected '(' or IDENT at %u", *offset);
+		return;
+	}
+}

@@ -1,0 +1,68 @@
+@SKIP \ \r\n\t
+@CASESENSITIVE true
+@LINECOMMENTSTART \/\/
+
+tokenident => (a-z)(a-z0-9)+;
+stateident => (A-Z)(A-Z0-9)+;
+stmtsep = "=" > \=;
+anytext => (.)+;
+annotation = "@" > \@;
+skip => SKIP;
+casesensitive => CASESENSITIVE;
+linecommentstart => LINECOMMENTSTART;
+or = "|" > \|;
+curlyo = "{" > \{;
+curlyc = "}" > \};
+roundo = "(" > \(;
+roundc = ")" > \);
+squareo = "[" > \[;
+squarec = "]" > \];
+true => true;
+false => false;
+sc = ";" > \;;
+lt = "<" > \<;
+gt = ">" > \>;
+modmax => max;
+colon = ":" > \:;
+number => (0-9)+;
+alphalow => (a-z);
+alphaup => (A-Z);
+minus = "-" > \-;
+plus = "+" > \+;
+digit => (0-9);
+any => .;
+dot = "." > \.;
+bs = "\\" > \\;
+space => \ ;
+
+
+EBNF = { ANNOTATION } { TOKEN | STATEMENT };
+
+//Switches in the generator
+ANNOTATION = annotation ( ASKIP | ACASEINSENSITIVE | ALINECOMMENTSTART );
+ASKIP = skip anytext;
+ACASESENSITIVE = casesensitive ( true | false );
+ALINECOMMENTSTART = linecommentstart anytext;
+
+//Token that will be looked up.
+//Stuff inbetween the stmtsep and the gt is used for the tostring representation.
+//All tokens need to be LF(1).
+TOKEN = tokenident stmtsep [ anytext ] gt TC sc;
+TC = { TC0 };
+TCG = roundo TC1 roundc [ plus ];
+//range
+TC0 = TCG | TC1;
+TC1 = TC2 [ minus TC | { TC2 } ] | dot;
+TC2 = alphalow | alphaup | digit | bs any;
+
+STATEMENT = stateident stmtsep EXPRESSION;
+EXPRESSION = EXPL0 { EXPL0 };
+EXPL0 = EXPL1 { or EXPRESSION };
+EXPL1 = ( curlyo EXPRESSION curlyc ) | EXPL2;
+EXPL2 = ( squareo EXPRESSION squarec ) | EXPL3;
+EXPL3 = roundo EXPRESSION roundc | tokenident | stateident [ STMNTMOD ];
+
+
+STMNTMOD = lt { SMMAX<max:1> } gt;
+//Sets the max occurances for an statement inside given context.
+SMMAX = modmax colon number;
