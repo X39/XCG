@@ -4,7 +4,6 @@
 #include <string.h>
 #include "Generator.h"
 
-
 void treeprint(scan* s, token* t, int depth)
 {
 	unsigned int i;
@@ -83,7 +82,7 @@ void treeprint(scan* s, token* t, int depth)
 		treeprint(s, t->children[i], depth + 1);
 	}
 }
-void log(const char* m, size_t l, size_t c, size_t o, char gottype)
+void scan_log_method(const char* m, size_t l, size_t c, size_t o, char gottype)
 {
 	switch (gottype)
 	{
@@ -291,7 +290,6 @@ int main(int argc, char** argv)
 	token* t = token_gen(&s, T__INVALID);
 	PGENERATOR gen;
 	FILE* header, *code;
-	memset(&s, 0, sizeof(scan));
 	int i;
 	char* cptr;
 	char* inputfile = 0;
@@ -341,7 +339,8 @@ int main(int argc, char** argv)
 	}
 
 
-	s.log = log;
+	memset(&s, 0, sizeof(scan));
+	s.log = scan_log_method;
 	s.txt = load_file(inputfile);
 	EBNF(&s, t);
 	//treeprint(&s, t, 0);
@@ -374,6 +373,7 @@ int main(int argc, char** argv)
 	fflush(code);
 	fclose(header);
 	fclose(code);
+	free(s.txt);
 
 	token_del(t);
 }

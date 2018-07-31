@@ -27,27 +27,13 @@
     <ClCompile Include="Parser.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="astnode.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="astnode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Parser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Generator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Parser.c.old">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="Parser.h.old">
-      <Filter>Header Files</Filter>
-    </None>
   </ItemGroup>
 </Project>

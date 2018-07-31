@@ -134,21 +134,13 @@
     <Text Include="ebnf.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="astnode.c" />
     <ClCompile Include="Generator.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="Parser.c" />
-    <None Include="Parser.c.old">
-      <FileType>Document</FileType>
-    </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="astnode.h" />
     <ClInclude Include="Generator.h" />
     <ClInclude Include="Parser.h" />
-    <None Include="Parser.h.old">
-      <FileType>Document</FileType>
-    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
