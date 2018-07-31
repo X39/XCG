@@ -549,8 +549,6 @@ void generator_handle_statement_START(PGENERATOR gen, token* token)
 				fprintf(gen->code, ")");
 			}
 			break;
-		case S_STMNTMOD: break;
-		case S_SMMAX: break;
 	}
 }
 token* generator_handle_statement_EXEC_find_start(token* token)
@@ -862,10 +860,6 @@ void generator_handle_statement_EXEC(PGENERATOR gen, token* t, bool expl0_or_for
 					fprintf(gen->code, "%.*s}\n", gen->depth, TABS100);
 				}
 			}
-			break;
-		case S_STMNTMOD:
-			break;
-		case S_SMMAX:
 			break;
 	}
 }

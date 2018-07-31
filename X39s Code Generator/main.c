@@ -51,7 +51,6 @@ void treeprint(scan* s, token* t, int depth)
 		case T_ANY: printf("TOKEN: ANY"); break;
 		case T_DOT: printf("TOKEN: DOT"); break;
 		case T_BS: printf("TOKEN: BS"); break;
-		case T_SPACE: printf("TOKEN: SPACE"); break;
 		case S_EBNF: printf("TYPE: EBNF"); break;
 		case S_ANNOTATION: printf("TYPE: ANNOTATION"); break;
 		case S_ASKIP: printf("TYPE: ASKIP"); break;
@@ -70,8 +69,6 @@ void treeprint(scan* s, token* t, int depth)
 		case S_EXPL1: printf("TYPE: EXPL1"); break;
 		case S_EXPL2: printf("TYPE: EXPL2"); break;
 		case S_EXPL3: printf("TYPE: EXPL3"); break;
-		case S_STMNTMOD: printf("TYPE: STMNTMOD"); break;
-		case S_SMMAX: printf("TYPE: SMMAX"); break;
 		default:
 			printf("TYPE: INVALID");
 			break;
@@ -122,32 +119,12 @@ void log(const char* m, size_t l, size_t c, size_t o, char gottype)
 		case T_ANY: printf("L%uC%u, ANY:\t%s", l, c, m); break;
 		case T_DOT: printf("L%uC%u, DOT:\t%s", l, c, m); break;
 		case T_BS: printf("L%uC%u, BS:\t%s", l, c, m); break;
-		case T_SPACE: printf("L%uC%u, SPACE:\t%s", l, c, m); break;
 		default:
 			printf("L%uC%u, NA:\t%s", l, c, m);
 			break;
 	}
 }
 
-void token_minimize(token* root)
-{
-	token* tmp;
-	int i;
-	for (i = 0; i < root->top; i++)
-	{
-		while (root->children[i]->top == 1)
-		{
-			tmp = root->children[i];
-			root->children[i] = tmp->children[0];
-			tmp->top = 0;
-			token_del(tmp);
-		}
-	}
-	for (i = 0; i < root->top; i++)
-	{
-		token_minimize(root->children[i]);
-	}
-}
 
 int main(int cargs, char** vargs)
 {
