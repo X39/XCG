@@ -195,7 +195,7 @@ size_t token_scan(scan* s, char expected) {
 	}
 }
 bool EBNF_START(scan* s) { return (token_scan(s, T_ANNOTATION)); }
-bool EBNF(scan* s, token* parent) {
+void EBNF(scan* s, token* parent) {
 	token* thistoken = token_gen(s, S_EBNF);
 	token* t;
 	size_t len;
@@ -223,7 +223,7 @@ bool EBNF(scan* s, token* parent) {
 	token_push(parent, thistoken);
 }
 bool ANNOTATION_START(scan* s) { return token_scan(s, T_ANNOTATION); }
-bool ANNOTATION(scan* s, token* parent) {
+void ANNOTATION(scan* s, token* parent) {
 	token* thistoken = token_gen(s, S_ANNOTATION);
 	token* t;
 	size_t len;
@@ -249,7 +249,7 @@ bool ANNOTATION(scan* s, token* parent) {
 	token_push(parent, thistoken);
 }
 bool ASKIP_START(scan* s) { return token_scan(s, T_SKIP); }
-bool ASKIP(scan* s, token* parent) {
+void ASKIP(scan* s, token* parent) {
 	token* thistoken = token_gen(s, S_ASKIP);
 	token* t;
 	size_t len;
@@ -275,7 +275,7 @@ bool ASKIP(scan* s, token* parent) {
 	token_push(parent, thistoken);
 }
 bool ACASESENSITIVE_START(scan* s) { return token_scan(s, T_CASESENSITIVE); }
-bool ACASESENSITIVE(scan* s, token* parent) {
+void ACASESENSITIVE(scan* s, token* parent) {
 	token* thistoken = token_gen(s, S_ACASESENSITIVE);
 	token* t;
 	size_t len;
@@ -304,7 +304,7 @@ bool ACASESENSITIVE(scan* s, token* parent) {
 	token_push(parent, thistoken);
 }
 bool ALINECOMMENTSTART_START(scan* s) { return token_scan(s, T_LINECOMMENTSTART); }
-bool ALINECOMMENTSTART(scan* s, token* parent) {
+void ALINECOMMENTSTART(scan* s, token* parent) {
 	token* thistoken = token_gen(s, S_ALINECOMMENTSTART);
 	token* t;
 	size_t len;
@@ -330,7 +330,7 @@ bool ALINECOMMENTSTART(scan* s, token* parent) {
 	token_push(parent, thistoken);
 }
 bool TOKEN_START(scan* s) { return token_scan(s, T_TOKENIDENT); }
-bool TOKEN(scan* s, token* parent) {
+void TOKEN(scan* s, token* parent) {
 	token* thistoken = token_gen(s, S_TOKEN);
 	token* t;
 	size_t len;
@@ -392,7 +392,7 @@ bool TOKEN(scan* s, token* parent) {
 	token_push(parent, thistoken);
 }
 bool TC_START(scan* s) { return ((token_scan(s, T_ROUNDO)) || ((token_scan(s, T_ALPHALOW) || token_scan(s, T_ALPHAUP) || token_scan(s, T_DIGIT) || token_scan(s, T_BS)) || token_scan(s, T_DOT))); }
-bool TC(scan* s, token* parent) {
+void TC(scan* s, token* parent) {
 	token* thistoken = token_gen(s, S_TC);
 	token* t;
 	size_t len;
@@ -411,7 +411,7 @@ bool TC(scan* s, token* parent) {
 	token_push(parent, thistoken);
 }
 bool TCG_START(scan* s) { return token_scan(s, T_ROUNDO); }
-bool TCG(scan* s, token* parent) {
+void TCG(scan* s, token* parent) {
 	token* thistoken = token_gen(s, S_TCG);
 	token* t;
 	size_t len;
@@ -455,7 +455,7 @@ bool TCG(scan* s, token* parent) {
 	token_push(parent, thistoken);
 }
 bool TC0_START(scan* s) { return (token_scan(s, T_ROUNDO)) || ((token_scan(s, T_ALPHALOW) || token_scan(s, T_ALPHAUP) || token_scan(s, T_DIGIT) || token_scan(s, T_BS)) || token_scan(s, T_DOT)); }
-bool TC0(scan* s, token* parent) {
+void TC0(scan* s, token* parent) {
 	token* thistoken = token_gen(s, S_TC0);
 	token* t;
 	size_t len;
@@ -472,7 +472,7 @@ bool TC0(scan* s, token* parent) {
 	token_push(parent, thistoken);
 }
 bool TC1_START(scan* s) { return (token_scan(s, T_ALPHALOW) || token_scan(s, T_ALPHAUP) || token_scan(s, T_DIGIT) || token_scan(s, T_BS)) || token_scan(s, T_DOT); }
-bool TC1(scan* s, token* parent) {
+void TC1(scan* s, token* parent) {
 	token* thistoken = token_gen(s, S_TC1);
 	token* t;
 	size_t len;
@@ -512,7 +512,7 @@ bool TC1(scan* s, token* parent) {
 	token_push(parent, thistoken);
 }
 bool TC2_START(scan* s) { return token_scan(s, T_ALPHALOW) || token_scan(s, T_ALPHAUP) || token_scan(s, T_DIGIT) || token_scan(s, T_BS); }
-bool TC2(scan* s, token* parent) {
+void TC2(scan* s, token* parent) {
 	token* thistoken = token_gen(s, S_TC2);
 	token* t;
 	size_t len;
@@ -556,7 +556,7 @@ bool TC2(scan* s, token* parent) {
 	token_push(parent, thistoken);
 }
 bool STATEMENT_START(scan* s) { return token_scan(s, T_STATEIDENT); }
-bool STATEMENT(scan* s, token* parent) {
+void STATEMENT(scan* s, token* parent) {
 	token* thistoken = token_gen(s, S_STATEMENT);
 	token* t;
 	size_t len;
@@ -597,7 +597,7 @@ bool STATEMENT(scan* s, token* parent) {
 	token_push(parent, thistoken);
 }
 bool EXPRESSION_START(scan* s) { return (((token_scan(s, T_CURLYO) || (token_scan(s, T_SQUAREO) || (token_scan(s, T_ROUNDO) || token_scan(s, T_TOKENIDENT) || token_scan(s, T_STATEIDENT)))))); }
-bool EXPRESSION(scan* s, token* parent) {
+void EXPRESSION(scan* s, token* parent) {
 	token* thistoken = token_gen(s, S_EXPRESSION);
 	token* t;
 	size_t len;
@@ -617,7 +617,7 @@ bool EXPRESSION(scan* s, token* parent) {
 	token_push(parent, thistoken);
 }
 bool EXPL0_START(scan* s) { return ((token_scan(s, T_CURLYO) || (token_scan(s, T_SQUAREO) || (token_scan(s, T_ROUNDO) || token_scan(s, T_TOKENIDENT) || token_scan(s, T_STATEIDENT))))); }
-bool EXPL0(scan* s, token* parent) {
+void EXPL0(scan* s, token* parent) {
 	token* thistoken = token_gen(s, S_EXPL0);
 	token* t;
 	size_t len;
@@ -646,7 +646,7 @@ bool EXPL0(scan* s, token* parent) {
 	token_push(parent, thistoken);
 }
 bool EXPRESSION2_START(scan* s) { return (token_scan(s, T_CURLYO) || (token_scan(s, T_SQUAREO) || (token_scan(s, T_ROUNDO) || token_scan(s, T_TOKENIDENT) || token_scan(s, T_STATEIDENT)))); }
-bool EXPRESSION2(scan* s, token* parent) {
+void EXPRESSION2(scan* s, token* parent) {
 	token* thistoken = token_gen(s, S_EXPRESSION2);
 	token* t;
 	size_t len;
@@ -666,7 +666,7 @@ bool EXPRESSION2(scan* s, token* parent) {
 	token_push(parent, thistoken);
 }
 bool EXPL1_START(scan* s) { return token_scan(s, T_CURLYO) || (token_scan(s, T_SQUAREO) || (token_scan(s, T_ROUNDO) || token_scan(s, T_TOKENIDENT) || token_scan(s, T_STATEIDENT))); }
-bool EXPL1(scan* s, token* parent) {
+void EXPL1(scan* s, token* parent) {
 	token* thistoken = token_gen(s, S_EXPL1);
 	token* t;
 	size_t len;
@@ -703,7 +703,7 @@ bool EXPL1(scan* s, token* parent) {
 	token_push(parent, thistoken);
 }
 bool EXPL2_START(scan* s) { return token_scan(s, T_SQUAREO) || (token_scan(s, T_ROUNDO) || token_scan(s, T_TOKENIDENT) || token_scan(s, T_STATEIDENT)); }
-bool EXPL2(scan* s, token* parent) {
+void EXPL2(scan* s, token* parent) {
 	token* thistoken = token_gen(s, S_EXPL2);
 	token* t;
 	size_t len;
@@ -740,7 +740,7 @@ bool EXPL2(scan* s, token* parent) {
 	token_push(parent, thistoken);
 }
 bool EXPL3_START(scan* s) { return token_scan(s, T_ROUNDO) || token_scan(s, T_TOKENIDENT) || token_scan(s, T_STATEIDENT); }
-bool EXPL3(scan* s, token* parent) {
+void EXPL3(scan* s, token* parent) {
 	token* thistoken = token_gen(s, S_EXPL3);
 	token* t;
 	size_t len;

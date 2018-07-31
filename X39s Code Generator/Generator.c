@@ -867,7 +867,7 @@ void generator_handle_statement(PGENERATOR gen, token* token)
 {
 	fprintf(gen->code, "bool %.*s_START(scan* s) { return ", token->children[0]->length, gen->origtext + token->children[0]->offset);
 	generator_handle_statement_START(gen, token->children[2]);
-	fprintf(gen->code, "; }\nbool %.*s(scan* s, token* parent) {" "\n"
+	fprintf(gen->code, "; }\nvoid %.*s(scan* s, token* parent) {" "\n"
 		"\t" "token* thistoken = token_gen(s, S_%.*s);" "\n"
 		"\t" "token* t;" "\n"
 		"\t" "size_t len;" "\n",
@@ -975,7 +975,7 @@ void generate(PGENERATOR gen)
 			{
 				case S_STATEMENT:
 					fprintf(gen->header, "bool %.*s_START(scan*);\n", token->children[0]->length, gen->origtext + token->children[0]->offset);
-					fprintf(gen->header, "bool %.*s(scan*, token*);\n", token->children[0]->length, gen->origtext + token->children[0]->offset);
+					fprintf(gen->header, "void %.*s(scan*, token*);\n", token->children[0]->length, gen->origtext + token->children[0]->offset);
 					break;
 			}
 		}

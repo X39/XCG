@@ -263,7 +263,6 @@ char* load_file(const char* fpath)
 	FILE* fptr = fopen(fpath, "rb");
 	size_t size;
 	char* filebuff, *filebuff2;
-	int i;
 	unsigned int bomskip = 0;
 	if (fptr == 0)
 	{
@@ -373,7 +372,7 @@ int main(int argc, char** argv)
 	fflush(code);
 	fclose(header);
 	fclose(code);
-	free(s.txt);
+	free((char*)s.txt); //on purpose, load_file currently loads directly into s.txt
 
 	token_del(t);
 }

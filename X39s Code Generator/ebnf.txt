@@ -38,7 +38,7 @@ bs = "\\" > \\;
 EBNF = { ANNOTATION } { TOKEN | STATEMENT };
 
 //Switches in the generator
-ANNOTATION = annotation ( ASKIP | ACASEINSENSITIVE | ALINECOMMENTSTART );
+ANNOTATION = annotation ( ASKIP | ACASESENSITIVE | ALINECOMMENTSTART );
 ASKIP = skip anytext;
 ACASESENSITIVE = casesensitive ( true | false );
 ALINECOMMENTSTART = linecommentstart anytext;
