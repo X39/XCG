@@ -83,7 +83,6 @@ void treeprint(scan* s, token* t, int depth)
 		treeprint(s, t->children[i], depth + 1);
 	}
 }
-
 void log(const char* m, size_t l, size_t c, size_t o, char gottype)
 {
 	switch (gottype)
@@ -124,96 +123,250 @@ void log(const char* m, size_t l, size_t c, size_t o, char gottype)
 			break;
 	}
 }
+void print_help(void)
+{
+	printf(
+		"Warning! Arguments are never properly checked!\n"
+		"    Usage: xcg -i <path> -o <name>\n"
+		"        -i    Sets the input BNF file. Should be a valid path.\n"
+		"              Will be passed straigth into fopen(...)!\n"
+		"\n"
+		"        -o    Sets the file names for the generation output.\n"
+		"              Please note that theese are not allowed to\n"
+		"              be a path and have to be a valid filename.\n"
+		"              Moving output to a different directory then\n"
+		"              where the tool is located is not supported.\n"
+		"\n"
+		"    BNF Documentation:\n"
+		"        - Annotation:\n"
+		"            Annotations have to be at the very start of each file.\n"
+		"            They allow you to change some flags in the generator\n"
+		"            which modify the output.\n"
+		"            Available annotations are:\n"
+		"                - @SKIP\n"
+		"                    Expects the characters that should be skipped.\n"
+		"                    defaults to \" \\r\\n\\t\".\n"
+		"                - @LINECOMMENTSTART\n"
+		"                    Tells what a linecomment-start looks like.\n"
+		"                    defaults to \"\\\\\".\n"
+		"                - @CASESENSITIVE\n"
+		"                    Allows parsing of test-tokens to be either\n"
+		"                    case-sensitive or not.\n"
+		"                    Please note that this has no effect on\n"
+		"                    tokens that are non-text tokens.\n"
+		"                    --> `(a-z)` is no text-token\n"
+		"                    --> `abc` is a text-token\n"
+		"                    defaults to \"false\".\n"
+		"                    value has to be either\n"
+		"                    `true` or `false`.\n"
+		"        - Tokens:\n"
+		"            Tokens are character-combinations that can be\n"
+		"            used in statements.\n"
+		"            The tokens always have to be lowercase!\n"
+		"            A token consists of:\n"
+		"                - A name\n"
+		"                - An optional representation for errors\n"
+		"                - the actual token\n"
+		"            The syntax of a token somewhat resembles regex,\n"
+		"            but do not be fooled! It is no actual regex\n"
+		"            involved!\n"
+		"            Usage:\n"
+		"                name = \"representation\" > token\n"
+		"                name => token\n"
+		"            Allowed stuff for tokens:\n"
+		"                - alphanumerical characters\n"
+		"                - backspace escaped anything\n"
+		"            Special syntax constructs:\n"
+		"                `?-?` will check for a given range.\n"
+		"                `(?)` allows to group a token together.\n"
+		"                `(?)+` allows repeat a group.\n"
+		"                `.` placeholder for ANY character but '\\0'.\n"
+		"        - Statements:\n"
+		"            Statements are rules about how to parse something.\n"
+		"            They always have to be named fully uppercase.\n"
+		"            Usage (Expressions is the actual content):\n"
+		"                NAME = <EXPRESSIONS>;"
+		"            Syntax constructs:\n"
+		"                `(?)` Allows grouping\n"
+		"                `[?]` Allows to conditional execute\n"
+		"                `{?}` Will repeatedly parse whatever is inside\n"
+		"            Example:\n"
+		"                STATEMENT = token1 OTHERSTATEMENT { token2 };\n"
+		"            For more info, checkout the wikipedia page to BNF :)\n"
+	);
+}
 
+int get_bom_skip(const char* buff)
+{
+	if (buff[0] == (char)0xEF && buff[1] == (char)0xBB && buff[2] == (char)0xBF)
+	{
+		//UTF-8
+		return 3;
+	}
+	else if (buff[0] == (char)0xFE && buff[1] == (char)0xFF)
+	{
+		//UTF-16 (BE)
+		return 2;
+	}
+	else if (buff[0] == (char)0xFE && buff[1] == (char)0xFE)
+	{
+		//UTF-16 (LE)
+		return 2;
+	}
+	else if (buff[0] == (char)0x00 && buff[1] == (char)0x00 && buff[2] == (char)0xFF && buff[3] == (char)0xFF)
+	{
+		//UTF-32 (BE)
+		return 2;
+	}
+	else if (buff[0] == (char)0xFF && buff[1] == (char)0xFF && buff[2] == (char)0x00 && buff[3] == (char)0x00)
+	{
+		//UTF-32 (LE)
+		return 2;
+	}
+	else if (buff[0] == (char)0x2B && buff[1] == (char)0x2F && buff[2] == (char)0x76 &&
+		(buff[3] == (char)0x38 || buff[3] == (char)0x39 || buff[3] == (char)0x2B || buff[3] == (char)0x2F))
+	{
+		//UTF-7
+		return 4;
+	}
+	else if (buff[0] == (char)0xF7 && buff[1] == (char)0x64 && buff[2] == (char)0x4C)
+	{
+		//UTF-1
+		return 3;
+	}
+	else if (buff[0] == (char)0xDD && buff[1] == (char)0x73 && buff[2] == (char)0x66 && buff[3] == (char)0x73)
+	{
+		//UTF-EBCDIC
+		return 3;
+	}
+	else if (buff[0] == (char)0x0E && buff[1] == (char)0xFE && buff[2] == (char)0xFF)
+	{
+		//SCSU
+		return 3;
+	}
+	else if (buff[0] == (char)0xFB && buff[1] == (char)0xEE && buff[2] == (char)0x28)
+	{
+		//BOCU-1
+		if (buff[3] == (char)0xFF)
+			return 4;
+		return 3;
+	}
+	else if (buff[0] == (char)0x84 && buff[1] == (char)0x31 && buff[2] == (char)0x95 && buff[3] == (char)0x33)
+	{
+		//GB 18030
+		return 3;
+	}
+	return 0;
+}
 
-int main(int cargs, char** vargs)
+char* load_file(const char* fpath)
+{
+	FILE* fptr = fopen(fpath, "rb");
+	size_t size;
+	char* filebuff, *filebuff2;
+	int i;
+	unsigned int bomskip = 0;
+	if (fptr == 0)
+	{
+		printf("[ERR] Could not open file '%s'", fpath);
+		return 0;
+	}
+	fseek(fptr, 0, SEEK_END);
+	size = ftell(fptr);
+	fseek(fptr, 0, SEEK_SET);
+	filebuff = malloc(sizeof(char) * (size + 1));
+	memset(filebuff, 0, sizeof(char) * (size + 1));
+	fread(filebuff, sizeof(char), size, fptr);
+	fclose(fptr);
+	bomskip = get_bom_skip(filebuff);
+	filebuff2 = malloc(sizeof(char) * (size + 1 - bomskip));
+	strcpy(filebuff2, filebuff + bomskip);
+	free(filebuff);
+	return filebuff2;
+}
+
+int main(int argc, char** argv)
 {
 	scan s;
 	token* t = token_gen(&s, T__INVALID);
 	PGENERATOR gen;
 	FILE* header, *code;
 	memset(&s, 0, sizeof(scan));
+	int i;
+	char* cptr;
+	char* inputfile = 0;
+	char* outputname = 0;
+
+	if (argc <= 1)
+	{
+		print_help();
+		return 1;
+	}
+	for (i = 0; i < argc; i++)
+	{
+		cptr = argv[i];
+		if (cptr[0] == '-' && i + 1 < argc)
+		{
+			switch (cptr[1])
+			{
+				case 'i':
+					inputfile = argv[i + 1];
+					i++;
+					printf("Seting input file to '%s'\n", inputfile);
+					break;
+				case 'o':
+					outputname = argv[i + 1];
+					printf("Seting output files to '%s.c' and '%s.h'\n", outputname, outputname);
+					i++;
+					break;
+				case '?':
+					print_help();
+					break;
+				default:
+					printf("Invalid Usage! Use the `-?` option for more info.\n");
+					return 1;
+			}
+		}
+		else if(i != 0)
+		{
+			printf("Invalid Usage! Use the `-?` option for more info.\n");
+			return 1;
+		}
+	}
+	if (inputfile == 0 || outputname == 0)
+	{
+		printf("Invalid Usage! Use the `-?` option for more info.\n");
+		print_help();
+		return 1;
+	}
+
+
 	s.log = log;
-#if 1
-	s.txt = "@SKIP \\ \\r\\n\\t" "\n"
-		"@CASESENSITIVE true" "\n"
-		"@LINECOMMENTSTART \\/\\/" "\n"
-
-		"tokenident => (a-z)(a-z0-9)+;" "\n"
-		"stateident => (A-Z)(A-Z0-9)+;" "\n"
-		"stmtsep = \"=\" > \\=;" "\n"
-		"anytext => (.)+;" "\n"
-		"annotation = \"@\" > \\@;" "\n"
-		"skip => SKIP;" "\n"
-		"casesensitive => CASESENSITIVE;" "\n"
-		"linecommentstart => LINECOMMENTSTART;" "\n"
-		"or = \"|\" > \\|;" "\n"
-		"curlyo = \"{\" > \\{;" "\n"
-		"curlyc = \"}\" > \\};" "\n"
-		"roundo = \"(\" > \\(;" "\n"
-		"roundc = \")\" > \\);" "\n"
-		"squareo = \"[\" > \\[;" "\n"
-		"squarec = \"]\" > \\];" "\n"
-		"true => true;" "\n"
-		"false => false;" "\n"
-		"sc = \";\" > \\;;" "\n"
-		"lt = \"<\" > \\<;" "\n"
-		"gt = \">\" > \\>;" "\n"
-		"modmax => max;" "\n"
-		"colon = \":\" > \\:;" "\n"
-		"number => (0-9)+;" "\n"
-		"alphalow => (a-z);" "\n"
-		"alphaup => (A-Z);" "\n"
-		"minus = \"-\" > \\-;" "\n"
-		"plus = \"+\" > \\+;" "\n"
-		"digit => (0-9);" "\n"
-		"any => .;" "\n"
-		"dot = \".\" > \\.;" "\n"
-		"bs = \"\\\\\" > \\\\;" "\n"
-
-
-		"EBNF = { ANNOTATION } { TOKEN | STATEMENT };" "\n"
-
-		"//Switches in the generator" "\n"
-		"ANNOTATION = annotation ( ASKIP | ACASESENSITIVE | ALINECOMMENTSTART );" "\n"
-		"ASKIP = skip anytext;" "\n"
-		"ACASESENSITIVE = casesensitive ( true | false );" "\n"
-		"ALINECOMMENTSTART = linecommentstart anytext;" "\n"
-
-		"//Token that will be looked up." "\n"
-		"//Stuff inbetween the stmtsep and the gt is used for the tostring representation." "\n"
-		"//All tokens need to be LF(1)." "\n"
-		"TOKEN = tokenident stmtsep ( gt | anytext gt ) TC sc;" "\n"
-		"TC = { TC0 };" "\n"
-		"TCG = roundo TC1 { TC1 } roundc [ plus ];" "\n"
-		"//range" "\n"
-		"TC0 = TCG | TC1;" "\n"
-		"TC1 = TC2 [ minus TC2 | { TC2 } ] | dot;" "\n"
-		"TC2 = alphalow | alphaup | digit | bs any;" "\n"
-
-		"STATEMENT = stateident stmtsep EXPRESSION sc;" "\n"
-		"EXPRESSION = EXPL0 { EXPL0 };" "\n"
-		"EXPL0 = EXPRESSION2 { or EXPRESSION2 };" "\n"
-		"EXPRESSION2 = EXPL1 { EXPL1 };" "\n"
-		"EXPL1 = ( curlyo EXPRESSION curlyc ) | EXPL2;" "\n"
-		"EXPL2 = ( squareo EXPRESSION squarec ) | EXPL3;" "\n"
-		"EXPL3 = roundo EXPRESSION roundc | tokenident | stateident;" "\n";
-#else
-	//s.txt = "token => foobar; ROOT = NEST1 | NEST2 | NEST3 | NEST4; NEST1 = token; NEST2 = token; NEST3 = token; NEST4 = token;";
-	//s.txt = "token1 => foobar; token2 => foobar; token3 => foobar; token4 => foobar; token5 => foobar; token6 => foobar; bar => bar;"
-	//	"ROOT = NEST1 | ( NEST2 NEST2 ) | { NEST3 } | [ NEST4 ] | ( NEST5 NEST1 NEST3 | NEST6 | bar );"
-	//	"NEST1 = token1; NEST2 = token2; NEST3 = token3; NEST4 = token4; NEST5 = token5; NEST6 = token6;";
-	//s.txt = "token => foobar; ROOT = NEST1 NEST1 token token NEST1 token; NEST1 = token;";
-	s.txt = "token => foobar; ROOT = { NEST1 } { NEST2 }; NEST1 = token; NEST2 = token;";
-#endif
+	s.txt = load_file(inputfile);
 	EBNF(&s, t);
 	//treeprint(&s, t, 0);
 	//token_minimize(t);
-	treeprint(&s, t, 0);
-
-	header = fopen("./../CodeGenTest/output.h", "w");
-	code = fopen("./../CodeGenTest/output.c", "w");
-	gen = generator_create(code, header, "output", t, s.txt);
+	//treeprint(&s, t, 0);
+	cptr = alloca(sizeof(char) * ((i = strlen(outputname)) + 3));
+	strcpy(cptr, outputname);
+	cptr[i] = '.';
+	cptr[i + 1] = 'h';
+	cptr[i + 2] = '\0';
+	header = fopen(cptr, "w");
+	if (header == 0)
+	{
+		printf("Failed to open '%s' in write mode.\n", cptr);
+		return 1;
+	}
+	cptr[i + 1] = 'c';
+	code = fopen(cptr, "w");
+	if (code == 0)
+	{
+		printf("Failed to open '%s' in write mode.\n", cptr);
+		fclose(header);
+		return 1;
+	}
+	gen = generator_create(code, header, outputname, t, s.txt);
 
 	generate(gen);
 
@@ -223,5 +376,4 @@ int main(int cargs, char** vargs)
 	fclose(code);
 
 	token_del(t);
-	getchar();
 }
