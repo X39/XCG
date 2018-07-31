@@ -630,7 +630,7 @@ void STATEMENT(scan *s, token* parent)
 	thistoken->length = s->off - thistoken->offset;
 	token_push(parent, thistoken);
 }
-//EXPRESSION = { EXPL0 };
+//EXPRESSION = EXPL0 { EXPL0 };
 bool EXPRESSION_START(scan *s) { return EXPL0_START(s); }
 void EXPRESSION(scan *s, token* parent)
 {
@@ -644,20 +644,34 @@ void EXPRESSION(scan *s, token* parent)
 	thistoken->length = s->off - thistoken->offset;
 	token_push(parent, thistoken);
 }
-//EXPL0 = EXPL1 { or EXPRESSION };
+//EXPRESSION2 = EXPL1 { EXPL1 };
+bool EXPRESSION2_START(scan *s) { return EXPL1_START(s); }
+void EXPRESSION2(scan *s, token* parent)
+{
+	token* thistoken = token_gen(s, S_EXPRESSION2);
+	token* t;
+	size_t len;
+	while (EXPL1_START(s))
+	{
+		EXPL1(s, thistoken);
+	}
+	thistoken->length = s->off - thistoken->offset;
+	token_push(parent, thistoken);
+}
+//EXPL0 = EXPRESSION2 { or EXPRESSION2 };
 bool EXPL0_START(scan *s) { return EXPL1_START(s); }
 void EXPL0(scan *s, token* parent)
 {
 	token* thistoken = token_gen(s, S_EXPL0);
 	token* t;
 	size_t len;
-	if (EXPL1_START(s))
+	if (EXPRESSION2_START(s))
 	{
-		EXPL1(s, thistoken);
+		EXPRESSION2(s, thistoken);
 	}
 	else
 	{
-		s->log("Expected '" S_EXPL1_STR "'", s->line, s->col, s->off, token_next_type(s));
+		s->log("Expected '" S_EXPRESSION_STR "'", s->line, s->col, s->off, token_next_type(s));
 	}
 	while ((len = token_scan(s, T_OR)) > 0)
 	{
@@ -666,9 +680,9 @@ void EXPL0(scan *s, token* parent)
 		token_skip(s, len);
 		token_push(thistoken, t);
 
-		if (EXPRESSION_START(s))
+		if (EXPRESSION2_START(s))
 		{
-			EXPRESSION(s, thistoken);
+			EXPRESSION2(s, thistoken);
 		}
 		else
 		{
@@ -768,7 +782,7 @@ void EXPL2(scan *s, token* parent)
 	thistoken->length = s->off - thistoken->offset;
 	token_push(parent, thistoken);
 }
-//EXPL3 = roundo EXPRESSION roundc | tokenident | stateident [ STMNTMOD ];
+//EXPL3 = roundo EXPRESSION roundc | tokenident | stateident;
 bool EXPL3_START(scan *s) { return token_scan(s, T_ROUNDO) || token_scan(s, T_TOKENIDENT) || token_scan(s, T_STATEIDENT); }
 void EXPL3(scan *s, token* parent)
 {
@@ -815,10 +829,10 @@ void EXPL3(scan *s, token* parent)
 		t->length = len;
 		token_skip(s, len);
 		token_push(thistoken, t);
-		if (STMNTMOD_START(s))
-		{
-			STMNTMOD(s, thistoken);
-		}
+		//if (STMNTMOD_START(s))
+		//{
+		//	STMNTMOD(s, thistoken);
+		//}
 	}
 	else
 	{
@@ -829,6 +843,7 @@ void EXPL3(scan *s, token* parent)
 }
 
 
+/*
 //STMNTMOD = lt { SMMAX<max:1> } gt;
 bool STMNTMOD_START(scan *s) { return token_scan(s, T_LT); }
 void STMNTMOD(scan *s, token* parent)
@@ -917,3 +932,4 @@ void SMMAX(scan *s, token* parent)
 	thistoken->length = s->off - thistoken->offset;
 	token_push(parent, thistoken);
 }
+*/

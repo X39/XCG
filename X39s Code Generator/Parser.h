@@ -59,6 +59,7 @@
 #define S_STMNTMOD 49
 #define S_SMMAX 50
 #define S_TC2 51
+#define S_EXPRESSION2 52
 
 #define T_TOKENIDENT_STR "tokenident"
 #define T_STATEIDENT_STR "stateident"
@@ -178,7 +179,7 @@ bool EXPL2_START(scan *s);
 void EXPL2(scan *s, token* parent);
 bool EXPL3_START(scan *s);
 void EXPL3(scan *s, token* parent);
-bool STMNTMOD_START(scan *s);
-void STMNTMOD(scan *s, token* parent); 
-bool SMMAX_START(scan *s);
-bool SMMAX(scan *s, token* parent);
+//bool STMNTMOD_START(scan *s);
+//void STMNTMOD(scan *s, token* parent); 
+//bool SMMAX_START(scan *s);
+//bool SMMAX(scan *s, token* parent);

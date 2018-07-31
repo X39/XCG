@@ -1,8 +1,7 @@
-#include "Parser.h"
 #include <stdio.h>
 #include <malloc.h>
 #include <string.h>
-#include "Generator.h"
+#include "output.h"
 
 
 void treeprint(scan* s, token* t, int depth)
@@ -51,7 +50,6 @@ void treeprint(scan* s, token* t, int depth)
 		case T_ANY: printf("TOKEN: ANY"); break;
 		case T_DOT: printf("TOKEN: DOT"); break;
 		case T_BS: printf("TOKEN: BS"); break;
-		case T_SPACE: printf("TOKEN: SPACE"); break;
 		case S_EBNF: printf("TYPE: EBNF"); break;
 		case S_ANNOTATION: printf("TYPE: ANNOTATION"); break;
 		case S_ASKIP: printf("TYPE: ASKIP"); break;
@@ -70,8 +68,6 @@ void treeprint(scan* s, token* t, int depth)
 		case S_EXPL1: printf("TYPE: EXPL1"); break;
 		case S_EXPL2: printf("TYPE: EXPL2"); break;
 		case S_EXPL3: printf("TYPE: EXPL3"); break;
-		case S_STMNTMOD: printf("TYPE: STMNTMOD"); break;
-		case S_SMMAX: printf("TYPE: SMMAX"); break;
 		default:
 			printf("TYPE: INVALID");
 			break;
@@ -122,42 +118,18 @@ void log(const char* m, size_t l, size_t c, size_t o, char gottype)
 		case T_ANY: printf("L%uC%u, ANY:\t%s", l, c, m); break;
 		case T_DOT: printf("L%uC%u, DOT:\t%s", l, c, m); break;
 		case T_BS: printf("L%uC%u, BS:\t%s", l, c, m); break;
-		case T_SPACE: printf("L%uC%u, SPACE:\t%s", l, c, m); break;
 		default:
 			printf("L%uC%u, NA:\t%s", l, c, m);
 			break;
 	}
+	printf("\n");
 }
-
-void token_minimize(token* root)
-{
-	token* tmp;
-	int i;
-	for (i = 0; i < root->top; i++)
-	{
-		while (root->children[i]->top == 1)
-		{
-			tmp = root->children[i];
-			root->children[i] = tmp->children[0];
-			tmp->top = 0;
-			token_del(tmp);
-		}
-	}
-	for (i = 0; i < root->top; i++)
-	{
-		token_minimize(root->children[i]);
-	}
-}
-
 int main(int cargs, char** vargs)
 {
 	scan s;
 	token* t = token_gen(&s, T__INVALID);
-	PGENERATOR gen;
-	FILE* header, *code;
 	memset(&s, 0, sizeof(scan));
 	s.log = log;
-#if 1
 	s.txt = "@SKIP \\ \\r\\n\\t" "\n"
 		"@CASESENSITIVE true" "\n"
 		"@LINECOMMENTSTART \\/\\/" "\n"
@@ -221,30 +193,10 @@ int main(int cargs, char** vargs)
 		"EXPL1 = ( curlyo EXPRESSION curlyc ) | EXPL2;" "\n"
 		"EXPL2 = ( squareo EXPRESSION squarec ) | EXPL3;" "\n"
 		"EXPL3 = roundo EXPRESSION roundc | tokenident | stateident;" "\n";
-#else
-	//s.txt = "token => foobar; ROOT = NEST1 | NEST2 | NEST3 | NEST4; NEST1 = token; NEST2 = token; NEST3 = token; NEST4 = token;";
-	//s.txt = "token1 => foobar; token2 => foobar; token3 => foobar; token4 => foobar; token5 => foobar; token6 => foobar; bar => bar;"
-	//	"ROOT = NEST1 | ( NEST2 NEST2 ) | { NEST3 } | [ NEST4 ] | ( NEST5 NEST1 NEST3 | NEST6 | bar );"
-	//	"NEST1 = token1; NEST2 = token2; NEST3 = token3; NEST4 = token4; NEST5 = token5; NEST6 = token6;";
-	//s.txt = "token => foobar; ROOT = NEST1 NEST1 token token NEST1 token; NEST1 = token;";
-	s.txt = "token => foobar; ROOT = { NEST1 } { NEST2 }; NEST1 = token; NEST2 = token;";
-#endif
 	EBNF(&s, t);
 	//treeprint(&s, t, 0);
 	//token_minimize(t);
 	treeprint(&s, t, 0);
-
-	header = fopen("./../CodeGenTest/output.h", "w");
-	code = fopen("./../CodeGenTest/output.c", "w");
-	gen = generator_create(code, header, "output", t, s.txt);
-
-	generate(gen);
-
-	fflush(header);
-	fflush(code);
-	fclose(header);
-	fclose(code);
-
 	token_del(t);
 	getchar();
 }

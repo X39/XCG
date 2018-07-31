@@ -33,7 +33,6 @@ digit => (0-9);
 any => .;
 dot = "." > \.;
 bs = "\\" > \\;
-space => \ ;
 
 
 EBNF = { ANNOTATION } { TOKEN | STATEMENT };
@@ -47,22 +46,18 @@ ALINECOMMENTSTART = linecommentstart anytext;
 //Token that will be looked up.
 //Stuff inbetween the stmtsep and the gt is used for the tostring representation.
 //All tokens need to be LF(1).
-TOKEN = tokenident stmtsep [ anytext ] gt TC sc;
+TOKEN = tokenident stmtsep (gt | anytext gt ) TC sc;
 TC = { TC0 };
-TCG = roundo TC1 roundc [ plus ];
+TCG = roundo TC1 { TC1 } roundc [ plus ];
 //range
 TC0 = TCG | TC1;
-TC1 = TC2 [ minus TC | { TC2 } ] | dot;
+TC1 = TC2 [ minus TC2 | { TC2 } ] | dot;
 TC2 = alphalow | alphaup | digit | bs any;
 
-STATEMENT = stateident stmtsep EXPRESSION;
+STATEMENT = stateident stmtsep EXPRESSION sc;
 EXPRESSION = EXPL0 { EXPL0 };
-EXPL0 = EXPL1 { or EXPRESSION };
+EXPL0 = EXPRESSION2 { or EXPRESSION2 };
+EXPRESSION2 = EXPL1 { EXPL1 };
 EXPL1 = ( curlyo EXPRESSION curlyc ) | EXPL2;
 EXPL2 = ( squareo EXPRESSION squarec ) | EXPL3;
-EXPL3 = roundo EXPRESSION roundc | tokenident | stateident [ STMNTMOD ];
-
-
-STMNTMOD = lt { SMMAX<max:1> } gt;
-//Sets the max occurances for an statement inside given context.
-SMMAX = modmax colon number;
+EXPL3 = roundo EXPRESSION roundc | tokenident | stateident;

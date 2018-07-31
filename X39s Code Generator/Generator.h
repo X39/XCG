@@ -1,6 +1,6 @@
 #pragma once
-#include <stdio.h>
 #include "Parser.h"
+#include <stdio.h>
 #include <stdbool.h>
 
 typedef struct generator_token {
@@ -19,8 +19,24 @@ typedef struct generator
 	const char* origtext;
 	bool casesensitive;
 	const char* fname;
+	bool helper_is_first_after_EXP_start;
 } generator;
 typedef generator* PGENERATOR;
+
+typedef struct gen_stmnt_helper {
+	struct gen_stmnt_helper** helpers;
+	size_t helpers_top;
+	size_t helpers_size;
+	token** tokens;
+	size_t tokens_top;
+	size_t tokens_size;
+	token* thistoken;
+} gen_stmnt_helper;
+typedef gen_stmnt_helper* pgen_stmnt_helper;
+pgen_stmnt_helper gen_stmnt_helper_create(void);
+void gen_stmnt_helper_push_token(pgen_stmnt_helper, token*);
+void gen_stmnt_helper_push_helper(pgen_stmnt_helper, pgen_stmnt_helper);
+void gen_stmnt_helper_destroy(pgen_stmnt_helper);
 
 bool str_partial_equals(const char*, const char*, size_t);
 PGENERATOR generator_create(FILE*, FILE*, const char*, token*, const char*);
