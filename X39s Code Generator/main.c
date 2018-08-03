@@ -3,6 +3,10 @@
 #include <malloc.h>
 #include <string.h>
 #include "Generator.h"
+#if _WIN32 & _DEBUG
+#include <stdlib.h>
+#include <crtdbg.h>
+#endif
 
 void treeprint(scan* s, token* t, int depth)
 {
@@ -135,6 +139,10 @@ void print_help(void)
 		"              be a path and have to be a valid filename.\n"
 		"              Moving output to a different directory then\n"
 		"              where the tool is located is not supported.\n"
+		"\n"
+		"        -t    Prints the whole BNF parsing tree after generating.\n"
+		"\n"
+		"        -T    Same as `-t` but minimizes the tree first.\n"
 		"\n"
 		"    BNF Documentation:\n"
 		"        - Annotation:\n"
@@ -293,6 +301,12 @@ int main(int argc, char** argv)
 	char* cptr;
 	char* inputfile = 0;
 	char* outputname = 0;
+	bool printtree = false, minimize = false;
+#if _WIN32 & _DEBUG
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF | _CRTDBG_CHECK_ALWAYS_DF);
+	//_CrtSetBreakAlloc(1718);
+	_ASSERTE(_CrtCheckMemory());
+#endif
 
 	if (argc <= 1)
 	{
@@ -315,6 +329,13 @@ int main(int argc, char** argv)
 					outputname = argv[i + 1];
 					printf("Seting output files to '%s.c' and '%s.h'\n", outputname, outputname);
 					i++;
+					break;
+				case 'T':
+					minimize = true;
+					printtree = true;
+					break;
+				case 't':
+					printtree = true;
 					break;
 				case '?':
 					print_help();
@@ -344,7 +365,6 @@ int main(int argc, char** argv)
 	EBNF(&s, t);
 	//treeprint(&s, t, 0);
 	//token_minimize(t);
-	//treeprint(&s, t, 0);
 	cptr = alloca(sizeof(char) * ((i = strlen(outputname)) + 3));
 	strcpy(cptr, outputname);
 	cptr[i] = '.';
@@ -368,11 +388,26 @@ int main(int argc, char** argv)
 
 	generate(gen);
 
+	generator_destroy(gen);
 	fflush(header);
 	fflush(code);
 	fclose(header);
 	fclose(code);
 	free((char*)s.txt); //on purpose, load_file currently loads directly into s.txt
 
+	if (minimize)
+	{
+		token_minimize(t);
+	}
+	if (printtree)
+	{
+		treeprint(&s, t, 0);
+	}
+
 	token_del(t);
+#if _WIN32 & _DEBUG
+	_CrtDumpMemoryLeaks();
+	_ASSERTE(_CrtCheckMemory());
+#endif
+	return 0;
 }
