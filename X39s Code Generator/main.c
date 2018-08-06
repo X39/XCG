@@ -326,16 +326,26 @@ int main(int argc, char** argv)
 	for (i = 0; i < argc; i++)
 	{
 		cptr = argv[i];
-		if (cptr[0] == '-' && i + 1 < argc)
+		if (cptr[0] == '-')
 		{
 			switch (cptr[1])
 			{
 				case 'i':
+					if (i + 1 >= argc)
+					{
+						printf("Invalid Usage! Use the `-?` option for more info.\n");
+						return -1;
+					}
 					inputfile = argv[i + 1];
 					i++;
 					printf("Seting input file to '%s'\n", inputfile);
 					break;
 				case 'o':
+					if (i + 1 >= argc)
+					{
+						printf("Invalid Usage! Use the `-?` option for more info.\n");
+						return -1;
+					}
 					outputname = argv[i + 1];
 					printf("Seting output files to '%s.c' and '%s.h'\n", outputname, outputname);
 					i++;
