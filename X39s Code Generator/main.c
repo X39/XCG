@@ -8,6 +8,8 @@
 #include <crtdbg.h>
 #endif
 
+#define VERSION "1.1"
+
 void treeprint(scan* s, token* t, int depth)
 {
 	unsigned int i;
@@ -142,6 +144,9 @@ void print_help(void)
 		"        -t    Prints the whole BNF parsing tree after generating.\n"
 		"\n"
 		"        -T    Same as `-t` but minimizes the tree first.\n"
+		"\n"
+		"        -v    Prints current version informations and terminates\n"
+		"              with exit code 0.\n"
 		"\n"
 		"    BNF Documentation:\n"
 		"        - Annotation:\n"
@@ -345,6 +350,9 @@ int main(int argc, char** argv)
 				case '?':
 					print_help();
 					break;
+				case 'v':
+					printf("X39s Code Generator (XCG) v" VERSION "\n");
+					return 0;
 				default:
 					printf("Invalid Usage! Use the `-?` option for more info.\n");
 					return 1;
