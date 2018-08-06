@@ -2,10 +2,12 @@
 ## What is this?
 X39s Code Generator (or short XCG) is a tool i created mostly for myself to make parser generation more simple.
 It allows you to generate a CST without any additional steps required but providing the input file.
+## Is there any example input file available?
+Yes, the whole parser of this project is generated with the tool itself. The input file is located [here](https://github.com/X39/XCG/blob/master/X39s%20Code%20Generator/ebnf.txt)
 
 ## How to use this?
 From the `xcg -?` output:
-```
+
     Usage: xcg -i <path> -o <name>
         -i    Sets the input BNF file. Should be a valid path.
               Will be passed straigth into fopen(...)!
@@ -83,4 +85,4 @@ From the `xcg -?` output:
                 `{?}` Will repeatedly parse whatever is inside
             Example:
                 STATEMENT = token1 OTHERSTATEMENT { token2 };
-            For more info, checkout the wikipedia page to BNF :)```
+            For more info, checkout the wikipedia page to BNF :)
