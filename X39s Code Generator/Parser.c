@@ -12,9 +12,11 @@ token* token_gen(scan *s, char type) {
 	ptr->children = malloc(sizeof(token*) * ptr->size);
 	ptr->top = 0;
 	ptr->type = type;
-	ptr->line = s->line;
-	ptr->column = s->col;
-	ptr->offset = s->off;
+	if (s != 0) {
+		ptr->line = s->line;
+		ptr->column = s->col;
+		ptr->offset = s->off;
+	}
 	return ptr;
 }
 void token_del(token* ptr) {
@@ -107,14 +109,6 @@ size_t token_scan(scan* s, char expected) {
 			return i;
 		}
 		case T_STMTSEP: return s->txt[s->off] == '=' ? 1 : 0;
-		case T_ANYTEXT:
-		{
-			if (!((s->txt[i + s->off] != ' ' && s->txt[i + s->off] != '\r' && s->txt[i + s->off] != '\n' && s->txt[i + s->off] != '\t') ? 1 : 0)) return 0;
-			if (s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; }
-			i++;
-			for (; (s->txt[i + s->off] != ' ' && s->txt[i + s->off] != '\r' && s->txt[i + s->off] != '\n' && s->txt[i + s->off] != '\t') ? 1 : 0; i++) { if (s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; } };
-			return i;
-		}
 		case T_ANNOTATION: return s->txt[s->off] == '@' ? 1 : 0;
 		case T_SKIP:
 		{
@@ -151,12 +145,7 @@ size_t token_scan(scan* s, char expected) {
 		case T_SC: return s->txt[s->off] == ';' ? 1 : 0;
 		case T_LT: return s->txt[s->off] == '<' ? 1 : 0;
 		case T_GT: return s->txt[s->off] == '>' ? 1 : 0;
-		case T_MODMAX:
-		{
-			i += str_equals(s->txt + s->off, "max") ? 3 : 0;
-			return i;
-		}
-		case T_COLON: return s->txt[s->off] == ':' ? 1 : 0;
+		case T_QUESTIONMARK: return s->txt[s->off] == '?' ? 1 : 0;
 		case T_NUMBER:
 		{
 			if (!((s->txt[i + s->off] >= '0' && s->txt[i + s->off] <= '9'))) return 0;
@@ -185,13 +174,26 @@ size_t token_scan(scan* s, char expected) {
 			i++;
 			return i;
 		}
+		case T_DOT: return s->txt[s->off] == '.' ? 1 : 0;
+		case T_BS: return s->txt[s->off] == '\\' ? 1 : 0;
+		case T_NOTOKEN:
+		{
+			i += str_equals(s->txt + s->off, "notoken") ? 7 : 0;
+			return i;
+		}
+		case T_ANYTEXT:
+		{
+			if (!((s->txt[i + s->off] != ' ' && s->txt[i + s->off] != '\r' && s->txt[i + s->off] != '\n' && s->txt[i + s->off] != '\t') ? 1 : 0)) return 0;
+			if (s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; }
+			i++;
+			for (; (s->txt[i + s->off] != ' ' && s->txt[i + s->off] != '\r' && s->txt[i + s->off] != '\n' && s->txt[i + s->off] != '\t') ? 1 : 0; i++) { if (s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; } };
+			return i;
+		}
 		case T_ANY:
 		{
 			i += (s->txt[i + s->off] != ' ' && s->txt[i + s->off] != '\r' && s->txt[i + s->off] != '\n' && s->txt[i + s->off] != '\t') ? 1 : 0;
 			return i;
 		}
-		case T_DOT: return s->txt[s->off] == '.' ? 1 : 0;
-		case T_BS: return s->txt[s->off] == '\\' ? 1 : 0;
 	}
 }
 bool EBNF_START(scan* s) { return (token_scan(s, T_ANNOTATION)); }
@@ -206,6 +208,8 @@ void EBNF(scan* s, token* parent) {
 			}
 			else { break; }
 		}
+	}
+	if (TOKEN_START(s) || STATEMENT_START(s)) {
 		while (true) {
 			if (TOKEN_START(s)) {
 				TOKEN(s, thistoken);
@@ -241,6 +245,9 @@ void ANNOTATION(scan* s, token* parent) {
 		else if (ALINECOMMENTSTART_START(s)) {
 			ALINECOMMENTSTART(s, thistoken);
 		}
+		else {
+			s->log("Expected '" S_ASKIP_STR "' or '" S_ACASESENSITIVE_STR "' or '" S_ALINECOMMENTSTART_STR "'", s->line, s->col, s->off, token_next_type(s));
+		}
 	}
 	else {
 		s->log("Expected '" T_ANNOTATION_STR "'", s->line, s->col, s->off, token_next_type(s));
@@ -263,9 +270,6 @@ void ASKIP(scan* s, token* parent) {
 			t->length = len;
 			token_skip(s, len);
 			token_push(thistoken, t);
-		}
-		else {
-			s->log("Expected '" T_ANYTEXT_STR "'", s->line, s->col, s->off, token_next_type(s));
 		}
 	}
 	else {
@@ -296,6 +300,9 @@ void ACASESENSITIVE(scan* s, token* parent) {
 			token_skip(s, len);
 			token_push(thistoken, t);
 		}
+		else {
+			s->log("Expected '" T_TRUE_STR "' or '" T_FALSE_STR "'", s->line, s->col, s->off, token_next_type(s));
+		}
 	}
 	else {
 		s->log("Expected '" T_CASESENSITIVE_STR "'", s->line, s->col, s->off, token_next_type(s));
@@ -318,9 +325,6 @@ void ALINECOMMENTSTART(scan* s, token* parent) {
 			t->length = len;
 			token_skip(s, len);
 			token_push(thistoken, t);
-		}
-		else {
-			s->log("Expected '" T_ANYTEXT_STR "'", s->line, s->col, s->off, token_next_type(s));
 		}
 	}
 	else {
@@ -345,9 +349,6 @@ void TOKEN(scan* s, token* parent) {
 			token_skip(s, len);
 			token_push(thistoken, t);
 		}
-		else {
-			s->log("Expected '" T_STMTSEP_STR "'", s->line, s->col, s->off, token_next_type(s));
-		}
 		if ((len = token_scan(s, T_GT)) > 0) {
 			t = token_gen(s, T_GT);
 			t->length = len;
@@ -365,24 +366,32 @@ void TOKEN(scan* s, token* parent) {
 				token_skip(s, len);
 				token_push(thistoken, t);
 			}
-			else {
-				s->log("Expected '" T_GT_STR "'", s->line, s->col, s->off, token_next_type(s));
-			}
+		}
+		else {
+			s->log("Expected '" T_GT_STR "' or '" T_ANYTEXT_STR "'", s->line, s->col, s->off, token_next_type(s));
 		}
 		if (TC_START(s)) {
 			TC(s, thistoken);
 		}
-		else {
-			s->log("Expected '" S_TC_STR "'", s->line, s->col, s->off, token_next_type(s));
+		if ((len = token_scan(s, T_QUESTIONMARK)) > 0) {
+			while (true) {
+				if ((len = token_scan(s, T_QUESTIONMARK)) > 0) {
+					t = token_gen(s, T_QUESTIONMARK);
+					t->length = len;
+					token_skip(s, len);
+					token_push(thistoken, t);
+					if (TMODE_START(s)) {
+						TMODE(s, thistoken);
+					}
+				}
+				else { break; }
+			}
 		}
 		if ((len = token_scan(s, T_SC)) > 0) {
 			t = token_gen(s, T_SC);
 			t->length = len;
 			token_skip(s, len);
 			token_push(thistoken, t);
-		}
-		else {
-			s->log("Expected '" T_SC_STR "'", s->line, s->col, s->off, token_next_type(s));
 		}
 	}
 	else {
@@ -423,14 +432,13 @@ void TCG(scan* s, token* parent) {
 		if (TC1_START(s)) {
 			TC1(s, thistoken);
 		}
-		else {
-			s->log("Expected '" S_TC1_STR "'", s->line, s->col, s->off, token_next_type(s));
-		}
-		while (true) {
-			if (TC1_START(s)) {
-				TC1(s, thistoken);
+		if (TC1_START(s)) {
+			while (true) {
+				if (TC1_START(s)) {
+					TC1(s, thistoken);
+				}
+				else { break; }
 			}
-			else { break; }
 		}
 		if ((len = token_scan(s, T_ROUNDC)) > 0) {
 			t = token_gen(s, T_ROUNDC);
@@ -438,14 +446,16 @@ void TCG(scan* s, token* parent) {
 			token_skip(s, len);
 			token_push(thistoken, t);
 		}
-		else {
-			s->log("Expected '" T_ROUNDC_STR "'", s->line, s->col, s->off, token_next_type(s));
-		}
 		if ((len = token_scan(s, T_PLUS)) > 0) {
-			t = token_gen(s, T_PLUS);
-			t->length = len;
-			token_skip(s, len);
-			token_push(thistoken, t);
+			if ((len = token_scan(s, T_PLUS)) > 0) {
+				t = token_gen(s, T_PLUS);
+				t->length = len;
+				token_skip(s, len);
+				token_push(thistoken, t);
+			}
+			else {
+				s->log("Expected '" T_PLUS_STR "'", s->line, s->col, s->off, token_next_type(s));
+			}
 		}
 	}
 	else {
@@ -478,24 +488,23 @@ void TC1(scan* s, token* parent) {
 	size_t len;
 	if (TC2_START(s)) {
 		TC2(s, thistoken);
-		if ((len = token_scan(s, T_MINUS)) > 0) {
-			t = token_gen(s, T_MINUS);
-			t->length = len;
-			token_skip(s, len);
-			token_push(thistoken, t);
-			if (TC2_START(s)) {
-				TC2(s, thistoken);
-			}
-			else {
-				s->log("Expected '" S_TC2_STR "'", s->line, s->col, s->off, token_next_type(s));
-			}
-		}
-		else if (TC2_START(s)) {
-			while (true) {
+		if ((len = token_scan(s, T_MINUS)) > 0 || TC2_START(s)) {
+			if ((len = token_scan(s, T_MINUS)) > 0) {
+				t = token_gen(s, T_MINUS);
+				t->length = len;
+				token_skip(s, len);
+				token_push(thistoken, t);
 				if (TC2_START(s)) {
 					TC2(s, thistoken);
 				}
-				else { break; }
+			}
+			else if (TC2_START(s)) {
+				while (true) {
+					if (TC2_START(s)) {
+						TC2(s, thistoken);
+					}
+					else { break; }
+				}
 			}
 		}
 	}
@@ -545,12 +554,26 @@ void TC2(scan* s, token* parent) {
 			token_skip(s, len);
 			token_push(thistoken, t);
 		}
-		else {
-			s->log("Expected '" T_ANY_STR "'", s->line, s->col, s->off, token_next_type(s));
-		}
 	}
 	else {
 		s->log("Expected '" T_ALPHALOW_STR "' or '" T_ALPHAUP_STR "' or '" T_DIGIT_STR "' or '" T_BS_STR "'", s->line, s->col, s->off, token_next_type(s));
+	}
+	thistoken->length = s->off - thistoken->offset;
+	token_push(parent, thistoken);
+}
+bool TMODE_START(scan* s) { return token_scan(s, T_NOTOKEN); }
+void TMODE(scan* s, token* parent) {
+	token* thistoken = token_gen(s, S_TMODE);
+	token* t;
+	size_t len;
+	if ((len = token_scan(s, T_NOTOKEN)) > 0) {
+		t = token_gen(s, T_NOTOKEN);
+		t->length = len;
+		token_skip(s, len);
+		token_push(thistoken, t);
+	}
+	else {
+		s->log("Expected '" T_NOTOKEN_STR "'", s->line, s->col, s->off, token_next_type(s));
 	}
 	thistoken->length = s->off - thistoken->offset;
 	token_push(parent, thistoken);
@@ -571,23 +594,14 @@ void STATEMENT(scan* s, token* parent) {
 			token_skip(s, len);
 			token_push(thistoken, t);
 		}
-		else {
-			s->log("Expected '" T_STMTSEP_STR "'", s->line, s->col, s->off, token_next_type(s));
-		}
 		if (EXPRESSION_START(s)) {
 			EXPRESSION(s, thistoken);
-		}
-		else {
-			s->log("Expected '" S_EXPRESSION_STR "'", s->line, s->col, s->off, token_next_type(s));
 		}
 		if ((len = token_scan(s, T_SC)) > 0) {
 			t = token_gen(s, T_SC);
 			t->length = len;
 			token_skip(s, len);
 			token_push(thistoken, t);
-		}
-		else {
-			s->log("Expected '" T_SC_STR "'", s->line, s->col, s->off, token_next_type(s));
 		}
 	}
 	else {
@@ -603,11 +617,13 @@ void EXPRESSION(scan* s, token* parent) {
 	size_t len;
 	if (EXPL0_START(s)) {
 		EXPL0(s, thistoken);
-		while (true) {
-			if (EXPL0_START(s)) {
-				EXPL0(s, thistoken);
+		if (EXPL0_START(s)) {
+			while (true) {
+				if (EXPL0_START(s)) {
+					EXPL0(s, thistoken);
+				}
+				else { break; }
 			}
-			else { break; }
 		}
 	}
 	else {
@@ -623,20 +639,19 @@ void EXPL0(scan* s, token* parent) {
 	size_t len;
 	if (EXPRESSION2_START(s)) {
 		EXPRESSION2(s, thistoken);
-		while (true) {
-			if ((len = token_scan(s, T_OR)) > 0) {
-				t = token_gen(s, T_OR);
-				t->length = len;
-				token_skip(s, len);
-				token_push(thistoken, t);
-				if (EXPRESSION2_START(s)) {
-					EXPRESSION2(s, thistoken);
+		if ((len = token_scan(s, T_OR)) > 0) {
+			while (true) {
+				if ((len = token_scan(s, T_OR)) > 0) {
+					t = token_gen(s, T_OR);
+					t->length = len;
+					token_skip(s, len);
+					token_push(thistoken, t);
+					if (EXPRESSION2_START(s)) {
+						EXPRESSION2(s, thistoken);
+					}
 				}
-				else {
-					s->log("Expected '" S_EXPRESSION2_STR "'", s->line, s->col, s->off, token_next_type(s));
-				}
+				else { break; }
 			}
-			else { break; }
 		}
 	}
 	else {
@@ -652,11 +667,13 @@ void EXPRESSION2(scan* s, token* parent) {
 	size_t len;
 	if (EXPL1_START(s)) {
 		EXPL1(s, thistoken);
-		while (true) {
-			if (EXPL1_START(s)) {
-				EXPL1(s, thistoken);
+		if (EXPL1_START(s)) {
+			while (true) {
+				if (EXPL1_START(s)) {
+					EXPL1(s, thistoken);
+				}
+				else { break; }
 			}
-			else { break; }
 		}
 	}
 	else {
@@ -671,26 +688,18 @@ void EXPL1(scan* s, token* parent) {
 	token* t;
 	size_t len;
 	if ((len = token_scan(s, T_CURLYO)) > 0) {
-		if ((len = token_scan(s, T_CURLYO)) > 0) {
-			t = token_gen(s, T_CURLYO);
+		t = token_gen(s, T_CURLYO);
+		t->length = len;
+		token_skip(s, len);
+		token_push(thistoken, t);
+		if (EXPRESSION_START(s)) {
+			EXPRESSION(s, thistoken);
+		}
+		if ((len = token_scan(s, T_CURLYC)) > 0) {
+			t = token_gen(s, T_CURLYC);
 			t->length = len;
 			token_skip(s, len);
 			token_push(thistoken, t);
-			if (EXPRESSION_START(s)) {
-				EXPRESSION(s, thistoken);
-			}
-			else {
-				s->log("Expected '" S_EXPRESSION_STR "'", s->line, s->col, s->off, token_next_type(s));
-			}
-			if ((len = token_scan(s, T_CURLYC)) > 0) {
-				t = token_gen(s, T_CURLYC);
-				t->length = len;
-				token_skip(s, len);
-				token_push(thistoken, t);
-			}
-			else {
-				s->log("Expected '" T_CURLYC_STR "'", s->line, s->col, s->off, token_next_type(s));
-			}
 		}
 	}
 	else if (EXPL2_START(s)) {
@@ -708,26 +717,18 @@ void EXPL2(scan* s, token* parent) {
 	token* t;
 	size_t len;
 	if ((len = token_scan(s, T_SQUAREO)) > 0) {
-		if ((len = token_scan(s, T_SQUAREO)) > 0) {
-			t = token_gen(s, T_SQUAREO);
+		t = token_gen(s, T_SQUAREO);
+		t->length = len;
+		token_skip(s, len);
+		token_push(thistoken, t);
+		if (EXPRESSION_START(s)) {
+			EXPRESSION(s, thistoken);
+		}
+		if ((len = token_scan(s, T_SQUAREC)) > 0) {
+			t = token_gen(s, T_SQUAREC);
 			t->length = len;
 			token_skip(s, len);
 			token_push(thistoken, t);
-			if (EXPRESSION_START(s)) {
-				EXPRESSION(s, thistoken);
-			}
-			else {
-				s->log("Expected '" S_EXPRESSION_STR "'", s->line, s->col, s->off, token_next_type(s));
-			}
-			if ((len = token_scan(s, T_SQUAREC)) > 0) {
-				t = token_gen(s, T_SQUAREC);
-				t->length = len;
-				token_skip(s, len);
-				token_push(thistoken, t);
-			}
-			else {
-				s->log("Expected '" T_SQUAREC_STR "'", s->line, s->col, s->off, token_next_type(s));
-			}
 		}
 	}
 	else if (EXPL3_START(s)) {
@@ -752,17 +753,11 @@ void EXPL3(scan* s, token* parent) {
 		if (EXPRESSION_START(s)) {
 			EXPRESSION(s, thistoken);
 		}
-		else {
-			s->log("Expected '" S_EXPRESSION_STR "'", s->line, s->col, s->off, token_next_type(s));
-		}
 		if ((len = token_scan(s, T_ROUNDC)) > 0) {
 			t = token_gen(s, T_ROUNDC);
 			t->length = len;
 			token_skip(s, len);
 			token_push(thistoken, t);
-		}
-		else {
-			s->log("Expected '" T_ROUNDC_STR "'", s->line, s->col, s->off, token_next_type(s));
 		}
 	}
 	else if ((len = token_scan(s, T_TOKENIDENT)) > 0) {

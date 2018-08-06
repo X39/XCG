@@ -43,8 +43,6 @@ void treeprint(scan* s, token* t, int depth)
 		case T_SC: printf("TOKEN: SC"); break;
 		case T_LT: printf("TOKEN: LT"); break;
 		case T_GT: printf("TOKEN: GT"); break;
-		case T_MODMAX: printf("TOKEN: MODMAX"); break;
-		case T_COLON: printf("TOKEN: COLON"); break;
 		case T_NUMBER: printf("TOKEN: NUMBER"); break;
 		case T_ALPHALOW: printf("TOKEN: ALPHALOW"); break;
 		case T_ALPHAUP: printf("TOKEN: ALPHAUP"); break;
@@ -54,6 +52,7 @@ void treeprint(scan* s, token* t, int depth)
 		case T_ANY: printf("TOKEN: ANY"); break;
 		case T_DOT: printf("TOKEN: DOT"); break;
 		case T_BS: printf("TOKEN: BS"); break;
+		case T_NOTOKEN: printf("TOKEN: NOTOKEN"); break;
 		case S_EBNF: printf("TYPE: EBNF"); break;
 		case S_ANNOTATION: printf("TYPE: ANNOTATION"); break;
 		case S_ASKIP: printf("TYPE: ASKIP"); break;
@@ -72,6 +71,7 @@ void treeprint(scan* s, token* t, int depth)
 		case S_EXPL1: printf("TYPE: EXPL1"); break;
 		case S_EXPL2: printf("TYPE: EXPL2"); break;
 		case S_EXPL3: printf("TYPE: EXPL3"); break;
+		case S_TMODE: printf("TYPE: TMODE"); break;
 		default:
 			printf("TYPE: INVALID");
 			break;
@@ -110,8 +110,7 @@ void scan_log_method(const char* m, size_t l, size_t c, size_t o, char gottype)
 		case T_SC: printf("L%uC%u, SC:\t%s", l, c, m); break;
 		case T_LT: printf("L%uC%u, LT:\t%s", l, c, m); break;
 		case T_GT: printf("L%uC%u, GT:\t%s", l, c, m); break;
-		case T_MODMAX: printf("L%uC%u, MODMAX:\t%s", l, c, m); break;
-		case T_COLON: printf("L%uC%u, COLON:\t%s", l, c, m); break;
+		case T_NOTOKEN: printf("L%uC%u, NOTOKEN:\t%s", l, c, m); break;
 		case T_NUMBER: printf("L%uC%u, NUMBER:\t%s", l, c, m); break;
 		case T_ALPHALOW: printf("L%uC%u, ALPHALOW:\t%s", l, c, m); break;
 		case T_ALPHAUP: printf("L%uC%u, ALPHAUP:\t%s", l, c, m); break;
@@ -174,12 +173,14 @@ void print_help(void)
 		"                - A name\n"
 		"                - An optional representation for errors\n"
 		"                - the actual token\n"
+		"                - Optional token mods\n"
 		"            The syntax of a token somewhat resembles regex,\n"
 		"            but do not be fooled! It is no actual regex\n"
 		"            involved!\n"
 		"            Usage:\n"
-		"                name = \"representation\" > token\n"
+		"                name = \"representation\" > token ? tokenmod\n"
 		"                name => token\n"
+		"                name => token ? tokenmod ? tokenmod\n"
 		"            Allowed stuff for tokens:\n"
 		"                - alphanumerical characters\n"
 		"                - backspace escaped anything\n"
@@ -188,6 +189,10 @@ void print_help(void)
 		"                `(?)` allows to group a token together.\n"
 		"                `(?)+` allows repeat a group.\n"
 		"                `.` placeholder for ANY character but '\\0'.\n"
+		"            Available tokenmods:\n"
+		"                notoken - Prevents token generation so that\n"
+		"                          it does not appears inside the\n"
+		"                          generated tree.\n"
 		"        - Statements:\n"
 		"            Statements are rules about how to parse something.\n"
 		"            They always have to be named fully uppercase.\n"
@@ -363,8 +368,16 @@ int main(int argc, char** argv)
 	s.log = scan_log_method;
 	s.txt = load_file(inputfile);
 	EBNF(&s, t);
-	//treeprint(&s, t, 0);
-	//token_minimize(t);
+
+	if (minimize)
+	{
+		token_minimize(t);
+	}
+	if (printtree)
+	{
+		treeprint(&s, t, 0);
+	}
+
 	cptr = alloca(sizeof(char) * ((i = strlen(outputname)) + 3));
 	strcpy(cptr, outputname);
 	cptr[i] = '.';
@@ -395,14 +408,6 @@ int main(int argc, char** argv)
 	fclose(code);
 	free((char*)s.txt); //on purpose, load_file currently loads directly into s.txt
 
-	if (minimize)
-	{
-		token_minimize(t);
-	}
-	if (printtree)
-	{
-		treeprint(&s, t, 0);
-	}
 
 	token_del(t);
 #if _WIN32 & _DEBUG

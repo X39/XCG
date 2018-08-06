@@ -6,6 +6,10 @@
 #define TABS50 TABS10 TABS10 TABS10 TABS10 TABS10 
 #define TABS100 TABS50 TABS50
 
+#define ELSEMODE_INACTIVE 0
+#define ELSEMODE_PREPARED 1
+#define ELSEMODE_ACTIVE 2
+
 
 bool str_partial_equals(const char* strin, const char* otherstr, size_t len) {
 	size_t i;
@@ -102,6 +106,24 @@ token* generator_next_token2(token* root, size_t * tokenindex)
 token* generator_next_token(token* root, size_t tokenindex)
 {
 	return generator_next_token2(root, &tokenindex);
+}
+
+void token_flatten(token* target, token* source)
+{
+	size_t i;
+	token* t;
+	for (i = 0; i < source->top; i++)
+	{
+		t = source->children[i];
+		if (t->type >= T__FIRST && t->type <= T__LAST)
+		{
+			token_push(target, t);
+		}
+		else
+		{
+			token_flatten(target, source->children[i]);
+		}
+	}
 }
 
 PGENERATOR generator_create(FILE* code, FILE* header, const char* fname, token* r, const char* origtext)
@@ -542,7 +564,7 @@ void generator_handle_statement_START(PGENERATOR gen, token* token)
 				if (otherstmnt == 0)
 				{
 					//ToDo: Add proper error reporting
-					sprintf(stderr, "Missing matching STATEMENT for %.*s", token->children[0]->length, gen->origtext + token->children[0]->offset);
+					fprintf(stderr, "Missing matching STATEMENT for %.*s\n", token->children[0]->length, gen->origtext + token->children[0]->offset);
 					break;
 				}
 				generator_handle_statement_START(gen, otherstmnt->children[2]);
@@ -627,32 +649,32 @@ void generator_handle_statement_EXEC_get_starts(PGENERATOR gen, token* t, pgen_s
 	{
 		case S_EXPRESSION:
 		case S_EXPRESSION2:
-			generator_handle_statement_EXEC_get_starts(gen, t->children[0], h, allowsubhelpers);
+			for (i = 0; i < t->top; i++)
+			{
+				generator_handle_statement_EXEC_get_starts(gen, t->children[i], h, allowsubhelpers);
+				if (t->children[i]->type == S_EXPL0 || (t->children[i]->type == S_EXPL1 && t->children[i]->top == 1 && t->children[i]->children[0]->top == 1))
+				{
+					break;
+				}
+			}
 			break;
 		case S_EXPL0:
-			if (t->top > 1)
+			if (allowsubhelpers)
 			{
-				if (allowsubhelpers)
+				h2 = gen_stmnt_helper_create();
+				h2->thistoken = t;
+				gen_stmnt_helper_push_helper(h, h2);
+				for (i = 0; i < t->top; i++)
 				{
-					h2 = gen_stmnt_helper_create();
-					h2->thistoken = t;
-					gen_stmnt_helper_push_helper(h, h2);
-					for (i = 0; i < t->top; i++)
-					{
-						generator_handle_statement_EXEC_get_starts(gen, t->children[i], h2, allowsubhelpers);
-					}
-				}
-				else
-				{
-					for (i = 0; i < t->top; i++)
-					{
-						generator_handle_statement_EXEC_get_starts(gen, t->children[i], h, allowsubhelpers);
-					}
+					generator_handle_statement_EXEC_get_starts(gen, t->children[i], h2, allowsubhelpers);
 				}
 			}
 			else
 			{
-				generator_handle_statement_EXEC_get_starts(gen, t->children[0], h, allowsubhelpers);
+				for (i = 0; i < t->top; i++)
+				{
+					generator_handle_statement_EXEC_get_starts(gen, t->children[i], h, allowsubhelpers);
+				}
 			}
 			break;
 		case S_EXPL1:
@@ -740,6 +762,8 @@ void generator_handle_statement_EXEC_EXPL0_print(PGENERATOR gen, token* t, bool 
 		expl0_or_format = false;
 	}
 }
+
+
 void generator_handle_statement_EXEC(PGENERATOR gen, token* t, bool expl0_or_format, bool expl0_prevent_else_log_printout)
 {
 	size_t i, j;
@@ -863,6 +887,390 @@ void generator_handle_statement_EXEC(PGENERATOR gen, token* t, bool expl0_or_for
 			break;
 	}
 }
+
+
+void generator_handle_statement_EXEC_flattened_casing_errorlogging_recursive(PGENERATOR gen, token *flattened, size_t index, size_t *i, bool *start_printed, bool *or_required)
+{
+	size_t enclosure_counter = 0;
+	for (; *i <= index; ++*i)
+	{
+		switch (flattened->children[*i]->type)
+		{
+			case T_CURLYO:
+			case T_SQUAREO:
+			case T_ROUNDO:
+				if (*start_printed)
+				{
+					enclosure_counter++;
+				}
+				else
+				{
+					++*i;
+					generator_handle_statement_EXEC_flattened_casing_errorlogging_recursive(gen, flattened, index, i, start_printed, or_required);
+				}
+				break;
+			case T_OR:
+				if (enclosure_counter == 0)
+				{
+					*start_printed = false;
+				}
+				break;
+			case T_CURLYC:
+			case T_SQUAREC:
+			case T_ROUNDC:
+				if (enclosure_counter == 0)
+				{
+					return;
+				}
+				else
+				{
+					enclosure_counter--;
+				}
+				break;
+			case T_STATEIDENT:
+			case T_TOKENIDENT:
+				if (enclosure_counter == 0 && !*start_printed)
+				{
+					*start_printed = true;
+					if (*or_required)
+					{
+						fprintf(gen->code, " \"' or '\" ");
+					}
+					else
+					{
+						*or_required = true;
+					}
+					generator_write_macro(gen->code, gen->origtext, flattened->children[*i]);
+					fprintf(gen->code, "_STR");
+				}
+				break;
+		}
+	}
+}
+void generator_handle_statement_EXEC_flattened_casing_errorlogging(PGENERATOR gen, token *flattened, size_t index)
+{
+	size_t i = index == flattened->top ? index - 1 : index, enclosure_counter = 0;
+	pgen_stmnt_helper helper;
+	bool start_printed = false;
+	bool flag;
+
+	fprintf(gen->code, "%.*selse {\n", gen->depth, TABS100);
+	gen->depth++;
+	fprintf(gen->code, "%.*ss->log(\"Expected '\" ", gen->depth, TABS100);
+
+	// Backtrack to T_OR start
+	// `flag` is used in here to break out of the loop.
+	flag = false;
+	for (; i != ~0; i--)
+	{
+		switch (flattened->children[i]->type)
+		{
+			case T_CURLYO:
+			case T_SQUAREO:
+			case T_ROUNDO:
+				if (enclosure_counter > 0)
+				{
+					enclosure_counter--;
+				}
+				else
+				{
+					flag = true;
+					break;
+				}
+			case T_CURLYC:
+			case T_SQUAREC:
+			case T_ROUNDC:
+				enclosure_counter++;
+				break;
+		}
+		if (flag)
+			break;
+	}
+	if (i == ~0)
+	{ // We hit 0 but due to backtracking, we are now at ~0 :)
+		i = 0; // Now we are at the correct index again
+	}
+
+	// Print out moving towards our original index the different
+	// possibilities.
+	// `flag` is used in here to check if the or should be printed.
+	flag = false;
+	generator_handle_statement_EXEC_flattened_casing_errorlogging_recursive(gen, flattened, index, &i, &start_printed, &flag);
+	fprintf(gen->code, " \"'\", s->line, s->col, s->off, token_next_type(s));\n");
+	gen->depth--;
+	fprintf(gen->code, "%.*s}\n", gen->depth, TABS100);
+}
+void generator_handle_statement_EXEC_flattened_casing_forward_condition_scan(PGENERATOR gen, token *flattened, size_t index)
+{
+	size_t enclosure_counter = 0;
+	pgen_stmnt_helper helper;
+	bool start_printed = false;
+	bool initial_printed = false;
+
+	for (; index != flattened->top; index++)
+	{
+		switch (flattened->children[index]->type)
+		{
+			case T_CURLYO:
+			case T_SQUAREO:
+			case T_ROUNDO:
+				// Add one to enclosure counter so we actually leave when we have to
+				enclosure_counter++;
+				break;
+			case T_CURLYC:
+			case T_SQUAREC:
+			case T_ROUNDC:
+				enclosure_counter--;
+				if (enclosure_counter == 0)
+				{ // We hit our outter scope, so we are done T_T
+					return;
+				}
+				break;
+			case T_OR:
+				start_printed = false;
+				break;
+			case T_STATEIDENT:
+			case T_TOKENIDENT:
+				if (start_printed)
+				{ // No need to do anything, our start already appeared
+					continue;
+				}
+				if (initial_printed)
+				{
+					fprintf(gen->code, " || ");
+				}
+				else
+				{
+					initial_printed = true;
+				}
+				generator_handle_statement_EXEC_write_start(gen, flattened->children[index]);
+				start_printed = true;
+				break;
+		}
+	}
+}
+bool generator_tmode__notoken(PGENERATOR gen, token* t)
+{
+	size_t i, j;
+	token *def = NULL, *tmp, *tmp2;
+	for (i = 0; i < gen->root->top; i++)
+	{
+		tmp = gen->root->children[i];
+		if (tmp->type == S_TOKEN && tmp->length == t->length && str_partial_equals(gen->origtext + tmp->offset, gen->origtext + t->offset, t->length))
+		{
+			def = tmp;
+			break;
+		}
+	}
+	if (def == NULL)
+	{
+		return false;
+	}
+	for (i = 0; i < def->top; i++)
+	{
+		tmp = def->children[i];
+		if (tmp->type == S_TMODE)
+		{
+			if (tmp->children[0]->type == T_NOTOKEN)
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+void generator_handle_statement_EXEC_flattened_casing(PGENERATOR gen, token *flattened, size_t *index, char parenttype)
+{
+	token *t, *tla;
+	short elsemode = ELSEMODE_INACTIVE;
+	for (; *index < flattened->top; ++*index)
+	{
+		t = flattened->children[*index];
+		tla = 1 + *index < flattened->top ? flattened->children[1 + *index] : NULL;
+		switch (t->type)
+		{
+			case T_CURLYO:
+				fprintf(gen->code, parenttype == T_OR || elsemode == ELSEMODE_PREPARED ? "%.*selse if (" : "%.*sif (", gen->depth, TABS100);
+				generator_handle_statement_EXEC_flattened_casing_forward_condition_scan(gen, flattened, *index);
+				fprintf(gen->code, ") {\n");
+				gen->depth++;
+				fprintf(gen->code, "%.*swhile (true) {\n", gen->depth, TABS100);
+				gen->depth++;
+				++*index;
+				generator_handle_statement_EXEC_flattened_casing(gen, flattened, index, T_CURLYO);
+				gen->depth--;
+				fprintf(gen->code, "%.*s}\n", gen->depth, TABS100);
+				gen->depth--;
+				fprintf(gen->code, "%.*s}\n", gen->depth, TABS100);
+				break;
+			case T_CURLYC:
+				if (elsemode == ELSEMODE_ACTIVE)
+				{
+					gen->depth--;
+					fprintf(gen->code, "%.*s}\n", gen->depth, TABS100);
+				}
+				if (parenttype != T_STATEIDENT && parenttype != T_TOKENIDENT)
+				{
+					fprintf(gen->code, "%.*selse { break; }\n", gen->depth, TABS100);
+				}
+				return;
+
+			case T_SQUAREO:
+				fprintf(gen->code, parenttype == T_OR || elsemode == ELSEMODE_PREPARED ? "%.*selse if (" : "%.*sif (", gen->depth, TABS100);
+				generator_handle_statement_EXEC_flattened_casing_forward_condition_scan(gen, flattened, *index);
+				fprintf(gen->code, ") {\n");
+				++*index;
+				generator_handle_statement_EXEC_flattened_casing(gen, flattened, index, T_SQUAREO);
+				gen->depth--;
+				fprintf(gen->code, "%.*s}\n", gen->depth, TABS100);
+				break;
+			case T_SQUAREC:
+				if (elsemode == ELSEMODE_ACTIVE)
+				{
+					gen->depth--;
+					fprintf(gen->code, "%.*s}\n", gen->depth, TABS100);
+				}
+				return;
+
+			case T_ROUNDO:
+				++*index;
+				generator_handle_statement_EXEC_flattened_casing(gen, flattened, index, T_ROUNDO);
+				break;
+			case T_ROUNDC:
+				if (elsemode == ELSEMODE_ACTIVE)
+				{
+					gen->depth--;
+					fprintf(gen->code, "%.*s}\n", gen->depth, TABS100);
+				}
+				if (parenttype != T_STATEIDENT && parenttype != T_TOKENIDENT)
+				{
+					generator_handle_statement_EXEC_flattened_casing_errorlogging(gen, flattened, (*index) - 1);
+				}
+				return;
+
+			case T_OR:
+				if (parenttype == T_STATEIDENT || parenttype == T_TOKENIDENT)
+				{
+					return;
+				}
+				if (elsemode == ELSEMODE_ACTIVE)
+				{
+					gen->depth--;
+					fprintf(gen->code, "%.*s}\n", gen->depth, TABS100);
+				}
+				elsemode = ELSEMODE_PREPARED;
+				break;
+			case T_STATEIDENT:
+			case T_TOKENIDENT:
+				fprintf(gen->code, elsemode == ELSEMODE_PREPARED ? "%.*selse if (" : "%.*sif (", gen->depth, TABS100);
+				generator_handle_statement_EXEC_write_start(gen, t);
+				fprintf(gen->code, ") {\n");
+				gen->depth++;
+
+				if (t->type == T_TOKENIDENT)
+				{
+					if (!generator_tmode__notoken(gen, t))
+					{
+						fprintf(gen->code, "%.*s" "t = token_gen(s, ", gen->depth, TABS100);
+						generator_write_macro(gen->code, gen->origtext, t);
+						fprintf(gen->code, ");" "\n"
+							"%.*s" "t->length = len;" "\n"
+							"%.*s" "token_skip(s, len);" "\n"
+							"%.*s" "token_push(thistoken, t);" "\n",
+							gen->depth, TABS100,
+							gen->depth, TABS100,
+							gen->depth, TABS100
+						);
+					}
+				}
+				else //if (t->type == T_STATEIDENT) implicit
+				{
+					fprintf(gen->code, "%.*s%.*s(s, thistoken);\n", gen->depth, TABS100, t->length, gen->origtext + t->offset);
+				}
+				if (elsemode == ELSEMODE_PREPARED)
+				{
+					elsemode = ELSEMODE_ACTIVE;
+				}
+				else if (parenttype != T_STATEIDENT && parenttype != T_TOKENIDENT)
+				{
+					++*index;
+					generator_handle_statement_EXEC_flattened_casing(gen, flattened, index, t->type);
+					gen->depth--;
+					fflush(gen->code);
+					fprintf(gen->code, "%.*s}\n", gen->depth, TABS100);
+					if (*index < flattened->top)
+					{
+						tla = flattened->children[*index];
+						if (tla->type == T_CURLYC)
+						{
+							fprintf(gen->code, "%.*selse { break; }\n", gen->depth, TABS100);
+						}
+						else if (tla->type == T_ROUNDC && ((*index) + 1 >= flattened->top || flattened->children[(*index) + 1]->type != T_OR))
+						{
+							gen->depth--;
+							fprintf(gen->code, "%.*s}\n", gen->depth, TABS100);
+							generator_handle_statement_EXEC_flattened_casing_errorlogging(gen, flattened, (*index) - 1);
+						}
+						else if(tla->type == T_OR)
+						{
+							--*index;
+						}
+						else if ((*index) + 1 >= flattened->top || flattened->children[(*index) + 1]->type != T_OR)
+						{
+							fprintf(gen->code, "%.*selse {\n", gen->depth, TABS100);
+							gen->depth++;
+							fprintf(gen->code, "%.*ss->log(\"Expected '\" ", gen->depth, TABS100);
+							generator_write_macro(gen->code, gen->origtext, t);
+							fprintf(gen->code, "_STR");
+							fprintf(gen->code, " \"'\", s->line, s->col, s->off, token_next_type(s));\n");
+							gen->depth--;
+							fprintf(gen->code, "%.*s}\n", gen->depth, TABS100);
+						}
+						if (parenttype != T__INVALID && (tla->type == T_CURLYC || tla->type == T_ROUNDC || tla->type == T_SQUAREC))
+						{
+							return;
+						}
+					}
+				}
+				else
+				{
+					gen->depth--;
+					fprintf(gen->code, "%.*s}\n", gen->depth, TABS100);
+				}
+				break;
+			default:
+				break;
+		}
+		fflush(gen->code);
+	}
+	if (elsemode == ELSEMODE_ACTIVE)
+	{
+		gen->depth--;
+		fprintf(gen->code, "%.*s}\n", gen->depth, TABS100);
+	}
+	if (parenttype == T__INVALID)
+	{
+		generator_handle_statement_EXEC_flattened_casing_errorlogging(gen, flattened, flattened->top - 1);
+	}
+}
+void generator_handle_statement_EXEC_flattened(PGENERATOR gen, token* input)
+{
+	token *flattened, *t, *tla;
+	size_t i = 0;
+
+	//Generate temporary token for usage in token_flatten
+	flattened = token_gen(NULL, T__INVALID);
+	token_flatten(flattened, input);
+
+	generator_handle_statement_EXEC_flattened_casing(gen, flattened, &i, T__INVALID);
+
+	//Do not use token_del for deletion of the temporary token!
+	//token_flatten is not creating copies and token_del would
+	//thus delete those.
+	free(flattened->children);
+	free(flattened);
+}
+
 void generator_handle_statement(PGENERATOR gen, token* token)
 {
 	fprintf(gen->code, "bool %.*s_START(scan* s) { return ", token->children[0]->length, gen->origtext + token->children[0]->offset);
@@ -875,7 +1283,8 @@ void generator_handle_statement(PGENERATOR gen, token* token)
 		token->children[0]->length, gen->origtext + token->children[0]->offset
 	);
 	gen->depth = 1;
-	generator_handle_statement_EXEC(gen, token->children[2], false, false);
+	generator_handle_statement_EXEC_flattened(gen, token->children[2]);
+	//generator_handle_statement_EXEC(gen, token->children[2], false, false);
 	fprintf(gen->code, "\t" "thistoken->length = s->off - thistoken->offset;" "\n"
 		"\t" "token_push(parent, thistoken);" "\n"
 		"}\n"
@@ -1007,9 +1416,11 @@ void generate(PGENERATOR gen)
 			"	ptr->children = malloc(sizeof(token*) * ptr->size);" "\n"
 			"	ptr->top = 0;" "\n"
 			"	ptr->type = type;" "\n"
-			"	ptr->line = s->line;" "\n"
-			"	ptr->column = s->col;" "\n"
-			"	ptr->offset = s->off;" "\n"
+			"	if (s != 0) {" "\n"
+			"		ptr->line = s->line;" "\n"
+			"		ptr->column = s->col;" "\n"
+			"		ptr->offset = s->off;" "\n"
+			"	}" "\n"
 			"	return ptr;" "\n"
 			"}" "\n"
 			"void token_del(token* ptr) {" "\n"
