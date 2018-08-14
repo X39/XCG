@@ -311,7 +311,7 @@ int main(int argc, char** argv)
 	char* cptr;
 	char* inputfile = 0;
 	char* outputname = 0;
-	bool printtree = false, minimize = false;
+	bool printtree = false, minimize = false, success = true;
 #if _WIN32 & _DEBUG
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF | _CRTDBG_CHECK_ALWAYS_DF);
 	//_CrtSetBreakAlloc(1718);
@@ -385,6 +385,7 @@ int main(int argc, char** argv)
 	memset(&s, 0, sizeof(scan));
 	s.log = scan_log_method;
 	s.txt = load_file(inputfile);
+	s.line++;
 	EBNF(&s, t);
 
 	if (minimize)
@@ -416,8 +417,11 @@ int main(int argc, char** argv)
 		return 1;
 	}
 	gen = generator_create(code, header, outputname, t, s.txt);
-
-	generate(gen);
+	generator_validate_token_tree(gen, t, &success);
+	if (success)
+	{
+		generate(gen);
+	}
 
 	generator_destroy(gen);
 	fflush(header);

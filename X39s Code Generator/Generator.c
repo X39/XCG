@@ -503,6 +503,26 @@ token* generator_handle_statement_find_statement(PGENERATOR gen, const char* nam
 	}
 	return 0;
 }
+token* generator_handle_statement_find_token(PGENERATOR gen, const char* name, size_t len)
+{
+	size_t index, off;
+	token* t;
+	for (index = 0; index < gen->root->top; index++)
+	{
+		t = gen->root->children[index];
+		switch (t->type)
+		{
+			case S_TOKEN:
+				off = t->children[0]->offset;
+				if (str_partial_equals(gen->origtext + off, name, len))
+				{
+					return t;
+				}
+				break;
+		}
+	}
+	return 0;
+}
 
 void generator_handle_statement_START(PGENERATOR gen, token* token)
 {
@@ -1495,5 +1515,36 @@ void generate(PGENERATOR gen)
 					break;
 			}
 		}
+	}
+}
+
+void generator_validate_token_tree(PGENERATOR gen, token* t, bool * success)
+{
+	size_t i;
+	token* tmp;
+	switch (t->type)
+	{
+		case T_STATEIDENT:
+			tmp = generator_handle_statement_find_statement(gen, gen->origtext + t->offset, t->length);
+			if (tmp == 0)
+			{
+				fprintf(stderr, "Statement '%.*s' cannot be found. Line %u, Column %u\n", t->length, gen->origtext + t->offset, t->line, t->column);
+				*success = false;
+			}
+			break;
+		case T_TOKENIDENT:
+			tmp = generator_handle_statement_find_token(gen, gen->origtext + t->offset, t->length);
+			if (tmp == 0)
+			{
+				fprintf(stderr, "Token '%.*s' cannot be found. Line %u, Column %u\n", t->length, gen->origtext + t->offset, t->line, t->column);
+				*success = false;
+			}
+			break;
+		default:
+			for (i = 0; i < t->top; i++)
+			{
+				generator_validate_token_tree(gen, t->children[i], success);
+			}
+			break;
 	}
 }

@@ -52,5 +52,7 @@ void generator_handle_statement_START(PGENERATOR, token*);
 token* generator_handle_statement_EXEC_find_start(token*);
 void generator_handle_statement_EXEC(PGENERATOR, token*);
 token* generator_handle_statement_find_statement(PGENERATOR, const char*, size_t);
+token* generator_handle_statement_find_token(PGENERATOR, const char*, size_t);
 void generator_handle_statement(PGENERATOR, token*);
+void generator_validate_token_tree(PGENERATOR, token*, bool *);
 void generate(PGENERATOR);
