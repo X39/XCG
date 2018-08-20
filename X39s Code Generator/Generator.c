@@ -59,7 +59,7 @@ void gen_stmnt_helper_push_token(pgen_stmnt_helper h, token* t)
 }
 void gen_stmnt_helper_push_helper(pgen_stmnt_helper h, pgen_stmnt_helper h2)
 {
-	gen_stmnt_helper * ptr;
+	gen_stmnt_helper ** ptr;
 	size_t s;
 	if (h->helpers_top == h->helpers_size)
 	{
@@ -210,7 +210,8 @@ void generator_write_token_skip_method(PGENERATOR gen)
 
 	for (i = 0; (c = gen->skip_characters[i]) != '\0'; i++)
 	{
-		if (isEscaped = c == '\\')
+		isEscaped = c == '\\';
+		if (isEscaped)
 		{
 			i++;
 			c = gen->skip_characters[i];
@@ -451,7 +452,7 @@ void generator_handle_token(PGENERATOR gen, token* token)
 	fprintf(gen->code, ":");
 	index = token->children[2]->type == T_GT ? 3 : 4;
 	
-	if (token->children[index]->length == 1 && (gen->origtext + token->children[index]->offset)[0] != '.' || token->children[index]->length == 2 && (gen->origtext + token->children[index]->offset)[0] == '\\')
+	if (((token->children[index]->length == 1) && (gen->origtext + token->children[index]->offset)[0] != '.') || (token->children[index]->length == 2 && (gen->origtext + token->children[index]->offset)[0] == '\\'))
 	{ //Special case for singe-char tokens (either with or without leading backspace)
 		if ((gen->origtext + token->children[index]->offset)[0] == '\\')
 		{
@@ -595,7 +596,6 @@ void generator_handle_statement_START(PGENERATOR gen, token* token)
 }
 token* generator_handle_statement_EXEC_find_start(token* token)
 {
-	size_t i;
 	switch (token->type)
 	{
 		case S_EXPL3:
@@ -642,7 +642,6 @@ void generator_write_macro(FILE* f, const char* origtext, token* t)
 }
 void generator_handle_statement_EXEC_write_start(PGENERATOR gen, token* t)
 {
-	size_t i;
 	if (t->type == T_TOKENIDENT)
 	{
 		fprintf(gen->code, "(len = token_scan(s, ");
@@ -660,254 +659,6 @@ void generator_handle_statement_EXEC_write_start(PGENERATOR gen, token* t)
 	}
 #endif
 }
-void generator_handle_statement_EXEC_get_starts(PGENERATOR gen, token* t, pgen_stmnt_helper h, bool allowsubhelpers)
-{
-	size_t i;
-	struct token* othertoken;
-	pgen_stmnt_helper h2;
-	switch (t->type)
-	{
-		case S_EXPRESSION:
-		case S_EXPRESSION2:
-			for (i = 0; i < t->top; i++)
-			{
-				generator_handle_statement_EXEC_get_starts(gen, t->children[i], h, allowsubhelpers);
-				if (t->children[i]->type == S_EXPL0 || (t->children[i]->type == S_EXPL1 && t->children[i]->top == 1 && t->children[i]->children[0]->top == 1))
-				{
-					break;
-				}
-			}
-			break;
-		case S_EXPL0:
-			if (allowsubhelpers)
-			{
-				h2 = gen_stmnt_helper_create();
-				h2->thistoken = t;
-				gen_stmnt_helper_push_helper(h, h2);
-				for (i = 0; i < t->top; i++)
-				{
-					generator_handle_statement_EXEC_get_starts(gen, t->children[i], h2, allowsubhelpers);
-				}
-			}
-			else
-			{
-				for (i = 0; i < t->top; i++)
-				{
-					generator_handle_statement_EXEC_get_starts(gen, t->children[i], h, allowsubhelpers);
-				}
-			}
-			break;
-		case S_EXPL1:
-			generator_handle_statement_EXEC_get_starts(gen, t->children[t->top > 1 ? 1 : 0], h, allowsubhelpers);
-			break;
-		case S_EXPL2:
-			generator_handle_statement_EXEC_get_starts(gen, t->children[t->top > 1 ? 1 : 0], h, allowsubhelpers);
-			break;
-		case S_EXPL3:
-			switch (t->children[0]->type)
-			{
-				case T_ROUNDO:
-					generator_handle_statement_EXEC_get_starts(gen, t->children[1], h, allowsubhelpers);
-					break;
-				case T_TOKENIDENT:
-				case T_STATEIDENT:
-					gen_stmnt_helper_push_token(h, t->children[0]);
-					break;
-			}
-			break;
-	}
-}
-void generator_handle_statement_EXEC_EXPL0_print(PGENERATOR gen, token* t, bool expl0_or_format, bool expl0_prevent_else_log_printout)
-{
-	size_t i, j, k;
-	struct token* othertoken;
-	pgen_stmnt_helper helper;
-	for (i = 0; i < t->top; i++)
-	{
-		if (t->children[i]->type == T_OR)
-		{
-			continue;
-		}
-		helper = gen_stmnt_helper_create();
-		generator_handle_statement_EXEC_get_starts(gen, t->children[i], helper, true);
-		if (!expl0_or_format)
-		{
-			fprintf(gen->code, "%.*s", gen->depth, TABS100);
-			expl0_or_format = true;
-		}
-		if (i > 0)
-		{
-			fprintf(gen->code, "else ");
-		}
-		if (helper->tokens_top > 0)
-		{
-			for (j = 0; j < helper->tokens_top; j++)
-			{
-				if (!expl0_or_format)
-				{
-					fprintf(gen->code, "%.*s", gen->depth, TABS100);
-				}
-				if (i == 0 && j > 0)
-				{
-					fprintf(gen->code, "else ");
-				}
-				fprintf(gen->code, "if (");
-				generator_handle_statement_EXEC_write_start(gen, helper->tokens[j]);
-				fprintf(gen->code, ") {\n");
-				gen->depth++;
-				gen->helper_is_first_after_EXP_start = true;
-				generator_handle_statement_EXEC(gen, t->children[i], expl0_or_format, expl0_prevent_else_log_printout);
-				gen->depth--;
-				fprintf(gen->code, "%.*s}\n", gen->depth, TABS100);
-			}
-		}
-		else //if (helper->helpers_top > 0) implicit
-		{
-			for (j = 0; j < helper->helpers_top; j++)
-			{
-				//fprintf(gen->code, "%.*s", gen->depth, TABS100);
-				//if (i > 0)
-				//{
-				//	fprintf(gen->code, "else ");
-				//}
-				//fprintf(gen->code, "if (");
-				//generator_handle_statement_EXEC_write_start(gen, helper->helpers[j]->thistoken);
-				//gen->depth++;
-				generator_handle_statement_EXEC(gen, helper->helpers[j]->thistoken, expl0_or_format, expl0_prevent_else_log_printout);
-				//gen->depth--;
-				//fprintf(gen->code, "%.*s}\n", gen->depth, TABS100);
-			}
-		}
-		gen_stmnt_helper_destroy(helper);
-		expl0_or_format = false;
-	}
-}
-
-
-void generator_handle_statement_EXEC(PGENERATOR gen, token* t, bool expl0_or_format, bool expl0_prevent_else_log_printout)
-{
-	size_t i, j;
-	struct token* othertoken;
-	pgen_stmnt_helper helper;
-	bool flag;
-	switch (t->type)
-	{
-		case S_EXPRESSION:
-		case S_EXPRESSION2:
-			for (i = 0; i < t->top; i++)
-			{
-				generator_handle_statement_EXEC(gen, t->children[i], expl0_or_format, expl0_prevent_else_log_printout);
-				fflush(gen->code);
-			}
-			break;
-		case S_EXPL0:
-			if (expl0_prevent_else_log_printout)
-			{
-				generator_handle_statement_EXEC_EXPL0_print(gen, t, expl0_or_format, expl0_prevent_else_log_printout);
-			}
-			else
-			{
-				expl0_prevent_else_log_printout = true;
-				generator_handle_statement_EXEC_EXPL0_print(gen, t, expl0_or_format, expl0_prevent_else_log_printout);
-				fprintf(gen->code, "%.*selse {\n", gen->depth, TABS100);
-				gen->depth++;
-				fprintf(gen->code, "%.*ss->log(\"Expected '\" ", gen->depth, TABS100);
-				for (i = 0; i < t->top; i++)
-				{
-					if (t->children[i]->type == T_OR)
-					{
-						continue;
-					}
-					helper = gen_stmnt_helper_create();
-					generator_handle_statement_EXEC_get_starts(gen, t->children[i], helper, false);
-					for (j = 0; j < helper->tokens_top; j++)
-					{
-						if (i > 0 || j > 0)
-						{
-							fprintf(gen->code, " \"' or '\" ");
-						}
-						generator_write_macro(gen->code, gen->origtext, helper->tokens[j]);
-						fprintf(gen->code, "_STR");
-					}
-					gen_stmnt_helper_destroy(helper);
-				}
-				fprintf(gen->code, " \"'\", s->line, s->col, s->off, token_next_type(s));\n");
-				gen->depth--;
-				fprintf(gen->code, "%.*s}\n", gen->depth, TABS100);
-				expl0_prevent_else_log_printout = false;
-			}
-			break;
-		case S_EXPL1:
-			if (t->top > 1)
-			{
-				fprintf(gen->code, "%.*swhile (true) {\n", gen->depth, TABS100);
-				gen->depth++;
-				generator_handle_statement_EXEC(gen, t->children[1], false, true);
-				fprintf(gen->code, "%.*selse { break; }\n", gen->depth, TABS100);
-				gen->depth--;
-				fprintf(gen->code, "%.*s}\n", gen->depth, TABS100);
-			}
-			else
-			{
-				generator_handle_statement_EXEC(gen, t->children[0], false, expl0_prevent_else_log_printout);
-			}
-			break;
-		case S_EXPL2:
-			generator_handle_statement_EXEC(gen, t->children[t->top > 1 ? 1 : 0], false, expl0_prevent_else_log_printout);
-			break;
-		case S_EXPL3:
-			if (t->top > 1)
-			{
-				generator_handle_statement_EXEC(gen, t->children[1], false, expl0_prevent_else_log_printout);
-			}
-			else
-			{
-				if ((flag = gen->helper_is_first_after_EXP_start))
-				{
-					gen->helper_is_first_after_EXP_start = false;
-				}
-				else
-				{
-					fprintf(gen->code, "%.*sif (", gen->depth, TABS100);
-					generator_handle_statement_EXEC_write_start(gen, t->children[0]);
-					fprintf(gen->code, ") {\n");
-					gen->depth++;
-				}
-
-				if (t->children[0]->type == T_TOKENIDENT)
-				{
-					fprintf(gen->code, "%.*s" "t = token_gen(s, ", gen->depth, TABS100);
-					generator_write_macro(gen->code, gen->origtext, t->children[0]);
-					fprintf(gen->code, ");" "\n"
-						"%.*s" "t->length = len;" "\n"
-						"%.*s" "token_skip(s, len);" "\n"
-						"%.*s" "token_push(thistoken, t);" "\n",
-						gen->depth, TABS100,
-						gen->depth, TABS100,
-						gen->depth, TABS100
-					);
-				}
-				else //if (t->children[0]->type == T_STATEIDENT) implicit
-				{
-					fprintf(gen->code, "%.*s%.*s(s, thistoken);\n", gen->depth, TABS100, t->children[0]->length, gen->origtext + t->children[0]->offset);
-				}
-
-				if (!flag)
-				{
-					gen->depth--;
-					fprintf(gen->code, "%.*s} else {\n", gen->depth, TABS100);
-					gen->depth++;
-					fprintf(gen->code, "%.*ss->log(\"Expected '\" ", gen->depth, TABS100);
-					generator_write_macro(gen->code, gen->origtext, t->children[0]);
-					fprintf(gen->code, "_STR \"'\", s->line, s->col, s->off, token_next_type(s));\n");
-					gen->depth--;
-					fprintf(gen->code, "%.*s}\n", gen->depth, TABS100);
-				}
-			}
-			break;
-	}
-}
-
 
 void generator_handle_statement_EXEC_flattened_casing_errorlogging_recursive(PGENERATOR gen, token *flattened, size_t index, size_t *i, bool *start_printed, bool *or_required)
 {
@@ -970,7 +721,6 @@ void generator_handle_statement_EXEC_flattened_casing_errorlogging_recursive(PGE
 void generator_handle_statement_EXEC_flattened_casing_errorlogging(PGENERATOR gen, token *flattened, size_t index)
 {
 	size_t i = index == flattened->top ? index - 1 : index, enclosure_counter = 0;
-	pgen_stmnt_helper helper;
 	bool start_printed = false;
 	bool flag;
 
@@ -1023,7 +773,6 @@ void generator_handle_statement_EXEC_flattened_casing_errorlogging(PGENERATOR ge
 void generator_handle_statement_EXEC_flattened_casing_forward_condition_scan(PGENERATOR gen, token *flattened, size_t index)
 {
 	size_t enclosure_counter = 0;
-	pgen_stmnt_helper helper;
 	bool start_printed = false;
 	bool initial_printed = false;
 
@@ -1071,8 +820,8 @@ void generator_handle_statement_EXEC_flattened_casing_forward_condition_scan(PGE
 }
 bool generator_tmode__notoken(PGENERATOR gen, token* t)
 {
-	size_t i, j;
-	token *def = NULL, *tmp, *tmp2;
+	size_t i;
+	token *def = NULL, *tmp;
 	for (i = 0; i < gen->root->top; i++)
 	{
 		tmp = gen->root->children[i];
@@ -1275,7 +1024,7 @@ void generator_handle_statement_EXEC_flattened_casing(PGENERATOR gen, token *fla
 }
 void generator_handle_statement_EXEC_flattened(PGENERATOR gen, token* input)
 {
-	token *flattened, *t, *tla;
+	token *flattened;
 	size_t i = 0;
 
 	//Generate temporary token for usage in token_flatten
