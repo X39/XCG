@@ -1081,17 +1081,8 @@ void generate(PGENERATOR gen)
 	//Handle Header-Section
 	{
 		//Create the different macros
-		fprintf(gen->header, "#pragma once\n"
-			"#include <stdbool.h>" "\n"
-			"#include <stdlib.h>" "\n"
-			"\n"
-			"#ifndef TOKEN_INITIALSIZE" "\n"
-			"#define TOKEN_INITIALSIZE 25" "\n"
-			"#endif" "\n"
-			"\n"
-			"#define T__INVALID 0" "\n"
-			"#define T__FIRST 1" "\n"
-		);
+		fprintf(gen->header, gen->f.header_head);
+		fprintf(gen->header, gen->f.header_enumeration_tokens_start);
 		gen->depth = 1;
 		for (index = 0; index < gen->root->top; index++)
 		{
@@ -1103,7 +1094,8 @@ void generate(PGENERATOR gen)
 					break;
 			}
 		}
-		fprintf(gen->header, "#define T__LAST %u" "\n", gen->depth - 1);
+		fprintf(gen->header, gen->f.header_enumeration_tokens_end, gen->depth - 1);
+		fprintf(gen->header, gen->f.header_enumeration_tokens_start, gen->depth);
 		for (index = 0; index < gen->root->top; index++)
 		{
 			token = gen->root->children[index];
@@ -1114,46 +1106,21 @@ void generate(PGENERATOR gen)
 					break;
 			}
 		}
+		fprintf(gen->header, gen->f.header_enumeration_statements_end, gen->depth - 1);
 
 		//Create the method-headers
-		fprintf(gen->header, "\n"
-			"typedef void(*logcallback)(const char* m, size_t l, size_t c, size_t o, char gottype);" "\n"
-			"typedef struct {" "\n"
-			"	size_t line;" "\n"
-			"	size_t col;" "\n"
-			"	size_t off;" "\n"
-			"	const char* txt;" "\n"
-			"	logcallback log;" "\n"
-			"} scan;" "\n"
-			"typedef struct token {" "\n"
-			"	size_t line;" "\n"
-			"	size_t column;" "\n"
-			"	size_t offset;" "\n"
-			"	size_t length;" "\n"
-			"	char type;" "\n"
-			"	size_t size;" "\n"
-			"	size_t top;" "\n"
-			"	struct token** children;" "\n"
-			"} token;" "\n"
-			"bool str_equals(const char* strin, const char* otherstr);" "\n"
-			"token* token_gen(scan *s, char type);" "\n"
-			"void token_del(token* ptr);" "\n"
-			"void token_grow(token* ptr);" "\n"
-			"void token_push(token* ptr, token* t);" "\n"
-			"void token_skip(scan* s, size_t skip);" "\n"
-			"size_t token_scan(scan* s, char expected);" "\n"
-			"void token_minimize(token*);" "\n"
-			"char token_next_type(scan* s);" "\n"
-			"\n"
-		);
+		fprintf(gen->header, gen->f.header_logcallback);
+		fprintf(gen->header, gen->f.header_scan_struct);
+		fprintf(gen->header, gen->f.header_token_struct);
+		fprintf(gen->header, gen->f.header_methods);
 		for (index = 0; index < gen->root->top; index++)
 		{
 			token = gen->root->children[index];
 			switch (token->type)
 			{
 				case S_STATEMENT:
-					fprintf(gen->header, "bool %.*s_START(scan*);\n", token->children[0]->length, gen->origtext + token->children[0]->offset);
-					fprintf(gen->header, "void %.*s(scan*, token*);\n", token->children[0]->length, gen->origtext + token->children[0]->offset);
+					fprintf(gen->header, gen->f.header_mhead_statement_start, token->children[0]->length, gen->origtext + token->children[0]->offset);
+					fprintf(gen->header, gen->f.header_mhead_statement, token->children[0]->length, gen->origtext + token->children[0]->offset);
 					break;
 			}
 		}

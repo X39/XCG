@@ -1,5 +1,6 @@
 #pragma once
 #include "Parser.h"
+#include "frontend.h"
 #include <stdio.h>
 #include <stdbool.h>
 
@@ -20,6 +21,7 @@ typedef struct generator
 	bool casesensitive;
 	const char* fname;
 	bool helper_is_first_after_EXP_start;
+	frontend f;
 } generator;
 typedef generator* PGENERATOR;
 

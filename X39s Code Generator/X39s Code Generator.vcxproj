@@ -139,6 +139,7 @@
     <ClCompile Include="Parser.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="frontend.h" />
     <ClInclude Include="Generator.h" />
     <ClInclude Include="Parser.h" />
   </ItemGroup>
