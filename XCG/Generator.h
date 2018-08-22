@@ -8,6 +8,7 @@ typedef struct generator_token {
 	size_t length;
 } generator_token;
 
+
 typedef struct generator
 {
 	FILE* code;

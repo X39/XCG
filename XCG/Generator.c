@@ -314,7 +314,7 @@ void generator_handle_token_recursive(PGENERATOR gen, token* token)
 			if (token->children[token->top - 1]->type != T_PLUS)
 			{
 				fprintf(gen->code, "%.*s", gen->depth, TABS100);
-				fprintf(gen->code, "if(!(");
+				fprintf(gen->code, "if (!(");
 				for (i = 1; i < token->top - 1; i++)
 				{
 					if (i > 1)
@@ -329,7 +329,7 @@ void generator_handle_token_recursive(PGENERATOR gen, token* token)
 			else
 			{
 				fprintf(gen->code, "%.*s", gen->depth, TABS100);
-				fprintf(gen->code, "if(!(");
+				fprintf(gen->code, "if (!(");
 				for (i = 1; i < token->top - 2; i++)
 				{
 					if (i > 1)
@@ -339,10 +339,10 @@ void generator_handle_token_recursive(PGENERATOR gen, token* token)
 					generator_handle_token_recursive(gen, token->children[i]);
 				}
 				fprintf(gen->code, ")) return 0;\n");
-				fprintf(gen->code, "%.*sif(s->txt[i + s->off] == '\\\\' && s->txt[i + s->off + 1] != '\\0') { i++; }\n", gen->depth, TABS100);
+				fprintf(gen->code, "%.*sif (s->txt[i + s->off] == '\\\\' && s->txt[i + s->off + 1] != '\\0') { i++; }\n", gen->depth, TABS100);
 				fprintf(gen->code, "%.*si++;\n", gen->depth, TABS100);
 				fprintf(gen->code, "%.*s", gen->depth, TABS100);
-				fprintf(gen->code, "for(; ");
+				fprintf(gen->code, "for (; ");
 				for (i = 1; i < token->top - 2; i++)
 				{
 					if (i > 1)
@@ -439,47 +439,57 @@ void generator_handle_token_recursive(PGENERATOR gen, token* token)
 			break;
 	}
 }
-void generator_handle_token(PGENERATOR gen, token* token)
+void generator_handle_token(PGENERATOR gen, token* t)
 {
 	size_t index;
 	char c, c2;
+	token* tmp;
 	//print case label
 	fprintf(gen->code, "%.*scase T_", gen->depth, TABS100);
-	for (index = 0; index < token->children[0]->length; index++)
+	for (index = 0; index < t->children[0]->length; index++)
 	{
-		fprintf(gen->code, "%c", toupper(*(gen->origtext + token->children[0]->offset + index)));
+		fprintf(gen->code, "%c", toupper(*(gen->origtext + t->children[0]->offset + index)));
 	}
 	fprintf(gen->code, ":");
-	index = token->children[2]->type == T_GT ? 3 : 4;
-	
-	if (((token->children[index]->length == 1) && (gen->origtext + token->children[index]->offset)[0] != '.') || (token->children[index]->length == 2 && (gen->origtext + token->children[index]->offset)[0] == '\\'))
-	{ //Special case for singe-char tokens (either with or without leading backspace)
-		if ((gen->origtext + token->children[index]->offset)[0] == '\\')
-		{
-			c = (gen->origtext + token->children[index]->offset)[1];
-			c2 = generator_get_escaped_char(c);
-			if (c != c2 || c == '\\')
+	if (t->children[2]->type == S_TOKENSTATIC)
+	{
+		tmp = t->children[2];
+		index = tmp->children[0]->type == T_GT ? 1 : 2;
+
+		if (((tmp->children[index]->length == 1) && (gen->origtext + tmp->children[index]->offset)[0] != '.') || (tmp->children[index]->length == 2 && (gen->origtext + tmp->children[index]->offset)[0] == '\\'))
+		{ //Special case for singe-char tokens (either with or without leading backspace)
+			if ((gen->origtext + tmp->children[index]->offset)[0] == '\\')
 			{
-				fprintf(gen->code, " return s->txt[s->off] == '\\%c' ? 1 : 0;\n", c);
+				c = (gen->origtext + tmp->children[index]->offset)[1];
+				c2 = generator_get_escaped_char(c);
+				if (c != c2 || c == '\\')
+				{
+					fprintf(gen->code, " return s->txt[s->off] == '\\%c' ? 1 : 0;\n", c);
+				}
+				else
+				{
+					fprintf(gen->code, " return s->txt[s->off] == '%c' ? 1 : 0;\n", c);
+				}
 			}
 			else
 			{
+				c = (gen->origtext + tmp->children[index]->offset)[0];
 				fprintf(gen->code, " return s->txt[s->off] == '%c' ? 1 : 0;\n", c);
 			}
 		}
 		else
-		{
-			c = (gen->origtext + token->children[index]->offset)[0];
-			fprintf(gen->code, " return s->txt[s->off] == '%c' ? 1 : 0;\n", c);
+		{ //Normal handle for token-parsing
+			fprintf(gen->code, "\n%.*s{\n", gen->depth, TABS100);
+			gen->depth++;
+			generator_handle_token_recursive(gen, tmp->children[index]);
+			gen->depth--;
+			fprintf(gen->code, "%.*s}\n", gen->depth, TABS100);
 		}
 	}
-	else
-	{ //Normal handle for token-parsing
-		fprintf(gen->code, "\n%.*s{\n", gen->depth, TABS100);
-		gen->depth++;
-		generator_handle_token_recursive(gen, token->children[index]);
-		gen->depth--;
-		fprintf(gen->code, "%.*s}\n", gen->depth, TABS100);
+	else if (t->children[2]->type == S_TOKENRUNTIME)
+	{
+		tmp = t->children[2]->children[1];
+		fprintf(gen->code, " return s->resolvers[%*.s](s);\n", tmp->length, gen->origtext + tmp->offset);
 	}
 }
 
@@ -886,6 +896,7 @@ void generator_handle_statement_EXEC_flattened_casing(PGENERATOR gen, token *fla
 
 			case T_SQUAREO:
 				fprintf(gen->code, parenttype == T_OR || elsemode == ELSEMODE_PREPARED ? "%.*selse if (" : "%.*sif (", gen->depth, TABS100);
+				gen->depth++;
 				generator_handle_statement_EXEC_flattened_casing_forward_condition_scan(gen, flattened, *index);
 				fprintf(gen->code, ") {\n");
 				++*index;
@@ -1118,12 +1129,14 @@ void generate(PGENERATOR gen)
 		//Create the method-headers
 		fprintf(gen->header, "\n"
 			"typedef void(*logcallback)(const char* m, size_t l, size_t c, size_t o, char gottype);" "\n"
-			"typedef struct {" "\n"
+			"typedef size_t(*token_scan_resolver)(struct scan*);" "\n"
+			"typedef struct scan {" "\n"
 			"	size_t line;" "\n"
 			"	size_t col;" "\n"
 			"	size_t off;" "\n"
 			"	const char* txt;" "\n"
 			"	logcallback log;" "\n"
+			"	token_scan_resolver* resolvers;" "\n"
 			"} scan;" "\n"
 			"typedef struct token {" "\n"
 			"	size_t line;" "\n"

@@ -8,21 +8,18 @@
 #include <crtdbg.h>
 #endif
 
-#define VERSION "1.1"
+#define VERSION "1.2"
+
+#define SPACE10 "          "
+#define SPACE50 SPACE10 SPACE10 SPACE10 SPACE10 SPACE10 
+#define SPACE100 SPACE50 SPACE50
+#define SPACE500 SPACE100 SPACE100 SPACE100 SPACE100 SPACE100 
+#define SPACE1000 SPACE500 SPACE500 
 
 void treeprint(scan* s, token* t, int depth)
 {
 	unsigned int i;
-	printf("%.*s", depth * 2,
-		"                                                  " //50
-		"                                                  " //100
-		"                                                  " //150
-		"                                                  " //200
-		"                                                  " //250
-		"                                                  " //300
-		"                                                  " //350
-		"                                                  " //400
-	);
+	printf("%.*s", depth * 2, SPACE1000);
 	switch (t->type)
 	{
 		case T_TOKENIDENT: printf("TOKEN: TOKENIDENT"); break;
@@ -131,6 +128,7 @@ void print_help(void)
 {
 	printf(
 		"Warning! Arguments are never properly checked!\n"
+		"To get the documentation, use the -d param.\n"
 		"    Usage: xcg -i <path> -o <name>\n"
 		"        -i    Sets the path to a EBNF-like file.\n"
 		"              Should be a valid path.\n"
@@ -151,6 +149,14 @@ void print_help(void)
 		"        -v    Prints current version informations and terminates\n"
 		"              with exit code 0.\n"
 		"\n"
+		"        -d    Prints the documentation to the console and\n"
+		"              terminates with exit code 0.\n"
+		"\n"
+	);
+}
+void print_documentation(void)
+{
+	printf(
 		"    Input File Documentation:\n"
 		"        The input file format was designed to look and feel like\n"
 		"        Some actual EBNF implementation. However, it is not!\n"
@@ -186,6 +192,10 @@ void print_help(void)
 		"                - An optional representation for errors\n"
 		"                - the actual token\n"
 		"                - Optional token mods\n"
+		"            Or, in the case of runtime-resolved tokens:\n"
+		"                - A name\n"
+		"                - The index of the resolver in the scan struct\n"
+		"            ---Following applies to normal tokens---\n"
 		"            The syntax of a token somewhat resembles regex,\n"
 		"            but do not be fooled! It is no actual regex\n"
 		"            involved!\n"
@@ -205,6 +215,25 @@ void print_help(void)
 		"                notoken - Prevents token generation so that\n"
 		"                          it does not appears inside the\n"
 		"                          generated tree.\n"
+		"            ---Following applies to runtime-solved tokens---\n"
+		"            Runtime-resolved tokens can be used to alter\n"
+		"            Parsing results during runtime or to provide\n"
+		"            a matter of matching tokens which can change\n"
+		"            according to implementation but syntax stays\n"
+		"            the same (eg. virtual machines with different\n"
+		"            operators that can be defined).\n"
+		"            They consist of a lowercase name, and an index\n"
+		"            which represents the actual method used to\n"
+		"            resolve those tokens inside of the scan struct.\n"
+		"            The scan struct will have to be prepared by you\n"
+		"            in that case to actually contain the resolver\n"
+		"            at provided index. There will be no checks done\n"
+		"            if a resolver exists at provided spot.\n"
+		"            Neither will the scan.resolvers spot ever be\n"
+		"            modified by the parser, meaning you have to\n"
+		"            clean it up yourself too.\n"
+		"            Usage:\n"
+		"                name =? index\n"
 		"        - Statements:\n"
 		"            Statements are rules about how to parse something.\n"
 		"            They always have to be named fully uppercase.\n"
@@ -369,6 +398,9 @@ int main(int argc, char** argv)
 					break;
 				case 'v':
 					printf("X39s Code Generator (XCG) v" VERSION "\n");
+					return 0;
+				case 'd':
+					print_documentation();
 					return 0;
 				default:
 					printf("Invalid Usage! Use the `-?` option for more info.\n");
