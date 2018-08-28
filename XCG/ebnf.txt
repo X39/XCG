@@ -47,9 +47,9 @@ ALINECOMMENTSTART = linecommentstart anytext;
 //Token that will be looked up.
 //Stuff inbetween the stmtsep and the gt is used for the tostring representation.
 //All tokens need to be LF(1).
-TOKEN = tokenident stmtsep ( TOKENSTATIC | TOKENRUNTIME );
+TOKEN = tokenident stmtsep ( TOKENRUNTIME | TOKENSTATIC );
 TOKENSTATIC = ( gt | anytext gt ) TC { questionmark TMODE } sc;
-TOKENRUNTIME = questionmark number;
+TOKENRUNTIME = questionmark number sc;
 TC = { TC0 };
 TCG = roundo TC1 { TC1 } roundc [ plus ];
 //range

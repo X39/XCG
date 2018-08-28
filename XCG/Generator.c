@@ -496,7 +496,7 @@ void generator_handle_token(PGENERATOR gen, token* t)
 	else if (t->children[2]->type == S_TOKENRUNTIME)
 	{
 		tmp = t->children[2]->children[1];
-		fprintf(gen->code, " return s->resolvers[%*.s](s);\n", tmp->length, gen->origtext + tmp->offset);
+		fprintf(gen->code, " return s->resolvers[%.*s](s);\n", tmp->length, gen->origtext + tmp->offset);
 	}
 }
 

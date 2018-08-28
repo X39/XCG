@@ -87,7 +87,7 @@ void token_skip(scan* s, size_t skip) {
 }
 size_t token_scan(scan* s, char expected) {
 	int i = 0;
-	switch (expected) {
+	switch(expected) {
 		case T_TOKENIDENT:
 		{
 			if (!((s->txt[i + s->off] >= 'a' && s->txt[i + s->off] <= 'z'))) return 0;
@@ -95,7 +95,7 @@ size_t token_scan(scan* s, char expected) {
 			if (!((s->txt[i + s->off] >= 'a' && s->txt[i + s->off] <= 'z') || (s->txt[i + s->off] >= '0' && s->txt[i + s->off] <= '9'))) return 0;
 			if (s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; }
 			i++;
-			for (; (s->txt[i + s->off] >= 'a' && s->txt[i + s->off] <= 'z') || (s->txt[i + s->off] >= '0' && s->txt[i + s->off] <= '9'); i++) { if (s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; } };
+			for (; (s->txt[i + s->off] >= 'a' && s->txt[i + s->off] <= 'z') || (s->txt[i + s->off] >= '0' && s->txt[i + s->off] <= '9'); i++) { if(s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; } };
 			return i;
 		}
 		case T_STATEIDENT:
@@ -105,7 +105,7 @@ size_t token_scan(scan* s, char expected) {
 			if (!((s->txt[i + s->off] >= 'A' && s->txt[i + s->off] <= 'Z') || (s->txt[i + s->off] >= '0' && s->txt[i + s->off] <= '9'))) return 0;
 			if (s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; }
 			i++;
-			for (; (s->txt[i + s->off] >= 'A' && s->txt[i + s->off] <= 'Z') || (s->txt[i + s->off] >= '0' && s->txt[i + s->off] <= '9'); i++) { if (s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; } };
+			for (; (s->txt[i + s->off] >= 'A' && s->txt[i + s->off] <= 'Z') || (s->txt[i + s->off] >= '0' && s->txt[i + s->off] <= '9'); i++) { if(s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; } };
 			return i;
 		}
 		case T_STMTSEP: return s->txt[s->off] == '=' ? 1 : 0;
@@ -123,11 +123,6 @@ size_t token_scan(scan* s, char expected) {
 		case T_LINECOMMENTSTART:
 		{
 			i += str_equals(s->txt + s->off, "LINECOMMENTSTART") ? 16 : 0;
-			return i;
-		}
-		case T_RUNTIMESOLVER:
-		{
-			i += str_equals(s->txt + s->off, "RUNTIMESOLVER") ? 13 : 0;
 			return i;
 		}
 		case T_OR: return s->txt[s->off] == '|' ? 1 : 0;
@@ -156,7 +151,7 @@ size_t token_scan(scan* s, char expected) {
 			if (!((s->txt[i + s->off] >= '0' && s->txt[i + s->off] <= '9'))) return 0;
 			if (s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; }
 			i++;
-			for (; (s->txt[i + s->off] >= '0' && s->txt[i + s->off] <= '9'); i++) { if (s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; } };
+			for (; (s->txt[i + s->off] >= '0' && s->txt[i + s->off] <= '9'); i++) { if(s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; } };
 			return i;
 		}
 		case T_ALPHALOW:
@@ -191,7 +186,7 @@ size_t token_scan(scan* s, char expected) {
 			if (!((s->txt[i + s->off] != ' ' && s->txt[i + s->off] != '\r' && s->txt[i + s->off] != '\n' && s->txt[i + s->off] != '\t') ? 1 : 0)) return 0;
 			if (s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; }
 			i++;
-			for (; (s->txt[i + s->off] != ' ' && s->txt[i + s->off] != '\r' && s->txt[i + s->off] != '\n' && s->txt[i + s->off] != '\t') ? 1 : 0; i++) { if (s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; } };
+			for (; (s->txt[i + s->off] != ' ' && s->txt[i + s->off] != '\r' && s->txt[i + s->off] != '\n' && s->txt[i + s->off] != '\t') ? 1 : 0; i++) { if(s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; } };
 			return i;
 		}
 		case T_ANY:
@@ -354,14 +349,14 @@ void TOKEN(scan* s, token* parent) {
 			token_skip(s, len);
 			token_push(thistoken, t);
 		}
-		if (TOKENSTATIC_START(s)) {
-			TOKENSTATIC(s, thistoken);
-		}
-		else if (TOKENRUNTIME_START(s)) {
+		if (TOKENRUNTIME_START(s)) {
 			TOKENRUNTIME(s, thistoken);
 		}
+		else if (TOKENSTATIC_START(s)) {
+			TOKENSTATIC(s, thistoken);
+		}
 		else {
-			s->log("Expected '" S_TOKENSTATIC_STR "' or '" S_TOKENRUNTIME_STR "'", s->line, s->col, s->off, token_next_type(s));
+			s->log("Expected '" S_TOKENRUNTIME_STR "' or '" S_TOKENSTATIC_STR "'", s->line, s->col, s->off, token_next_type(s));
 		}
 	}
 	else {
@@ -435,8 +430,14 @@ void TOKENRUNTIME(scan* s, token* parent) {
 		t->length = len;
 		token_skip(s, len);
 		token_push(thistoken, t);
-		if ((len = token_scan(s, T_ANYTEXT)) > 0) {
-			t = token_gen(s, T_ANYTEXT);
+		if ((len = token_scan(s, T_NUMBER)) > 0) {
+			t = token_gen(s, T_NUMBER);
+			t->length = len;
+			token_skip(s, len);
+			token_push(thistoken, t);
+		}
+		if ((len = token_scan(s, T_SC)) > 0) {
+			t = token_gen(s, T_SC);
 			t->length = len;
 			token_skip(s, len);
 			token_push(thistoken, t);
