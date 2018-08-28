@@ -430,7 +430,14 @@ void generator_handle_token_recursive(PGENERATOR gen, token* token)
 					fprintf(gen->code, "%c", (gen->origtext + token->children[0]->offset)[0]);
 					break;
 				case T_BS:
-					fprintf(gen->code, "%c", generator_get_escaped_char((gen->origtext + token->children[1]->offset)[0]));
+					if ((gen->origtext + token->children[1]->offset)[0] == '"')
+					{
+						fprintf(gen->code, "\\\"");
+					}
+					else
+					{
+						fprintf(gen->code, "%c", generator_get_escaped_char((gen->origtext + token->children[1]->offset)[0]));
+					}
 					break;
 				case S_TCG:
 					generator_handle_token_recursive(gen, token->children[0]);
