@@ -1376,7 +1376,7 @@ void generate(PGENERATOR gen)
 					break;
 			}
 		}
-		fprintf(gen->code, "\t}\n}\n");
+		fprintf(gen->code, "\t}\n\treturn 0;\n}\n");
 
 		for (index = 0; index < gen->root->top; index++)
 		{
