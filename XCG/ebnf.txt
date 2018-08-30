@@ -1,6 +1,8 @@
 @SKIP \ \r\n\t
 @CASESENSITIVE true
 @LINECOMMENTSTART \/\/
+@BLOCKCOMMENTSTART \/\*
+@BLOCKCOMMENTEND \*\/
 
 tokenident => (a-z)(a-z0-9)+;
 stateident => (A-Z)(A-Z0-9)+;
@@ -9,6 +11,8 @@ annotation = "@" > \@;
 skip => SKIP;
 casesensitive => CASESENSITIVE;
 linecommentstart => LINECOMMENTSTART;
+blockcommentstart => BLOCKCOMMENTSTART;
+blockcommentend => BLOCKCOMMENTEND;
 or = "|" > \|;
 curlyo = "{" > \{;
 curlyc = "}" > \};
@@ -39,10 +43,12 @@ EBNF = { ANNOTATION } { TOKEN | STATEMENT };
 
 
 //Switches in the generator
-ANNOTATION = annotation ( ASKIP | ACASESENSITIVE | ALINECOMMENTSTART );
+ANNOTATION = annotation ( ASKIP | ACASESENSITIVE | ALINECOMMENTSTART | BLOCKCOMMENTSTART | BLOCKCOMMENTEND );
 ASKIP = skip anytext;
 ACASESENSITIVE = casesensitive ( true | false );
 ALINECOMMENTSTART = linecommentstart anytext;
+BLOCKCOMMENTSTART = blockcommentstart anytext;
+BLOCKCOMMENTEND = blockcommentend anytext;
 
 //Token that will be looked up.
 //Stuff inbetween the stmtsep and the gt is used for the tostring representation.

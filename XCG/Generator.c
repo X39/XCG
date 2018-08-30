@@ -135,8 +135,9 @@ PGENERATOR generator_create(FILE* code, FILE* header, const char* fname, token* 
 	gen->origtext = origtext;
 	gen->fname = fname;
 	gen->root = r;
-	gen->linecommentstart = malloc(sizeof(char) * 3);
-	strcpy(gen->linecommentstart, "//");
+	gen->linecommentstart = NULL;
+	gen->blockcommentstart = NULL;
+	gen->blockcommentend = NULL;
 	gen->skip_characters = malloc(sizeof(char) * 10);
 	strcpy(gen->skip_characters, "\\ \\t\\r\\n");
 	if (r->top == 1 && r->children[0]->type == S_EBNF)
@@ -147,7 +148,9 @@ PGENERATOR generator_create(FILE* code, FILE* header, const char* fname, token* 
 }
 void generator_destroy(PGENERATOR gen)
 {
-	free(gen->linecommentstart);
+	if (gen->linecommentstart != NULL) { free(gen->linecommentstart); }
+	if (gen->blockcommentstart != NULL) { free(gen->blockcommentstart); }
+	if (gen->blockcommentend != NULL) { free(gen->blockcommentend); }
 	free(gen->skip_characters);
 	free(gen);
 }
@@ -177,10 +180,33 @@ void generator_handle_annotation(PGENERATOR gen, token* anno)
 			gen->casesensitive = anno->children[1]->children[1]->type == T_TRUE;
 			break;
 		case S_ALINECOMMENTSTART:
-			free(gen->linecommentstart);
+			if (gen->linecommentstart != NULL)
+			{
+				free(gen->linecommentstart);
+			}
 			gen->linecommentstart = malloc(anno->children[1]->children[1]->length + 1);
 			strncpy(gen->linecommentstart, gen->origtext + anno->children[1]->children[1]->offset, anno->children[1]->children[1]->length);
 			gen->linecommentstart[anno->children[1]->children[1]->length] = '\0';
+			break;
+		case S_BLOCKCOMMENTSTART:
+			if (gen->blockcommentstart != NULL)
+			{
+				free(gen->blockcommentstart);
+			}
+			gen->blockcommentstart = malloc(anno->children[1]->children[1]->length + 1);
+			strncpy(gen->blockcommentstart, gen->origtext + anno->children[1]->children[1]->offset, anno->children[1]->children[1]->length);
+			gen->blockcommentstart[anno->children[1]->children[1]->length] = '\0';
+
+			break;
+		case S_BLOCKCOMMENTEND:
+			if (gen->blockcommentend != NULL)
+			{
+				free(gen->blockcommentend);
+			}
+			gen->blockcommentend = malloc(anno->children[1]->children[1]->length + 1);
+			strncpy(gen->blockcommentend, gen->origtext + anno->children[1]->children[1]->offset, anno->children[1]->children[1]->length);
+			gen->blockcommentend[anno->children[1]->children[1]->length] = '\0';
+
 			break;
 	}
 }
@@ -190,23 +216,69 @@ void generator_write_token_skip_method(PGENERATOR gen)
 	char c;
 	bool nlAvailable = false;
 	bool isEscaped;
-	fprintf(gen->code, "void token_skip(scan* s, size_t skip) {" "\n"
-		"\tbool commentmode = false;" "\n"
-		"\ts->off += skip;" "\n"
+	fprintf(gen->code, "void token_skip(scan* s, size_t skip) {" "\n");
+	if (gen->linecommentstart != NULL)
+	{
+		fprintf(gen->code, "\tbool lcommentmode = false;" "\n");
+	}
+	if (gen->blockcommentstart != NULL)
+	{
+		fprintf(gen->code, "\tbool bcommentmode = false;" "\n");
+	}
+	fprintf(gen->code, "\ts->off += skip;" "\n"
 		"\ts->col += skip;" "\n"
-		"\twhile (s->txt[s->off] != '\\0') {" "\n"
-		"\t\tif (commentmode) {" "\n"
-		"\t\t\ts->off++;" "\n"
-		"\t\t\ts->col++;" "\n"
-		"\t\t\tif (s->txt[s->off] == '\\n') {" "\n"
-		"\t\t\t\tcommentmode = false;" "\n"
-		"\t\t\t\ts->line++;" "\n"
-		"\t\t\t\ts->col = 0;" "\n"
-		"\t\t\t}" "\n"
-		"\t\t\tcontinue;" "\n"
-		"\t\t}" "\n"
-		"\t\tswitch (s->txt[s->off]) {" "\n"
-	);
+		"\twhile (s->txt[s->off] != '\\0') {" "\n");
+	if (gen->linecommentstart != NULL)
+	{
+		fprintf(gen->code,
+			"\t\tif (lcommentmode) {" "\n"
+			"\t\t\ts->off++;" "\n"
+			"\t\t\ts->col++;" "\n"
+			"\t\t\tif (s->txt[s->off] == '\\n') {" "\n"
+			"\t\t\t\tlcommentmode = false;" "\n"
+			"\t\t\t\ts->line++;" "\n"
+			"\t\t\t\ts->col = 0;" "\n"
+			"\t\t\t}" "\n"
+			"\t\t\tcontinue;" "\n"
+			"\t\t}" "\n"
+		);
+	}
+	if (gen->blockcommentend != NULL)
+	{
+		fprintf(gen->code,
+			"\t\tif (bcommentmode) {" "\n"
+			"\t\t\ts->off++;" "\n"
+			"\t\t\ts->col++;" "\n"
+			"\t\t\tif (");
+		isEscaped = false; //Why you no use proper variable for dis!?
+		for (i = 0, j = 0; (c = gen->blockcommentend[i]) != '\0'; i++)
+		{
+			if (c == '\\' && gen->blockcommentend[i + 1] != '\0')
+			{
+				i++;
+				c = gen->blockcommentend[i];
+			}
+			if (isEscaped) //Ohh bro ... really ...
+			{
+				fprintf(gen->code, " && ");
+			}
+			else
+			{
+				isEscaped = true; //You need help dude
+			}
+			fprintf(gen->code, "s->txt[s->off + %u] == '%c'", j, c);
+			j++;
+		}
+		fprintf(gen->code, ") {" "\n"
+			"\t\t\t\tbcommentmode = false;" "\n"
+			"\t\t\t\ts->line++;" "\n"
+			"\t\t\t\ts->col = 0;" "\n"
+			"\t\t\t}" "\n"
+			"\t\t\tcontinue;" "\n"
+			"\t\t}" "\n"
+		);
+	}
+	fprintf(gen->code, "\t\tswitch (s->txt[s->off]) {" "\n");
 
 	for (i = 0; (c = gen->skip_characters[i]) != '\0'; i++)
 	{
@@ -241,28 +313,56 @@ void generator_write_token_skip_method(PGENERATOR gen)
 	{
 		fprintf(gen->code, "\t\t\tcase '\\n': s->line++; s->col = 0; return;\n");
 	}
-	fprintf(gen->code, "\t\t\tcase '%c': ", gen->linecommentstart[gen->linecommentstart[0] == '\\' ? 1 : 0]);
-	fprintf(gen->code, "if (");
-	nlAvailable = false; //cries "rape"
-	for (i = gen->linecommentstart[0] == '\\' ? 2 : 1, j = 1; (c = gen->linecommentstart[i]) != '\0'; i++)
+	fprintf(gen->code, "\t\t\tdefault:\n");
+	if (gen->linecommentstart != NULL)
 	{
-		if (c == '\\' && gen->linecommentstart[i + 1] != '\0')
+		fprintf(gen->code, "\t\t\t\tif (");
+		nlAvailable = false; //cries "rape"
+		for (i = 0, j = 0; (c = gen->linecommentstart[i]) != '\0'; i++)
 		{
-			i++;
-			c = gen->linecommentstart[i];
+			if (c == '\\' && gen->linecommentstart[i + 1] != '\0')
+			{
+				i++;
+				c = gen->linecommentstart[i];
+			}
+			if (nlAvailable) //cries "Why you do this to me.." T_T
+			{
+				fprintf(gen->code, " && ");
+			}
+			else
+			{
+				nlAvailable = true; //cries "No more please!"
+			}
+			fprintf(gen->code, "s->txt[s->off + %u] == '%c'", j, c);
+			j++;
 		}
-		if (nlAvailable) //cries "Why you do this to me.." T_T
-		{
-			fprintf(gen->code, " && ");
-		}
-		else
-		{
-			nlAvailable = true; //cries "No more please!"
-		}
-		fprintf(gen->code, "s->txt[s->off + %u] == '%c'", j, c);
+		fprintf(gen->code, ") { lcommentmode = true; break; }\n");
 	}
-	fprintf(gen->code, ") { commentmode = true; break; }\n");
-	fprintf(gen->code, "\t\t\tdefault: return;\n\t\t}\n\t}\n}\n");
+	if (gen->blockcommentstart != NULL)
+	{
+		fprintf(gen->code, "\t\t\t\tif (");
+		nlAvailable = false; //cries "How are you not yet satisfied" T_T
+		for (i = 0, j = 0; (c = gen->blockcommentstart[i]) != '\0'; i++)
+		{
+			if (c == '\\' && gen->blockcommentstart[i + 1] != '\0')
+			{
+				i++;
+				c = gen->blockcommentstart[i];
+			}
+			if (nlAvailable) //cries "LET ME GO" T_T
+			{
+				fprintf(gen->code, " && ");
+			}
+			else
+			{
+				nlAvailable = true; //cries "No more please!"
+			}
+			fprintf(gen->code, "s->txt[s->off + %u] == '%c'", j, c);
+			j++;
+		}
+		fprintf(gen->code, ") { bcommentmode = true; break; }\n");
+	}
+	fprintf(gen->code, "\t\t\t\treturn;\n\t\t}\n\t}\n}\n");
 }
 void generator_create_macro(PGENERATOR gen, token* token)
 {
@@ -586,7 +686,7 @@ void generator_handle_statement_START(PGENERATOR gen, token* token)
 			{
 				generator_handle_statement_START(gen, token->children[1]);
 			}
-			else if(token->children[0]->type == T_TOKENIDENT)
+			else if (token->children[0]->type == T_TOKENIDENT)
 			{
 				fprintf(gen->code, "token_scan(s, T_");
 				for (i = 0; i < token->children[0]->length; i++)
@@ -665,7 +765,7 @@ void generator_handle_statement_EXEC_write_start(PGENERATOR gen, token* t)
 		generator_write_macro(gen->code, gen->origtext, t);
 		fprintf(gen->code, ")) > 0");
 	}
-	else if(t->type == T_STATEIDENT)
+	else if (t->type == T_STATEIDENT)
 	{
 		fprintf(gen->code, "%.*s_START(s)", t->length, gen->origtext + t->offset);
 	}
@@ -998,7 +1098,7 @@ void generator_handle_statement_EXEC_flattened_casing(PGENERATOR gen, token *fla
 							fprintf(gen->code, "%.*s}\n", gen->depth, TABS100);
 							generator_handle_statement_EXEC_flattened_casing_errorlogging(gen, flattened, (*index) - 1);
 						}
-						else if(tla->type == T_OR)
+						else if (tla->type == T_OR)
 						{
 							--*index;
 						}
@@ -1286,8 +1386,55 @@ void generate(PGENERATOR gen)
 		}
 	}
 }
-
 void generator_validate_token_tree(PGENERATOR gen, token* t, bool * success)
+{
+	size_t i;
+	token* tmp;
+	bool hasblockcommentstart = false;
+	bool hasblockcommentend = false;
+	if (t->type == T__INVALID && t->top == 0)
+	{
+		fprintf(stderr, "Token provided is invalid and empty.\n");
+		*success = false;
+		return;
+	}
+	if (t->type == T__INVALID && t->children[0]->type == S_EBNF)
+	{
+		t = t->children[0];
+	}
+	for (i = 0; i < t->top; i++)
+	{
+		tmp = t->children[i];
+		if (tmp->type == T_ANNOTATION)
+		{
+			switch (tmp->children[1]->type)
+			{
+				case S_BLOCKCOMMENTSTART:
+					hasblockcommentstart = true;
+					break;
+				case S_BLOCKCOMMENTEND:
+					hasblockcommentend = true;
+					break;
+			}
+		}
+	}
+	if (hasblockcommentstart != hasblockcommentend)
+	{
+		if (hasblockcommentstart)
+		{
+			fprintf(stderr, "Missing annotation for blockcommentend.\n");
+			*success = false;
+		}
+		else
+		{
+			fprintf(stderr, "Missing annotation for blockcommentstart.\n");
+			*success = false;
+		}
+	}
+	generator_validate_token_tree_inner(gen, t, success);
+}
+
+void generator_validate_token_tree_inner(PGENERATOR gen, token* t, bool * success)
 {
 	size_t i;
 	token* tmp;
@@ -1312,7 +1459,7 @@ void generator_validate_token_tree(PGENERATOR gen, token* t, bool * success)
 		default:
 			for (i = 0; i < t->top; i++)
 			{
-				generator_validate_token_tree(gen, t->children[i], success);
+				generator_validate_token_tree_inner(gen, t->children[i], success);
 			}
 			break;
 	}

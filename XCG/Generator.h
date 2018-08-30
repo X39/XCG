@@ -17,6 +17,8 @@ typedef struct generator
 	unsigned short depth;
 	char* skip_characters;
 	char* linecommentstart;
+	char* blockcommentstart;
+	char* blockcommentend;
 	const char* origtext;
 	bool casesensitive;
 	const char* fname;
@@ -55,4 +57,5 @@ token* generator_handle_statement_find_statement(PGENERATOR, const char*, size_t
 token* generator_handle_statement_find_token(PGENERATOR, const char*, size_t);
 void generator_handle_statement(PGENERATOR, token*);
 void generator_validate_token_tree(PGENERATOR, token*, bool *);
+void generator_validate_token_tree_inner(PGENERATOR, token*, bool *);
 void generate(PGENERATOR);

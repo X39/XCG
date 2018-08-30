@@ -61,15 +61,26 @@ char token_next_type(scan* s) {
 	return T__INVALID;
 }
 void token_skip(scan* s, size_t skip) {
-	bool commentmode = false;
+	bool lcommentmode = false;
+	bool bcommentmode = false;
 	s->off += skip;
 	s->col += skip;
 	while (s->txt[s->off] != '\0') {
-		if (commentmode) {
+		if (lcommentmode) {
 			s->off++;
 			s->col++;
 			if (s->txt[s->off] == '\n') {
-				commentmode = false;
+				lcommentmode = false;
+				s->line++;
+				s->col = 0;
+			}
+			continue;
+		}
+		if (bcommentmode) {
+			s->off++;
+			s->col++;
+			if (s->txt[s->off + 0] == '*' && s->txt[s->off + 1] == '/') {
+				bcommentmode = false;
 				s->line++;
 				s->col = 0;
 			}
@@ -80,8 +91,10 @@ void token_skip(scan* s, size_t skip) {
 			case '\r': s->col++; s->off++; break;
 			case '\n': s->line++; s->col = 0; s->off++; break;
 			case '\t': s->col++; s->off++; break;
-			case '/': if (s->txt[s->off + 1] == '/') { commentmode = true; break; }
-			default: return;
+			default:
+				if (s->txt[s->off + 0] == '/' && s->txt[s->off + 1] == '/') { lcommentmode = true; break; }
+				if (s->txt[s->off + 0] == '/' && s->txt[s->off + 1] == '*') { bcommentmode = true; break; }
+				return;
 		}
 	}
 }
@@ -123,6 +136,16 @@ size_t token_scan(scan* s, char expected) {
 		case T_LINECOMMENTSTART:
 		{
 			i += str_equals(s->txt + s->off, "LINECOMMENTSTART") ? 16 : 0;
+			return i;
+		}
+		case T_BLOCKCOMMENTSTART:
+		{
+			i += str_equals(s->txt + s->off, "BLOCKCOMMENTSTART") ? 17 : 0;
+			return i;
+		}
+		case T_BLOCKCOMMENTEND:
+		{
+			i += str_equals(s->txt + s->off, "BLOCKCOMMENTEND") ? 15 : 0;
 			return i;
 		}
 		case T_OR: return s->txt[s->off] == '|' ? 1 : 0;
@@ -245,8 +268,14 @@ void ANNOTATION(scan* s, token* parent) {
 		else if (ALINECOMMENTSTART_START(s)) {
 			ALINECOMMENTSTART(s, thistoken);
 		}
+		else if (BLOCKCOMMENTSTART_START(s)) {
+			BLOCKCOMMENTSTART(s, thistoken);
+		}
+		else if (BLOCKCOMMENTEND_START(s)) {
+			BLOCKCOMMENTEND(s, thistoken);
+		}
 		else {
-			s->log("Expected '" S_ASKIP_STR "' or '" S_ACASESENSITIVE_STR "' or '" S_ALINECOMMENTSTART_STR "'", s->line, s->col, s->off, token_next_type(s));
+			s->log("Expected '" S_ASKIP_STR "' or '" S_ACASESENSITIVE_STR "' or '" S_ALINECOMMENTSTART_STR "' or '" S_BLOCKCOMMENTSTART_STR "' or '" S_BLOCKCOMMENTEND_STR "'", s->line, s->col, s->off, token_next_type(s));
 		}
 	}
 	else {
@@ -329,6 +358,52 @@ void ALINECOMMENTSTART(scan* s, token* parent) {
 	}
 	else {
 		s->log("Expected '" T_LINECOMMENTSTART_STR "'", s->line, s->col, s->off, token_next_type(s));
+	}
+	thistoken->length = s->off - thistoken->offset;
+	token_push(parent, thistoken);
+}
+bool BLOCKCOMMENTSTART_START(scan* s) { return token_scan(s, T_BLOCKCOMMENTSTART); }
+void BLOCKCOMMENTSTART(scan* s, token* parent) {
+	token* thistoken = token_gen(s, S_BLOCKCOMMENTSTART);
+	token* t;
+	size_t len;
+	if ((len = token_scan(s, T_BLOCKCOMMENTSTART)) > 0) {
+		t = token_gen(s, T_BLOCKCOMMENTSTART);
+		t->length = len;
+		token_skip(s, len);
+		token_push(thistoken, t);
+		if ((len = token_scan(s, T_ANYTEXT)) > 0) {
+			t = token_gen(s, T_ANYTEXT);
+			t->length = len;
+			token_skip(s, len);
+			token_push(thistoken, t);
+		}
+	}
+	else {
+		s->log("Expected '" T_BLOCKCOMMENTSTART_STR "'", s->line, s->col, s->off, token_next_type(s));
+	}
+	thistoken->length = s->off - thistoken->offset;
+	token_push(parent, thistoken);
+}
+bool BLOCKCOMMENTEND_START(scan* s) { return token_scan(s, T_BLOCKCOMMENTEND); }
+void BLOCKCOMMENTEND(scan* s, token* parent) {
+	token* thistoken = token_gen(s, S_BLOCKCOMMENTEND);
+	token* t;
+	size_t len;
+	if ((len = token_scan(s, T_BLOCKCOMMENTEND)) > 0) {
+		t = token_gen(s, T_BLOCKCOMMENTEND);
+		t->length = len;
+		token_skip(s, len);
+		token_push(thistoken, t);
+		if ((len = token_scan(s, T_ANYTEXT)) > 0) {
+			t = token_gen(s, T_ANYTEXT);
+			t->length = len;
+			token_skip(s, len);
+			token_push(thistoken, t);
+		}
+	}
+	else {
+		s->log("Expected '" T_BLOCKCOMMENTEND_STR "'", s->line, s->col, s->off, token_next_type(s));
 	}
 	thistoken->length = s->off - thistoken->offset;
 	token_push(parent, thistoken);
