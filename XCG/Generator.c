@@ -843,7 +843,7 @@ void generator_handle_statement_EXEC_flattened_casing_errorlogging(PGENERATOR ge
 
 	fprintf(gen->code, "%.*selse {\n", gen->depth, TABS100);
 	gen->depth++;
-	fprintf(gen->code, "%.*ss->log(\"Expected '\" ", gen->depth, TABS100);
+	fprintf(gen->code, "%.*ss->log(s->data, \"Expected '\" ", gen->depth, TABS100);
 
 	// Backtrack to T_OR start
 	// `flag` is used in here to break out of the loop.
@@ -1106,7 +1106,7 @@ void generator_handle_statement_EXEC_flattened_casing(PGENERATOR gen, token *fla
 						{
 							fprintf(gen->code, "%.*selse {\n", gen->depth, TABS100);
 							gen->depth++;
-							fprintf(gen->code, "%.*ss->log(\"Expected '\" ", gen->depth, TABS100);
+							fprintf(gen->code, "%.*ss->log(s->data, \"Expected '\" ", gen->depth, TABS100);
 							generator_write_macro(gen->code, gen->origtext, t);
 							fprintf(gen->code, "_STR");
 							fprintf(gen->code, " \"'\", s->line, s->col, s->off, token_next_type(s));\n");
@@ -1237,8 +1237,8 @@ void generate(PGENERATOR gen)
 		fprintf(gen->header, "#ifdef __cplusplus" "\n"
 			"extern \"C\" {" "\n"
 			"#endif" "\n\n"
-			"typedef void(*logcallback)(const char* m, size_t l, size_t c, size_t o, char gottype);" "\n"
-			"typedef size_t(*token_scan_resolver)(struct scan*);" "\n"
+			"typedef void(*logcallback)(void * data, const char * m, size_t l, size_t c, size_t o, char gottype);" "\n"
+			"typedef size_t(*token_scan_resolver)(struct scan * s);" "\n"
 			"typedef struct scan {" "\n"
 			"	size_t line;" "\n"
 			"	size_t col;" "\n"
@@ -1246,6 +1246,7 @@ void generate(PGENERATOR gen)
 			"	const char* txt;" "\n"
 			"	logcallback log;" "\n"
 			"	token_scan_resolver* resolvers;" "\n"
+			"	void* data;" "\n"
 			"} scan;" "\n"
 			"typedef struct token {" "\n"
 			"	size_t line;" "\n"
