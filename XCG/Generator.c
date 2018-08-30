@@ -1405,7 +1405,7 @@ void generator_validate_token_tree(PGENERATOR gen, token* t, bool * success)
 	for (i = 0; i < t->top; i++)
 	{
 		tmp = t->children[i];
-		if (tmp->type == T_ANNOTATION)
+		if (tmp->type == S_ANNOTATION)
 		{
 			switch (tmp->children[1]->type)
 			{
@@ -1416,6 +1416,11 @@ void generator_validate_token_tree(PGENERATOR gen, token* t, bool * success)
 					hasblockcommentend = true;
 					break;
 			}
+		}
+		else if (tmp->type == S_STATEMENT && tmp->children[0]->length == 4 && str_partial_equals(gen->origtext + tmp->children[0]->offset, "FILE", 4))
+		{
+			fprintf(stderr, "Statement '%.*s' requires a different name due to conflicts with FILE struct. Line %u, Column %u\n", tmp->children[0]->length, gen->origtext + tmp->children[0]->offset, tmp->children[0]->line, tmp->children[0]->column);
+			*success = false;
 		}
 	}
 	if (hasblockcommentstart != hasblockcommentend)
