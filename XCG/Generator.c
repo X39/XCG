@@ -1234,7 +1234,9 @@ void generate(PGENERATOR gen)
 		}
 
 		//Create the method-headers
-		fprintf(gen->header, "\n"
+		fprintf(gen->header, "#ifdef __cplusplus" "\n"
+			"extern \"C\" {" "\n"
+			"#endif" "\n\n"
 			"typedef void(*logcallback)(const char* m, size_t l, size_t c, size_t o, char gottype);" "\n"
 			"typedef size_t(*token_scan_resolver)(struct scan*);" "\n"
 			"typedef struct scan {" "\n"
@@ -1278,6 +1280,7 @@ void generate(PGENERATOR gen)
 			}
 		}
 	}
+	fprintf(gen->header, "#ifdef __cplusplus\n}\n#endif");
 
 	//Handle Code-Section
 	{
