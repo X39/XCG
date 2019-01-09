@@ -135,8 +135,9 @@ PGENERATOR generator_create(FILE* code, FILE* header, const char* fname, token* 
 	gen->origtext = origtext;
 	gen->fname = fname;
 	gen->root = r;
-	gen->linecommentstart = malloc(sizeof(char) * 3);
-	strcpy(gen->linecommentstart, "//");
+	gen->linecommentstart = NULL;
+	gen->blockcommentstart = NULL;
+	gen->blockcommentend = NULL;
 	gen->skip_characters = malloc(sizeof(char) * 10);
 	strcpy(gen->skip_characters, "\\ \\t\\r\\n");
 	if (r->top == 1 && r->children[0]->type == S_EBNF)
@@ -147,7 +148,9 @@ PGENERATOR generator_create(FILE* code, FILE* header, const char* fname, token* 
 }
 void generator_destroy(PGENERATOR gen)
 {
-	free(gen->linecommentstart);
+	if (gen->linecommentstart != NULL) { free(gen->linecommentstart); }
+	if (gen->blockcommentstart != NULL) { free(gen->blockcommentstart); }
+	if (gen->blockcommentend != NULL) { free(gen->blockcommentend); }
 	free(gen->skip_characters);
 	free(gen);
 }
@@ -177,10 +180,33 @@ void generator_handle_annotation(PGENERATOR gen, token* anno)
 			gen->casesensitive = anno->children[1]->children[1]->type == T_TRUE;
 			break;
 		case S_ALINECOMMENTSTART:
-			free(gen->linecommentstart);
+			if (gen->linecommentstart != NULL)
+			{
+				free(gen->linecommentstart);
+			}
 			gen->linecommentstart = malloc(anno->children[1]->children[1]->length + 1);
 			strncpy(gen->linecommentstart, gen->origtext + anno->children[1]->children[1]->offset, anno->children[1]->children[1]->length);
 			gen->linecommentstart[anno->children[1]->children[1]->length] = '\0';
+			break;
+		case S_BLOCKCOMMENTSTART:
+			if (gen->blockcommentstart != NULL)
+			{
+				free(gen->blockcommentstart);
+			}
+			gen->blockcommentstart = malloc(anno->children[1]->children[1]->length + 1);
+			strncpy(gen->blockcommentstart, gen->origtext + anno->children[1]->children[1]->offset, anno->children[1]->children[1]->length);
+			gen->blockcommentstart[anno->children[1]->children[1]->length] = '\0';
+
+			break;
+		case S_BLOCKCOMMENTEND:
+			if (gen->blockcommentend != NULL)
+			{
+				free(gen->blockcommentend);
+			}
+			gen->blockcommentend = malloc(anno->children[1]->children[1]->length + 1);
+			strncpy(gen->blockcommentend, gen->origtext + anno->children[1]->children[1]->offset, anno->children[1]->children[1]->length);
+			gen->blockcommentend[anno->children[1]->children[1]->length] = '\0';
+
 			break;
 	}
 }
@@ -190,23 +216,69 @@ void generator_write_token_skip_method(PGENERATOR gen)
 	char c;
 	bool nlAvailable = false;
 	bool isEscaped;
-	fprintf(gen->code, "void token_skip(scan* s, size_t skip) {" "\n"
-		"\tbool commentmode = false;" "\n"
-		"\ts->off += skip;" "\n"
+	fprintf(gen->code, "void token_skip(scan* s, size_t skip) {" "\n");
+	if (gen->linecommentstart != NULL)
+	{
+		fprintf(gen->code, "\tbool lcommentmode = false;" "\n");
+	}
+	if (gen->blockcommentstart != NULL)
+	{
+		fprintf(gen->code, "\tbool bcommentmode = false;" "\n");
+	}
+	fprintf(gen->code, "\ts->off += skip;" "\n"
 		"\ts->col += skip;" "\n"
-		"\twhile (s->txt[s->off] != '\\0') {" "\n"
-		"\t\tif (commentmode) {" "\n"
-		"\t\t\ts->off++;" "\n"
-		"\t\t\ts->col++;" "\n"
-		"\t\t\tif (s->txt[s->off] == '\\n') {" "\n"
-		"\t\t\t\tcommentmode = false;" "\n"
-		"\t\t\t\ts->line++;" "\n"
-		"\t\t\t\ts->col = 0;" "\n"
-		"\t\t\t}" "\n"
-		"\t\t\tcontinue;" "\n"
-		"\t\t}" "\n"
-		"\t\tswitch (s->txt[s->off]) {" "\n"
-	);
+		"\twhile (s->txt[s->off] != '\\0') {" "\n");
+	if (gen->linecommentstart != NULL)
+	{
+		fprintf(gen->code,
+			"\t\tif (lcommentmode) {" "\n"
+			"\t\t\ts->off++;" "\n"
+			"\t\t\ts->col++;" "\n"
+			"\t\t\tif (s->txt[s->off] == '\\n') {" "\n"
+			"\t\t\t\tlcommentmode = false;" "\n"
+			"\t\t\t\ts->line++;" "\n"
+			"\t\t\t\ts->col = 0;" "\n"
+			"\t\t\t}" "\n"
+			"\t\t\tcontinue;" "\n"
+			"\t\t}" "\n"
+		);
+	}
+	if (gen->blockcommentend != NULL)
+	{
+		fprintf(gen->code,
+			"\t\tif (bcommentmode) {" "\n"
+			"\t\t\ts->off++;" "\n"
+			"\t\t\ts->col++;" "\n"
+			"\t\t\tif (");
+		isEscaped = false; //Why you no use proper variable for dis!?
+		for (i = 0, j = 0; (c = gen->blockcommentend[i]) != '\0'; i++)
+		{
+			if (c == '\\' && gen->blockcommentend[i + 1] != '\0')
+			{
+				i++;
+				c = gen->blockcommentend[i];
+			}
+			if (isEscaped) //Ohh bro ... really ...
+			{
+				fprintf(gen->code, " && ");
+			}
+			else
+			{
+				isEscaped = true; //You need help dude
+			}
+			fprintf(gen->code, "s->txt[s->off + %u] == '%c'", j, c);
+			j++;
+		}
+		fprintf(gen->code, ") {" "\n"
+			"\t\t\t\tbcommentmode = false;" "\n"
+			"\t\t\t\ts->line++;" "\n"
+			"\t\t\t\ts->col = 0;" "\n"
+			"\t\t\t}" "\n"
+			"\t\t\tcontinue;" "\n"
+			"\t\t}" "\n"
+		);
+	}
+	fprintf(gen->code, "\t\tswitch (s->txt[s->off]) {" "\n");
 
 	for (i = 0; (c = gen->skip_characters[i]) != '\0'; i++)
 	{
@@ -241,28 +313,56 @@ void generator_write_token_skip_method(PGENERATOR gen)
 	{
 		fprintf(gen->code, "\t\t\tcase '\\n': s->line++; s->col = 0; return;\n");
 	}
-	fprintf(gen->code, "\t\t\tcase '%c': ", gen->linecommentstart[gen->linecommentstart[0] == '\\' ? 1 : 0]);
-	fprintf(gen->code, "if (");
-	nlAvailable = false; //cries "rape"
-	for (i = gen->linecommentstart[0] == '\\' ? 2 : 1, j = 1; (c = gen->linecommentstart[i]) != '\0'; i++)
+	fprintf(gen->code, "\t\t\tdefault:\n");
+	if (gen->linecommentstart != NULL)
 	{
-		if (c == '\\' && gen->linecommentstart[i + 1] != '\0')
+		fprintf(gen->code, "\t\t\t\tif (");
+		nlAvailable = false; //cries "rape"
+		for (i = 0, j = 0; (c = gen->linecommentstart[i]) != '\0'; i++)
 		{
-			i++;
-			c = gen->linecommentstart[i];
+			if (c == '\\' && gen->linecommentstart[i + 1] != '\0')
+			{
+				i++;
+				c = gen->linecommentstart[i];
+			}
+			if (nlAvailable) //cries "Why you do this to me.." T_T
+			{
+				fprintf(gen->code, " && ");
+			}
+			else
+			{
+				nlAvailable = true; //cries "No more please!"
+			}
+			fprintf(gen->code, "s->txt[s->off + %u] == '%c'", j, c);
+			j++;
 		}
-		if (nlAvailable) //cries "Why you do this to me.." T_T
-		{
-			fprintf(gen->code, " && ");
-		}
-		else
-		{
-			nlAvailable = true; //cries "No more please!"
-		}
-		fprintf(gen->code, "s->txt[s->off + %u] == '%c'", j, c);
+		fprintf(gen->code, ") { lcommentmode = true; break; }\n");
 	}
-	fprintf(gen->code, ") { commentmode = true; break; }\n");
-	fprintf(gen->code, "\t\t\tdefault: return;\n\t\t}\n\t}\n}\n");
+	if (gen->blockcommentstart != NULL)
+	{
+		fprintf(gen->code, "\t\t\t\tif (");
+		nlAvailable = false; //cries "How are you not yet satisfied" T_T
+		for (i = 0, j = 0; (c = gen->blockcommentstart[i]) != '\0'; i++)
+		{
+			if (c == '\\' && gen->blockcommentstart[i + 1] != '\0')
+			{
+				i++;
+				c = gen->blockcommentstart[i];
+			}
+			if (nlAvailable) //cries "LET ME GO" T_T
+			{
+				fprintf(gen->code, " && ");
+			}
+			else
+			{
+				nlAvailable = true; //cries "No more please!"
+			}
+			fprintf(gen->code, "s->txt[s->off + %u] == '%c'", j, c);
+			j++;
+		}
+		fprintf(gen->code, ") { bcommentmode = true; break; }\n");
+	}
+	fprintf(gen->code, "\t\t\t\treturn;\n\t\t}\n\t}\n}\n");
 }
 void generator_create_macro(PGENERATOR gen, token* token)
 {
@@ -314,7 +414,7 @@ void generator_handle_token_recursive(PGENERATOR gen, token* token)
 			if (token->children[token->top - 1]->type != T_PLUS)
 			{
 				fprintf(gen->code, "%.*s", gen->depth, TABS100);
-				fprintf(gen->code, "if(!(");
+				fprintf(gen->code, "if (!(");
 				for (i = 1; i < token->top - 1; i++)
 				{
 					if (i > 1)
@@ -329,7 +429,7 @@ void generator_handle_token_recursive(PGENERATOR gen, token* token)
 			else
 			{
 				fprintf(gen->code, "%.*s", gen->depth, TABS100);
-				fprintf(gen->code, "if(!(");
+				fprintf(gen->code, "if (!(");
 				for (i = 1; i < token->top - 2; i++)
 				{
 					if (i > 1)
@@ -339,10 +439,10 @@ void generator_handle_token_recursive(PGENERATOR gen, token* token)
 					generator_handle_token_recursive(gen, token->children[i]);
 				}
 				fprintf(gen->code, ")) return 0;\n");
-				fprintf(gen->code, "%.*sif(s->txt[i + s->off] == '\\\\' && s->txt[i + s->off + 1] != '\\0') { i++; }\n", gen->depth, TABS100);
+				fprintf(gen->code, "%.*sif (s->txt[i + s->off] == '\\\\' && s->txt[i + s->off + 1] != '\\0') { i++; }\n", gen->depth, TABS100);
 				fprintf(gen->code, "%.*si++;\n", gen->depth, TABS100);
 				fprintf(gen->code, "%.*s", gen->depth, TABS100);
-				fprintf(gen->code, "for(; ");
+				fprintf(gen->code, "for (; ");
 				for (i = 1; i < token->top - 2; i++)
 				{
 					if (i > 1)
@@ -430,7 +530,14 @@ void generator_handle_token_recursive(PGENERATOR gen, token* token)
 					fprintf(gen->code, "%c", (gen->origtext + token->children[0]->offset)[0]);
 					break;
 				case T_BS:
-					fprintf(gen->code, "%c", generator_get_escaped_char((gen->origtext + token->children[1]->offset)[0]));
+					if ((gen->origtext + token->children[1]->offset)[0] == '"')
+					{
+						fprintf(gen->code, "\\\"");
+					}
+					else
+					{
+						fprintf(gen->code, "%c", generator_get_escaped_char((gen->origtext + token->children[1]->offset)[0]));
+					}
 					break;
 				case S_TCG:
 					generator_handle_token_recursive(gen, token->children[0]);
@@ -439,47 +546,57 @@ void generator_handle_token_recursive(PGENERATOR gen, token* token)
 			break;
 	}
 }
-void generator_handle_token(PGENERATOR gen, token* token)
+void generator_handle_token(PGENERATOR gen, token* t)
 {
 	size_t index;
 	char c, c2;
+	token* tmp;
 	//print case label
 	fprintf(gen->code, "%.*scase T_", gen->depth, TABS100);
-	for (index = 0; index < token->children[0]->length; index++)
+	for (index = 0; index < t->children[0]->length; index++)
 	{
-		fprintf(gen->code, "%c", toupper(*(gen->origtext + token->children[0]->offset + index)));
+		fprintf(gen->code, "%c", toupper(*(gen->origtext + t->children[0]->offset + index)));
 	}
 	fprintf(gen->code, ":");
-	index = token->children[2]->type == T_GT ? 3 : 4;
-	
-	if (((token->children[index]->length == 1) && (gen->origtext + token->children[index]->offset)[0] != '.') || (token->children[index]->length == 2 && (gen->origtext + token->children[index]->offset)[0] == '\\'))
-	{ //Special case for singe-char tokens (either with or without leading backspace)
-		if ((gen->origtext + token->children[index]->offset)[0] == '\\')
-		{
-			c = (gen->origtext + token->children[index]->offset)[1];
-			c2 = generator_get_escaped_char(c);
-			if (c != c2 || c == '\\')
+	if (t->children[2]->type == S_TOKENSTATIC)
+	{
+		tmp = t->children[2];
+		index = tmp->children[0]->type == T_GT ? 1 : 2;
+
+		if (((tmp->children[index]->length == 1) && (gen->origtext + tmp->children[index]->offset)[0] != '.') || (tmp->children[index]->length == 2 && (gen->origtext + tmp->children[index]->offset)[0] == '\\'))
+		{ //Special case for singe-char tokens (either with or without leading backspace)
+			if ((gen->origtext + tmp->children[index]->offset)[0] == '\\')
 			{
-				fprintf(gen->code, " return s->txt[s->off] == '\\%c' ? 1 : 0;\n", c);
+				c = (gen->origtext + tmp->children[index]->offset)[1];
+				c2 = generator_get_escaped_char(c);
+				if (c != c2 || c == '\\')
+				{
+					fprintf(gen->code, " return s->txt[s->off] == '\\%c' ? 1 : 0;\n", c);
+				}
+				else
+				{
+					fprintf(gen->code, " return s->txt[s->off] == '%c' ? 1 : 0;\n", c);
+				}
 			}
 			else
 			{
+				c = (gen->origtext + tmp->children[index]->offset)[0];
 				fprintf(gen->code, " return s->txt[s->off] == '%c' ? 1 : 0;\n", c);
 			}
 		}
 		else
-		{
-			c = (gen->origtext + token->children[index]->offset)[0];
-			fprintf(gen->code, " return s->txt[s->off] == '%c' ? 1 : 0;\n", c);
+		{ //Normal handle for token-parsing
+			fprintf(gen->code, "\n%.*s{\n", gen->depth, TABS100);
+			gen->depth++;
+			generator_handle_token_recursive(gen, tmp->children[index]);
+			gen->depth--;
+			fprintf(gen->code, "%.*s}\n", gen->depth, TABS100);
 		}
 	}
-	else
-	{ //Normal handle for token-parsing
-		fprintf(gen->code, "\n%.*s{\n", gen->depth, TABS100);
-		gen->depth++;
-		generator_handle_token_recursive(gen, token->children[index]);
-		gen->depth--;
-		fprintf(gen->code, "%.*s}\n", gen->depth, TABS100);
+	else if (t->children[2]->type == S_TOKENRUNTIME)
+	{
+		tmp = t->children[2]->children[1];
+		fprintf(gen->code, " return s->resolvers[%.*s](s);\n", tmp->length, gen->origtext + tmp->offset);
 	}
 }
 
@@ -569,7 +686,7 @@ void generator_handle_statement_START(PGENERATOR gen, token* token)
 			{
 				generator_handle_statement_START(gen, token->children[1]);
 			}
-			else if(token->children[0]->type == T_TOKENIDENT)
+			else if (token->children[0]->type == T_TOKENIDENT)
 			{
 				fprintf(gen->code, "token_scan(s, T_");
 				for (i = 0; i < token->children[0]->length; i++)
@@ -648,7 +765,7 @@ void generator_handle_statement_EXEC_write_start(PGENERATOR gen, token* t)
 		generator_write_macro(gen->code, gen->origtext, t);
 		fprintf(gen->code, ")) > 0");
 	}
-	else if(t->type == T_STATEIDENT)
+	else if (t->type == T_STATEIDENT)
 	{
 		fprintf(gen->code, "%.*s_START(s)", t->length, gen->origtext + t->offset);
 	}
@@ -726,7 +843,7 @@ void generator_handle_statement_EXEC_flattened_casing_errorlogging(PGENERATOR ge
 
 	fprintf(gen->code, "%.*selse {\n", gen->depth, TABS100);
 	gen->depth++;
-	fprintf(gen->code, "%.*ss->log(\"Expected '\" ", gen->depth, TABS100);
+	fprintf(gen->code, "%.*ss->log(s->data, \"Expected '\" ", gen->depth, TABS100);
 
 	// Backtrack to T_OR start
 	// `flag` is used in here to break out of the loop.
@@ -886,6 +1003,7 @@ void generator_handle_statement_EXEC_flattened_casing(PGENERATOR gen, token *fla
 
 			case T_SQUAREO:
 				fprintf(gen->code, parenttype == T_OR || elsemode == ELSEMODE_PREPARED ? "%.*selse if (" : "%.*sif (", gen->depth, TABS100);
+				gen->depth++;
 				generator_handle_statement_EXEC_flattened_casing_forward_condition_scan(gen, flattened, *index);
 				fprintf(gen->code, ") {\n");
 				++*index;
@@ -980,7 +1098,7 @@ void generator_handle_statement_EXEC_flattened_casing(PGENERATOR gen, token *fla
 							fprintf(gen->code, "%.*s}\n", gen->depth, TABS100);
 							generator_handle_statement_EXEC_flattened_casing_errorlogging(gen, flattened, (*index) - 1);
 						}
-						else if(tla->type == T_OR)
+						else if (tla->type == T_OR)
 						{
 							--*index;
 						}
@@ -988,7 +1106,7 @@ void generator_handle_statement_EXEC_flattened_casing(PGENERATOR gen, token *fla
 						{
 							fprintf(gen->code, "%.*selse {\n", gen->depth, TABS100);
 							gen->depth++;
-							fprintf(gen->code, "%.*ss->log(\"Expected '\" ", gen->depth, TABS100);
+							fprintf(gen->code, "%.*ss->log(s->data, \"Expected '\" ", gen->depth, TABS100);
 							generator_write_macro(gen->code, gen->origtext, t);
 							fprintf(gen->code, "_STR");
 							fprintf(gen->code, " \"'\", s->line, s->col, s->off, token_next_type(s));\n");
@@ -1125,6 +1243,7 @@ void generate(PGENERATOR gen)
 			}
 		}
 	}
+	fprintf(gen->header, "#ifdef __cplusplus\n}\n#endif");
 
 	//Handle Code-Section
 	{
@@ -1219,7 +1338,7 @@ void generate(PGENERATOR gen)
 					break;
 			}
 		}
-		fprintf(gen->code, "\t}\n}\n");
+		fprintf(gen->code, "\t}\n\treturn 0;\n}\n");
 
 		for (index = 0; index < gen->root->top; index++)
 		{
@@ -1233,8 +1352,60 @@ void generate(PGENERATOR gen)
 		}
 	}
 }
-
 void generator_validate_token_tree(PGENERATOR gen, token* t, bool * success)
+{
+	size_t i;
+	token* tmp;
+	bool hasblockcommentstart = false;
+	bool hasblockcommentend = false;
+	if (t->type == T__INVALID && t->top == 0)
+	{
+		fprintf(stderr, "Token provided is invalid and empty.\n");
+		*success = false;
+		return;
+	}
+	if (t->type == T__INVALID && t->children[0]->type == S_EBNF)
+	{
+		t = t->children[0];
+	}
+	for (i = 0; i < t->top; i++)
+	{
+		tmp = t->children[i];
+		if (tmp->type == S_ANNOTATION)
+		{
+			switch (tmp->children[1]->type)
+			{
+				case S_BLOCKCOMMENTSTART:
+					hasblockcommentstart = true;
+					break;
+				case S_BLOCKCOMMENTEND:
+					hasblockcommentend = true;
+					break;
+			}
+		}
+		else if (tmp->type == S_STATEMENT && tmp->children[0]->length == 4 && str_partial_equals(gen->origtext + tmp->children[0]->offset, "FILE", 4))
+		{
+			fprintf(stderr, "Statement '%.*s' requires a different name due to conflicts with FILE struct. Line %u, Column %u\n", tmp->children[0]->length, gen->origtext + tmp->children[0]->offset, tmp->children[0]->line, tmp->children[0]->column);
+			*success = false;
+		}
+	}
+	if (hasblockcommentstart != hasblockcommentend)
+	{
+		if (hasblockcommentstart)
+		{
+			fprintf(stderr, "Missing annotation for blockcommentend.\n");
+			*success = false;
+		}
+		else
+		{
+			fprintf(stderr, "Missing annotation for blockcommentstart.\n");
+			*success = false;
+		}
+	}
+	generator_validate_token_tree_inner(gen, t, success);
+}
+
+void generator_validate_token_tree_inner(PGENERATOR gen, token* t, bool * success)
 {
 	size_t i;
 	token* tmp;
@@ -1259,7 +1430,7 @@ void generator_validate_token_tree(PGENERATOR gen, token* t, bool * success)
 		default:
 			for (i = 0; i < t->top; i++)
 			{
-				generator_validate_token_tree(gen, t->children[i], success);
+				generator_validate_token_tree_inner(gen, t->children[i], success);
 			}
 			break;
 	}

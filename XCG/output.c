@@ -1,4 +1,4 @@
-#include "Parser.h"
+#include "output.h"
 #include <malloc.h>
 
 bool str_equals(const char* strin, const char* otherstr) {
@@ -87,7 +87,7 @@ void token_skip(scan* s, size_t skip) {
 }
 size_t token_scan(scan* s, char expected) {
 	int i = 0;
-	switch (expected) {
+	switch(expected) {
 		case T_TOKENIDENT:
 		{
 			if (!((s->txt[i + s->off] >= 'a' && s->txt[i + s->off] <= 'z'))) return 0;
@@ -95,7 +95,7 @@ size_t token_scan(scan* s, char expected) {
 			if (!((s->txt[i + s->off] >= 'a' && s->txt[i + s->off] <= 'z') || (s->txt[i + s->off] >= '0' && s->txt[i + s->off] <= '9'))) return 0;
 			if (s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; }
 			i++;
-			for (; (s->txt[i + s->off] >= 'a' && s->txt[i + s->off] <= 'z') || (s->txt[i + s->off] >= '0' && s->txt[i + s->off] <= '9'); i++) { if (s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; } };
+			for (; (s->txt[i + s->off] >= 'a' && s->txt[i + s->off] <= 'z') || (s->txt[i + s->off] >= '0' && s->txt[i + s->off] <= '9'); i++) { if(s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; } };
 			return i;
 		}
 		case T_STATEIDENT:
@@ -105,7 +105,7 @@ size_t token_scan(scan* s, char expected) {
 			if (!((s->txt[i + s->off] >= 'A' && s->txt[i + s->off] <= 'Z') || (s->txt[i + s->off] >= '0' && s->txt[i + s->off] <= '9'))) return 0;
 			if (s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; }
 			i++;
-			for (; (s->txt[i + s->off] >= 'A' && s->txt[i + s->off] <= 'Z') || (s->txt[i + s->off] >= '0' && s->txt[i + s->off] <= '9'); i++) { if (s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; } };
+			for (; (s->txt[i + s->off] >= 'A' && s->txt[i + s->off] <= 'Z') || (s->txt[i + s->off] >= '0' && s->txt[i + s->off] <= '9'); i++) { if(s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; } };
 			return i;
 		}
 		case T_STMTSEP: return s->txt[s->off] == '=' ? 1 : 0;
@@ -151,7 +151,7 @@ size_t token_scan(scan* s, char expected) {
 			if (!((s->txt[i + s->off] >= '0' && s->txt[i + s->off] <= '9'))) return 0;
 			if (s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; }
 			i++;
-			for (; (s->txt[i + s->off] >= '0' && s->txt[i + s->off] <= '9'); i++) { if (s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; } };
+			for (; (s->txt[i + s->off] >= '0' && s->txt[i + s->off] <= '9'); i++) { if(s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; } };
 			return i;
 		}
 		case T_ALPHALOW:
@@ -186,7 +186,7 @@ size_t token_scan(scan* s, char expected) {
 			if (!((s->txt[i + s->off] != ' ' && s->txt[i + s->off] != '\r' && s->txt[i + s->off] != '\n' && s->txt[i + s->off] != '\t') ? 1 : 0)) return 0;
 			if (s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; }
 			i++;
-			for (; (s->txt[i + s->off] != ' ' && s->txt[i + s->off] != '\r' && s->txt[i + s->off] != '\n' && s->txt[i + s->off] != '\t') ? 1 : 0; i++) { if (s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; } };
+			for (; (s->txt[i + s->off] != ' ' && s->txt[i + s->off] != '\r' && s->txt[i + s->off] != '\n' && s->txt[i + s->off] != '\t') ? 1 : 0; i++) { if(s->txt[i + s->off] == '\\' && s->txt[i + s->off + 1] != '\0') { i++; } };
 			return i;
 		}
 		case T_ANY:
@@ -349,30 +349,50 @@ void TOKEN(scan* s, token* parent) {
 			token_skip(s, len);
 			token_push(thistoken, t);
 		}
+		if (TOKENSTATIC_START(s)) {
+			TOKENSTATIC(s, thistoken);
+		}
+		else if (TOKENRUNTIME_START(s)) {
+			TOKENRUNTIME(s, thistoken);
+		}
+		else {
+			s->log("Expected '" S_TOKENSTATIC_STR "' or '" S_TOKENRUNTIME_STR "'", s->line, s->col, s->off, token_next_type(s));
+		}
+	}
+	else {
+		s->log("Expected '" T_TOKENIDENT_STR "'", s->line, s->col, s->off, token_next_type(s));
+	}
+	thistoken->length = s->off - thistoken->offset;
+	token_push(parent, thistoken);
+}
+bool TOKENSTATIC_START(scan* s) { return token_scan(s, T_GT) || token_scan(s, T_ANYTEXT); }
+void TOKENSTATIC(scan* s, token* parent) {
+	token* thistoken = token_gen(s, S_TOKENSTATIC);
+	token* t;
+	size_t len;
+	if ((len = token_scan(s, T_GT)) > 0) {
+		t = token_gen(s, T_GT);
+		t->length = len;
+		token_skip(s, len);
+		token_push(thistoken, t);
+	}
+	else if ((len = token_scan(s, T_ANYTEXT)) > 0) {
+		t = token_gen(s, T_ANYTEXT);
+		t->length = len;
+		token_skip(s, len);
+		token_push(thistoken, t);
 		if ((len = token_scan(s, T_GT)) > 0) {
 			t = token_gen(s, T_GT);
 			t->length = len;
 			token_skip(s, len);
 			token_push(thistoken, t);
 		}
-		else if ((len = token_scan(s, T_ANYTEXT)) > 0) {
-			t = token_gen(s, T_ANYTEXT);
-			t->length = len;
-			token_skip(s, len);
-			token_push(thistoken, t);
-			if ((len = token_scan(s, T_GT)) > 0) {
-				t = token_gen(s, T_GT);
-				t->length = len;
-				token_skip(s, len);
-				token_push(thistoken, t);
-			}
-		}
-		else {
-			s->log("Expected '" T_GT_STR "' or '" T_ANYTEXT_STR "'", s->line, s->col, s->off, token_next_type(s));
-		}
-		if (TC_START(s)) {
-			TC(s, thistoken);
-		}
+	}
+	else {
+		s->log("Expected '" T_GT_STR "' or '" T_ANYTEXT_STR "'", s->line, s->col, s->off, token_next_type(s));
+	}
+	if (TC_START(s)) {
+		TC(s, thistoken);
 		if ((len = token_scan(s, T_QUESTIONMARK)) > 0) {
 			while (true) {
 				if ((len = token_scan(s, T_QUESTIONMARK)) > 0) {
@@ -395,7 +415,30 @@ void TOKEN(scan* s, token* parent) {
 		}
 	}
 	else {
-		s->log("Expected '" T_TOKENIDENT_STR "'", s->line, s->col, s->off, token_next_type(s));
+		s->log("Expected '" T_GT_STR "' or '" T_ANYTEXT_STR "'", s->line, s->col, s->off, token_next_type(s));
+	}
+	thistoken->length = s->off - thistoken->offset;
+	token_push(parent, thistoken);
+}
+bool TOKENRUNTIME_START(scan* s) { return token_scan(s, T_QUESTIONMARK); }
+void TOKENRUNTIME(scan* s, token* parent) {
+	token* thistoken = token_gen(s, S_TOKENRUNTIME);
+	token* t;
+	size_t len;
+	if ((len = token_scan(s, T_QUESTIONMARK)) > 0) {
+		t = token_gen(s, T_QUESTIONMARK);
+		t->length = len;
+		token_skip(s, len);
+		token_push(thistoken, t);
+		if ((len = token_scan(s, T_NUMBER)) > 0) {
+			t = token_gen(s, T_NUMBER);
+			t->length = len;
+			token_skip(s, len);
+			token_push(thistoken, t);
+		}
+	}
+	else {
+		s->log("Expected '" T_QUESTIONMARK_STR "'", s->line, s->col, s->off, token_next_type(s));
 	}
 	thistoken->length = s->off - thistoken->offset;
 	token_push(parent, thistoken);
