@@ -1,0 +1,59 @@
+#region basic
+token digit
+    require once    { 0-9 }
+token number
+    require plus    { digit }
+token char-normal
+    require once    { a-z, A-Z }
+token char-underscore
+    require once    _
+token char-minus
+    require once    -
+token word
+    require plus    { char-normal, char-underscore, char-minus }
+#endregion
+#region scalar
+token scalar-full
+    require once    { number }
+    require once    .
+    require once    { number }
+token scalar-prefix
+    require once    .
+    require once    { number }
+token scalar-postfix
+    require once    { number }
+    require once    .
+token scalar
+    require once    { scalar-full, scalar-postfix, scalar-prefix }
+#endregion
+token ident
+    require once    { char-normal, char-underscore }
+    require [0, *)  { char-normal, char-underscore, char-minus, digit }
+    backtrack not   { char-minus }
+
+message switch-default-already-set
+    with Multiple default cases found
+    level error
+
+production switch
+    set local has-default false
+    // putting ! in front of a matched token will capture that.
+    // A captured token may be named using ![name]matched,
+    // otherwise the name will be equivalent to the token name.
+    match "switch" "(" @expression ")"
+    while ( match not "}" )
+        alternatives
+            match "case" ":"
+            match "default" ":"
+                if get has-default
+                    print switch-default-already-set
+                else
+                    set local has-default true
+    match "}"
+
+production main
+    while match statement
+        match semicolon
+
+production class
+    match "class"

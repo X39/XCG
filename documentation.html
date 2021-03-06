@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Beautifyconverter.com Yaml To HTML Converter</title>
+</head>
+
+<body>
+    <table>
+        <tr>
+            <td>warnings.T0001.name</td>
+            <td>warnings.T0001.level</td>
+            <td>warnings.T0001.when</td>
+            <td>comments.block-comment.regex</td>
+            <td>comments.block-comment.description</td>
+            <td>comments.line-comment.regex</td>
+            <td>comments.line-comment.description</td>
+            <td>comments.hashmark-comment.regex</td>
+            <td>comments.hashmark-comment.description</td>
+            <td>keywords.token.description</td>
+            <td>keywords.token.arguments.0.name.regex</td>
+            <td>keywords.token.arguments.0.name.description</td>
+            <td>keywords.token.refer.0</td>
+            <td>keywords.token.refer.1</td>
+            <td>keywords.token.warnings.0</td>
+            <td>keywords.backtrack.description</td>
+            <td>keywords.backtrack.arguments.0.range.regex</td>
+            <td>keywords.backtrack.arguments.0.range.description</td>
+            <td>keywords.backtrack.arguments.1.characters.regex</td>
+            <td>keywords.backtrack.arguments.1.characters.description</td>
+            <td>keywords.require.description</td>
+            <td>keywords.require.arguments.0.range.regex</td>
+            <td>keywords.require.arguments.0.range.description</td>
+            <td>keywords.require.arguments.1.characters.regex</td>
+            <td>keywords.require.arguments.1.characters.description</td>
+        </tr>
+        <tr>
+            <td>MatchConflict</td>
+            <td>warning</td>
+            <td>Gets raised when two or more {{token}} are colliding by their definition</td>
+            <td>/\*[\s]*\*/</td>
+            <td>Allows marking a block of characters as non-relevant to the parser</td>
+            <td>//.+\n</td>
+            <td>Allows marking a single line of character as non-relevant to the parser</td>
+            <td>#.+\n</td>
+            <td>Allows passing instructions to the parser. Unknown instructions shall be ignored silently unless verbose output is enabled. IDEs and other tooling thus may use this to implement custom behavior. It is recommended for those tools to also ignore invalid instructions silently.</td>
+            <td>"Token declaration for lexing phase. Tokens written down should be unique and will be handled top to bottom if a {{statement}} has conflicting ones. eg. ``` token plus text +</td>
+        </tr>
+        <tr>
+            <td>token plusplus text ++</td>
+        </tr>
+        <tr>
+            <td>``` will cause `token plusplus` never to be found as `plus` is always consuming the `+` prior."</td>
+            <td>[a-zA-Z_][a-zA-Z0-9_-]*(?
+                <=[a-zA-Z0-9_])</td>
+                    <td>Represents the tokens name</td>
+                    <td>require</td>
+                    <td>backtrack</td>
+                    <td>T0001</td>
+                    <td>"Checks the last X characters again</td>
+                    <td> using the rules provided. Allows to backtrack</td>
+                    <td> possibly invalidating the whole token. If the backtrack token found that the rule it applies is not matching</td>
+                    <td> the token has to attempt to resolve its rule set up to that point. If it succeeded in doing so</td>
+                    <td> the token must be returned with the backtrack rules applied. Otherwise</td>
+                    <td> the token must be discarded and a new round shall be started."</td>
+                    <td>last|one|[0-9]+</td>
+                    <td>"Declares how many characters this should backtrack. Can be either a simple number (`1` = backtrack one character; `5` = backtrack five characters)</td>
+                    <td> or last (equivalent to `1`) or one (equivalent to `1`)"</td>
+                    <td>"{(?:\s*(.-.|[a-zA-Z_][a-zA-Z0-9_-]*(?
+                        <=[a-zA-Z0-9_]))\s*(?:</td>
+                            <td>\s*(.-.|[a-zA-Z_][a-zA-Z0-9_-]*(?
+                                <=[a-zA-Z0-9_]))\s*)*)}|.+ "</td><td>Range of characters represented by this backtrack. Can be either a series of characters (`this is fun`) or a range definition. Range definitions start with `{` and end with `}`. They may contain either ranges (`a-z` = from character 'a' to character 'z') or references to other tokens (`my-token` = import rules from my-token)</td><td>Denotes a character class by its multiplicity and character range.</td><td>once|plus|[\(\[][0-9]+\-(\*\)|[0-9]+[\)\]])</td><td>"Declares the following character classes multiplicity. Can be either a mathematical range (`(`</td>
+                                    <td> `)` = exclusive; `[`</td>
+                                    <td> `]` = inclusive; `*` = Infinity)</td>
+                                    <td> or once (equivalent to `[1-1]`) or plus (equivalent to `[1-*)`)"</td>
+                                    <td>"{(?:\s*(.-.|[a-zA-Z_][a-zA-Z0-9_-]*(?
+                                        <=[a-zA-Z0-9_]))\s*(?:</td>
+                                            <td>\s*(.-.|[a-zA-Z_][a-zA-Z0-9_-]*(?
+                                                <=[a-zA-Z0-9_]))\s*)*)}|.+ "</td><td>Range of characters represented by this require. Can be either a series of characters (`this is fun`) or a range definition. Range definitions start with `{` and end with `}`. They may contain either ranges (`a-z` = from character 'a' to character 'z') or references to other tokens (`my-token` = import rules from my-token)</td></tr><tr><td></td></tr></table></body></html>
