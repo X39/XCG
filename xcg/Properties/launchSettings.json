@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "xcg": {
+      "commandName": "Project",
+      "commandLineArgs": "D:\\dev\\git\\XCG\\example.xcg"
+    }
+  }
+}

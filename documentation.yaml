@@ -1,0 +1,429 @@
+comments:
+    block-comment:
+        regex: >-
+            /\*[\s]*\*/
+        description: >-
+            Allows marking a block of characters as non-relevant to the parser
+#    line-comment:
+#        regex: >-
+#            //.+\n
+#        description: >-
+#            Allows marking a single line of character as non-relevant to the parser
+#    hashmark-comment:
+#        regex: >-
+#            #.+\n
+#        description: >-
+#            Allows passing instructions to the parser.
+#            Unknown instructions shall be ignored silently unless verbose output is enabled.
+#            IDEs and other tooling thus may use this to implement custom behavior.
+#            It is recommended for those tools to also ignore invalid instructions silently.
+meta:
+    weak-scoping: >-
+        Creates a variable scope, catching `set local`.
+        Weak Scoping rules are applied, meaning that the variable lookup
+        will first traverse up until a strong scope is hit. If a variable
+        with the same name is encountered, that variable will be updated.
+        Weak scoping may be promoted by providing explicit scoping behavior.
+    strong-scoping: >-
+        Creates a variable scope, catching `set local`.
+        Strong scoping rules are applied, meaning that `set auto` will always
+        update variables local to this scope and not traverse any higher.
+types:
+    boolean:
+        regex: >-
+            true|false
+        description: >-
+            A boolean is either true or false and can be used with logic operators.
+    scalar:
+        regex: >-
+            [0-9]+(?:\.[0-9]+)?
+        description: >-
+            A scalar represents a numerical value and can be used with math and comparison operators.
+    map:
+        description: >-
+            Special value type.
+            See {{set}} and {{get}} for more info.
+    list:
+        description: >-
+            Special value type.
+            See {{set}} and {{get}} for more info.
+keywords:
+    FILE:
+        accepts:
+            - token
+            - set
+            - echo
+            - production
+    production:
+        meta:
+            - strong-scoping
+        description: >-
+            Describes a set of rule which gets constructed to
+            a production-class.
+            There always has to be at least one production called main,
+            defining the entry point for parsing.
+        arguments:
+            - name:
+                regex: >-
+                    [a-zA-Z_][a-zA-Z0-9_-]*(?<=[a-zA-Z0-9_])
+                description: >-
+                    Represents the productions name
+        accepts:
+            - set
+            - echo
+            - if
+            - while
+            - alternatives
+            - match
+            - try
+    alternatives:
+        description: >-
+            Will match one of its childs matches.
+            Only accepts match as child.
+            Checks children top to bottom.
+        accepts:
+            - match
+    match:
+        meta:
+        - weak-scoping
+        help: >-
+            match [ not ] { [ ? ] [ @ [ \[ name \] ] ] rule } ...
+        description: >-
+            Creates a match rule, matching a provided {{production}} or {{token}}.
+            Match rules may capture values into the current {{production:productions}} class,
+            by prefixing a rule with an exclamation mark (`@`). Captures may also be named,
+            by following the exclamation mark by square brackets, containing the name (`@[name]`).
+            Match rules may be marked as optional by prefixing them with a question mark (`?`).
+            An optional capture can be created by combining those two, with the question mark leading (`?@`).
+            A match may be negated, making it check wether its ruleset can be matched (relevant with
+            {{if}} and {{while}}).
+            Tokens can be refered to by using putting them inbetween double-quotes (`"`).
+            If a token is not found, it will be auto-generated.
+            A match rule may have statements following it, including other match statements.
+            Those statements are then evaluated after (and only if) the original match statement was parsed.
+        accepts:
+            - match
+        returns:
+            - boolean
+    get:
+        help: >-
+            get [ auto | local | global ] ( property | map property key | list property ( index value | pop ) ]
+        description: >-
+            Allows to receive a property or variable
+        arguments:
+            - scope:
+                optional: true
+                default: auto
+                regex: >-
+                    (?:global|auto|local)?
+                description: >-
+                    The scope resolution for where property resides in.
+                    Global scope says that the variable lives at the top-most scope.
+                    Local scope will will walk the local scopes upwards slowly, without ever scanning global.
+                    Auto scope first checks local, then global.
+                    If not provided, scope will be set to auto.
+                    See {{weak-scoping}} and {{strong-scoping}} for more info about scopes.
+            - property:
+                regex: >-
+                    [-a-zA-Z_.]+
+                description: >-
+                    The property to get
+            - key:
+                regex: >-
+                    [-a-zA-Z_.]+
+                description: >-
+                    A key to a value inside of a {{map}}.
+                    Will override existing values.
+            - value:
+                regex: >-
+                    .+
+                description: >-
+                    Any valid, creatible value (see {{types}} for valid value types) or
+                    a {{get}} instruction.
+                    Value may use additional operators (, chain them) and values if needed.
+                    Available (precedence (low = last): "operator" -> type -> description):
+                    0: "or"  -> {{boolean}} -> LEFT or RIGHT
+                    1: "and"  -> {{boolean}} -> LEFT and RIGHT
+                    2: ">"  -> {{boolean}} -> LEFT larger then RIGHT
+                    2: ">=" -> {{boolean}} -> LEFT larger then or equal to RIGHT
+                    2: "<"  -> {{boolean}} -> LEFT less then RIGHT
+                    2: "<=" -> {{boolean}} -> LEFT less then or equal to  RIGHT
+                    2: "==" -> {{boolean}} -> LEFT equal to RIGHT
+                    2: "!=" -> {{boolean}} -> LEFT not equal to RIGHT
+                    3: "+" -> {{scalar}} -> LEFT plus RIGHT
+                    3: "-" -> {{scalar}} -> LEFT minus RIGHT
+                    4: "/" -> {{scalar}} -> LEFT divided by RIGHT
+                    4: "*" -> {{scalar}} -> LEFT multiplied by RIGHT
+            - map:
+                regex: >-
+                    map
+                description: >-
+                    Denotes that this `get` operation is manipulating a {{map}} type,
+                    altering the expected arguments of `get`.
+            - list:
+                regex: >-
+                    list
+                description: >-
+                    Denotes that this `get` operation is manipulating a {{list}} type,
+                    altering the expected arguments of `get`.
+            - at:
+                regex: >-
+                    at
+                description: >-
+                    Tells the parser that the content followed shall be interpreted as and {{index}}
+            - index:
+                regex: >-
+                    [0-9]+
+                description: >-
+                    An index to a position in a {{list}}. If needed, the {{list}} will be resized to the targeted
+                    index automatically.
+            - pop:
+                regex: >-
+                    pop
+                description: >-
+                    Pops from a {{list}} the value that is followed.
+    set:
+        help: >-
+            set [ auto | local | global ] ( property | map property key | list property ( index value | push ) ] value
+        description: >-
+            Allows changing properties or setting variables.
+        arguments:
+            - scope:
+                optional: true
+                default: auto
+                regex: >-
+                    (?:global|auto|local)?
+                description: >-
+                    The scope this property resides in.
+                    Global scope says that the variable lives at the top-most scope.
+                    Local scope will create or update the variable inside of the most
+                    local scope. Eg. a {{production}} having `set local ...` as first operation
+                    will store the value in its local storage space.
+                    If not provided, scope will be set to auto.
+                    See {{weak-scoping}} and {{strong-scoping}} for more info about scopes.
+            - property:
+                regex: >-
+                    [-a-zA-Z_.]+
+                description: >-
+                    The property to set
+            - key:
+                regex: >-
+                    [-a-zA-Z_.]+
+                description: >-
+                    A key to a value inside of a {{map}}.
+                    Will override existing values.
+            - value:
+                regex: >-
+                    .+
+                description: >-
+                    Any valid, creatible value (see {{types}} for valid value types) or
+                    a {{get}} instruction.
+                    Value may use additional operators (, chain them) and values if needed.
+                    Available (precedence (low = last): "operator" -> type -> description):
+                    0: "or"  -> {{boolean}} -> LEFT or RIGHT
+                    1: "and"  -> {{boolean}} -> LEFT and RIGHT
+                    2: ">"  -> {{boolean}} -> LEFT larger then RIGHT
+                    2: ">=" -> {{boolean}} -> LEFT larger then or equal to RIGHT
+                    2: "<"  -> {{boolean}} -> LEFT less then RIGHT
+                    2: "<=" -> {{boolean}} -> LEFT less then or equal to  RIGHT
+                    2: "==" -> {{boolean}} -> LEFT equal to RIGHT
+                    2: "!=" -> {{boolean}} -> LEFT not equal to RIGHT
+                    3: "+" -> {{scalar}} -> LEFT plus RIGHT
+                    3: "-" -> {{scalar}} -> LEFT minus RIGHT
+                    4: "/" -> {{scalar}} -> LEFT divided by RIGHT
+                    4: "*" -> {{scalar}} -> LEFT multiplied by RIGHT
+            - map:
+                regex: >-
+                    map
+                description: >-
+                    Denotes that this `set` operation is manipulating a {{map}} type,
+                    altering the expected arguments of `set`.
+            - list:
+                regex: >-
+                    list
+                description: >-
+                    Denotes that this `set` operation is manipulating a {{list}} type,
+                    altering the expected arguments of `set`.
+            - at:
+                regex: >-
+                    at
+                description: >-
+                    Tells the parser that the content followed shall be interpreted as and {{index}}
+            - index:
+                regex: >-
+                    [0-9]+
+                description: >-
+                    An index to a position in a {{list}}. If needed, the {{list}} will be resized to the targeted
+                    index automatically.
+            - push:
+                regex: >-
+                    push
+                description: >-
+                    Appends to a {{list}} the value that is followed.
+    echo:
+        help: >-
+            echo value
+        description: >-
+            Prints the provided value to stdout
+        arguments:
+            - value:
+                regex: >-
+                    [=].+
+                description: >-
+                    Either a constant value or an {{expression}}
+                    (denoted by starting the value with `=`)
+    token:
+        help: >-
+            token name [ : alias ]
+        meta:
+            - strong-scoping
+        description: >-
+            Token declaration for lexing phase.
+            Tokens may have aliases (or not):
+            ```
+            token plus
+                require once +
+            token plusplus: "++"
+                require once ++
+            ```
+        arguments:
+            - name:
+                regex: >-
+                    [a-zA-Z_][a-zA-Z0-9_-]*(?<=[a-zA-Z0-9_])
+                description: >-
+                    Represents the tokens name
+            - alias:
+                regex: >-
+                    [ \t]*"(?:.*|(?:""))"
+                description: >-
+                    Allows to set an alias for a token
+        accepts:
+            - require
+            - backtrack
+            - set
+            - if
+    backtrack:
+        help: >-
+            backtrack [ not ] range characters
+        description: >-
+            Checks the last X characters again, using the rules provided.
+            Allows to backtrack, possibly invalidating the whole token.
+            If the backtrack token found that the rule it applies is not matching,
+            the token has to attempt to resolve its rule set up to that point.
+            If it succeeded in doing so, the token must be returned with the backtrack
+            rules applied.
+            Otherwise, the token must be discarded and a new round shall be started.
+        arguments:
+            - not:
+                regex: >-
+                    not
+                description: >-
+                    Allows to negate the backtracking, matching anything that is not listed
+            - range:
+                regex: >-
+                    last|one|[0-9]+
+                description: >-
+                    Declares how many characters this should backtrack.
+                    Can be either a simple number
+                    (`1` = backtrack one character; `5` = backtrack five characters),
+                    or last (equivalent to `1`)
+                    or one (equivalent to `1`)
+            - characters:
+                regex: >-
+                    {(?:\s*(?:.-.))\s*(?:,\s*(.-.)\s*)*}|.+
+                description: >-
+                    Range of characters represented by this backtrack.
+                    Can be either a series of characters (`this is fun`)
+                    or a range definition.
+                    Range definitions start with `{` and end with `}` and contain a range of possible matches.
+                    They may contain actual character ranges (`a-z` = from character 'a' to character 'z.
+                    Ranges are evaluated left to right.
+                    The range functionality may be used to implement alternatives or optionals (via an empty token).
+        warnings:
+            - T0001
+    require:
+        help: >-
+            require [ not ] range characters
+        description: >-
+            Denotes a character class by its multiplicity and
+            character range.
+        arguments:
+            - not:
+                regex: >-
+                    not
+                description: >-
+                    Allows to negate the backtracking, matching anything that is not listed
+            - range:
+                regex: >-
+                    once|plus|[\(\[][0-9]+\-(\*\)|[0-9]+[\)\]])
+                description: >-
+                    Declares the following character classes multiplicity.
+                    Can be either a mathematical range
+                    (`(`, `)` = exclusive; `[`, `]` = inclusive; `*` = Infinity),
+                    or once (equivalent to `[1-1]`)
+                    or plus (equivalent to `[1-*)`)
+            - characters:
+                regex: >-
+                    {(?:\s*(?:.-.|\*|[a-zA-Z_][a-zA-Z0-9_-]*(?<=[a-zA-Z0-9_]))\s*(?:,\s*(.-.|\*|[a-zA-Z_][a-zA-Z0-9_-]*(?<=[a-zA-Z0-9_]))\s*)*)}|.+
+                description: >-
+                    Range of characters represented by this require.
+                    Can be either a series of characters (`this is fun`) starting with the first non-whitespace
+                    character encountered or a range definition.
+                    Range definitions start with `{` and end with `}` and contain a range of possible matches.
+                    They may contain either actual character ranges (`a-z` = from character 'a' to character 'z'),
+                    the star character (`*`) to match any character
+                    or references to whole other tokens (`my-token` = import rules from my-token).
+                    Ranges are evaluated left to right.
+                    The range functionality may be used to implement alternatives or optionals (via an empty token).
+        warnings:
+            - T0001
+    if:
+        meta:
+            - weak-scoping
+        help: >-
+            if [ not ] ( match | get | eval value ) ... [ $NEWLINE$ else ... ]
+        description: >-
+            Allows setting up a conditional branch in parsing.
+            May be followed up by an {{else}}
+        arguments:
+            - not:
+                description: >-
+                    Inverts the condition following
+                optional: true
+            - match:
+                description: >-
+                    Literally {{match}} but without the ability to capture
+            - get:
+                description: >-
+                    Literally {{get}}
+            - eval:
+                description: >-
+                    Instructs the if to evaluate the value
+            - value:
+                regex: >-
+                    .+
+                description: >-
+                    Any valid, creatible value (see {{types}} for valid value types) or
+                    a {{get}} instruction.
+                    Value may use additional operators (, chain them) and values if needed.
+                    Available (precedence (low = last): "operator" -> type -> description):
+                    0: "or"  -> {{boolean}} -> LEFT or RIGHT
+                    1: "and"  -> {{boolean}} -> LEFT and RIGHT
+                    2: ">"  -> {{boolean}} -> LEFT larger then RIGHT
+                    2: ">=" -> {{boolean}} -> LEFT larger then or equal to RIGHT
+                    2: "<"  -> {{boolean}} -> LEFT less then RIGHT
+                    2: "<=" -> {{boolean}} -> LEFT less then or equal to  RIGHT
+                    2: "==" -> {{boolean}} -> LEFT equal to RIGHT
+                    2: "!=" -> {{boolean}} -> LEFT not equal to RIGHT
+                    3: "+" -> {{scalar}} -> LEFT plus RIGHT
+                    3: "-" -> {{scalar}} -> LEFT minus RIGHT
+                    4: "/" -> {{scalar}} -> LEFT divided by RIGHT
+                    4: "*" -> {{scalar}} -> LEFT multiplied by RIGHT
+    else:
+        meta:
+            - weak-scoping
+        description: >-
+            Followup of an {{if}}. Cannot have conditions.
+    while:
+    try:
+    print:

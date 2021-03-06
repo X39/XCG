@@ -1,0 +1,135 @@
+token ident: "ident"
+    require once        { char-normal, char-underscore }
+    require [0, *)      { char-normal, char-underscore, char-minus, digit }
+    backtrack not once  -
+token digit
+    require once        { 0-9 }
+token number
+    require plus        { digit }
+token char-normal
+    require once        { a-z, A-Z }
+token char-underscore
+    require once        _
+token word
+    require plus        { char-normal, char-underscore, char-minus }
+token scalar-full
+    require once        { number }
+    require once        .
+    require once        { number }
+token scalar-prefix
+    require once        .
+    require once        { number }
+token scalar-postfix
+    require once        { number }
+    require once        .
+token scalar
+    require once        { scalar-full, scalar-postfix, scalar-prefix }
+
+message switch-default-already-set
+    with Multiple default cases found
+    level error
+
+production switch
+    set local has-default false
+    /* putting ! in front of a matched token will capture that. */
+    /* A captured token may be named using ![name]matched, */
+    /* otherwise the name will be equivalent to the token name. */
+    match "switch" "(" @expression ")"
+    while not match "}"
+        alternatives
+            match "case" ":"
+            match "default" ":"
+                if get has-default
+                    print switch-default-already-set
+                else
+                    set local has-default true
+    match "}"
+
+production main
+    while match statement
+		match @[statements]statement
+		
+production statement
+	alternatives
+		match class
+		...
+
+production value-const
+	alternatives
+		match string
+		match char
+		match scalar
+		match boolean
+		match type
+
+production encapsulation
+	alternatives
+		match "public"
+		match "local"
+		match "derived"
+		match "private"
+
+production type
+	match @"ident"
+	while match "."
+		match "." @"ident"
+	if match "<"
+		match "<"
+		match @[template_values]value-const
+		while match ","
+			match "," @[template_values]value-const
+		match ">"
+
+production template_definition
+	match "<"
+	match @[items]template_item
+	while match ","
+		match "," @[items]template_item
+	match ">"
+
+production template_item
+	match @[key]"ident"
+	if match "="
+		match "=" @[value]value-const
+
+production class
+    match ?@encapsulation "class" @[classname]"ident" ?@template_definition
+	if match ":"
+		match ":"
+		match @[base]type
+		while match ","
+			match ","
+			match @[base]type
+	match "{"
+	while not match "}"
+		alternatives
+			match @[statements]statement
+			match @[member_statements]member-statement
+	match "}"
+production member-statement
+	alternatives
+		match @member-method
+
+production member-method
+	match ?@encapsulation @type @[methodname]"ident" ?@template_definition
+	match "("
+	if match method_arg
+		match @[args]method_arg
+		while match ","
+			match "," @[args]method_arg
+	match ")"
+	alternatives
+		match @scope
+		match ";"
+
+production member-property
+	match ?@encapsulation @type @[propertyname]"ident"
+	...
+
+production scope
+	...
+
+production method_arg
+	match @type @"ident"
+	if match "="
+		match "=" @[value]value-const
