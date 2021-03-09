@@ -90,13 +90,16 @@ keywords:
             - match
     match:
         help: >-
-            match [ not ] { [ @ [ \[ name \] ] ] rule }
+            match [ not ] { [ ? ] [ @ [ \[ name \] ] ] rule }
         description: >-
             Creates a match rule, matching a provided {{production}} or {{token}}.
             Match rules may capture values into the current {{production:productions}} class,
             by prefixing a rule with an exclamation mark (`@`). Captures may also be named,
             by following the exclamation mark by square brackets, containing the name (`@[name]`).
-            A match may be negated, making it check wether its ruleset can be matched.
+            Match rules may be marked as optional by prefixing them with a question mark (`?`).
+            An optional capture can be created by combining those two, with the question mark leading (`?@`).
+            A match may be negated, making it check wether its ruleset can be matched (relevant with
+            {{if}} and {{while}}).
             Tokens can be refered to by using putting them inbetween double-quotes (`"`).
             If a token is not found, it will be auto-generated.
         accepts:

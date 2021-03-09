@@ -41,7 +41,7 @@ production switch
     // A captured token may be named using ![name]matched,
     // otherwise the name will be equivalent to the token name.
     match "switch" "(" @expression ")"
-    while ( match not "}" )
+    while match not "}"
         alternatives
             match "case" ":"
             match "default" ":"
@@ -53,7 +53,89 @@ production switch
 
 production main
     while match statement
-        match semicolon
+		match @[statements]statement
+		
+production statement
+	alternatives
+		match class
+		...
+
+production value-const
+	alternatives
+		match string
+		match char
+		match scalar
+		match boolean
+		match type
+
+production encapsulation
+	alternatives
+		match "public"
+		match "local"
+		match "derived"
+		match "private"
+
+production type
+	match @"ident"
+	while match "."
+		match "." @"ident"
+	if match "<"
+		match "<"
+		match @[template_values]value-const
+		while match ","
+			match "," @[template_values]value-const
+		match ">"
+
+production template_definition
+	match "<"
+	match @[items]template_item
+	while match ","
+		match "," @[items]template_item
+	match ">"
+
+production template_item
+	match @[key]"ident"
+	if match "="
+		match "=" @[value]value-const
 
 production class
-    match "class"
+    match ?@encapsulation "class" @[classname]"ident" ?@template_definition
+	if match ":"
+		match ":"
+		match @[base]type
+		while match ","
+			match ","
+			match @[base]type
+	match "{"
+	while not match "}"
+		alternatives
+			match @[statements]statement
+			match @[member_statements]member-statement
+	match "}"
+production member-statement
+	alternatives
+		match @member-method
+
+production member-method
+	match ?@encapsulation @type @[methodname]"ident" ?@template_definition
+	match "("
+	if match method_arg
+		match @[args]method_arg
+		while match ","
+			match "," @[args]method_arg
+	match ")"
+	alternatives
+		match @scope
+		match ";"
+
+production member-property
+	match ?@encapsulation @type @[propertyname]"ident"
+	...
+
+production scope
+	...
+
+production method_arg
+	match @type @"ident"
+	if match "="
+		match "=" @[value]value-const
