@@ -14,18 +14,20 @@ production value
 
 production expC
     alternatives
-        match value
-        match "(" expA ")"
+        match @[value]value
+        match "(" @[value]expA ")"
 
 production expB
     alternatives
-        match expC @"/" expC
-        match expC @"*" expC
+        match @[left]expC @"/" @[right]expC
+        match @[left]expC @"*" @[right]expC
+        match @[left]expC
 
 production expA
     alternatives
-        match expB @"+" expB
-        match expB @"-" expB
+        match @[left]expB @"+" @[right]expB
+        match @[left]expB @"-" @[right]expB
+        match @[left]expB
 
 production main
-    match expA
+    match @expA
