@@ -1,0 +1,31 @@
+token integer
+    require plus { 0-9 }
+    
+token scalar
+    require once integer
+    require once .
+    require once integer
+
+
+production value
+    alternatives
+        match @scalar
+        match @integer
+
+production expC
+    alternatives
+        match value
+        match "(" expA ")"
+
+production expB
+    alternatives
+        match expC @"/" expC
+        match expC @"*" expC
+
+production expA
+    alternatives
+        match expB @"+" expB
+        match expB @"-" expB
+
+production main
+    match expA
