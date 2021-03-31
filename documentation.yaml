@@ -107,7 +107,7 @@ keywords:
             - boolean
     get:
         help: >-
-            get [ auto | local | global ] ( property | map property key | list property ( index value | pop ) ]
+            get [ auto | local | global | capture ] ( property | map property key | list property ( index value | pop ) ]
         description: >-
             Allows to receive a property or variable
         arguments:
@@ -115,12 +115,13 @@ keywords:
                 optional: true
                 default: auto
                 regex: >-
-                    (?:global|auto|local)?
+                    (?:global|auto|local|capture)?
                 description: >-
                     The scope resolution for where property resides in.
                     Global scope says that the variable lives at the top-most scope.
                     Local scope will will walk the local scopes upwards slowly, without ever scanning global.
                     Auto scope first checks local, then global.
+                    Capture scope allows getting values directly from the captures scope of the current production.
                     If not provided, scope will be set to auto.
                     See {{weak-scoping}} and {{strong-scoping}} for more info about scopes.
             - property:
@@ -184,7 +185,7 @@ keywords:
                     Pops from a {{list}} the value that is followed.
     set:
         help: >-
-            set [ auto | local | global ] ( property | map property key | list property ( index value | push ) ] value
+            set [ auto | local | global | capture ] ( property | map property key | list property ( index value | push ) ] value
         description: >-
             Allows changing properties or setting variables.
         arguments:
@@ -192,13 +193,14 @@ keywords:
                 optional: true
                 default: auto
                 regex: >-
-                    (?:global|auto|local)?
+                    (?:global|auto|local|capture)?
                 description: >-
                     The scope this property resides in.
                     Global scope says that the variable lives at the top-most scope.
                     Local scope will create or update the variable inside of the most
                     local scope. Eg. a {{production}} having `set local ...` as first operation
                     will store the value in its local storage space.
+                    Capture scope allows setting values directly in the captures scope of the current production.
                     If not provided, scope will be set to auto.
                     See {{weak-scoping}} and {{strong-scoping}} for more info about scopes.
             - property:

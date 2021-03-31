@@ -1149,6 +1149,10 @@ namespace XCG.Parsing
             {
                 return EActiveScope.global;
             }
+            else if (this.TryMatch("capture"))
+            {
+                return EActiveScope.capture;
+            }
             return null;
         }
         private Statements.Match? ParseMatch(int wsLevel, bool skipWhitespace = true, bool allowCaptures = true, bool allowChildren = true)
@@ -1445,6 +1449,7 @@ namespace XCG.Parsing
         {
             if (this.TryMatchNoCapture("", skipWS: true))
             {
+                this.Skip();
                 return null;
             }
             else if (this.TryMatchNoCapture("require", skipWS: true))

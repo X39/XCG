@@ -4,6 +4,7 @@
     {
         auto,
         global,
-        local
+        local,
+        capture
     }
 }
