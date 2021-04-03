@@ -2,7 +2,7 @@
   "profiles": {
     "xcg": {
       "commandName": "Project",
-      "commandLineArgs": "D:\\dev\\git\\XCG\\examples\\calculator.xcg"
+      "commandLineArgs": "..\\..\\..\\..\\examples\\calculator.xcg"
     }
   }
 }
