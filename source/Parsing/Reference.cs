@@ -8,6 +8,7 @@
         public bool IsCaptured { get; set; }
         public bool IsAlias { get; set; }
         public string? CaptureName { get; set; }
+        public Diagnostic Diagnostics { get; internal set; }
 
         public Reference(string text)
         {

@@ -9,5 +9,6 @@ namespace XCG.Parsing.Expressions
     public class CreateNewList : IStatement
     {
         public List<IStatement> Statements { get; } = new List<IStatement>();
+        public Diagnostic Diagnostics { get; internal set; }
     }
 }

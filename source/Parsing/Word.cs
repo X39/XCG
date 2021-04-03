@@ -3,6 +3,7 @@
     public class Word : IPart
     {
         public string Text { get; set; }
+        public Diagnostic Diagnostics { get; internal set; }
 
         public Word(string text)
         {

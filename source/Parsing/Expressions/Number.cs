@@ -15,5 +15,6 @@ namespace XCG.Parsing.Expressions
 
         public List<IStatement> Statements { get; } = new List<IStatement>();
         public double Value { get; }
+        public Diagnostic Diagnostics { get; internal set; }
     }
 }

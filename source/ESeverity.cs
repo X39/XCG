@@ -1,4 +1,4 @@
-﻿namespace XCG.Parsing
+﻿namespace XCG
 {
     public enum ESeverity
     {

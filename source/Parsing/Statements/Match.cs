@@ -10,5 +10,6 @@ namespace XCG.Parsing.Statements
     {
         public List<IMatchPart> Parts { get; set; } = new List<IMatchPart>();
         public List<IStatement> Statements { get; set; } = new List<IStatement>();
+        public Diagnostic Diagnostics { get; internal set; }
     }
 }

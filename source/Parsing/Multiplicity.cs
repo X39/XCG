@@ -16,16 +16,19 @@
 
         public bool IsOnce => this.To - this.From == 1;
 
+        public Diagnostic Diagnostics { get; internal set; }
 
-        public Multiplicity(int fromInclusive, int toExclusive)
+        public Multiplicity(int fromInclusive, int toExclusive, Diagnostic diagnostic)
         {
             this.From = fromInclusive;
             this.To = toExclusive;
+            this.Diagnostics = diagnostic;
         }
-        public Multiplicity(int exact)
+        public Multiplicity(int exact, Diagnostic diagnostic)
         {
             this.From = exact;
             this.To = exact + 1;
+            this.Diagnostics = diagnostic;
         }
     }
 }

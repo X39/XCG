@@ -6,6 +6,7 @@ namespace XCG.Parsing
 {
     public class Token
     {
+        public Diagnostic Diagnostics { get; set; }
         public string Identifier { get; set; } = String.Empty;
         public string Alias { get; set; } = String.Empty;
         public List<ITokenStatement> Statements { get; set; } = new List<ITokenStatement>();

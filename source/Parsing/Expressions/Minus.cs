@@ -7,6 +7,7 @@ namespace XCG.Parsing.Expressions
         public bool Value { get; }
 
         public List<IStatement> Statements { get; }
+        public Diagnostic Diagnostics { get; internal set; }
 
         public Minus(params IStatement[] statements)
         {

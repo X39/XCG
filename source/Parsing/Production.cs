@@ -8,5 +8,6 @@ namespace XCG.Parsing
     {
         public string Identifier { get; set; } = String.Empty;
         public List<IStatement> Statements { get; set; } = new List<IStatement>();
+        public Diagnostic Diagnostics { get; internal set; }
     }
 }

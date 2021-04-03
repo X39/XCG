@@ -2,7 +2,7 @@
   "profiles": {
     "xcg": {
       "commandName": "Project",
-      "commandLineArgs": "..\\..\\..\\..\\examples\\calculator.xcg"
+      "commandLineArgs": "-i ..\\..\\..\\..\\examples\\calculator.xcg -o calculator.cpp -g cpp"
     }
   }
 }

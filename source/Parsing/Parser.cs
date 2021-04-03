@@ -14,9 +14,11 @@ namespace XCG.Parsing
         private int column = 1;
         private string contents = String.Empty;
         private List<ParseNote> parseNotes = new List<ParseNote>();
+        private string? file;
         #endregion
 
         public List<Token> Tokens { get; private set; } = new List<Token>();
+        public List<Reference> References { get; private set; } = new List<Reference>();
         public List<Message> Messages { get; private set; } = new List<Message>();
         public List<Production> Productions { get; private set; } = new List<Production>();
 
@@ -429,7 +431,7 @@ namespace XCG.Parsing
                 this.parseNotes.Add(this.err("Failed to read token"));
                 return null;
             }
-            var message = new Message();
+            var message = new Message { Diagnostics = this.GetDiagnostic() };
             this.Skip();
             if (!this.TryReadIdent(out string? ident))
             {
@@ -491,7 +493,7 @@ namespace XCG.Parsing
                 this.parseNotes.Add(this.err("Failed to read production"));
                 return null;
             }
-            var production = new Production();
+            var production = new Production { Diagnostics = this.GetDiagnostic() };
             this.Skip();
             if (!this.TryReadIdent(out string? ident))
             {
@@ -523,7 +525,7 @@ namespace XCG.Parsing
                 this.parseNotes.Add(this.err("Failed to read alternatives"));
                 return null;
             }
-            var statement = new Statements.Alternatives();
+            var statement = new Statements.Alternatives { Diagnostics = this.GetDiagnostic() };
 
             this.SkipLine();
             int newWsLevel;
@@ -598,9 +600,13 @@ namespace XCG.Parsing
                 this.parseNotes.Add(this.err("Failed to read print"));
                 return null;
             }
-            var statement = new Statements.Print();
+            var statement = new Statements.Print { Diagnostics = this.GetDiagnostic() };
             this.Skip();
-            if (this.TryReadIdent(out string? property)) { statement.Reference = new Reference(property); }
+            if (this.TryReadIdent(out string? property))
+            {
+                statement.Reference = new Reference(property) { Diagnostics = this.GetDiagnostic() };
+                this.References.Add(statement.Reference);
+            }
             else { this.parseNotes.Add(this.err("Failed to read in message")); }
             return statement;
         }
@@ -620,7 +626,7 @@ namespace XCG.Parsing
                 this.parseNotes.Add(this.err("Failed to read set"));
                 return null;
             }
-            var statement = new Statements.Set();
+            var statement = new Statements.Set { Diagnostics = this.GetDiagnostic() };
             this.Skip();
             statement.ActiveScope = this.ParseActiveScope() ?? EActiveScope.auto;
             this.Skip();
@@ -683,8 +689,8 @@ namespace XCG.Parsing
                     {
                         switch (ident.ToLower())
                         {
-                            case "map": value = new Expressions.CreateNewMap(); return true;
-                            case "list": value = new Expressions.CreateNewList(); return true;
+                            case "map": value = new Expressions.CreateNewMap { Diagnostics = this.GetDiagnostic() }; return true;
+                            case "list": value = new Expressions.CreateNewList { Diagnostics = this.GetDiagnostic() }; return true;
                             default: this.parseNotes.Add(this.err($"Unkown instancable datatype '{ident}'")); value = null; return true;
                         }
                     }
@@ -713,7 +719,7 @@ namespace XCG.Parsing
                     }
                     string? str = this.contents[this.index..(this.index + len)];
                     if (Double.TryParse(str, out double number))
-                    { value = new Expressions.Number(number); }
+                    { value = new Expressions.Number(number) { Diagnostics = this.GetDiagnostic() }; }
                     else { this.parseNotes.Add(this.err("Failed to read in property")); value = null; }
                     this.index += len;
                     this.column += len;
@@ -729,14 +735,14 @@ namespace XCG.Parsing
             {
                 if (this.contents.Length - this.index > "true".Length && this.contents[this.index..(this.index + "true".Length)].Equals("true", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    value = new Expressions.Bool(true);
+                    value = new Expressions.Bool(true) { Diagnostics = this.GetDiagnostic() };
                     this.index += "true".Length;
                     this.column += "true".Length;
                     return true;
                 }
                 else if (this.contents.Length - this.index > "false".Length && this.contents[this.index..(this.index + "false".Length)].Equals("false", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    value = new Expressions.Bool(false);
+                    value = new Expressions.Bool(false) { Diagnostics = this.GetDiagnostic() };
                     this.index += "false".Length;
                     this.column += "false".Length;
                     return true;
@@ -776,22 +782,22 @@ namespace XCG.Parsing
                 {
                     if (!parseValue(out var left)) { value = null; return false; }
                     this.Skip();
-                    if (TryMatch("*"))
+                    if (this.TryMatch("*"))
                     {
                         this.Skip();
                         if (!parseValue(out var right)) { this.parseNotes.Add(this.err("Missing right expression")); value = null; return false; }
-                        value = left is not null && right is not null ? new Expressions.Multiply(left, right) : null;
+                        value = left is not null && right is not null ? new Expressions.Multiply(left, right) { Diagnostics = this.GetDiagnostic() } : null;
                         if (value is not null)
                         {
                             return parseLevel4(out value, value);
                         }
                         return true;
                     }
-                    if (TryMatch("/"))
+                    if (this.TryMatch("/"))
                     {
                         this.Skip();
                         if (!parseValue(out var right)) { this.parseNotes.Add(this.err("Missing right expression")); value = null; return false; }
-                        value = left is not null && right is not null ? new Expressions.Divide(left, right) : null;
+                        value = left is not null && right is not null ? new Expressions.Divide(left, right) { Diagnostics = this.GetDiagnostic() } : null;
                         if (value is not null)
                         {
                             return parseLevel4(out value, value);
@@ -803,18 +809,18 @@ namespace XCG.Parsing
                 }
                 else
                 {
-                    if (TryMatch("*"))
+                    if (this.TryMatch("*"))
                     {
                         this.Skip();
                         if (!parseValue(out var right)) { this.parseNotes.Add(this.err("Missing right expression")); value = null; return false; }
-                        value = right is not null ? new Expressions.Multiply(leftFold, right) : null;
+                        value = right is not null ? new Expressions.Multiply(leftFold, right) { Diagnostics = this.GetDiagnostic() } : null;
                         return true;
                     }
-                    if (TryMatch("/"))
+                    if (this.TryMatch("/"))
                     {
                         this.Skip();
                         if (!parseValue(out var right)) { this.parseNotes.Add(this.err("Missing right expression")); value = null; return false; }
-                        value = right is not null ? new Expressions.Divide(leftFold, right) : null;
+                        value = right is not null ? new Expressions.Divide(leftFold, right) { Diagnostics = this.GetDiagnostic() } : null;
                         return true;
                     }
                     value = leftFold;
@@ -827,22 +833,22 @@ namespace XCG.Parsing
                 {
                     if (!parseLevel4(out var left)) { value = null; return false; }
                     this.Skip();
-                    if (TryMatch("+"))
+                    if (this.TryMatch("+"))
                     {
                         this.Skip();
                         if (!parseLevel4(out var right)) { this.parseNotes.Add(this.err("Missing right expression")); value = null; return false; }
-                        value = left is not null && right is not null ? new Expressions.Plus(left, right) : null;
+                        value = left is not null && right is not null ? new Expressions.Plus(left, right) { Diagnostics = this.GetDiagnostic() } : null;
                         if (value is not null)
                         {
                             return parseLevel3(out value, value);
                         }
                         return true;
                     }
-                    if (TryMatch("-"))
+                    if (this.TryMatch("-"))
                     {
                         this.Skip();
                         if (!parseLevel4(out var right)) { this.parseNotes.Add(this.err("Missing right expression")); value = null; return false; }
-                        value = left is not null && right is not null ? new Expressions.Minus(left, right) : null;
+                        value = left is not null && right is not null ? new Expressions.Minus(left, right) { Diagnostics = this.GetDiagnostic() } : null;
                         if (value is not null)
                         {
                             return parseLevel3(out value, value);
@@ -854,18 +860,18 @@ namespace XCG.Parsing
                 }
                 else
                 {
-                    if (TryMatch("+"))
+                    if (this.TryMatch("+"))
                     {
                         this.Skip();
                         if (!parseLevel4(out var right)) { this.parseNotes.Add(this.err("Missing right expression")); value = null; return false; }
-                        value = right is not null ? new Expressions.Plus(leftFold, right) : null;
+                        value = right is not null ? new Expressions.Plus(leftFold, right) { Diagnostics = this.GetDiagnostic() } : null;
                         return true;
                     }
-                    if (TryMatch("-"))
+                    if (this.TryMatch("-"))
                     {
                         this.Skip();
                         if (!parseLevel4(out var right)) { this.parseNotes.Add(this.err("Missing right expression")); value = null; return false; }
-                        value = right is not null ? new Expressions.Minus(leftFold, right) : null;
+                        value = right is not null ? new Expressions.Minus(leftFold, right) { Diagnostics = this.GetDiagnostic() } : null;
                         return true;
                     }
                     value = leftFold;
@@ -878,66 +884,66 @@ namespace XCG.Parsing
                 {
                     if (!parseLevel3(out var left)) { value = null; return false; }
                     this.Skip();
-                    if (TryMatch("!="))
+                    if (this.TryMatch("!="))
                     {
                         this.Skip();
                         if (!parseLevel3(out var right)) { this.parseNotes.Add(this.err("Missing right expression")); value = null; return false; }
-                        value = left is not null && right is not null ? new Expressions.NotEquivalentTo(left, right) : null;
+                        value = left is not null && right is not null ? new Expressions.NotEquivalentTo(left, right) { Diagnostics = this.GetDiagnostic() } : null;
                         if (value is not null)
                         {
                             return parseLevel2(out value, value);
                         }
                         return true;
                     }
-                    if (TryMatch("=="))
+                    if (this.TryMatch("=="))
                     {
                         this.Skip();
                         if (!parseLevel3(out var right)) { this.parseNotes.Add(this.err("Missing right expression")); value = null; return false; }
-                        value = left is not null && right is not null ? new Expressions.EquivalentTo(left, right) : null;
+                        value = left is not null && right is not null ? new Expressions.EquivalentTo(left, right) { Diagnostics = this.GetDiagnostic() } : null;
                         if (value is not null)
                         {
                             return parseLevel2(out value, value);
                         }
                         return true;
                     }
-                    if (TryMatch("<="))
+                    if (this.TryMatch("<="))
                     {
                         this.Skip();
                         if (!parseLevel3(out var right)) { this.parseNotes.Add(this.err("Missing right expression")); value = null; return false; }
-                        value = left is not null && right is not null ? new Expressions.LessThenOrEqualTo(left, right) : null;
+                        value = left is not null && right is not null ? new Expressions.LessThenOrEqualTo(left, right) { Diagnostics = this.GetDiagnostic() } : null;
                         if (value is not null)
                         {
                             return parseLevel2(out value, value);
                         }
                         return true;
                     }
-                    if (TryMatch("<"))
+                    if (this.TryMatch("<"))
                     {
                         this.Skip();
                         if (!parseLevel3(out var right)) { this.parseNotes.Add(this.err("Missing right expression")); value = null; return false; }
-                        value = left is not null && right is not null ? new Expressions.LessThen(left, right) : null;
+                        value = left is not null && right is not null ? new Expressions.LessThen(left, right) { Diagnostics = this.GetDiagnostic() } : null;
                         if (value is not null)
                         {
                             return parseLevel2(out value, value);
                         }
                         return true;
                     }
-                    if (TryMatch(">="))
+                    if (this.TryMatch(">="))
                     {
                         this.Skip();
                         if (!parseLevel3(out var right)) { this.parseNotes.Add(this.err("Missing right expression")); value = null; return false; }
-                        value = left is not null && right is not null ? new Expressions.GreaterThenOrEqualTo(left, right) : null;
+                        value = left is not null && right is not null ? new Expressions.GreaterThenOrEqualTo(left, right) { Diagnostics = this.GetDiagnostic() } : null;
                         if (value is not null)
                         {
                             return parseLevel2(out value, value);
                         }
                         return true;
                     }
-                    if (TryMatch(">"))
+                    if (this.TryMatch(">"))
                     {
                         this.Skip();
                         if (!parseLevel3(out var right)) { this.parseNotes.Add(this.err("Missing right expression")); value = null; return false; }
-                        value = left is not null && right is not null ? new Expressions.GreaterThen(left, right) : null;
+                        value = left is not null && right is not null ? new Expressions.GreaterThen(left, right) { Diagnostics = this.GetDiagnostic() } : null;
                         if (value is not null)
                         {
                             return parseLevel2(out value, value);
@@ -949,46 +955,46 @@ namespace XCG.Parsing
                 }
                 else
                 {
-                    if (TryMatch("!="))
+                    if (this.TryMatch("!="))
                     {
                         this.Skip();
                         if (!parseLevel3(out var right)) { this.parseNotes.Add(this.err("Missing right expression")); value = null; return false; }
-                        value = right is not null ? new Expressions.NotEquivalentTo(leftFold, right) : null;
+                        value = right is not null ? new Expressions.NotEquivalentTo(leftFold, right) { Diagnostics = this.GetDiagnostic() } : null;
                         return true;
                     }
-                    if (TryMatch("=="))
+                    if (this.TryMatch("=="))
                     {
                         this.Skip();
                         if (!parseLevel3(out var right)) { this.parseNotes.Add(this.err("Missing right expression")); value = null; return false; }
-                        value = right is not null ? new Expressions.EquivalentTo(leftFold, right) : null;
+                        value = right is not null ? new Expressions.EquivalentTo(leftFold, right) { Diagnostics = this.GetDiagnostic() } : null;
                         return true;
                     }
-                    if (TryMatch("<="))
+                    if (this.TryMatch("<="))
                     {
                         this.Skip();
                         if (!parseLevel3(out var right)) { this.parseNotes.Add(this.err("Missing right expression")); value = null; return false; }
-                        value = right is not null ? new Expressions.LessThenOrEqualTo(leftFold, right) : null;
+                        value = right is not null ? new Expressions.LessThenOrEqualTo(leftFold, right) { Diagnostics = this.GetDiagnostic() } : null;
                         return true;
                     }
-                    if (TryMatch("<"))
+                    if (this.TryMatch("<"))
                     {
                         this.Skip();
                         if (!parseLevel3(out var right)) { this.parseNotes.Add(this.err("Missing right expression")); value = null; return false; }
-                        value = right is not null ? new Expressions.LessThen(leftFold, right) : null;
+                        value = right is not null ? new Expressions.LessThen(leftFold, right) { Diagnostics = this.GetDiagnostic() } : null;
                         return true;
                     }
-                    if (TryMatch(">="))
+                    if (this.TryMatch(">="))
                     {
                         this.Skip();
                         if (!parseLevel3(out var right)) { this.parseNotes.Add(this.err("Missing right expression")); value = null; return false; }
-                        value = right is not null ? new Expressions.GreaterThenOrEqualTo(leftFold, right) : null;
+                        value = right is not null ? new Expressions.GreaterThenOrEqualTo(leftFold, right) { Diagnostics = this.GetDiagnostic() } : null;
                         return true;
                     }
-                    if (TryMatch(">"))
+                    if (this.TryMatch(">"))
                     {
                         this.Skip();
                         if (!parseLevel3(out var right)) { this.parseNotes.Add(this.err("Missing right expression")); value = null; return false; }
-                        value = right is not null ? new Expressions.GreaterThen(leftFold, right) : null;
+                        value = right is not null ? new Expressions.GreaterThen(leftFold, right) { Diagnostics = this.GetDiagnostic() } : null;
                         return true;
                     }
                     value = leftFold;
@@ -1001,11 +1007,11 @@ namespace XCG.Parsing
                 {
                     if (!parseLevel2(out var left)) { value = null; return false; }
                     this.Skip();
-                    if (TryMatch("and"))
+                    if (this.TryMatch("and"))
                     {
                         this.Skip();
                         if (!parseLevel2(out var right)) { this.parseNotes.Add(this.err("Missing right expression")); value = null; return false; }
-                        value = left is not null && right is not null ? new Expressions.And(left, right) : null;
+                        value = left is not null && right is not null ? new Expressions.And(left, right) { Diagnostics = this.GetDiagnostic() } : null;
                         if (value is not null)
                         {
                             return parseLevel1(out value, value);
@@ -1017,11 +1023,11 @@ namespace XCG.Parsing
                 }
                 else
                 {
-                    if (TryMatch("and"))
+                    if (this.TryMatch("and"))
                     {
                         this.Skip();
                         if (!parseLevel2(out var right)) { this.parseNotes.Add(this.err("Missing right expression")); value = null; return false; }
-                        value = right is not null ? new Expressions.And(leftFold, right) : null;
+                        value = right is not null ? new Expressions.And(leftFold, right) { Diagnostics = this.GetDiagnostic() } : null;
                         return true;
                     }
                     value = leftFold;
@@ -1034,11 +1040,11 @@ namespace XCG.Parsing
                 {
                     if (!parseLevel1(out var left)) { value = null; return false; }
                     this.Skip();
-                    if (TryMatch("or"))
+                    if (this.TryMatch("or"))
                     {
                         this.Skip();
                         if (!parseLevel1(out var right)) { this.parseNotes.Add(this.err("Missing right expression")); value = null; return false; }
-                        value = left is not null && right is not null ? new Expressions.Or(left, right) : null;
+                        value = left is not null && right is not null ? new Expressions.Or(left, right) { Diagnostics = this.GetDiagnostic() } : null;
                         if (value is not null)
                         {
                             return parseLevel0(out value, value);
@@ -1050,11 +1056,11 @@ namespace XCG.Parsing
                 }
                 else
                 {
-                    if (TryMatch("or"))
+                    if (this.TryMatch("or"))
                     {
                         this.Skip();
                         if (!parseLevel1(out var right)) { this.parseNotes.Add(this.err("Missing right expression")); value = null; return false; }
-                        value = right is not null ? new Expressions.Or(leftFold, right) : null;
+                        value = right is not null ? new Expressions.Or(leftFold, right) { Diagnostics = this.GetDiagnostic() } : null;
                         return true;
                     }
                     value = leftFold;
@@ -1089,7 +1095,7 @@ namespace XCG.Parsing
                 this.parseNotes.Add(this.err("Failed to read get"));
                 return null;
             }
-            var statement = new Statements.Get();
+            var statement = new Statements.Get { Diagnostics = this.GetDiagnostic() };
             this.Skip();
             statement.ActiveScope = this.ParseActiveScope() ?? EActiveScope.auto;
             this.Skip();
@@ -1171,7 +1177,7 @@ namespace XCG.Parsing
                 this.parseNotes.Add(this.err("Failed to read match"));
                 return null;
             }
-            var statement = new Statements.Match();
+            var statement = new Statements.Match { Diagnostics = this.GetDiagnostic() };
             this.Skip();
             while (this.PeekChar() != '\n' && !this.EOF())
             {
@@ -1193,7 +1199,7 @@ namespace XCG.Parsing
                     {
                         statement.Statements.Add(subStatement);
                     }
-                    if (PeekChar(0) != '\n')
+                    if (this.PeekChar(0) != '\n')
                     {
                         this.SkipLine();
                     }
@@ -1204,7 +1210,7 @@ namespace XCG.Parsing
 
         private bool EOF()
         {
-            return PeekChar() == '\0';
+            return this.PeekChar() == '\0';
         }
 
         private IMatchPart? ParseMatchPart(bool allowCaptures = true)
@@ -1263,13 +1269,16 @@ namespace XCG.Parsing
                 text = text.Trim('"');
                 isAlias = true;
             }
-            return new Reference(text)
+            var reference = new Reference(text)
             {
+                Diagnostics = this.GetDiagnostic(),
                 CaptureName = captureName,
                 IsCaptured = isCaptured,
                 IsOptional = isOptional,
                 IsAlias = isAlias
             };
+            this.References.Add(reference);
+            return reference;
         }
         private Statements.While? ParseWhile(int wsLevel)
         {
@@ -1278,7 +1287,7 @@ namespace XCG.Parsing
                 this.parseNotes.Add(this.err("Failed to read while"));
                 return null;
             }
-            var statement = new Statements.While();
+            var statement = new Statements.While { Diagnostics = this.GetDiagnostic() };
             this.Skip();
             if (this.TryMatch("not"))
             {
@@ -1320,7 +1329,7 @@ namespace XCG.Parsing
                 {
                     statement.Statements.Add(subStatement);
                 }
-                if (PeekChar(0) != '\n')
+                if (this.PeekChar(0) != '\n')
                 {
                     this.SkipLine();
                 }
@@ -1334,7 +1343,7 @@ namespace XCG.Parsing
                 this.parseNotes.Add(this.err("Failed to read if"));
                 return null;
             }
-            var statement = new Statements.If();
+            var statement = new Statements.If { Diagnostics = this.GetDiagnostic() };
             this.Skip();
             if (this.TryMatch("not"))
             {
@@ -1376,7 +1385,7 @@ namespace XCG.Parsing
                 {
                     statement.Statements.Add(subStatement);
                 }
-                if (PeekChar(0) != '\n')
+                if (this.PeekChar(0) != '\n')
                 {
                     this.SkipLine();
                 }
@@ -1393,7 +1402,7 @@ namespace XCG.Parsing
                     {
                         statement.Else.Add(subStatement);
                     }
-                    if (PeekChar(0) != '\n')
+                    if (this.PeekChar(0) != '\n')
                     {
                         this.SkipLine();
                     }
@@ -1414,7 +1423,7 @@ namespace XCG.Parsing
                 this.parseNotes.Add(this.err("Failed to read token"));
                 return null;
             }
-            var token = new Token();
+            var token = new Token { Diagnostics = this.GetDiagnostic() };
             this.Skip();
             if (!this.TryReadIdent(out string? ident))
             {
@@ -1445,6 +1454,18 @@ namespace XCG.Parsing
 
             return token;
         }
+
+        private Diagnostic GetDiagnostic()
+        {
+            return new Diagnostic
+            {
+                Column = this.column,
+                Line = this.line,
+                File = this.file ?? String.Empty,
+                Offset = this.index
+            };
+        }
+
         private ITokenStatement? ParseToken_Statement(int wsLevel)
         {
             if (this.TryMatchNoCapture("", skipWS: true))
@@ -1471,15 +1492,15 @@ namespace XCG.Parsing
         {
             if (this.TryMatch("once"))
             {
-                return new Multiplicity(1);
+                return new Multiplicity(1, this.GetDiagnostic());
             }
             else if (this.TryMatch("plus"))
             {
-                return new Multiplicity(1, Int32.MaxValue);
+                return new Multiplicity(1, Int32.MaxValue, this.GetDiagnostic());
             }
             else
             {
-                var range = new Multiplicity();
+                var range = new Multiplicity { Diagnostics = this.GetDiagnostic() };
                 bool inclusiveFrom = true;
                 switch (this.NextChar())
                 {
@@ -1594,7 +1615,7 @@ namespace XCG.Parsing
                     { // Any character
                         if (allowAnyPlaceholder)
                         {
-                            parts.Add(new AnyCharacter());
+                            parts.Add(new AnyCharacter { Diagnostics = this.GetDiagnostic() });
                         }
                         else
                         {
@@ -1606,7 +1627,7 @@ namespace XCG.Parsing
                         char a = this.NextChar();
                         this.NextChar();
                         char b = this.NextChar();
-                        parts.Add(new CharacterRange(a, b));
+                        parts.Add(new CharacterRange(a, b, this.GetDiagnostic()));
                     }
                     else
                     { // Token Reference
@@ -1651,7 +1672,9 @@ namespace XCG.Parsing
                         {
                             this.parseNotes.Add(this.err($@"Reference ends with invalid character '{la}' while only {{ a-z, A-Z, 0-9, _ }} was accepted."));
                         }
-                        parts.Add(new Reference(referenceContents));
+                        var reference = new Reference(referenceContents) { Diagnostics = this.GetDiagnostic() };
+                        this.References.Add(reference);
+                        parts.Add(reference);
                     }
                     this.Skip();
                     handleComma();
@@ -1678,7 +1701,7 @@ namespace XCG.Parsing
                 string? requireContents = this.contents.Substring(currentIndex, indexOfNewLine - currentIndex);
                 this.column += requireContents.Length;
                 this.index += requireContents.Length;
-                parts.Add(new Word(requireContents));
+                parts.Add(new Word(requireContents) { Diagnostics = this.GetDiagnostic() });
             }
             return true;
         }
@@ -1689,7 +1712,7 @@ namespace XCG.Parsing
                 this.parseNotes.Add(this.err("Failed to read required"));
                 return null;
             }
-            var require = new TokenStatements.Require();
+            var require = new TokenStatements.Require { Diagnostics = this.GetDiagnostic() };
 
             this.Skip();
             if (this.TryMatch("not"))
@@ -1714,7 +1737,7 @@ namespace XCG.Parsing
                 this.parseNotes.Add(this.err("Failed to read backtrack"));
                 return null;
             }
-            var backtrack = new TokenStatements.Backtrack();
+            var backtrack = new TokenStatements.Backtrack { Diagnostics = this.GetDiagnostic() };
 
             this.Skip();
             if (this.TryMatch("not"))
@@ -1749,7 +1772,7 @@ namespace XCG.Parsing
         /// <paramref name="outParseNotes"/> will contain the reason for failed parsing attempts.
         /// </returns>
         /// <exception cref="InvalidOperationException">Thrown if two or more threads try to access this method at the same time</exception>
-        public bool Parse(string contents, out IEnumerable<ParseNote> outParseNotes)
+        public bool Parse(string filePath, string contents, out IEnumerable<ParseNote> outParseNotes)
         {
             lock (this)
             {
@@ -1766,6 +1789,7 @@ namespace XCG.Parsing
                 this.line = 1;
                 this.column = 1;
                 this.index = 0;
+                this.file = filePath;
                 outParseNotes = this.parseNotes;
 
                 while (this.PeekChar() != '\0')
