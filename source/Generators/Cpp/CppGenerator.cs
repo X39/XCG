@@ -39,7 +39,7 @@ namespace XCG.Generators.Cpp
                     {
                         new FullBody
                         {
-                            @"while (m_contents.length() < m_offset)",
+                            @"while (m_contents.length() > m_offset)",
                             @"{",
                             @"    char c = m_contents[m_offset];",
                             @"    switch (c)",
@@ -50,6 +50,42 @@ namespace XCG.Generators.Cpp
                             @"        case '\n': m_line++; m_column = 1; m_offset++; break;",
                             @"        default: return;",
                             @"    }",
+                            @"}",
+                        }
+                    },
+                    new MethodDefinition(EType.Boolean, "next")
+                    {
+                        new FullBody
+                        {
+                            @"if (m_contents.length() > m_offset)",
+                            @"{",
+                            @"    char c = m_contents[m_offset];",
+                            @"    switch (c)",
+                            @"    {",
+                            @"        case '\r':",
+                            @"        case '\t':",
+                            @"        case ' ': m_column++; m_offset++; break;",
+                            @"        case '\n': m_line++; m_column = 1; m_offset++; break;",
+                            @"    }",
+                            @"    return true;",
+                            @"}",
+                            @"else",
+                            @"{",
+                            @"    return false;",
+                            @"}",
+                        }
+                    },
+                    new MethodDefinition(EType.Char, "current")
+                    {
+                        new FullBody
+                        {
+                            @"if (m_contents.length() > m_offset)",
+                            @"{",
+                            @"    return m_contents[m_offset];",
+                            @"}",
+                            @"else",
+                            @"{",
+                            @"    return '\0';",
                             @"}",
                         }
                     }

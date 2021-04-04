@@ -10,6 +10,7 @@
         Int64,
         String,
         StringView,
-        SizeT
+        SizeT,
+        Char
     }
 }

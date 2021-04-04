@@ -21,6 +21,7 @@ namespace XCG.Generators.Cpp
                 EType.String => "std::string",
                 EType.StringView => "std::string_view",
                 EType.SizeT => "size_t",
+                EType.Char => "char",
                 _ => throw new NotImplementedException(),
             };
         }
