@@ -13,7 +13,6 @@
         /// </summary>
         public int To { get; set; }
 
-
         public bool IsOnce => this.To - this.From == 1;
 
         public Diagnostic Diagnostics { get; internal set; }

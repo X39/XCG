@@ -15,20 +15,20 @@ namespace XCG.Generators.Cpp
         public string FullName => this.BaseName is null ? this.Name : String.Concat(this.BaseName, "::", this.Name);
         public IEnumerable<TypeImpl> Arguments { get; }
         public List<ICppPart> Parts { get; init; }
-        public MethodDefinition(EType returnType, string name)
+        public string? AfterMethodImpl { get; init; }
+        public MethodDefinition(EType returnType, string name, string? afterMethodImpl, IEnumerable<TypeImpl> arguments)
         {
             this.ReturnType = returnType;
-            this.Name = name;
-            this.Arguments = Array.Empty<TypeImpl>();
-            this.Parts = new List<ICppPart>();
-        }
-        public MethodDefinition(EType returnType, string name, IEnumerable<TypeImpl> arguments)
-        {
-            this.ReturnType = returnType;
+            this.AfterMethodImpl = afterMethodImpl;
             this.Name = name;
             this.Arguments = new ReadOnlyCollection<TypeImpl>(arguments.ToList());
             this.Parts = new List<ICppPart>();
         }
+        public MethodDefinition(EType returnType, string name, IEnumerable<TypeImpl> arguments) : this(returnType, name, null, arguments) { }
+        public MethodDefinition(EType returnType, string name) : this(returnType, name, null, Array.Empty<TypeImpl>() as IEnumerable<TypeImpl>) { }
+        public MethodDefinition(EType returnType, string name, string afterMethodImpl) : this(returnType, name, afterMethodImpl, Array.Empty<TypeImpl>() as IEnumerable<TypeImpl>) { }
+        public MethodDefinition(EType returnType, string name, params TypeImpl[] arguments) : this(returnType, name, null, arguments as IEnumerable<TypeImpl>) { }
+        public MethodDefinition(EType returnType, string name, string afterMethodImpl, params TypeImpl[] arguments) : this(returnType, name, afterMethodImpl, arguments as IEnumerable<TypeImpl>) { }
 
         public void WriteHeader(CppOptions options, StreamWriter writer, string whitespace)
         {
@@ -49,7 +49,8 @@ namespace XCG.Generators.Cpp
             writer.Write(this.FullName);
             writer.Write("(");
             writer.Write(String.Join(", ", this.Arguments.Select((q) => q.ToString())));
-            writer.WriteLine(")");
+            writer.Write(")");
+            writer.WriteLine(this.AfterMethodImpl ?? String.Empty);
 
             writer.Write(whitespace);
             writer.WriteLine("{");

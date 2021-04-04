@@ -307,6 +307,43 @@ namespace XCG
                 }
                 return hints;
             });
+            validator.Register("V", ESeverity.Error, (parser) =>
+            {
+                var hints = new List<Validation.Hint>();
+                var identifiers = parser.Tokens.Select((q) => q.Identifier).Concat(parser.Productions.Select((q) => q.Identifier)).Distinct().ToHashSet();
+                foreach (var token in parser.Tokens)
+                {
+                    foreach (var it in token.Statements)
+                    {
+                        List<Parsing.IPart> parts;
+                        if (it is Parsing.TokenStatements.Require require)
+                        {
+                            parts = require.Parts;
+                        }
+                        else if (it is Parsing.TokenStatements.Backtrack backtrack)
+                        {
+                            parts = backtrack.Parts;
+                        }
+                        else
+                        {
+                            throw new FatalException("Missing TokenStatement implementation");
+                        }
+                        foreach (var reference in parts.Where((q) => q is Parsing.Reference).Cast<Parsing.Reference>())
+                        {
+                            if (reference.Refered is not Parsing.Token)
+                            {
+                                hints.Add(new Validation.Hint
+                                {
+                                    File = token.Diagnostics.File,
+                                    Line = token.Diagnostics.Line,
+                                    Message = $@"Expected reference to refer to a token."
+                                });
+                            }
+                        }
+                    }
+                }
+                return hints;
+            });
         }
     }
 }

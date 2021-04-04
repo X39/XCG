@@ -12,6 +12,7 @@ namespace XCG.Generators.Cpp
         {
             return type switch
             {
+                EType.None => String.Empty,
                 EType.Void => "void",
                 EType.Boolean => "bool",
                 EType.Float => "float",
@@ -22,6 +23,15 @@ namespace XCG.Generators.Cpp
                 EType.StringView => "std::string_view",
                 EType.SizeT => "size_t",
                 EType.Char => "char",
+                EType.OptionalBoolean       => "std::optional<bool>",
+                EType.OptionalFloat         => "std::optional<float>",
+                EType.OptionalDouble        => "std::optional<double>",
+                EType.OptionalInt32         => "std::optional<int>",
+                EType.OptionalInt64         => "std::optional<long>",
+                EType.OptionalString        => "std::optional<std::string>",
+                EType.OptionalStringView    => "std::optional<std::string_view>",
+                EType.OptionalSizeT         => "std::optional<size_t>",
+                EType.OptionalChar          => "std::optional<char>",
                 _ => throw new NotImplementedException(),
             };
         }

@@ -7,7 +7,7 @@ namespace XCG.Generators.Cpp
     internal class FullBody : ICppPart, IList<string>
     {
         private readonly List<string> inner = new List<string>();
-
+        private readonly EUsage usage;
 
         #region IList<string>
         public string this[int index] { get => ((IList<string>)this.inner)[index]; set => ((IList<string>)this.inner)[index] = value; }
@@ -67,16 +67,31 @@ namespace XCG.Generators.Cpp
         }
         #endregion
         #region ICppPart
+        public FullBody(EUsage usage = EUsage.Implementation)
+        {
+            this.usage = usage;
+        }
         public string? BaseName { get; set; }
         public void WriteHeader(CppOptions options, StreamWriter writer, string whitespace)
         {
+            if (usage.HasFlag(EUsage.Header))
+            {
+                foreach (var line in this.inner)
+                {
+                    writer.Write(whitespace);
+                    writer.WriteLine(line);
+                }
+            }
         }
         public void WriteImplementation(CppOptions options, StreamWriter writer, string whitespace)
         {
-            foreach (var line in this.inner)
+            if (usage.HasFlag(EUsage.Implementation))
             {
-                writer.Write(whitespace);
-                writer.WriteLine(line);
+                foreach (var line in this.inner)
+                {
+                    writer.Write(whitespace);
+                    writer.WriteLine(line);
+                }
             }
         }
         #endregion

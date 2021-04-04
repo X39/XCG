@@ -1705,7 +1705,7 @@ namespace XCG.Parsing
                 string? requireContents = this.contents.Substring(currentIndex, indexOfNewLine - currentIndex);
                 this.column += requireContents.Length;
                 this.index += requireContents.Length;
-                parts.Add(new Word(requireContents) { Diagnostics = this.GetDiagnostic() });
+                parts.Add(new Word(requireContents.Trim()) { Diagnostics = this.GetDiagnostic() });
             }
             return true;
         }

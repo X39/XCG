@@ -2,6 +2,7 @@
 {
     internal enum EType
     {
+        None,
         Void,
         Boolean,
         Float,
@@ -11,6 +12,15 @@
         String,
         StringView,
         SizeT,
-        Char
+        Char,
+        OptionalBoolean,
+        OptionalFloat,
+        OptionalDouble,
+        OptionalInt32,
+        OptionalInt64,
+        OptionalString,
+        OptionalStringView,
+        OptionalSizeT,
+        OptionalChar,
     }
 }

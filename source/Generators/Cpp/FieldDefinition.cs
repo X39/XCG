@@ -7,25 +7,24 @@ using System.Threading.Tasks;
 
 namespace XCG.Generators.Cpp
 {
-    public class TokenRangeImpl : ICppPart
+    internal class FieldDefinition : ICppPart
     {
         public string? BaseName { get; set; }
-        public Parsing.CharacterRange CharacterRange { get; private set; }
+        public TypeImpl Type { get; set; }
 
-        public TokenRangeImpl(Parsing.CharacterRange characterRange)
+        public FieldDefinition(TypeImpl typeImpl)
         {
-            this.CharacterRange = characterRange;
+            this.Type = typeImpl;
         }
         public void WriteHeader(CppOptions options, StreamWriter writer, string whitespace)
         {
-            // ToDo: Take into account full require here somehow
             writer.Write(whitespace);
-            writer.WriteLine($"for (; current() >= '{CharacterRange.Start}' && current() <= '{CharacterRange.Start}' && next(););");
+            writer.Write(Type.ToString());
+            writer.WriteLine(";");
         }
 
         public void WriteImplementation(CppOptions options, StreamWriter writer, string whitespace)
         {
-            throw new NotImplementedException();
         }
     }
 }

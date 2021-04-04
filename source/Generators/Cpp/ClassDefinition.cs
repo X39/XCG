@@ -10,17 +10,15 @@ namespace XCG.Generators.Cpp
         public string? BaseName { get; set; }
         public string Name { get; }
         public string FullName => this.BaseName is null ? this.Name : String.Concat(this.BaseName, "::", this.Name);
-        public List<TypeImpl> PrivateFields { get; init; }
-        public List<TypeImpl> PublicFields { get; init; }
-        public List<MethodDefinition> PrivateMethods { get; init; }
-        public List<MethodDefinition> PublicMethods { get; init; }
+        public List<ICppPart> PrivateParts { get; init; }
+        public List<ICppPart> ProtectedParts { get; init; }
+        public List<ICppPart> PublicParts { get; init; }
         public ClassDefinition(string name)
         {
             this.Name = name;
-            this.PrivateFields = new List<TypeImpl>();
-            this.PublicFields = new List<TypeImpl>();
-            this.PrivateMethods = new List<MethodDefinition>();
-            this.PublicMethods = new List<MethodDefinition>();
+            this.PrivateParts = new();
+            this.ProtectedParts = new();
+            this.PublicParts = new();
         }
         public void WriteHeader(CppOptions options, StreamWriter writer, string whitespace)
         {
@@ -32,38 +30,37 @@ namespace XCG.Generators.Cpp
             writer.WriteLine("{");
 
             string? subWhitespace = String.Concat(whitespace, "    ");
-            if (this.PrivateFields.Any() || this.PrivateMethods.Any())
+            if (this.PrivateParts.Any())
             {
                 writer.Write(whitespace);
                 writer.WriteLine("private:");
-            }
-            foreach (var typeImpl in this.PrivateFields)
-            {
-                writer.Write(subWhitespace);
-                writer.Write(typeImpl.ToString());
-                writer.WriteLine(";");
-            }
-            foreach (var generatorPart in this.PrivateMethods)
-            {
-                generatorPart.BaseName = null;
-                generatorPart.WriteHeader(options, writer, subWhitespace);
+                foreach (var generatorPart in this.PrivateParts)
+                {
+                    generatorPart.BaseName = null;
+                    generatorPart.WriteHeader(options, writer, subWhitespace);
+                }
             }
 
-            if (this.PublicFields.Any() || this.PublicMethods.Any())
+            if (this.ProtectedParts.Any())
+            {
+                writer.Write(whitespace);
+                writer.WriteLine("protected:");
+                foreach (var generatorPart in this.PublicParts)
+                {
+                    generatorPart.BaseName = null;
+                    generatorPart.WriteHeader(options, writer, subWhitespace);
+                }
+            }
+
+            if (this.PublicParts.Any())
             {
                 writer.Write(whitespace);
                 writer.WriteLine("public:");
-            }
-            foreach (var typeImpl in this.PublicFields)
-            {
-                writer.Write(subWhitespace);
-                writer.Write(typeImpl.ToString());
-                writer.WriteLine(";");
-            }
-            foreach (var generatorPart in this.PublicMethods)
-            {
-                generatorPart.BaseName = null;
-                generatorPart.WriteHeader(options, writer, subWhitespace);
+                foreach (var generatorPart in this.PublicParts)
+                {
+                    generatorPart.BaseName = null;
+                    generatorPart.WriteHeader(options, writer, subWhitespace);
+                }
             }
 
             writer.Write(whitespace);
@@ -72,13 +69,19 @@ namespace XCG.Generators.Cpp
 
         public void WriteImplementation(CppOptions options, StreamWriter writer, string whitespace)
         {
-            foreach (var generatorPart in this.PrivateMethods)
+            foreach (var generatorPart in this.PrivateParts)
             {
                 generatorPart.BaseName = this.FullName;
                 generatorPart.WriteImplementation(options, writer, whitespace);
             }
 
-            foreach (var generatorPart in this.PublicMethods)
+            foreach (var generatorPart in this.ProtectedParts)
+            {
+                generatorPart.BaseName = this.FullName;
+                generatorPart.WriteImplementation(options, writer, whitespace);
+            }
+
+            foreach (var generatorPart in this.PublicParts)
             {
                 generatorPart.BaseName = this.FullName;
                 generatorPart.WriteImplementation(options, writer, whitespace);

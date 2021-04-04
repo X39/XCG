@@ -16,25 +16,48 @@ namespace XCG.Generators.Cpp
             var capturedSetters = parser.Setters.Where((q) => q.ActiveScope == EActiveScope.capture).ToArray();
             var instanceClass = new ClassDefinition("instance")
             {
-                PrivateFields = new List<TypeImpl>(capturedSetters.Select((q) => new TypeImpl
+                PrivateParts = new List<ICppPart>
                 {
-                    Name = q.Key.Replace('-', '_').ToLower(),
-                    Type = q.Statements.FirstOrDefault() switch
+                    new ClassDefinition("resetable")
                     {
-                        Parsing.Expressions.CreateNewBoolean => EType.Boolean,
-                        Parsing.Expressions.CreateNewNumber => EType.Float,
-                        _ => throw new FatalException()
-                    }
-                }))
-                {
-                    new TypeImpl { Name = "m_contents", Type = EType.StringView },
-                    new TypeImpl { Name = "m_file", Type = EType.String },
-                    new TypeImpl { Name = "m_line", Type = EType.SizeT },
-                    new TypeImpl { Name = "m_column", Type = EType.SizeT },
-                    new TypeImpl { Name = "m_offset", Type = EType.SizeT },
-                },
-                PrivateMethods = new List<MethodDefinition>
-                {
+                        PublicParts = new List<ICppPart>
+                        {
+                            new FieldDefinition(new TypeImpl { Name = "m_ref", TypeString = "instance" }),
+                            new FieldDefinition(new TypeImpl { Name = "m_contents", Type = EType.StringView }),
+                            new FieldDefinition(new TypeImpl { Name = "m_file", Type = EType.String }),
+                            new FieldDefinition(new TypeImpl { Name = "m_line", Type = EType.SizeT }),
+                            new FieldDefinition(new TypeImpl { Name = "m_column", Type = EType.SizeT }),
+                            new FieldDefinition(new TypeImpl { Name = "m_offset", Type = EType.SizeT }),
+                            new MethodDefinition(EType.Void, "resetable", ": m_ref(ref)", new TypeImpl{ TypeString = "instance", ReferenceCount = 1, Name = "ref" })
+                            {
+                                new FullBody
+                                {
+                                    $@"m_contents = ref.m_contents;",
+                                    $@"m_file = ref.m_file;",
+                                    $@"m_line = ref.m_line;",
+                                    $@"m_column = ref.m_column;",
+                                    $@"m_offset = ref.m_offset;",
+                                }
+                            },
+                            new MethodDefinition(EType.Void, "reset")
+                            {
+                                new FullBody
+                                {
+                                    $@"ref.m_contents   = m_contents;",
+                                    $@"ref.m_file       = m_file;",
+                                    $@"ref.m_line       = m_line;",
+                                    $@"ref.m_column     = m_column;",
+                                    $@"ref.m_offset     = m_offset;",
+                                }
+                            }
+                        }
+                    },
+                    new FullBody(EUsage.Header) { $@"friend class resetable;" },
+                    new FieldDefinition(new TypeImpl { Name = "m_contents", Type = EType.StringView }),
+                    new FieldDefinition(new TypeImpl { Name = "m_file", Type = EType.String }),
+                    new FieldDefinition(new TypeImpl { Name = "m_line", Type = EType.SizeT }),
+                    new FieldDefinition(new TypeImpl { Name = "m_column", Type = EType.SizeT }),
+                    new FieldDefinition(new TypeImpl { Name = "m_offset", Type = EType.SizeT }),
                     new MethodDefinition(EType.Void, "skip")
                     {
                         new FullBody
@@ -91,6 +114,23 @@ namespace XCG.Generators.Cpp
                     }
                 }
             };
+
+            instanceClass.PrivateParts.AddRange(capturedSetters.Select((q) => new FieldDefinition(new TypeImpl
+            {
+                Name = q.Key.Replace('-', '_').ToLower(),
+                Type = q.Statements.FirstOrDefault() switch
+                {
+                    Parsing.Expressions.CreateNewBoolean => EType.Boolean,
+                    Parsing.Expressions.CreateNewNumber => EType.Float,
+                    _ => throw new FatalException()
+                }
+            })));
+            instanceClass.PrivateParts.AddRange(
+                parser.Tokens.SelectMany((q) => q switch
+                {
+                    Parsing.Token token => token.ToParts(),
+                    _ => throw new NotImplementedException(),
+                }));
 
 
             System.IO.Directory.CreateDirectory(output);
