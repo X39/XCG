@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace XCG.Parsing.Expressions
 {
-    public class CreateNewList : IStatement
+    public class CreateNewList : IStatement, ICreateNew
     {
         public List<IStatement> Statements { get; } = new List<IStatement>();
         public Diagnostic Diagnostics { get; internal set; }

@@ -147,7 +147,7 @@ namespace XCG
             {
                 case "cpp":
                 case "c++":
-                    generator = new Generators.CppGenerator();
+                    generator = new Generators.Cpp.CppGenerator();
                     break;
                 case null: return -1;
                 default:
@@ -204,12 +204,31 @@ namespace XCG
             }
 
             // Set generator options
+            bool optionError = false;
             foreach (string? option in cliOptions.Settings ?? Array.Empty<string>())
             {
                 string[]? splitted = option.Split(':');
                 string? key = splitted[0];
                 string? value = splitted.Length >= 2 ? splitted[1] : null;
-                generator.SetOption(key, value);
+                try
+                {
+                    generator.SetOption(key, value);
+                }
+                catch (Exception ex)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Error.WriteLine(String.Concat(ex.GetType().Name, ": ", ex.Message));
+                    Console.ResetColor();
+                    optionError = true;
+                }
+            }
+            if (optionError)
+            {
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine($"Aborting generation as options have not been set successfully.");
+                Console.ResetColor();
+                return -1;
             }
             #endregion
             #region Validation
@@ -225,7 +244,8 @@ namespace XCG
             #endregion
 
             // Tell the generator to generate the parser
-            generator.Generate(parser, cliOptions.Output ?? System.Environment.CurrentDirectory);
+            string? outputPath = System.IO.Path.GetFullPath(cliOptions.Output ?? System.Environment.CurrentDirectory);
+            generator.Generate(parser, outputPath);
             return 0;
         }
 

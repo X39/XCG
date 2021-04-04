@@ -2,7 +2,7 @@
   "profiles": {
     "xcg": {
       "commandName": "Project",
-      "commandLineArgs": "-i ..\\..\\..\\..\\examples\\calculator.xcg -o calculator.cpp -g cpp"
+      "commandLineArgs": "-i ..\\..\\..\\..\\examples\\calculator.xcg -o output -g cpp -s namespace:yaoosl::parsing"
     }
   }
 }

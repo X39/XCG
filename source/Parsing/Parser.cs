@@ -19,6 +19,7 @@ namespace XCG.Parsing
 
         public List<Token> Tokens { get; private set; } = new List<Token>();
         public List<Reference> References { get; private set; } = new List<Reference>();
+        public List<Statements.Set> Setters { get; private set; } = new List<Statements.Set>();
         public List<Message> Messages { get; private set; } = new List<Message>();
         public List<Production> Productions { get; private set; } = new List<Production>();
 
@@ -691,6 +692,9 @@ namespace XCG.Parsing
                         {
                             case "map": value = new Expressions.CreateNewMap { Diagnostics = this.GetDiagnostic() }; return true;
                             case "list": value = new Expressions.CreateNewList { Diagnostics = this.GetDiagnostic() }; return true;
+                            case "bool": value = new Expressions.CreateNewBoolean { Diagnostics = this.GetDiagnostic() }; return true;
+                            case "number": value = new Expressions.CreateNewNumber { Diagnostics = this.GetDiagnostic() }; return true;
+                            case "scalar": value = new Expressions.CreateNewNumber { Diagnostics = this.GetDiagnostic() }; return true;
                             default: this.parseNotes.Add(this.err($"Unkown instancable datatype '{ident}'")); value = null; return true;
                         }
                     }
@@ -1811,6 +1815,14 @@ namespace XCG.Parsing
                         if (message != null)
                         {
                             this.Messages.Add(message);
+                        }
+                    }
+                    else if (this.TryMatchNoCapture("set", skipWS: true))
+                    {
+                        var set = this.ParseSet(0);
+                        if (set != null)
+                        {
+                            this.Setters.Add(set);
                         }
                     }
                     else if (this.TryMatchNoCapture("production", skipWS: true))

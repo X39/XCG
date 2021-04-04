@@ -64,7 +64,7 @@ namespace XCG.Validation
         {
             lock (this)
             {
-                var code = (this.Rules.Any() ? this.Rules.Where((q) => q.Realm == realm).Max((q) => q.Code) : 0) + 1;
+                var code = this.Rules.Where((q) => q.Realm == realm).Select((q) => q.Code).Append(0).Max() + 1;
                 var ruleKey = new RuleKey { Realm = realm, Code = code };
                 if (_RuleKeys.Contains(ruleKey))
                 {
