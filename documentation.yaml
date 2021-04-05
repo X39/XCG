@@ -54,6 +54,7 @@ keywords:
             - set
             - echo
             - production
+            - left-recursive
     production:
         meta:
             - strong-scoping
@@ -429,3 +430,4 @@ keywords:
     while:
     try:
     print:
+    left-recursive:

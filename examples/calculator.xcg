@@ -6,7 +6,6 @@ token scalar
     require once .
     require once { integer }
 
-
 production value
     alternatives
         match @scalar
@@ -17,17 +16,42 @@ production expC
         match @[value]value
         match "(" @[value]expA ")"
 
-production expB
-    alternatives
-        match @[left]expC @"/" @[right]expC
-        match @[left]expC @"*" @[right]expC
-        match @[left]expC
+left-recursive expB
+	match @[left]expB "/" @[right]expC
+		set capture op '/'
+	match @[left]expB "*" @[right]expC
+		set capture op '*'
+	match @[left]expC
+/*
+	void expB__part(left)
+	{
+		if (can_match("/"))
+		{
+			match("/");
+			match(expC);
+		}
+		else if (can_match("*"))
+		{
+			match("*");
+			match(expC);
+		}
+	}
+	void expB()
+	{
+		matched = match(expC);
+		while(can_match(expB__part))
+		{
+			matched = expB__part(matched);
+		}
+	}
+*/
 
-production expA
-    alternatives
-        match @[left]expB @"+" @[right]expB
-        match @[left]expB @"-" @[right]expB
-        match @[left]expB
+left-recursive expA
+	match @[left]expA "+" @[right]expB
+		set capture op '+'
+	match @[left]expA "-" @[right]expB
+		set capture op '-'
+	match @[left]expB
 
 production main
     match @expA

@@ -126,8 +126,14 @@ namespace XCG.Generators.Cpp
                 }
             })));
             instanceClass.PrivateParts.AddRange(
-                parser.Tokens.SelectMany((q) => q switch
+                Array.Empty<object>()
+                .Concat(parser.Tokens)
+                .Concat(parser.Productions)
+                .Concat(parser.LeftRecursives)
+                .SelectMany((q) => q switch
                 {
+                    Parsing.LeftRecursive leftRecursive => leftRecursive.ToParts(),
+                    Parsing.Production production => production.ToParts(),
                     Parsing.Token token => token.ToParts(),
                     _ => throw new NotImplementedException(),
                 }));

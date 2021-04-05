@@ -31,7 +31,7 @@ namespace XCG.Generators.Cpp
                 {
                     var scopePart = new ScopePart { new VariableDefinition(EType.SizeT, "count", "0") };
                     methodDefinition.Add(scopePart);
-                    var localLoop = require.Range.To > 1 && require.Range.To != Int32.MaxValue ? new WhileLoopPart($"current() != '\\0' && count < {require.Range.To}") : new WhileLoopPart("current() != '\\0'");
+                    var localLoop = require.Range.To != Int32.MaxValue ? new WhileLoopPart($"current() != '\\0' && count < {require.Range.To}") : new WhileLoopPart("current() != '\\0'");
                     scopePart.Add(localLoop);
                     int localsCount = 0;
                     bool isFirst = true;
@@ -39,20 +39,35 @@ namespace XCG.Generators.Cpp
                     {
                         if (part is Parsing.Word word)
                         {
-                            localLoop.Add(new FullBody
+                            if (word.Text.Length > 1)
                             {
-                                $@"const char* l{++localsCount} = ""{word.Text.Replace("\"", "\\\"")}"";",
-                                $@"if (m_contents.length() - m_offset < {word.Text.Length} &&",
-                                $@"    std::equal(m_contents.begin() + m_offset, m_contents.begin() + m_offset + {word.Text.Length}, l{localsCount}, l{localsCount} + {word.Text.Length}))",
-                                $@"{{",
-                                $@"    count++;",
-                                $@"    for (size_t i = 0; i < {word.Text.Length}; i++)",
-                                $@"    {{",
-                                $@"        next();",
-                                $@"    }}",
-                                $@"    continue;",
-                                $@"}}",
-                            });
+                                localLoop.Add(new FullBody
+                                {
+                                    $@"const char* l{++localsCount} = ""{word.Text.Replace("\"", "\\\"")}"";",
+                                    $@"if (m_contents.length() - m_offset < {word.Text.Length} &&",
+                                    $@"    std::equal(m_contents.begin() + m_offset, m_contents.begin() + m_offset + {word.Text.Length}, l{localsCount}, l{localsCount} + {word.Text.Length}))",
+                                    $@"{{",
+                                    $@"    count++;",
+                                    $@"    for (size_t i = 0; i < {word.Text.Length}; i++)",
+                                    $@"    {{",
+                                    $@"        next();",
+                                    $@"    }}",
+                                    $@"    continue;",
+                                    $@"}}",
+                                });
+                            }
+                            else
+                            {
+                                localLoop.Add(new FullBody
+                                {
+                                    $@"if (current() == '{word.Text.First()}')",
+                                    $@"{{",
+                                    $@"    count++;",
+                                    $@"    next();",
+                                    $@"    continue;",
+                                    $@"}}",
+                                });
+                            }
                         }
                         else if (part is Parsing.CharacterRange range)
                         {
@@ -118,6 +133,42 @@ namespace XCG.Generators.Cpp
 
             methodDefinition.Add(new FullBody { $@"return {{}};" });
             return new[] { methodDefinition };
+        }
+
+        public static IEnumerable<ICppPart> ToParts(this Parsing.Production production)
+        {
+            // ToDo: Implement production
+            yield break;
+        }
+        public static IEnumerable<ICppPart> ToParts(this Parsing.LeftRecursive leftRecursive)
+        {
+            // ToDo: Implement production
+            yield break;
+        }
+
+        /// <summary>
+        /// Returns all occurances of <typeparamref name="T"/> inside of the <see cref="Parsing.IStatement"/>.
+        /// Will not descend into the found ones.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="statement"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> FindChildren<T>(this Parsing.IStatement statement)
+        {
+            foreach (var it in statement.Statements)
+            {
+                if (it is T t)
+                {
+                    yield return t;
+                }
+                else
+                {
+                    foreach (var found in it.FindChildren<T>())
+                    {
+                        yield return found;
+                    }
+                }
+            }
         }
     }
 }

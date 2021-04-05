@@ -22,6 +22,7 @@ namespace XCG.Parsing
         public List<Statements.Set> Setters { get; private set; } = new List<Statements.Set>();
         public List<Message> Messages { get; private set; } = new List<Message>();
         public List<Production> Productions { get; private set; } = new List<Production>();
+        public List<LeftRecursive> LeftRecursives { get; private set; } = new List<LeftRecursive>();
 
 
         private string formatted(string msg)
@@ -519,6 +520,39 @@ namespace XCG.Parsing
 
             return production;
         }
+        private LeftRecursive? ParseLeftRecursive(int wsLevel)
+        {
+            if (!this.SkipWhiteSpaceLevel(wsLevel) || !this.TryMatch("left-recursive"))
+            {
+                this.parseNotes.Add(this.err("Failed to read left-recursive"));
+                return null;
+            }
+            var leftRecursive = new LeftRecursive { Diagnostics = this.GetDiagnostic() };
+            this.Skip();
+            if (!this.TryReadIdent(out string? ident))
+            {
+                this.parseNotes.Add(this.err("Missing ident"));
+            }
+            leftRecursive.Identifier = ident;
+
+            this.SkipLine();
+            int newWsLevel;
+            while ((newWsLevel = this.CountWhiteSpaces()) > wsLevel)
+            {
+                if (this.TryMatchNoCapture("", skipWS: true))
+                {
+                    this.SkipLine();
+                    continue;
+                }
+                var match = this.ParseMatch(newWsLevel);
+                if (match != null)
+                {
+                    leftRecursive.Statements.Add(match);
+                }
+            }
+
+            return leftRecursive;
+        }
         private Statements.Alternatives? ParseAlternatives(int wsLevel)
         {
             if (!this.SkipWhiteSpaceLevel(wsLevel) || !this.TryMatch("alternatives"))
@@ -693,6 +727,8 @@ namespace XCG.Parsing
                             case "map": value = new Expressions.CreateNewMap { Diagnostics = this.GetDiagnostic() }; return true;
                             case "list": value = new Expressions.CreateNewList { Diagnostics = this.GetDiagnostic() }; return true;
                             case "bool": value = new Expressions.CreateNewBoolean { Diagnostics = this.GetDiagnostic() }; return true;
+                            case "character": value = new Expressions.CreateNewCharacter { Diagnostics = this.GetDiagnostic() }; return true;
+                            case "char": value = new Expressions.CreateNewCharacter { Diagnostics = this.GetDiagnostic() }; return true;
                             case "number": value = new Expressions.CreateNewNumber { Diagnostics = this.GetDiagnostic() }; return true;
                             case "scalar": value = new Expressions.CreateNewNumber { Diagnostics = this.GetDiagnostic() }; return true;
                             default: this.parseNotes.Add(this.err($"Unkown instancable datatype '{ident}'")); value = null; return true;
@@ -757,6 +793,23 @@ namespace XCG.Parsing
                     return false;
                 }
             }
+            bool tryParseChar(out IStatement? value)
+            {
+                if (this.PeekChar() == '\'')
+                {
+                    this.NextChar();
+                    value = new Expressions.Char(this.NextChar());
+                    if (this.PeekChar() == '\'')
+                    { NextChar(); }
+                    else { this.parseNotes.Add(this.err($"Expected character to be ended with `'` but got `{this.PeekChar()}`")); }
+                    return true;
+                }
+                else
+                {
+                    value = null;
+                    return false;
+                }
+            }
             bool tryParseGet(out IStatement? value)
             {
                 if (this.TryMatchNoCapture("get", skipWS: false))
@@ -777,6 +830,7 @@ namespace XCG.Parsing
                 if (tryParseBoolean(out value)) { return true; }
                 if (tryParseGet(out value)) { return true; }
                 if (tryParseScalar(out value)) { return true; }
+                if (tryParseChar(out value)) { return true; }
 
                 return false;
             }
@@ -1831,6 +1885,14 @@ namespace XCG.Parsing
                         if (production != null)
                         {
                             this.Productions.Add(production);
+                        }
+                    }
+                    else if (this.TryMatchNoCapture("left-recursive", skipWS: true))
+                    {
+                        var leftRecursive = this.ParseLeftRecursive(0);
+                        if (leftRecursive != null)
+                        {
+                            this.LeftRecursives.Add(leftRecursive);
                         }
                     }
                     else

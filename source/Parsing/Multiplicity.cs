@@ -8,7 +8,7 @@
         /// </summary>
         public int From { get; set; }
         /// <summary>
-        /// The exclusive to value.
+        /// The inclusive to value.
         /// A value of <see cref="int.MaxValue"/> is considered to be positive infinity.
         /// </summary>
         public int To { get; set; }
@@ -26,7 +26,7 @@
         public Multiplicity(int exact, Diagnostic diagnostic)
         {
             this.From = exact;
-            this.To = exact + 1;
+            this.To = exact;
             this.Diagnostics = diagnostic;
         }
     }

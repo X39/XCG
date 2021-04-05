@@ -51,7 +51,7 @@ namespace XCG.Generators.Cpp
         public void WriteImplementation(CppOptions options, StreamWriter writer, string whitespace)
         {
             writer.Write(whitespace);
-            writer.Write(Type.ToString());
+            writer.Write(Type.GetCppType());
             writer.Write(" ");
             writer.Write(VariableName);
             if (DefaultValue is not null)

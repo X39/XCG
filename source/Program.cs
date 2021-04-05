@@ -119,6 +119,9 @@ namespace XCG
                 possibleActual = parser.Productions.FirstOrDefault((q) => q.Identifier == reference.Text);
                 if (possibleActual is not null) { reference.Refered = possibleActual; continue; }
 
+                possibleActual = parser.LeftRecursives.FirstOrDefault((q) => q.Identifier == reference.Text);
+                if (possibleActual is not null) { reference.Refered = possibleActual; continue; }
+
                 var token = new Parsing.Token
                 {
                     Alias = reference.Text,
@@ -237,7 +240,7 @@ namespace XCG
             generator.RegisterRules(validator);
 
             if (!validator.Validate(parser, (rule, hint) => Colored(rule.Severity,
-                () => Console.WriteLine($"[{rule.Realm}{rule.Code}][{SeverityString(rule.Severity)}][{hint.File}][{hint.Line}]: {hint.Message}"))))
+                () => Console.WriteLine($"[{rule.Realm}{rule.Code:0000}][{SeverityString(rule.Severity)}][{hint.File}][L{hint.Line}]: {hint.Message}"))))
             {
                 return -1;
             }
@@ -251,48 +254,48 @@ namespace XCG
 
         private static void RegisterDefaultValidatorRules(Validation.Validator validator)
         {
+            // Identifier Collision
             validator.Register("V", ESeverity.Warning, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
-                var identifiers = new HashSet<string>();
-                foreach (var token in parser.Tokens)
+                var identifiers = parser.Tokens.Select((q) => q.Identifier)
+                .Concat(parser.Productions.Select((q) => q.Identifier))
+                .Concat(parser.LeftRecursives.Select((q) => q.Identifier))
+                .Concat(parser.Messages.Select((q) => q.Identifier))
+                .GroupBy((q) => q)
+                .Where((q) => q.Count() > 1)
+                .Select((q) => q.Key)
+                .ToHashSet();
+                foreach (var tuple in parser.Tokens.Select((q) => (diag: q.Diagnostics, ident: q.Identifier))
+                .Concat(parser.Productions.Select((q) => (diag: q.Diagnostics, ident: q.Identifier)))
+                .Concat(parser.LeftRecursives.Select((q) => (diag: q.Diagnostics, ident: q.Identifier)))
+                .Concat(parser.Messages.Select((q) => (diag: q.Diagnostics, ident: q.Identifier))))
                 {
-                    if (identifiers.Contains(token.Identifier))
+                    if (identifiers.Contains(tuple.ident))
                     {
                         hints.Add(new Validation.Hint
                         {
-                            File = token.Diagnostics.File,
-                            Line = token.Diagnostics.Line,
-                            Message = $@"Identifier of token ""{token.Identifier}"" collides with token existing identifier"
+                            File = tuple.diag.File,
+                            Line = tuple.diag.Line,
+                            Message = $@"Identifier ""{tuple.ident}"" collides with existing identifier"
                         });
-                    }
-                    else
-                    {
-                        identifiers.Add(token.Identifier);
-                    }
-                }
-                foreach (var production in parser.Productions)
-                {
-                    if (identifiers.Contains(production.Identifier))
-                    {
-                        hints.Add(new Validation.Hint
-                        {
-                            File = production.Diagnostics.File,
-                            Line = production.Diagnostics.Line,
-                            Message = $@"Identifier of production ""{production.Identifier}"" collides with token existing identifier"
-                        });
-                    }
-                    else
-                    {
-                        identifiers.Add(production.Identifier);
                     }
                 }
                 return hints;
             });
+            // Alias Collision
             validator.Register("V", ESeverity.Warning, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
-                var identifiers = parser.Tokens.Select((q) => q.Identifier).Concat(parser.Productions.Select((q) => q.Identifier)).Distinct().ToHashSet();
+                var identifiers = parser.Tokens.Select((q) => q.Identifier)
+                .Concat(parser.Tokens.Select((q) => q.Alias).Where((q) => !String.IsNullOrWhiteSpace(q)))
+                .Concat(parser.Productions.Select((q) => q.Identifier))
+                .Concat(parser.LeftRecursives.Select((q) => q.Identifier))
+                .Concat(parser.Messages.Select((q) => q.Identifier))
+                .GroupBy((q) => q)
+                .Where((q) => q.Count() > 1)
+                .Select((q) => q.Key)
+                .ToHashSet();
                 foreach (var token in parser.Tokens)
                 {
                     if (identifiers.Contains(token.Alias))
@@ -301,12 +304,13 @@ namespace XCG
                         {
                             File = token.Diagnostics.File,
                             Line = token.Diagnostics.Line,
-                            Message = $@"Alias ""{token.Alias}"" collides with token existing identifier"
+                            Message = $@"Alias ""{token.Alias}"" collides with existing identifier or alias"
                         });
                     }
                 }
                 return hints;
             });
+            // Ensure token parts only refer to tokens
             validator.Register("V", ESeverity.Error, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
@@ -340,6 +344,144 @@ namespace XCG
                                 });
                             }
                         }
+                    }
+                }
+                return hints;
+            });
+            // Left-recursion in production at top level
+            validator.Register("V", ESeverity.Error, (parser) =>
+            {
+                var hints = new List<Validation.Hint>();
+                var recursiveMatches = (from q in parser.Productions
+                                        where q.Statements.Any()
+                                        select (q.Statements.First() switch
+                                        {
+                                            Parsing.Statements.Alternatives alternatives => alternatives.Matches
+                                            .Where((q2) => q2.Parts.First() is Parsing.Reference),
+                                            Parsing.Statements.Match match => match.Parts.First() is Parsing.Reference reference
+                                            && reference.Refered == q ? new[] { match } : Array.Empty<Parsing.Statements.Match>(),
+                                            _ => Array.Empty<Parsing.Statements.Match>()
+                                        }).Where((match) => match.Parts.First() is Parsing.Reference reference && reference.Refered == q))
+                                       .SelectMany((q) => q);
+                foreach (var match in recursiveMatches)
+                {
+                    hints.Add(new Validation.Hint
+                    {
+                        File = match.Diagnostics.File,
+                        Line = match.Diagnostics.Line,
+                        Message = $@"left recusion with top-level matches are not allowed in productions. Consider using left-recursive instead."
+                    });
+                }
+                return hints;
+            });
+            // left-recursive has at least two matches
+            validator.Register("V", ESeverity.Error, (parser) =>
+            {
+                var hints = new List<Validation.Hint>();
+                foreach (var leftRecursive in parser.LeftRecursives)
+                {
+                    if (leftRecursive.Statements.Count < 2)
+                    {
+                        hints.Add(new Validation.Hint
+                        {
+                            File = leftRecursive.Diagnostics.File,
+                            Line = leftRecursive.Diagnostics.Line,
+                            Message = $@"left-recursive requires at least two matches."
+                        });
+                    }
+                }
+                return hints;
+            });
+
+            // left-recursive has exactly one alternative
+            validator.Register("V", ESeverity.Error, (parser) =>
+            {
+                var hints = new List<Validation.Hint>();
+                foreach (var leftRecursive in parser.LeftRecursives)
+                {
+                    if (leftRecursive.Statements.Count < 2)
+                    {
+                        hints.Add(new Validation.Hint
+                        {
+                            File = leftRecursive.Diagnostics.File,
+                            Line = leftRecursive.Diagnostics.Line,
+                            Message = $@"left-recursive requires at least two matches."
+                        });
+                    }
+                }
+                return hints;
+            });
+            // left-recursive matches (but last) start with the containing left-recursive
+            validator.Register("V", ESeverity.Error, (parser) =>
+            {
+                var hints = new List<Validation.Hint>();
+                foreach (var leftRecursive in parser.LeftRecursives.Where((q) => q.Statements.Count >= 2))
+                {
+                    var matches = leftRecursive.Statements.Where((q) => q is Parsing.Statements.Match).Cast<Parsing.Statements.Match>();
+                    var count = matches.Count();
+                    foreach (var match in matches.Take(count - 1))
+                    {
+                        if (match.Parts.First() is Parsing.Reference reference)
+                        {
+                            if (reference.Refered != leftRecursive)
+                            {
+                                hints.Add(new Validation.Hint
+                                {
+                                    File = leftRecursive.Diagnostics.File,
+                                    Line = leftRecursive.Diagnostics.Line,
+                                    Message = $@"Match must start with containing left-recursive."
+                                });
+                            }
+                        }
+                        else
+                        {
+                            throw new FatalException();
+                        }
+                    }
+                }
+                return hints;
+            });
+            // left-recursive last match refers to anything but the containing left-recursive
+            validator.Register("V", ESeverity.Error, (parser) =>
+            {
+                var hints = new List<Validation.Hint>();
+                foreach (var leftRecursive in parser.LeftRecursives.Where((q) => q.Statements.Count >= 2))
+                {
+                    var match = leftRecursive.Statements.Where((q) => q is Parsing.Statements.Match).Cast<Parsing.Statements.Match>().Last();
+                    if (match.Parts.Last() is Parsing.Reference reference)
+                    {
+                        if (reference.Refered == leftRecursive)
+                        {
+                            hints.Add(new Validation.Hint
+                            {
+                                File = leftRecursive.Diagnostics.File,
+                                Line = leftRecursive.Diagnostics.Line,
+                                Message = $@"Last match of left-recursive must refer to anything but the left-recursive."
+                            });
+                        }
+                    }
+                    else
+                    {
+                        throw new FatalException();
+                    }
+                }
+                return hints;
+            });
+            // left-recursive last match has exactly one part
+            validator.Register("V", ESeverity.Error, (parser) =>
+            {
+                var hints = new List<Validation.Hint>();
+                foreach (var leftRecursive in parser.LeftRecursives.Where((q) => q.Statements.Count >= 2))
+                {
+                    var match = leftRecursive.Statements.Where((q) => q is Parsing.Statements.Match).Cast<Parsing.Statements.Match>().Last();
+                    if (match.Parts.Count != 1)
+                    {
+                        hints.Add(new Validation.Hint
+                        {
+                            File = leftRecursive.Diagnostics.File,
+                            Line = leftRecursive.Diagnostics.Line,
+                            Message = $@"Last match of left-recursive must have exactly one part."
+                        });
                     }
                 }
                 return hints;
