@@ -320,7 +320,7 @@ namespace XCG
         private static void RegisterDefaultValidatorRules(Validation.Validator validator)
         {
             // Identifier Collision
-            validator.Register("V", ESeverity.Warning, (parser) =>
+            validator.Register("XCG", ESeverity.Warning, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
                 var identifiers = parser.Tokens.Select((q) => q.Identifier)
@@ -349,7 +349,7 @@ namespace XCG
                 return hints;
             });
             // Alias Collision
-            validator.Register("V", ESeverity.Warning, (parser) =>
+            validator.Register("XCG", ESeverity.Warning, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
                 var identifiers = parser.Tokens.Select((q) => q.Identifier)
@@ -376,7 +376,7 @@ namespace XCG
                 return hints;
             });
             // Ensure token parts only refer to tokens
-            validator.Register("V", ESeverity.Error, (parser) =>
+            validator.Register("XCG", ESeverity.Error, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
                 var identifiers = parser.Tokens.Select((q) => q.Identifier).Concat(parser.Productions.Select((q) => q.Identifier)).Distinct().ToHashSet();
@@ -414,7 +414,7 @@ namespace XCG
                 return hints;
             });
             // Left-recursion in production at top level
-            validator.Register("V", ESeverity.Error, (parser) =>
+            validator.Register("XCG", ESeverity.Error, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
                 var recursiveMatches = (from q in parser.Productions
@@ -440,7 +440,7 @@ namespace XCG
                 return hints;
             });
             // left-recursive has at least two matches
-            validator.Register("V", ESeverity.Error, (parser) =>
+            validator.Register("XCG", ESeverity.Error, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
                 foreach (var leftRecursive in parser.LeftRecursives)
@@ -459,7 +459,7 @@ namespace XCG
             });
 
             // left-recursive has exactly one alternative
-            validator.Register("V", ESeverity.Error, (parser) =>
+            validator.Register("XCG", ESeverity.Error, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
                 foreach (var leftRecursive in parser.LeftRecursives)
@@ -477,7 +477,7 @@ namespace XCG
                 return hints;
             });
             // left-recursive matches (but last) start with the containing left-recursive
-            validator.Register("V", ESeverity.Error, (parser) =>
+            validator.Register("XCG", ESeverity.Error, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
                 foreach (var leftRecursive in parser.LeftRecursives.Where((q) => q.Statements.Count >= 2))
@@ -507,7 +507,7 @@ namespace XCG
                 return hints;
             });
             // left-recursive last match refers to anything but the containing left-recursive
-            validator.Register("V", ESeverity.Error, (parser) =>
+            validator.Register("XCG", ESeverity.Error, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
                 foreach (var leftRecursive in parser.LeftRecursives.Where((q) => q.Statements.Count >= 2))
@@ -533,7 +533,7 @@ namespace XCG
                 return hints;
             });
             // left-recursive last match has exactly one part
-            validator.Register("V", ESeverity.Error, (parser) =>
+            validator.Register("XCG", ESeverity.Error, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
                 foreach (var leftRecursive in parser.LeftRecursives.Where((q) => q.Statements.Count >= 2))
