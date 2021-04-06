@@ -1,17 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace XCG.Generators.Cpp
 {
     internal static class Extensions
     {
+        public static string ToCppName(this string str)
+        {
+            return String.Concat(str.Replace('-', '_').Replace('@', '_').ToLower());
+        }
         public static string GetMethodName(this Parsing.Token token)
         {
             return String.Concat("token_", token.Identifier.Replace('-', '_').Replace('@', '_').ToLower());
         }
+        public static string ToCppTypeName(this Parsing.Token token, CppOptions cppOptions)
+        {
+            return "token";
+        }
+
+        public static string ToCppTypeName(this Parsing.Production production, CppOptions cppOptions)
+        {
+            return String.Concat("p_", production.Identifier.ToCppName());
+        }
+
+        public static string ToCppTypeName(this Parsing.LeftRecursive leftRecursive, CppOptions cppOptions)
+        {
+            return String.Concat("lr_", leftRecursive.Identifier.ToCppName());
+        }
+
         public static string GetTestMethodName(this Parsing.Production production)
         {
             return String.Concat("prod_test_", production.Identifier.Replace('-', '_').ToLower());
@@ -22,8 +39,10 @@ namespace XCG.Generators.Cpp
         }
         public static IEnumerable<ICppPart> ToParts(this Parsing.Token token)
         {
-            var methodDefinition = new MethodDefinition(EType.OptionalSizeT, token.GetMethodName());
-            methodDefinition.Add(new FullBody { $@"auto r = resetable(*this);" });
+            var methodDefinition = new MethodDefinition(EType.OptionalSizeT, token.GetMethodName())
+            {
+                new FullBody { $@"auto r = resetable(*this);" }
+            };
 
             foreach (var statement in token.Statements)
             {
@@ -135,40 +154,86 @@ namespace XCG.Generators.Cpp
             return new[] { methodDefinition };
         }
 
-        public static IEnumerable<ICppPart> ToParts(this Parsing.Production production)
+        public static ClassDefinition GetClassDefinition(Parsing.IStatement statement, CppOptions cppOptions)
         {
-            // ToDo: Implement production
-            yield break;
-        }
-        public static IEnumerable<ICppPart> ToParts(this Parsing.LeftRecursive leftRecursive)
-        {
-            // ToDo: Implement production
-            yield break;
-        }
-
-        /// <summary>
-        /// Returns all occurances of <typeparamref name="T"/> inside of the <see cref="Parsing.IStatement"/>.
-        /// Will not descend into the found ones.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="statement"></param>
-        /// <returns></returns>
-        public static IEnumerable<T> FindChildren<T>(this Parsing.IStatement statement)
-        {
-            foreach (var it in statement.Statements)
+            var captureModifyingSets = statement.FindChildren<Parsing.Statements.Set>()
+                .Where((q) => q.ActiveScope == Parsing.EActiveScope.capture)
+                .ToArray();
+            var captureContainingReferences = statement.FindChildren<Parsing.Statements.Match>()
+                .SelectMany((q) => q.Parts)
+                .Where((q) => q is Parsing.Reference)
+                .Cast<Parsing.Reference>()
+                .Where((q) => q.IsCaptured)
+                .ToArray();
+            var captureDefinitions = new Dictionary<string, CaptureDefinition>();
+            foreach (var captureModifyingSet in captureModifyingSets)
             {
-                if (it is T t)
+                var captureName = captureModifyingSet.Property.ToCppName();
+                if (!captureDefinitions.TryGetValue(captureName, out var captureDefinition))
                 {
-                    yield return t;
+                    captureDefinition = new CaptureDefinition(captureName);
+                    captureDefinitions[captureName] = captureDefinition;
                 }
-                else
+                var typeImpl = new TypeImpl
                 {
-                    foreach (var found in it.FindChildren<T>())
+                    Type = captureModifyingSet.Statements.First() switch
                     {
-                        yield return found;
+                        Parsing.Expressions.CreateNewBoolean => EType.Boolean,
+                        Parsing.Expressions.Bool => EType.Boolean,
+                        Parsing.Expressions.CreateNewCharacter => EType.Char,
+                        Parsing.Expressions.Character => EType.Char,
+                        Parsing.Expressions.CreateNewNumber => EType.Double,
+                        Parsing.Expressions.Number => EType.Double,
+                        _ => throw new FatalException()
                     }
+                };
+                if (!captureDefinition.Types.Contains(typeImpl))
+                {
+                    captureDefinition.Types.Add(typeImpl);
                 }
             }
+            foreach (var captureContainingReference in captureContainingReferences)
+            {
+                string typeName = captureContainingReference.Refered switch
+                {
+                    Parsing.Token token => token.ToCppTypeName(cppOptions),
+                    Parsing.Production production => production.ToCppTypeName(cppOptions),
+                    Parsing.LeftRecursive leftRecursion => leftRecursion.ToCppTypeName(cppOptions),
+                    _ => throw new FatalException()
+                };
+                var captureName = captureContainingReference.CaptureName ?? $"capture{captureDefinitions.Count + 1}";
+                if (!captureDefinitions.TryGetValue(captureName, out var captureDefinition))
+                {
+                    captureDefinition = new CaptureDefinition(captureName);
+                    captureDefinitions[captureName] = captureDefinition;
+                }
+                var typeImpl = new TypeImpl { TypeString = typeName };
+                if (!captureDefinition.Types.Contains(typeImpl))
+                {
+                    captureDefinition.Types.Add(typeImpl);
+                }
+            }
+
+            return new ClassDefinition(statement switch
+                {
+                    Parsing.Token token => token.ToCppTypeName(cppOptions),
+                    Parsing.Production production => production.ToCppTypeName(cppOptions),
+                    Parsing.LeftRecursive leftRecursion => leftRecursion.ToCppTypeName(cppOptions),
+                    _ => throw new FatalException()
+                })
+            {
+                PublicParts = new List<ICppPart>(captureDefinitions.Values)
+            };
+        }
+        public static IEnumerable<ICppPart> ToParts(this Parsing.Production production, CppOptions cppOptions)
+        {
+            // ToDo: Implement production
+            yield break;
+        }
+        public static IEnumerable<ICppPart> ToParts(this Parsing.LeftRecursive leftRecursive, CppOptions cppOptions)
+        {
+            // ToDo: Implement production
+            yield break;
         }
     }
 }

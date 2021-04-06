@@ -6,15 +6,11 @@ token scalar
     require once .
     require once { integer }
 
-production value
-    alternatives
-        match @scalar
-        match @integer
-
 production expC
     alternatives
-        match @[value]value
         match "(" @[value]expA ")"
+        match @[value]scalar
+        match @[value]integer
 
 left-recursive expB
 	match @[left]expB "/" @[right]expC

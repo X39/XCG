@@ -2,14 +2,14 @@
 
 namespace XCG.Parsing.Expressions
 {
-    public class Char : IStatement
+    public class Character : IStatement
     {
         public char Value { get; }
 
         public List<IStatement> Statements { get; } = new List<IStatement>();
         public Diagnostic Diagnostics { get; internal set; }
 
-        public Char(char v)
+        public Character(char v)
         {
             this.Value = v;
         }

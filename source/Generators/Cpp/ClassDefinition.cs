@@ -23,7 +23,7 @@ namespace XCG.Generators.Cpp
         public void WriteHeader(CppOptions options, StreamWriter writer, string whitespace)
         {
             writer.Write(whitespace);
-            writer.Write("class ");
+            writer.Write(!this.PrivateParts.Any() ? "struct " : "class ");
             writer.WriteLine(this.FullName);
 
             writer.Write(whitespace);
@@ -54,8 +54,11 @@ namespace XCG.Generators.Cpp
 
             if (this.PublicParts.Any())
             {
-                writer.Write(whitespace);
-                writer.WriteLine("public:");
+                if (this.PrivateParts.Any())
+                {
+                    writer.Write(whitespace);
+                    writer.WriteLine("public:");
+                }
                 foreach (var generatorPart in this.PublicParts)
                 {
                     generatorPart.BaseName = null;

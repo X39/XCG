@@ -798,7 +798,7 @@ namespace XCG.Parsing
                 if (this.PeekChar() == '\'')
                 {
                     this.NextChar();
-                    value = new Expressions.Char(this.NextChar());
+                    value = new Expressions.Character(this.NextChar());
                     if (this.PeekChar() == '\'')
                     { NextChar(); }
                     else { this.parseNotes.Add(this.err($"Expected character to be ended with `'` but got `{this.PeekChar()}`")); }

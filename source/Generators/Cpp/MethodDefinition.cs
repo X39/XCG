@@ -13,22 +13,22 @@ namespace XCG.Generators.Cpp
         public string? BaseName { get; set; }
         public string Name { get; }
         public string FullName => this.BaseName is null ? this.Name : String.Concat(this.BaseName, "::", this.Name);
-        public IEnumerable<TypeImpl> Arguments { get; }
+        public IEnumerable<FieldImpl> Arguments { get; }
         public List<ICppPart> Parts { get; init; }
         public string? AfterMethodImpl { get; init; }
-        public MethodDefinition(EType returnType, string name, string? afterMethodImpl, IEnumerable<TypeImpl> arguments)
+        public MethodDefinition(EType returnType, string name, string? afterMethodImpl, IEnumerable<FieldImpl> arguments)
         {
             this.ReturnType = returnType;
             this.AfterMethodImpl = afterMethodImpl;
             this.Name = name;
-            this.Arguments = new ReadOnlyCollection<TypeImpl>(arguments.ToList());
+            this.Arguments = new ReadOnlyCollection<FieldImpl>(arguments.ToList());
             this.Parts = new List<ICppPart>();
         }
-        public MethodDefinition(EType returnType, string name, IEnumerable<TypeImpl> arguments) : this(returnType, name, null, arguments) { }
-        public MethodDefinition(EType returnType, string name) : this(returnType, name, null, Array.Empty<TypeImpl>() as IEnumerable<TypeImpl>) { }
-        public MethodDefinition(EType returnType, string name, string afterMethodImpl) : this(returnType, name, afterMethodImpl, Array.Empty<TypeImpl>() as IEnumerable<TypeImpl>) { }
-        public MethodDefinition(EType returnType, string name, params TypeImpl[] arguments) : this(returnType, name, null, arguments as IEnumerable<TypeImpl>) { }
-        public MethodDefinition(EType returnType, string name, string afterMethodImpl, params TypeImpl[] arguments) : this(returnType, name, afterMethodImpl, arguments as IEnumerable<TypeImpl>) { }
+        public MethodDefinition(EType returnType, string name, IEnumerable<FieldImpl> arguments) : this(returnType, name, null, arguments) { }
+        public MethodDefinition(EType returnType, string name) : this(returnType, name, null, Array.Empty<FieldImpl>() as IEnumerable<FieldImpl>) { }
+        public MethodDefinition(EType returnType, string name, string afterMethodImpl) : this(returnType, name, afterMethodImpl, Array.Empty<FieldImpl>() as IEnumerable<FieldImpl>) { }
+        public MethodDefinition(EType returnType, string name, params FieldImpl[] arguments) : this(returnType, name, null, arguments as IEnumerable<FieldImpl>) { }
+        public MethodDefinition(EType returnType, string name, string afterMethodImpl, params FieldImpl[] arguments) : this(returnType, name, afterMethodImpl, arguments as IEnumerable<FieldImpl>) { }
 
         public void WriteHeader(CppOptions options, StreamWriter writer, string whitespace)
         {
