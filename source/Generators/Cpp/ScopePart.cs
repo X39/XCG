@@ -45,6 +45,8 @@ namespace XCG.Generators.Cpp
             }
         }
         #endregion
+
+        public void AddRange(IEnumerable<ICppPart> parts) => this.inner.AddRange(parts);
         #region IList<ICppPart>
         public ICppPart this[int index] { get => ((IList<ICppPart>)inner)[index]; set => ((IList<ICppPart>)inner)[index] = value; }
 

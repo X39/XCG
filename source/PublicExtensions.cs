@@ -46,5 +46,43 @@ namespace XCG
                 }
             }
         }
+
+
+        /// <summary>
+        /// Extracts the whole stacktrace, including possible datamembers and inner exceptions, from the provided exception.
+        /// </summary>
+        /// <param name="exception"></param>
+        /// <returns></returns>
+        public static string FullStackTrace(this Exception exception)
+        {
+            StringBuilder builder = new StringBuilder();
+            void recurse(Exception ex, int intendation)
+            {
+                var tab = new string(' ', intendation * 4);
+                builder.Append(tab);
+                builder.AppendLine(ex.GetType().FullName ?? "unavailable");
+
+                builder.Append(tab);
+                builder.AppendLine(ex.Message ?? "unavailable");
+
+                foreach (System.Collections.DictionaryEntry dictionaryEntry in ex.Data)
+                {
+                    builder.Append(tab);
+                    builder.Append(Convert.ToString(dictionaryEntry.Key));
+                    builder.Append(": ");
+                    builder.AppendLine(Convert.ToString(dictionaryEntry.Value));
+                }
+
+                var stackTrace = ex.StackTrace ?? "unavailable";
+                builder.AppendLine(stackTrace.Replace("\n", String.Concat("\n", tab)));
+                if (ex.InnerException is not null)
+                {
+                    recurse(ex.InnerException, intendation + 1);
+                }
+            }
+            recurse(exception, 0);
+            return builder.ToString();
+        }
     }
 }
+

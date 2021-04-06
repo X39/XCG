@@ -10,9 +10,9 @@ namespace XCG.Generators.Cpp
     internal class FieldDefinition : ICppPart
     {
         public string? BaseName { get; set; }
-        public FieldImpl Type { get; set; }
+        public ArgImpl Type { get; set; }
 
-        public FieldDefinition(FieldImpl typeImpl)
+        public FieldDefinition(ArgImpl typeImpl)
         {
             this.Type = typeImpl;
         }

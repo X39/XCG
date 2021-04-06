@@ -108,6 +108,11 @@ namespace XCG
             int generatedReferences = 0;
             foreach (var reference in parser.References)
             {
+                generatedReferences++;
+                if (reference.CaptureName is null)
+                {
+                    reference.CaptureName =  $"capture{generatedReferences}";
+                }
                 object? possibleActual;
 
                 possibleActual = parser.Tokens.FirstOrDefault((q) => q.Alias == reference.Text);
@@ -125,7 +130,7 @@ namespace XCG
                 var token = new Parsing.Token
                 {
                     Alias = reference.Text,
-                    Identifier = $"@auto-{++generatedReferences}",
+                    Identifier = $"@auto-{generatedReferences}",
                     Statements = new List<Parsing.ITokenStatement>
                     {
                         new Parsing.TokenStatements.Require
@@ -248,8 +253,59 @@ namespace XCG
 
             // Tell the generator to generate the parser
             string? outputPath = System.IO.Path.GetFullPath(cliOptions.Output ?? System.Environment.CurrentDirectory);
-            generator.Generate(parser, outputPath);
-            return 0;
+            try
+            {
+                generator.Generate(parser, outputPath);
+                return 0;
+            }
+            catch (NotImplementedException ex)
+            {
+                Console.BackgroundColor = ConsoleColor.DarkRed;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine(ex.FullStackTrace());
+                Console.ResetColor();
+
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("Looks like you found a pattern that is not yet implemented.");
+                Console.WriteLine("XCG is not a finished product.");
+                Console.WriteLine("Either try to use a different pattern,");
+                Console.WriteLine("or raise an issue (or comment under some existing with your pattern) at https://github.com/X39/XCG.");
+                Console.WriteLine("Sorry for the inconvenience.");
+                Console.ResetColor();
+                return -1;
+            }
+            catch (FatalException ex)
+            {
+                Console.BackgroundColor = ConsoleColor.DarkRed;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine(ex.FullStackTrace());
+                Console.ResetColor();
+
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("A Fatal Exception got raised.");
+                Console.WriteLine("This should never, ever happen!");
+                Console.WriteLine("Please raise an issue with:");
+                Console.WriteLine("- All input files used");
+                Console.WriteLine("- The exact CLI args passed");
+                Console.WriteLine("- The entirety of this consoles output");
+                Console.WriteLine("at https://github.com/X39/XCG so it can be fixed ASAP.");
+                Console.ResetColor();
+                return -1;
+            }
+            catch (Exception ex)
+            {
+                Console.BackgroundColor = ConsoleColor.DarkRed;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine(ex.FullStackTrace());
+                Console.ResetColor();
+
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("Something moved wrong during generation.");
+                Console.WriteLine("Please raise an issue at https://github.com/X39/XCG so it can be fixed.");
+                Console.WriteLine("Sorry for the inconvenience.");
+                Console.ResetColor();
+                return -1;
+            }
         }
 
         private static void RegisterDefaultValidatorRules(Validation.Validator validator)

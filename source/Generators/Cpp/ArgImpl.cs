@@ -1,6 +1,6 @@
 ﻿namespace XCG.Generators.Cpp
 {
-    internal struct FieldImpl
+    internal struct ArgImpl
     {
         public EType Type { get; init; }
 

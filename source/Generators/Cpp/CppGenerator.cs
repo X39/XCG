@@ -20,13 +20,13 @@ namespace XCG.Generators.Cpp
                     {
                         PublicParts = new List<ICppPart>
                         {
-                            new FieldDefinition(new FieldImpl { Name = "m_ref", TypeString = "instance" }),
-                            new FieldDefinition(new FieldImpl { Name = "m_contents", Type = EType.StringView }),
-                            new FieldDefinition(new FieldImpl { Name = "m_file", Type = EType.String }),
-                            new FieldDefinition(new FieldImpl { Name = "m_line", Type = EType.SizeT }),
-                            new FieldDefinition(new FieldImpl { Name = "m_column", Type = EType.SizeT }),
-                            new FieldDefinition(new FieldImpl { Name = "m_offset", Type = EType.SizeT }),
-                            new MethodDefinition(EType.Void, "resetable", ": m_ref(ref)", new FieldImpl{ TypeString = "instance", ReferenceCount = 1, Name = "ref" })
+                            new FieldDefinition(new ArgImpl { Name = "m_ref", TypeString = "instance" }),
+                            new FieldDefinition(new ArgImpl { Name = "m_contents", Type = EType.StringView }),
+                            new FieldDefinition(new ArgImpl { Name = "m_file", Type = EType.String }),
+                            new FieldDefinition(new ArgImpl { Name = "m_line", Type = EType.SizeT }),
+                            new FieldDefinition(new ArgImpl { Name = "m_column", Type = EType.SizeT }),
+                            new FieldDefinition(new ArgImpl { Name = "m_offset", Type = EType.SizeT }),
+                            new MethodDefinition(EType.Void, "resetable", ": m_ref(ref)", new ArgImpl{ TypeString = "instance", ReferenceCount = 1, Name = "ref" })
                             {
                                 new FullBody
                                 {
@@ -51,11 +51,11 @@ namespace XCG.Generators.Cpp
                         }
                     },
                     new FullBody(EUsage.Header) { $@"friend class resetable;" },
-                    new FieldDefinition(new FieldImpl { Name = "m_contents", Type = EType.StringView }),
-                    new FieldDefinition(new FieldImpl { Name = "m_file", Type = EType.String }),
-                    new FieldDefinition(new FieldImpl { Name = "m_line", Type = EType.SizeT }),
-                    new FieldDefinition(new FieldImpl { Name = "m_column", Type = EType.SizeT }),
-                    new FieldDefinition(new FieldImpl { Name = "m_offset", Type = EType.SizeT }),
+                    new FieldDefinition(new ArgImpl { Name = "m_contents", Type = EType.StringView }),
+                    new FieldDefinition(new ArgImpl { Name = "m_file", Type = EType.String }),
+                    new FieldDefinition(new ArgImpl { Name = "m_line", Type = EType.SizeT }),
+                    new FieldDefinition(new ArgImpl { Name = "m_column", Type = EType.SizeT }),
+                    new FieldDefinition(new ArgImpl { Name = "m_offset", Type = EType.SizeT }),
                     new MethodDefinition(EType.Void, "skip")
                     {
                         new FullBody
@@ -113,7 +113,7 @@ namespace XCG.Generators.Cpp
                 }
             };
 
-            instanceClass.PrivateParts.AddRange(capturedSetters.Select((q) => new FieldDefinition(new FieldImpl
+            instanceClass.PrivateParts.AddRange(capturedSetters.Select((q) => new FieldDefinition(new ArgImpl
             {
                 Name = q.Key.Replace('-', '_').ToLower(),
                 Type = q.Statements.FirstOrDefault() switch
