@@ -215,9 +215,18 @@ namespace XCG
             bool optionError = false;
             foreach (string? option in cliOptions.Settings ?? Array.Empty<string>())
             {
-                string[]? splitted = option.Split(':');
-                string? key = splitted[0];
-                string? value = splitted.Length >= 2 ? splitted[1] : null;
+                string key = String.Empty;
+                string? value = null;
+                var splitterIndex = option.IndexOf(':');
+                if (splitterIndex == -1)
+                {
+                    key = option;
+                }
+                else
+                {
+                    key = option[..splitterIndex];
+                    value = option[(splitterIndex + 1)..];
+                }
                 try
                 {
                     generator.SetOption(key, value);
