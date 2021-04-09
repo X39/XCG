@@ -6,11 +6,15 @@ namespace XCG.Generators.Cpp
 {
     internal static class Extensions
     {
-        private const string isCanVariable = "isCan";
+        private const string isCanVariable = "is_can";
         private const string classInstanceVariable = "actual";
-        public static string ToCppSharedPtr(this string str)
+        public static string ToCppSharedPtrType(this string str)
         {
             return String.Concat("std::shared_ptr<", str, ">");
+        }
+        public static string ToCppSharedPtrMake(this string str, params string[] args)
+        {
+            return String.Concat("std::make_shared<", str, ">(", String.Join(", ", args), ")");
         }
         public static string ToCppName(this string str)
         {
@@ -20,14 +24,14 @@ namespace XCG.Generators.Cpp
         {
             return String.Concat("token_", token.Identifier.Replace('-', '_').Replace('@', '_').ToLower());
         }
-        public static string ToCppTypeName(this Parsing.Token token, CppOptions cppOptions)
+        public static string ToCppTypeName(this Parsing.Token token, CppOptions cppOptions, bool full)
         {
-            return "token";
+            return String.Concat(full ? cppOptions.RootClassName : String.Empty, cppOptions.TypePrefix, cppOptions.TokenName);
         }
 
-        public static string ToCppTypeName(this Parsing.Production production, CppOptions cppOptions)
+        public static string ToCppTypeName(this Parsing.Production production, CppOptions cppOptions, bool full)
         {
-            return String.Concat(cppOptions.TypePrefix, "p_", production.Identifier.ToCppName());
+            return String.Concat(full ? cppOptions.RootClassName : String.Empty, cppOptions.TypePrefix, "p_", production.Identifier.ToCppName());
         }
         public static string ToCppCanMatchMethodName(this Parsing.Production production, CppOptions cppOptions)
         {
@@ -38,9 +42,9 @@ namespace XCG.Generators.Cpp
             return String.Concat(cppOptions.MethodsPrefix, "p_match_", production.Identifier.ToCppName());
         }
 
-        public static string ToCppTypeName(this Parsing.LeftRecursive leftRecursive, CppOptions cppOptions)
+        public static string ToCppTypeName(this Parsing.LeftRecursive leftRecursive, CppOptions cppOptions, bool full)
         {
-            return String.Concat(cppOptions.TypePrefix, "lr_", leftRecursive.Identifier.ToCppName());
+            return String.Concat(full ? cppOptions.RootClassName : String.Empty, cppOptions.TypePrefix, "lr_", leftRecursive.Identifier.ToCppName());
         }
         public static string ToCppCanMatchMethodName(this Parsing.LeftRecursive leftRecursive, CppOptions cppOptions)
         {
@@ -183,7 +187,7 @@ namespace XCG.Generators.Cpp
             var captureDefinitions = new Dictionary<string, CaptureDefinition>();
             foreach (var captureModifyingSet in captureModifyingSets)
             {
-                var captureName = captureModifyingSet.Property.ToCppName();
+                string? captureName = captureModifyingSet.Property.ToCppName();
                 if (!captureDefinitions.TryGetValue(captureName, out var captureDefinition))
                 {
                     captureDefinition = new CaptureDefinition(captureName);
@@ -211,12 +215,12 @@ namespace XCG.Generators.Cpp
             {
                 string typeName = captureContainingReference.Refered switch
                 {
-                    Parsing.Token token => token.ToCppTypeName(cppOptions),
-                    Parsing.Production production => production.ToCppTypeName(cppOptions),
-                    Parsing.LeftRecursive leftRecursion => leftRecursion.ToCppTypeName(cppOptions),
+                    Parsing.Token token => token.ToCppTypeName(cppOptions, false),
+                    Parsing.Production production => production.ToCppTypeName(cppOptions, false).ToCppSharedPtrType(),
+                    Parsing.LeftRecursive leftRecursion => leftRecursion.ToCppTypeName(cppOptions, false).ToCppSharedPtrType(),
                     _ => throw new FatalException()
                 };
-                var captureName = captureContainingReference.CaptureName ?? throw new FatalException();
+                string? captureName = captureContainingReference.CaptureName ?? throw new FatalException();
                 if (!captureDefinitions.TryGetValue(captureName, out var captureDefinition))
                 {
                     captureDefinition = new CaptureDefinition(captureName);
@@ -230,42 +234,190 @@ namespace XCG.Generators.Cpp
             }
 
             return new ClassDefinition(statement switch
-                {
-                    Parsing.Token token => token.ToCppTypeName(cppOptions),
-                    Parsing.Production production => production.ToCppTypeName(cppOptions),
-                    Parsing.LeftRecursive leftRecursion => leftRecursion.ToCppTypeName(cppOptions),
-                    _ => throw new FatalException()
-                })
+            {
+                Parsing.Token token => token.ToCppTypeName(cppOptions, false),
+                Parsing.Production production => production.ToCppTypeName(cppOptions, false),
+                Parsing.LeftRecursive leftRecursion => leftRecursion.ToCppTypeName(cppOptions, false),
+                _ => throw new FatalException()
+            })
             {
                 PublicParts = new List<ICppPart>(captureDefinitions.Values)
             };
         }
+        private static IEnumerable<ICppPart> PrepareStatementMethods(Parsing.IStatement statement, string cppTypeName, CppOptions cppOptions)
+        {
+            // Output matches
+            foreach (var it in statement.Statements)
+            {
+                switch (it)
+                {
+                    case Parsing.Statements.Alternatives alternatives:
+                        foreach (var yielded in PrepareStatementMethods(alternatives, cppTypeName, cppOptions))
+                        {
+                            yield return yielded;
+                        }
+                        yield return cppOptions.FromCacheOrCreate(it, (m) => alternatives.CreateMethodDefinition(cppOptions, cppTypeName.ToCppSharedPtrType()));
+                        break;
+                    case Parsing.Statements.Match match:
+                        foreach (var yielded in PrepareStatementMethods(match, cppTypeName, cppOptions))
+                        {
+                            yield return yielded;
+                        }
+                        yield return cppOptions.FromCacheOrCreate(it, (m) => match.CreateMethodDefinition(cppOptions, 0, cppTypeName.ToCppSharedPtrType()));
+                        break;
+                    case Parsing.Statements.Set set:
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
+        }
         public static IEnumerable<ICppPart> ToParts(this Parsing.Production production, CppOptions cppOptions)
         {
-            // ToDo: Implement production
-            yield break;
+            // Output matches
+            foreach (var it in PrepareStatementMethods(production, production.ToCppTypeName(cppOptions, true), cppOptions))
+            {
+                yield return it;
+            }
+
+            // Generate can method
+            string? resetable = cppOptions.ToUnique("resetable");
+            var canMatchMethodDefinition = new MethodDefinition(EType.Boolean, production.ToCppCanMatchMethodName(cppOptions))
+            {
+                $@"resetable {resetable}(*this);",
+            };
+            bool isFirst = true;
+            foreach (var statement in production.Statements)
+            {
+                switch (statement)
+                {
+                    case Parsing.Statements.Match match:
+                        canMatchMethodDefinition.Add(new IfPart(isIf: isFirst, $@"!{cppOptions.FromCache(match).Name}(true, {{}})")
+                        {
+                            $@"{resetable}.reset();",
+                            $@"return false;",
+                        });
+                        break;
+                    case Parsing.Statements.Alternatives alternatives:
+                        canMatchMethodDefinition.Add(new IfPart(isIf: isFirst, $@"!{cppOptions.FromCache(alternatives).Name}(true, {{}})")
+                        {
+                            $@"{resetable}.reset();",
+                            $@"return false;",
+                        });
+                        break;
+                    case Parsing.Statements.Set:
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+                isFirst = false;
+            }
+            canMatchMethodDefinition.Add($@"{resetable}.reset();");
+            canMatchMethodDefinition.Add($@"return true;");
+            yield return canMatchMethodDefinition;
+
+            // Generate match method
+            var matchMethodDefinition = new MethodDefinition(production.ToCppTypeName(cppOptions, true).ToCppSharedPtrType(), production.ToCppMatchMethodName(cppOptions))
+            {
+                $@"resetable {resetable}(*this);",
+                $@"auto {classInstanceVariable} = {production.ToCppTypeName(cppOptions, true).ToCppSharedPtrMake()};",
+            };
+            isFirst = true;
+            foreach (var statement in production.Statements)
+            {
+                switch (statement)
+                {
+                    case Parsing.Statements.Match match:
+                        matchMethodDefinition.Add(new IfPart(isIf: isFirst, $@"{cppOptions.FromCache(match).Name}(true, {{}})")
+                        {
+                            $@"{cppOptions.FromCache(match).Name}(false, {classInstanceVariable});",
+                        });
+                        matchMethodDefinition.Add(new IfPart(IfPart.EIfScope.Else, null)
+                        {
+                            $@"report(""Something moved wrong (todo: improve error messages)"");",
+                        });
+                        break;
+                    case Parsing.Statements.Alternatives alternatives:
+                        matchMethodDefinition.Add(new IfPart(isIf: isFirst, $@"{cppOptions.FromCache(alternatives).Name}(true, {{}})")
+                        {
+                            $@"{cppOptions.FromCache(alternatives).Name}(false, {classInstanceVariable});",
+                        });
+                        matchMethodDefinition.Add(new IfPart(IfPart.EIfScope.Else, null)
+                        {
+                            $@"report(""Something moved wrong (todo: improve error messages)"");",
+                        });
+                        break;
+                    case Parsing.Statements.Set:
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+                isFirst = false;
+            }
+            matchMethodDefinition.Add($@"return {classInstanceVariable};");
+            yield return matchMethodDefinition;
         }
         public static IEnumerable<ICppPart> ToParts(this Parsing.LeftRecursive leftRecursive, CppOptions cppOptions)
         {
-            // ToDo: Implement leftRecursive
-
-
-
-            // Output match for testing
+            // Output matches
             var matches = leftRecursive.Statements.Cast<Parsing.Statements.Match>().ToArray();
             var lastMatch = matches.Last();
-            yield return cppOptions.FromCacheOrCreate(lastMatch, (m) => m.CreateMethodDefinition(cppOptions, 0, leftRecursive.ToCppTypeName(cppOptions).ToCppSharedPtr()));
-            foreach (var it in matches.Take(matches.Length - 1))
+            foreach (var it in PrepareStatementMethods(leftRecursive, leftRecursive.ToCppTypeName(cppOptions, true), cppOptions))
             {
-                yield return cppOptions.FromCacheOrCreate(it, (m) => m.CreateMethodDefinition(cppOptions, 1, leftRecursive.ToCppTypeName(cppOptions).ToCppSharedPtr()));
+                yield return it;
             }
-        }
 
+            // Generate can method
+            string? resetable = cppOptions.ToUnique("resetable");
+            yield return new MethodDefinition(EType.Boolean, leftRecursive.ToCppCanMatchMethodName(cppOptions))
+            {
+                $@"resetable {resetable}(*this);",
+                $@"if ({cppOptions.FromCache(lastMatch).Name}(true, {{}}))",
+                new ScopePart
+                {
+                    $@"{resetable}.reset();",
+                    $@"return true;",
+                },
+                $@"return false;"
+            };
+
+            // Generate match method
+            var whileScope = new ScopePart();
+            var matchMethodDefinition = new MethodDefinition(leftRecursive.ToCppTypeName(cppOptions, true).ToCppSharedPtrType(), leftRecursive.ToCppMatchMethodName(cppOptions))
+            {
+                $@"auto {classInstanceVariable} = {leftRecursive.ToCppTypeName(cppOptions, true).ToCppSharedPtrMake()};",
+                $@"{cppOptions.FromCache(lastMatch).Name}(false, {classInstanceVariable});",
+                $@"while (true)",
+                whileScope
+            };
+            bool isFirst = true;
+            foreach (var match in matches.Take(matches.Length - 1))
+            {
+                whileScope.Add($"{(isFirst ? String.Empty : "else ")}if ({cppOptions.FromCache(match).Name}(true, {{}}))");
+                var innerScope = new ScopePart();
+                whileScope.Add(innerScope);
+                if (isFirst) { isFirst = false; }
+
+                innerScope.Add($"{cppOptions.FromCache(match).Name}(false, {classInstanceVariable});");
+            }
+            whileScope.Add("else");
+            whileScope.Add(new ScopePart
+            {
+                "break;"
+            });
+            matchMethodDefinition.Add($@"return {classInstanceVariable};");
+            yield return matchMethodDefinition;
+        }
         /// <summary>
         /// Receives the <see cref="ICppPart"/> for the provided <paramref name="match"/>.
         /// If <paramref name="isCanMethod"/> is true, the match will only check wether it can be matched,
         /// not generating any code to actually match.
         /// </summary>
+        /// <remarks>
+        /// Match Methods always are of the following prototype:
+        /// <code>bool function(bool is_can, type actual)</code>
+        /// where <code>function</code> is the name of the match function and <code>type</code> is the calling structure type.
+        /// </remarks>
         /// <param name="match"></param>
         /// <param name="cppOptions"></param>
         /// <param name="skip">The amount of match-tokens to skip.</param>
@@ -273,50 +425,47 @@ namespace XCG.Generators.Cpp
         /// <returns></returns>
         public static MethodDefinition CreateMethodDefinition(this Parsing.Statements.Match match, CppOptions cppOptions, int skip, string typeName)
         {
-            var methodDefinition = new MethodDefinition(
-                EType.Boolean,
-                cppOptions.ToUnique(String.Concat(cppOptions.MethodsPrefix, "match")),
-                new ArgImpl { Name = isCanVariable, Type = EType.Boolean },
-                new ArgImpl { Name = classInstanceVariable, TypeString = typeName }
-            );
             // Unique Variables
-            var resetable = cppOptions.ToUnique("resetable");
-            
+            string? resetable = cppOptions.ToUnique("resetable");
+
 
 
             var references = match.Parts.Cast<Parsing.Reference>().Skip(skip).ToArray();
 
 
-            methodDefinition.Add(new FullBody
+            var methodDefinition = new MethodDefinition(
+                EType.Boolean,
+                cppOptions.ToUnique(String.Concat(cppOptions.MethodsPrefix, "match")),
+                new ArgImpl { Name = isCanVariable, Type = EType.Boolean },
+                new ArgImpl { Name = classInstanceVariable, TypeString = typeName }
+            )
             {
                 $@"resetable {resetable}(*this);",
-                $@"if ({String.Join(" && ", references.Select((reference) => reference.Refered switch{
-                    // Match the different possible refered things into proper conditions
-                    Parsing.Token token => String.Concat(token.GetMethodName(), "().has_value()"),
-                    Parsing.Production production => String.Concat(production.ToCppCanMatchMethodName(cppOptions), "()"),
-                    Parsing.LeftRecursive leftRecursive => String.Concat(leftRecursive.ToCppCanMatchMethodName(cppOptions), "()"),
-                    _ => throw new FatalException()
-                }))})",
-            });
-            var scope = new ScopePart();
+            };
+            var scope = new IfPart(IfPart.EIfScope.If, String.Join(" && ", references.Select((reference) => reference.Refered switch {
+                // Match the different possible refered things into proper conditions
+                Parsing.Token token => String.Concat(token.GetMethodName(), "().has_value()"),
+                Parsing.Production production => String.Concat(production.ToCppCanMatchMethodName(cppOptions), "()"),
+                Parsing.LeftRecursive leftRecursive => String.Concat(leftRecursive.ToCppCanMatchMethodName(cppOptions), "()"),
+                _ => throw new FatalException()
+            })));
             methodDefinition.Add(scope);
 
             // Handle actual matches
             {
-                scope.Add(new FullBody { $"if (!{isCanVariable})" });
-                var ifScope = new ScopePart();
+                var ifScope = new IfPart(IfPart.EIfScope.If, $@"!{isCanVariable}");
                 scope.Add(ifScope);
                 ifScope.Add(new FullBody { $"{resetable}.reset();" });
                 // capture local matches matches
                 foreach (var reference in references)
                 {
-                    var valueVariable = cppOptions.ToUnique("val");
+                    string? valueVariable = cppOptions.ToUnique("val");
                     if (reference.IsCaptured)
                     {
-                        var call = reference.Refered switch
+                        string? call = reference.Refered switch
                         {
                             // Match the different possible refered things into proper conditions
-                            Parsing.Token token => String.Concat(token.GetMethodName(), "().value()"),
+                            Parsing.Token token => String.Concat("create_token(", token.GetMethodName(), "().value())"),
                             Parsing.Production production => String.Concat(production.ToCppMatchMethodName(cppOptions), "()"),
                             Parsing.LeftRecursive leftRecursive => String.Concat(leftRecursive.ToCppMatchMethodName(cppOptions), "()"),
                             _ => throw new FatalException()
@@ -329,7 +478,7 @@ namespace XCG.Generators.Cpp
                     }
                     else
                     {
-                        var call = reference.Refered switch
+                        string? call = reference.Refered switch
                         {
                             // Match the different possible refered things into proper conditions
                             Parsing.Token token => String.Concat(token.GetMethodName(), "()"),
@@ -356,21 +505,77 @@ namespace XCG.Generators.Cpp
                     default: throw new NotImplementedException();
                 }
             }
+            scope.Add("return true;");
 
             methodDefinition.Add(new FullBody
             {
+                $@"else if ({isCanVariable})",
+                $@"{{",
+                $@"    {resetable}.reset();",
+                $@"    return false;",
+                $@"}}",
                 $@"else",
                 $@"{{",
-                $@"    if ({isCanVariable})",
-                $@"    {{",
-                $@"        {resetable}.reset();",
-                $@"    }}",
-                $@"    else",
-                $@"    {{",
-                $@"        report(""Something moved wrong (todo: improve error messages)"");",
-                $@"    }}",
+                $@"    report(""Something moved wrong (todo: improve error messages)"");",
+                $@"    return false;",
                 $@"}}",
             });
+            return methodDefinition;
+        }
+        /// <summary>
+        /// Receives the <see cref="ICppPart"/> for the provided <paramref name="alternatives"/>.
+        /// If <paramref name="isCanMethod"/> is true, the alternatives will only check wether it can be matched,
+        /// not generating any code to actually alternatives.
+        /// </summary>
+        /// <remarks>
+        /// Alternatives Methods always are of the following prototype:
+        /// <code>bool function(bool is_can, type actual)</code>
+        /// where <code>function</code> is the name of the alternatives function and <code>type</code> is the calling structure type.
+        /// </remarks>
+        /// <param name="alternatives"></param>
+        /// <param name="cppOptions"></param>
+        /// <param name="typeName">The type the <paramref name="alternatives"/> gets to capture things onto.</param>
+        /// <returns></returns>
+        public static MethodDefinition CreateMethodDefinition(this Parsing.Statements.Alternatives alternatives, CppOptions cppOptions, string typeName)
+        {
+            var methodDefinition = new MethodDefinition(
+                EType.Boolean,
+                cppOptions.ToUnique(String.Concat(cppOptions.MethodsPrefix, "alternatives")),
+                new ArgImpl { Name = isCanVariable, Type = EType.Boolean },
+                new ArgImpl { Name = classInstanceVariable, TypeString = typeName }
+            );
+            // Unique Variables
+            string? resetable = cppOptions.ToUnique("resetable");
+
+
+
+            var matches = alternatives.Matches.ToArray();
+
+
+            methodDefinition.Add(new FullBody
+            {
+                $@"resetable {resetable}(*this);",
+            });
+            bool isFirst = true;
+            foreach (var match in matches)
+            {
+                methodDefinition.Add($@"{(isFirst ? String.Empty : "else ")}if ({cppOptions.FromCache(match).Name}(true, {{}}))");
+                methodDefinition.Add(new ScopePart{
+                    $@"if ({isCanVariable})",
+                    new ScopePart
+                    {
+                        $@"{cppOptions.FromCache(match).Name}(true, {classInstanceVariable});"
+                    },
+                    $@"else",
+                    new ScopePart
+                    {
+                        $@"return true;"
+                    }
+                });
+                if (isFirst) { isFirst = false; }
+            }
+            methodDefinition.Add($@"{resetable}.reset();");
+            methodDefinition.Add($@"return false;");
             return methodDefinition;
         }
         public static IEnumerable<ICppPart> ToParts(this Parsing.Statements.Set set, CppOptions cppOptions)

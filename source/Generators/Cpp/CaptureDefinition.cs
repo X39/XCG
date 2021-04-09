@@ -25,16 +25,7 @@ namespace XCG.Generators.Cpp
             {
                 var typeImpl = this.Types.First();
                 writer.Write(whitespace);
-                if (typeImpl.TypeString is null)
-                {
-                    writer.Write(typeImpl.ToString());
-                }
-                else
-                {
-                    writer.Write($"std::shared_ptr<");
-                    writer.Write(typeImpl.ToString());
-                    writer.Write($">");
-                }
+                writer.Write(typeImpl.ToString());
                 writer.Write($" ");
                 writer.Write(this.Name);
                 writer.WriteLine(";");
@@ -47,16 +38,7 @@ namespace XCG.Generators.Cpp
                 foreach (var typeImpl in this.Types)
                 {
                     if (isFirst) { isFirst = false; } else { writer.Write(", "); }
-                    if (typeImpl.TypeString is null)
-                    {
-                        writer.Write(typeImpl.ToString());
-                    }
-                    else
-                    {
-                        writer.Write($"std::shared_ptr<");
-                        writer.Write(typeImpl.ToString());
-                        writer.Write($">");
-                    }
+                    writer.Write(typeImpl.ToString());
                 }
                 writer.Write($"> ");
                 writer.Write(this.Name);

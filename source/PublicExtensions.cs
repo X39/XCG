@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,23 @@ namespace XCG
 {
     public static class PublicExtensions
     {
+        /// <summary>
+        /// Returns all <typeparamref name="T"/> in <paramref name="ts"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ts"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> WhereIs<T>(this IEnumerable ts) where T : class
+        {
+            foreach (var it in ts)
+            {
+                if (it is T t)
+                {
+                    yield return t;
+                }
+            }
+        }
+
         /// <summary>
         /// Ensures that only non-null elements are returned.
         /// Equivalent to calling

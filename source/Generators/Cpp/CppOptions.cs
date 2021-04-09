@@ -5,6 +5,12 @@ namespace XCG.Generators.Cpp
 {
     public class CppOptions
     {
+        [CppOption("class", Nullable = false)]
+        public string ClassName { get; set; } = "instance";
+
+        [CppOption("token", Nullable = false)]
+        public string TokenName { get; set; } = "token";
+
         [CppOption("file-header", Nullable = false)]
         public string HeaderFileName { get; set; } = "parser.hpp";
 
@@ -21,6 +27,7 @@ namespace XCG.Generators.Cpp
         public string? TypePrefix { get; set; } = null;
 
 
+        public string RootClassName => String.Concat(this.NamespaceName ?? String.Empty, this.NamespaceName is null ? String.Empty : "::", this.ClassName, "::");
         /// <summary>
         /// An internal counter, allowing to create variables
         /// collission-free.
@@ -34,6 +41,11 @@ namespace XCG.Generators.Cpp
 
         private Dictionary<object, MethodDefinition> MethodCache { get; } = new Dictionary<object, MethodDefinition>();
 
+        internal MethodDefinition FromCache<T>(T target)
+        {
+            if (target is null) { throw new ArgumentNullException(nameof(target)); }
+            return this.MethodCache[target];
+        }
         internal MethodDefinition FromCacheOrCreate<T>(T target, Func<T, MethodDefinition> action)
         {
             if (target is null) { throw new ArgumentNullException(nameof(target)); }

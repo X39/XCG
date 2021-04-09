@@ -23,13 +23,52 @@ namespace XCG.Generators.Cpp
         public void WriteHeader(CppOptions options, StreamWriter writer, string whitespace)
         {
             writer.Write(whitespace);
-            writer.Write(!this.PrivateParts.Any() ? "struct " : "class ");
+            writer.Write("class ");
             writer.WriteLine(this.FullName);
 
             writer.Write(whitespace);
             writer.WriteLine("{");
 
             string? subWhitespace = String.Concat(whitespace, "    ");
+            if (this.PrivateParts.WhereIs<ClassDefinition>().Any())
+            {
+                writer.Write(whitespace);
+                writer.WriteLine("private:");
+                foreach (var generatorPart in this.PrivateParts.WhereIs<ClassDefinition>())
+                {
+                    writer.Write(subWhitespace);
+                    writer.Write("class ");
+                    writer.Write(generatorPart.Name);
+                    writer.WriteLine(";");
+                }
+            }
+
+            if (this.ProtectedParts.WhereIs<ClassDefinition>().Any())
+            {
+                writer.Write(whitespace);
+                writer.WriteLine("protected:");
+                foreach (var generatorPart in this.ProtectedParts.WhereIs<ClassDefinition>())
+                {
+                    writer.Write(subWhitespace);
+                    writer.Write("class ");
+                    writer.Write(generatorPart.Name);
+                    writer.WriteLine(";");
+                }
+            }
+
+            if (this.PublicParts.WhereIs<ClassDefinition>().Any())
+            {
+                writer.Write(whitespace);
+                writer.WriteLine("public:");
+                foreach (var generatorPart in this.PublicParts.WhereIs<ClassDefinition>())
+                {
+                    writer.Write(subWhitespace);
+                    writer.Write("class ");
+                    writer.Write(generatorPart.Name);
+                    writer.WriteLine(";");
+                }
+            }
+
             if (this.PrivateParts.Any())
             {
                 writer.Write(whitespace);
@@ -45,7 +84,7 @@ namespace XCG.Generators.Cpp
             {
                 writer.Write(whitespace);
                 writer.WriteLine("protected:");
-                foreach (var generatorPart in this.PublicParts)
+                foreach (var generatorPart in this.ProtectedParts)
                 {
                     generatorPart.BaseName = null;
                     generatorPart.WriteHeader(options, writer, subWhitespace);
@@ -54,11 +93,8 @@ namespace XCG.Generators.Cpp
 
             if (this.PublicParts.Any())
             {
-                if (this.PrivateParts.Any())
-                {
-                    writer.Write(whitespace);
-                    writer.WriteLine("public:");
-                }
+                writer.Write(whitespace);
+                writer.WriteLine("public:");
                 foreach (var generatorPart in this.PublicParts)
                 {
                     generatorPart.BaseName = null;

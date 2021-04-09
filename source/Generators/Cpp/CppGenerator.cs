@@ -12,21 +12,71 @@ namespace XCG.Generators.Cpp
         public void Generate(Parser parser, string output)
         {
             var capturedSetters = parser.Setters.Where((q) => q.ActiveScope == EActiveScope.capture).ToArray();
-            var instanceClass = new ClassDefinition("instance")
+            var instanceClass = new ClassDefinition(String.Concat(Options.TypePrefix, Options.ClassName))
             {
+                PublicParts = new List<ICppPart>
+                {
+                    new MethodDefinition(String.Empty, String.Concat(Options.TypePrefix, Options.ClassName),
+                    " : m_contents(contents), m_file(file), m_line(1), m_column(1), m_offset(0)",
+                    new ArgImpl{ Type = EType.StringView, Name = "contents" },
+                    new ArgImpl{ Type = EType.String, Name = "file" })
+                    {
+                        HeaderOnly = true
+                    },
+                    new ClassDefinition(String.Concat(Options.TypePrefix, Options.TokenName))
+                    {
+                        PublicParts = new List<ICppPart>
+                        {
+                            new FieldDefinition(new ArgImpl { Name = "file", Type = EType.String }),
+                            new FieldDefinition(new ArgImpl { Name = "line", Type = EType.SizeT }),
+                            new FieldDefinition(new ArgImpl { Name = "column", Type = EType.SizeT }),
+                            new FieldDefinition(new ArgImpl { Name = "offset", Type = EType.SizeT }),
+                            new FieldDefinition(new ArgImpl { Name = "length", Type = EType.SizeT }),
+                        }
+                    },
+                    new MethodDefinition(String.Concat(Options.RootClassName, Options.TypePrefix, Options.TokenName), "create_token", new ArgImpl{ Type = EType.SizeT, Name = "length" })
+                    {
+                        $@"{String.Concat(Options.TypePrefix, Options.TokenName)} t;",
+                        $@"t.file = m_file;",
+                        $@"t.line = m_line;",
+                        $@"t.column = m_column;",
+                        $@"t.offset = m_offset;",
+                        $@"t.length = length;",
+                        $@"return t;",
+                    }
+                },
+                ProtectedParts = new List<ICppPart>
+                {
+                    new FieldDefinition(new ArgImpl { Name = "m_contents", Type = EType.StringView }),
+                    new FieldDefinition(new ArgImpl { Name = "m_file", Type = EType.String }),
+                    new FieldDefinition(new ArgImpl { Name = "m_line", Type = EType.SizeT }),
+                    new FieldDefinition(new ArgImpl { Name = "m_column", Type = EType.SizeT }),
+                    new FieldDefinition(new ArgImpl { Name = "m_offset", Type = EType.SizeT }),
+                    new MethodDefinition(EType.Void, "report", new ArgImpl{ Name = "message", Type = EType.StringView })
+                    {
+                        IsVirtual = true,
+                        Parts = new List<ICppPart>
+                        {
+                            new FullBody
+                            {
+                                $@"std::cout << ""[L"" << m_line << ""]"" << ""[C"" << m_column << ""] "" << message;"
+                            }
+                        }
+                    }
+                },
                 PrivateParts = new List<ICppPart>
                 {
                     new ClassDefinition("resetable")
                     {
                         PublicParts = new List<ICppPart>
                         {
-                            new FieldDefinition(new ArgImpl { Name = "m_ref", TypeString = "instance" }),
+                            new FieldDefinition(new ArgImpl { Name = "m_ref", ReferenceCount = 1, TypeString = String.Concat(Options.TypePrefix, Options.ClassName) }),
                             new FieldDefinition(new ArgImpl { Name = "m_contents", Type = EType.StringView }),
                             new FieldDefinition(new ArgImpl { Name = "m_file", Type = EType.String }),
                             new FieldDefinition(new ArgImpl { Name = "m_line", Type = EType.SizeT }),
                             new FieldDefinition(new ArgImpl { Name = "m_column", Type = EType.SizeT }),
                             new FieldDefinition(new ArgImpl { Name = "m_offset", Type = EType.SizeT }),
-                            new MethodDefinition(EType.Void, "resetable", ": m_ref(ref)", new ArgImpl{ TypeString = "instance", ReferenceCount = 1, Name = "ref" })
+                            new MethodDefinition(EType.None, "resetable", ": m_ref(ref)", new ArgImpl{ TypeString = String.Concat(Options.TypePrefix, Options.ClassName), ReferenceCount = 1, Name = "ref" })
                             {
                                 new FullBody
                                 {
@@ -41,21 +91,16 @@ namespace XCG.Generators.Cpp
                             {
                                 new FullBody
                                 {
-                                    $@"ref.m_contents   = m_contents;",
-                                    $@"ref.m_file       = m_file;",
-                                    $@"ref.m_line       = m_line;",
-                                    $@"ref.m_column     = m_column;",
-                                    $@"ref.m_offset     = m_offset;",
+                                    $@"m_ref.m_contents   = m_contents;",
+                                    $@"m_ref.m_file       = m_file;",
+                                    $@"m_ref.m_line       = m_line;",
+                                    $@"m_ref.m_column     = m_column;",
+                                    $@"m_ref.m_offset     = m_offset;",
                                 }
                             }
                         }
                     },
                     new FullBody(EUsage.Header) { $@"friend class resetable;" },
-                    new FieldDefinition(new ArgImpl { Name = "m_contents", Type = EType.StringView }),
-                    new FieldDefinition(new ArgImpl { Name = "m_file", Type = EType.String }),
-                    new FieldDefinition(new ArgImpl { Name = "m_line", Type = EType.SizeT }),
-                    new FieldDefinition(new ArgImpl { Name = "m_column", Type = EType.SizeT }),
-                    new FieldDefinition(new ArgImpl { Name = "m_offset", Type = EType.SizeT }),
                     new MethodDefinition(EType.Void, "skip")
                     {
                         new FullBody
@@ -145,6 +190,12 @@ namespace XCG.Generators.Cpp
             System.IO.Directory.CreateDirectory(output);
             using (var writer = new System.IO.StreamWriter(System.IO.Path.Combine(output, this.Options.HeaderFileName)))
             {
+                writer.WriteLine($@"#include <memory>");
+                writer.WriteLine($@"#include <string>");
+                writer.WriteLine($@"#include <string_view>");
+                writer.WriteLine($@"#include <optional>");
+                writer.WriteLine($@"#include <variant>");
+                writer.WriteLine();
                 if (this.Options.NamespaceName is null)
                 {
                     instanceClass.WriteHeader(this.Options, writer, String.Empty);
@@ -161,6 +212,8 @@ namespace XCG.Generators.Cpp
             using (var writer = new System.IO.StreamWriter(System.IO.Path.Combine(output, this.Options.ImplementationFileName)))
             {
                 writer.WriteLine($@"#include ""{this.Options.HeaderFileName}""");
+                writer.WriteLine($@"#include <iostream>");
+                writer.WriteLine();
                 if (this.Options.NamespaceName is null)
                 {
                     instanceClass.WriteImplementation(this.Options, writer, String.Empty);
