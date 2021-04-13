@@ -21,7 +21,7 @@ namespace XCG.Generators.Cpp
         public void WriteHeader(CppOptions options, StreamWriter writer, string whitespace)
         {
             writer.Write(whitespace);
-            writer.Write("enum ");
+            writer.Write("enum class ");
             writer.WriteLine(this.FullName);
 
             writer.Write(whitespace);

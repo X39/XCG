@@ -2,9 +2,27 @@ token integer
     require plus { 0-9 }
 
 token scalar
-    require once   { integer }
+    require once { integer }
     require once .
     require once { integer }
+
+token roundO: "("
+    require once (
+    
+token roundC: ")"
+    require once )
+    
+token slash: "/"
+    require once /
+    
+token star: "*"
+    require once *
+    
+token plus: "+"
+    require once +
+    
+token minus: "-"
+    require once -
 
 production expC
     alternatives

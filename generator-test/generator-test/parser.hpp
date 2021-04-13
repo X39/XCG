@@ -35,13 +35,13 @@ namespace yaoosl::parsing
         char current();
         std::optional<size_t> token_integer();
         std::optional<size_t> token_scalar();
-        std::optional<size_t> token__auto_3();
-        std::optional<size_t> token__auto_5();
-        std::optional<size_t> token__auto_9();
-        std::optional<size_t> token__auto_12();
-        std::optional<size_t> token__auto_16();
-        std::optional<size_t> token__auto_19();
-        bool auto3_expA_auto5_18(bool is_can, std::shared_ptr<yaoosl::parsing::instance::p_expc> actual);
+        std::optional<size_t> token_roundo();
+        std::optional<size_t> token_roundc();
+        std::optional<size_t> token_slash();
+        std::optional<size_t> token_star();
+        std::optional<size_t> token_plus();
+        std::optional<size_t> token_minus();
+        bool roundO_expA_roundC_18(bool is_can, std::shared_ptr<yaoosl::parsing::instance::p_expc> actual);
         bool scalar_23(bool is_can, std::shared_ptr<yaoosl::parsing::instance::p_expc> actual);
         bool integer_26(bool is_can, std::shared_ptr<yaoosl::parsing::instance::p_expc> actual);
         bool alternatives28(bool is_can, std::shared_ptr<yaoosl::parsing::instance::p_expc> actual);
@@ -50,13 +50,13 @@ namespace yaoosl::parsing
         bool expA_32(bool is_can, std::shared_ptr<yaoosl::parsing::instance::p_main> actual);
         bool p_can_main();
         std::shared_ptr<yaoosl::parsing::instance::p_main> p_match_main();
-        bool expB_auto9_expC_36(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expb> actual);
-        bool expB_auto12_expC_41(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expb> actual);
+        bool expB_slash_expC_36(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expb> actual);
+        bool expB_star_expC_41(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expb> actual);
         bool expC_46(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expb> actual);
         bool lr_can_expb();
         std::shared_ptr<yaoosl::parsing::instance::lr_expb> lr_match_expb();
-        bool expA_auto16_expB_50(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expa> actual);
-        bool expA_auto19_expB_55(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expa> actual);
+        bool expA_plus_expB_50(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expa> actual);
+        bool expA_minus_expB_55(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expa> actual);
         bool expB_60(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expa> actual);
         bool lr_can_expa();
         std::shared_ptr<yaoosl::parsing::instance::lr_expa> lr_match_expa();
@@ -75,12 +75,12 @@ namespace yaoosl::parsing
         {
             INTEGER,
             SCALAR,
-            _AUTO_3,
-            _AUTO_5,
-            _AUTO_9,
-            _AUTO_12,
-            _AUTO_16,
-            _AUTO_19,
+            ROUNDO,
+            ROUNDC,
+            SLASH,
+            STAR,
+            PLUS,
+            MINUS,
             __MAX__
         };
         class token

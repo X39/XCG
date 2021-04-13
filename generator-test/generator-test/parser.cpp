@@ -157,7 +157,7 @@ std::optional<size_t> yaoosl::parsing::instance::token_scalar()
     resetable3.reset();
     return resultVariable4;
 }
-std::optional<size_t> yaoosl::parsing::instance::token__auto_3()
+std::optional<size_t> yaoosl::parsing::instance::token_roundo()
 {
     resetable resetable5(*this);
     {
@@ -182,7 +182,7 @@ std::optional<size_t> yaoosl::parsing::instance::token__auto_3()
     resetable5.reset();
     return resultVariable6;
 }
-std::optional<size_t> yaoosl::parsing::instance::token__auto_5()
+std::optional<size_t> yaoosl::parsing::instance::token_roundc()
 {
     resetable resetable7(*this);
     {
@@ -207,7 +207,7 @@ std::optional<size_t> yaoosl::parsing::instance::token__auto_5()
     resetable7.reset();
     return resultVariable8;
 }
-std::optional<size_t> yaoosl::parsing::instance::token__auto_9()
+std::optional<size_t> yaoosl::parsing::instance::token_slash()
 {
     resetable resetable9(*this);
     {
@@ -232,7 +232,7 @@ std::optional<size_t> yaoosl::parsing::instance::token__auto_9()
     resetable9.reset();
     return resultVariable10;
 }
-std::optional<size_t> yaoosl::parsing::instance::token__auto_12()
+std::optional<size_t> yaoosl::parsing::instance::token_star()
 {
     resetable resetable11(*this);
     {
@@ -257,7 +257,7 @@ std::optional<size_t> yaoosl::parsing::instance::token__auto_12()
     resetable11.reset();
     return resultVariable12;
 }
-std::optional<size_t> yaoosl::parsing::instance::token__auto_16()
+std::optional<size_t> yaoosl::parsing::instance::token_plus()
 {
     resetable resetable13(*this);
     {
@@ -282,7 +282,7 @@ std::optional<size_t> yaoosl::parsing::instance::token__auto_16()
     resetable13.reset();
     return resultVariable14;
 }
-std::optional<size_t> yaoosl::parsing::instance::token__auto_19()
+std::optional<size_t> yaoosl::parsing::instance::token_minus()
 {
     resetable resetable15(*this);
     {
@@ -307,18 +307,18 @@ std::optional<size_t> yaoosl::parsing::instance::token__auto_19()
     resetable15.reset();
     return resultVariable16;
 }
-bool yaoosl::parsing::instance::auto3_expA_auto5_18(bool is_can, std::shared_ptr<yaoosl::parsing::instance::p_expc> actual)
+bool yaoosl::parsing::instance::roundO_expA_roundC_18(bool is_can, std::shared_ptr<yaoosl::parsing::instance::p_expc> actual)
 {
     resetable resetable17(*this);
-    if (token__auto_3().has_value() && lr_can_expa() && token__auto_5().has_value())
+    if (token_roundo().has_value() && lr_can_expa() && token_roundc().has_value())
     {
         if (!is_can)
         {
             resetable17.reset();
-            token__auto_3();
+            token_roundo();
             auto val20 = lr_match_expa();
             actual->value = val20;
-            token__auto_5();
+            token_roundc();
         }
         return true;
     }
@@ -384,7 +384,7 @@ bool yaoosl::parsing::instance::integer_26(bool is_can, std::shared_ptr<yaoosl::
 bool yaoosl::parsing::instance::alternatives28(bool is_can, std::shared_ptr<yaoosl::parsing::instance::p_expc> actual)
 {
     resetable resetable29(*this);
-    if (auto3_expA_auto5_18(true, {}))
+    if (roundO_expA_roundC_18(true, {}))
     {
         if (is_can)
         {
@@ -392,7 +392,7 @@ bool yaoosl::parsing::instance::alternatives28(bool is_can, std::shared_ptr<yaoo
         }
         else
         {
-            auto3_expA_auto5_18(false, actual);
+            roundO_expA_roundC_18(false, actual);
             return true;
         }
     }
@@ -497,17 +497,17 @@ std::shared_ptr<yaoosl::parsing::instance::p_main> yaoosl::parsing::instance::p_
     }
     return actual;
 }
-bool yaoosl::parsing::instance::expB_auto9_expC_36(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expb> actual)
+bool yaoosl::parsing::instance::expB_slash_expC_36(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expb> actual)
 {
     resetable resetable35(*this);
-    if (lr_can_expb() && token__auto_9().has_value() && p_can_expc())
+    if (lr_can_expb() && token_slash().has_value() && p_can_expc())
     {
         if (!is_can)
         {
             resetable35.reset();
             auto val37 = lr_match_expb();
             actual->left = val37;
-            token__auto_9();
+            token_slash();
             auto val39 = p_match_expc();
             actual->right = val39;
         }
@@ -528,17 +528,17 @@ bool yaoosl::parsing::instance::expB_auto9_expC_36(bool is_can, std::shared_ptr<
         return false;
     }
 }
-bool yaoosl::parsing::instance::expB_auto12_expC_41(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expb> actual)
+bool yaoosl::parsing::instance::expB_star_expC_41(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expb> actual)
 {
     resetable resetable40(*this);
-    if (lr_can_expb() && token__auto_12().has_value() && p_can_expc())
+    if (lr_can_expb() && token_star().has_value() && p_can_expc())
     {
         if (!is_can)
         {
             resetable40.reset();
             auto val42 = lr_match_expb();
             actual->left = val42;
-            token__auto_12();
+            token_star();
             auto val44 = p_match_expc();
             actual->right = val44;
         }
@@ -599,13 +599,13 @@ std::shared_ptr<yaoosl::parsing::instance::lr_expb> yaoosl::parsing::instance::l
     expC_46(false, actual);
     while (true)
     {
-        if (expB_auto9_expC_36(true, {}))
+        if (expB_slash_expC_36(true, {}))
         {
-            expB_auto9_expC_36(false, actual);
+            expB_slash_expC_36(false, actual);
         }
-        else if (expB_auto12_expC_41(true, {}))
+        else if (expB_star_expC_41(true, {}))
         {
-            expB_auto12_expC_41(false, actual);
+            expB_star_expC_41(false, actual);
         }
         else
         {
@@ -614,17 +614,17 @@ std::shared_ptr<yaoosl::parsing::instance::lr_expb> yaoosl::parsing::instance::l
     }
     return actual;
 }
-bool yaoosl::parsing::instance::expA_auto16_expB_50(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expa> actual)
+bool yaoosl::parsing::instance::expA_plus_expB_50(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expa> actual)
 {
     resetable resetable49(*this);
-    if (lr_can_expa() && token__auto_16().has_value() && lr_can_expb())
+    if (lr_can_expa() && token_plus().has_value() && lr_can_expb())
     {
         if (!is_can)
         {
             resetable49.reset();
             auto val51 = lr_match_expa();
             actual->left = val51;
-            token__auto_16();
+            token_plus();
             auto val53 = lr_match_expb();
             actual->right = val53;
         }
@@ -645,17 +645,17 @@ bool yaoosl::parsing::instance::expA_auto16_expB_50(bool is_can, std::shared_ptr
         return false;
     }
 }
-bool yaoosl::parsing::instance::expA_auto19_expB_55(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expa> actual)
+bool yaoosl::parsing::instance::expA_minus_expB_55(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expa> actual)
 {
     resetable resetable54(*this);
-    if (lr_can_expa() && token__auto_19().has_value() && lr_can_expb())
+    if (lr_can_expa() && token_minus().has_value() && lr_can_expb())
     {
         if (!is_can)
         {
             resetable54.reset();
             auto val56 = lr_match_expa();
             actual->left = val56;
-            token__auto_19();
+            token_minus();
             auto val58 = lr_match_expb();
             actual->right = val58;
         }
@@ -716,13 +716,13 @@ std::shared_ptr<yaoosl::parsing::instance::lr_expa> yaoosl::parsing::instance::l
     expB_60(false, actual);
     while (true)
     {
-        if (expA_auto16_expB_50(true, {}))
+        if (expA_plus_expB_50(true, {}))
         {
-            expA_auto16_expB_50(false, actual);
+            expA_plus_expB_50(false, actual);
         }
-        else if (expA_auto19_expB_55(true, {}))
+        else if (expA_minus_expB_55(true, {}))
         {
-            expA_auto19_expB_55(false, actual);
+            expA_minus_expB_55(false, actual);
         }
         else
         {
