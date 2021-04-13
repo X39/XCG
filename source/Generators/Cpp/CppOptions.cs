@@ -11,6 +11,9 @@ namespace XCG.Generators.Cpp
         [CppOption("token", Nullable = false)]
         public string TokenName { get; set; } = "token";
 
+        [CppOption("token-enum", Nullable = false)]
+        public string TokenEnumName { get; set; } = "tok";
+
         [CppOption("file-header", Nullable = false)]
         public string HeaderFileName { get; set; } = "parser.hpp";
 

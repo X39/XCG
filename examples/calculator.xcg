@@ -1,8 +1,8 @@
 token integer
     require plus { 0-9 }
-    
+
 token scalar
-    require once { integer }
+    require once   { integer }
     require once .
     require once { integer }
 

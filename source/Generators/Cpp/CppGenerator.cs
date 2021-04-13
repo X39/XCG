@@ -12,6 +12,7 @@ namespace XCG.Generators.Cpp
         public void Generate(Parser parser, string output)
         {
             var capturedSetters = parser.Setters.Where((q) => q.ActiveScope == EActiveScope.capture).ToArray();
+            var mainProduction = parser.Productions.First((q) => q.Identifier == "main");
             var instanceClass = new ClassDefinition(String.Concat(Options.TypePrefix, Options.ClassName))
             {
                 PublicParts = new List<ICppPart>
@@ -23,10 +24,15 @@ namespace XCG.Generators.Cpp
                     {
                         HeaderOnly = true
                     },
+                    new EnumDefinition(String.Concat(Options.TypePrefix, Options.TokenEnumName))
+                    {
+                        Entries = parser.Tokens.Select((q) => q.GetCppEnumName()).ToList()
+                    },
                     new ClassDefinition(String.Concat(Options.TypePrefix, Options.TokenName))
                     {
                         PublicParts = new List<ICppPart>
                         {
+                            new FieldDefinition(new ArgImpl { Name = "type", TypeString = String.Concat(Options.TypePrefix, Options.TokenEnumName) }),
                             new FieldDefinition(new ArgImpl { Name = "file", Type = EType.String }),
                             new FieldDefinition(new ArgImpl { Name = "line", Type = EType.SizeT }),
                             new FieldDefinition(new ArgImpl { Name = "column", Type = EType.SizeT }),
@@ -34,7 +40,11 @@ namespace XCG.Generators.Cpp
                             new FieldDefinition(new ArgImpl { Name = "length", Type = EType.SizeT }),
                         }
                     },
-                    new MethodDefinition(String.Concat(Options.RootClassName, Options.TypePrefix, Options.TokenName), "create_token", new ArgImpl{ Type = EType.SizeT, Name = "length" })
+                    new MethodDefinition(
+                        String.Concat(Options.RootClassName, Options.TypePrefix, Options.TokenName),
+                        "create_token",
+                        new ArgImpl{ Type = EType.SizeT, Name = "length" },
+                        new ArgImpl{ TypeString = String.Concat(Options.TypePrefix, Options.TokenEnumName), Name = "type" })
                     {
                         $@"{String.Concat(Options.TypePrefix, Options.TokenName)} t;",
                         $@"t.file = m_file;",
@@ -42,6 +52,7 @@ namespace XCG.Generators.Cpp
                         $@"t.column = m_column;",
                         $@"t.offset = m_offset;",
                         $@"t.length = length;",
+                        $@"t.type = type;",
                         $@"return t;",
                     }
                 },
@@ -130,7 +141,8 @@ namespace XCG.Generators.Cpp
                             @"    {",
                             @"        case '\r':",
                             @"        case '\t':",
-                            @"        case ' ': m_column++; m_offset++; break;",
+                            @"        case ' ':",
+                            @"        default: m_column++; m_offset++; break;",
                             @"        case '\n': m_line++; m_column = 1; m_offset++; break;",
                             @"    }",
                             @"    return true;",
@@ -177,7 +189,7 @@ namespace XCG.Generators.Cpp
                 {
                     Parsing.LeftRecursive leftRecursive => leftRecursive.ToParts(this.Options),
                     Parsing.Production production => production.ToParts(this.Options),
-                    Parsing.Token token => token.ToParts(),
+                    Parsing.Token token => token.ToParts(this.Options),
                     _ => throw new NotImplementedException(),
                 }));
             instanceClass.PublicParts.AddRange(
@@ -186,6 +198,10 @@ namespace XCG.Generators.Cpp
                 .Concat(parser.LeftRecursives.Cast<Parsing.IStatement>())
                 .Select((q) => Extensions.GetClassDefinition(q, this.Options)));
 
+            instanceClass.PublicParts.Add(new MethodDefinition(mainProduction.ToCppTypeName(this.Options, true).ToCppSharedPtrType(), "parse")
+            {
+                $@"return {mainProduction.ToCppMatchMethodName(this.Options)}();"
+            });
 
             System.IO.Directory.CreateDirectory(output);
             using (var writer = new System.IO.StreamWriter(System.IO.Path.Combine(output, this.Options.HeaderFileName)))

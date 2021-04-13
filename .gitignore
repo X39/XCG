@@ -328,3 +328,4 @@ ASALocalRun/
 # MFractors (Xamarin productivity tool) working folder
 .mfractor/
 /generator-test/out/build/x64-Debug
+/generator-test/out/build/x64-Debug (default)

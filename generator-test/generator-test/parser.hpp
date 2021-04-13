@@ -41,23 +41,23 @@ namespace yaoosl::parsing
         std::optional<size_t> token__auto_12();
         std::optional<size_t> token__auto_16();
         std::optional<size_t> token__auto_19();
-        bool match2(bool is_can, std::shared_ptr<yaoosl::parsing::instance::p_expc> actual);
-        bool match7(bool is_can, std::shared_ptr<yaoosl::parsing::instance::p_expc> actual);
-        bool match10(bool is_can, std::shared_ptr<yaoosl::parsing::instance::p_expc> actual);
-        bool alternatives12(bool is_can, std::shared_ptr<yaoosl::parsing::instance::p_expc> actual);
+        bool auto3_expA_auto5_18(bool is_can, std::shared_ptr<yaoosl::parsing::instance::p_expc> actual);
+        bool scalar_23(bool is_can, std::shared_ptr<yaoosl::parsing::instance::p_expc> actual);
+        bool integer_26(bool is_can, std::shared_ptr<yaoosl::parsing::instance::p_expc> actual);
+        bool alternatives28(bool is_can, std::shared_ptr<yaoosl::parsing::instance::p_expc> actual);
         bool p_can_expc();
         std::shared_ptr<yaoosl::parsing::instance::p_expc> p_match_expc();
-        bool match16(bool is_can, std::shared_ptr<yaoosl::parsing::instance::p_main> actual);
+        bool expA_32(bool is_can, std::shared_ptr<yaoosl::parsing::instance::p_main> actual);
         bool p_can_main();
         std::shared_ptr<yaoosl::parsing::instance::p_main> p_match_main();
-        bool match20(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expb> actual);
-        bool match25(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expb> actual);
-        bool match30(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expb> actual);
+        bool expB_auto9_expC_36(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expb> actual);
+        bool expB_auto12_expC_41(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expb> actual);
+        bool expC_46(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expb> actual);
         bool lr_can_expb();
         std::shared_ptr<yaoosl::parsing::instance::lr_expb> lr_match_expb();
-        bool match34(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expa> actual);
-        bool match39(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expa> actual);
-        bool match44(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expa> actual);
+        bool expA_auto16_expB_50(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expa> actual);
+        bool expA_auto19_expB_55(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expa> actual);
+        bool expB_60(bool is_can, std::shared_ptr<yaoosl::parsing::instance::lr_expa> actual);
         bool lr_can_expa();
         std::shared_ptr<yaoosl::parsing::instance::lr_expa> lr_match_expa();
     protected:
@@ -71,16 +71,29 @@ namespace yaoosl::parsing
         instance(std::string_view contents, std::string file) : m_contents(contents), m_file(file), m_line(1), m_column(1), m_offset(0)
         {
         }
+        enum tok
+        {
+            INTEGER,
+            SCALAR,
+            _AUTO_3,
+            _AUTO_5,
+            _AUTO_9,
+            _AUTO_12,
+            _AUTO_16,
+            _AUTO_19,
+            __MAX__
+        };
         class token
         {
         public:
+            tok type;
             std::string file;
             size_t line;
             size_t column;
             size_t offset;
             size_t length;
         };
-        yaoosl::parsing::instance::token create_token(size_t length);
+        yaoosl::parsing::instance::token create_token(size_t length, tok type);
         class p_expc
         {
         public:
@@ -105,5 +118,6 @@ namespace yaoosl::parsing
             std::variant<std::shared_ptr<lr_expa>, std::shared_ptr<lr_expb>> left;
             std::shared_ptr<lr_expb> right;
         };
+        std::shared_ptr<yaoosl::parsing::instance::p_main> parse();
     };
 }

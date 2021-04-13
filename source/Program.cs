@@ -551,6 +551,22 @@ namespace XCG
                 }
                 return hints;
             });
+
+            // grammar has a main production
+            // left-recursive last match has exactly one part
+            validator.Register("XCG", ESeverity.Error, (parser) =>
+            {
+                var hints = new List<Validation.Hint>();
+                var mainProduction = parser.Productions.FirstOrDefault((q) => q.Identifier == "main");
+                if (mainProduction is null)
+                {
+                    hints.Add(new Validation.Hint
+                    {
+                        Message = $@"No ""main"" production found."
+                    });
+                }
+                return hints;
+            });
         }
     }
 }

@@ -24,6 +24,10 @@ namespace XCG.Generators.Cpp
         {
             return String.Concat("token_", token.Identifier.Replace('-', '_').Replace('@', '_').ToLower());
         }
+        public static string GetCppEnumName(this Parsing.Token token)
+        {
+            return String.Concat(token.Identifier.Replace('-', '_').Replace('@', '_').ToUpper());
+        }
         public static string ToCppTypeName(this Parsing.Token token, CppOptions cppOptions, bool full)
         {
             return String.Concat(full ? cppOptions.RootClassName : String.Empty, cppOptions.TypePrefix, cppOptions.TokenName);
@@ -56,11 +60,12 @@ namespace XCG.Generators.Cpp
         }
 
 
-        public static IEnumerable<ICppPart> ToParts(this Parsing.Token token)
+        public static IEnumerable<ICppPart> ToParts(this Parsing.Token token, CppOptions cppOptions)
         {
+            string? resetable = cppOptions.ToUnique("resetable");
             var methodDefinition = new MethodDefinition(EType.OptionalSizeT, token.GetMethodName())
             {
-                new FullBody { $@"auto r = resetable(*this);" }
+                new FullBody { $@"resetable {resetable}(*this);" }
             };
 
             foreach (var statement in token.Statements)
@@ -109,32 +114,26 @@ namespace XCG.Generators.Cpp
                         }
                         else if (part is Parsing.CharacterRange range)
                         {
-                            localLoop.Add(new FullBody
+                            localLoop.Add(new IfPart(isFirst, $@"'{range.Start}' <= current() && current() <= '{range.End}'")
                             {
-                                $@"{(isFirst ? String.Empty : "else ")}if ('{range.Start}' <= current() && current() <= '{range.End}')",
-                                $@"{{",
-                                $@"    count++;",
-                                $@"    next();",
-                                $@"    continue;",
-                                $@"}}",
+                                $@"count++;",
+                                $@"next();",
+                                $@"continue;",
                             });
                         }
                         else if (part is Parsing.Reference reference)
                         {
                             if (reference.Refered is Parsing.Token referedToken)
                             {
-                                localLoop.Add(new FullBody
+                                localLoop.Add($@"auto l{++localsCount} = {referedToken.GetMethodName()}();");
+                                localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"l{localsCount}.has_value()")
                                 {
-                                    $@"auto l{++localsCount} = {referedToken.GetMethodName()}();",
-                                    $@"if (l{localsCount}.has_value())",
+                                    $@"count++;",
+                                    $@"for (size_t i = 0; i < l{localsCount}; i++)",
                                     $@"{{",
-                                    $@"    count++;",
-                                    $@"    for (size_t i = 0; i < l{localsCount}; i++)",
-                                    $@"    {{",
-                                    $@"        next();",
-                                    $@"    }}",
-                                    $@"    continue;",
+                                    $@"    next();",
                                     $@"}}",
+                                    $@"continue;",
                                 });
                             }
                             else
@@ -149,14 +148,14 @@ namespace XCG.Generators.Cpp
                         isFirst = false;
                     }
                     localLoop.Add(new FullBody { $@"break;" });
-                    scopePart.Add(new FullBody
+                    if (require.Range.From > 0)
                     {
-                        $@"if (count < {require.Range.From})",
-                        $@"{{",
-                        $@"    r.reset();",
-                        $@"    return {{}};",
-                        $@"}}",
-                    });
+                        scopePart.Add(new IfPart(IfPart.EIfScope.If, $@"count < {require.Range.From}")
+                        {
+                            $@"{resetable}.reset();",
+                            $@"return {{}};",
+                        });
+                    }
                 }
                 else if (statement is Parsing.TokenStatements.Backtrack backtrack)
                 {
@@ -169,7 +168,12 @@ namespace XCG.Generators.Cpp
                 }
             }
 
-            methodDefinition.Add(new FullBody { $@"return {{}};" });
+            var resultVariable = cppOptions.ToUnique("resultVariable");
+            methodDefinition.Add(new FullBody {
+                $@"auto {resultVariable} = m_offset - {resetable}.m_offset;",
+                $@"{resetable}.reset();",
+                $@"return {resultVariable};",
+            });
             return new[] { methodDefinition };
         }
 
@@ -425,6 +429,7 @@ namespace XCG.Generators.Cpp
         /// <returns></returns>
         public static MethodDefinition CreateMethodDefinition(this Parsing.Statements.Match match, CppOptions cppOptions, int skip, string typeName)
         {
+            // ToDo: Rewrite to use skip method too
             // Unique Variables
             string? resetable = cppOptions.ToUnique("resetable");
 
@@ -432,10 +437,16 @@ namespace XCG.Generators.Cpp
 
             var references = match.Parts.Cast<Parsing.Reference>().Skip(skip).ToArray();
 
-
+            var matchName = String.Join("_", match.Parts.WhereIs<Parsing.Reference>().Select((q) => q.Refered switch
+            {
+                Parsing.Token token => token.Identifier,
+                Parsing.Production production => production.Identifier,
+                Parsing.LeftRecursive leftRecursive => leftRecursive.Identifier,
+                _ => q.Text,
+            })).Replace("-", String.Empty).Replace("@", String.Empty);
             var methodDefinition = new MethodDefinition(
                 EType.Boolean,
-                cppOptions.ToUnique(String.Concat(cppOptions.MethodsPrefix, "match")),
+                cppOptions.ToUnique(String.Concat(cppOptions.MethodsPrefix, matchName, "_")),
                 new ArgImpl { Name = isCanVariable, Type = EType.Boolean },
                 new ArgImpl { Name = classInstanceVariable, TypeString = typeName }
             )
@@ -465,7 +476,7 @@ namespace XCG.Generators.Cpp
                         string? call = reference.Refered switch
                         {
                             // Match the different possible refered things into proper conditions
-                            Parsing.Token token => String.Concat("create_token(", token.GetMethodName(), "().value())"),
+                            Parsing.Token token => String.Concat("create_token(", token.GetMethodName(), "().value(), ", cppOptions.TokenEnumName, "::", token.GetCppEnumName(), ")"),
                             Parsing.Production production => String.Concat(production.ToCppMatchMethodName(cppOptions), "()"),
                             Parsing.LeftRecursive leftRecursive => String.Concat(leftRecursive.ToCppMatchMethodName(cppOptions), "()"),
                             _ => throw new FatalException()
@@ -559,20 +570,19 @@ namespace XCG.Generators.Cpp
             bool isFirst = true;
             foreach (var match in matches)
             {
-                methodDefinition.Add($@"{(isFirst ? String.Empty : "else ")}if ({cppOptions.FromCache(match).Name}(true, {{}}))");
-                methodDefinition.Add(new ScopePart{
-                    $@"if ({isCanVariable})",
-                    new ScopePart
+                methodDefinition.Add(new IfPart(isFirst, $@"{cppOptions.FromCache(match).Name}(true, {{}})")
+                {
+                    new IfPart(IfPart.EIfScope.If, isCanVariable)
                     {
-                        $@"{cppOptions.FromCache(match).Name}(true, {classInstanceVariable});"
+                        $@"return true;"
                     },
-                    $@"else",
-                    new ScopePart
+                    new IfPart(IfPart.EIfScope.Else, null)
                     {
+                        $@"{cppOptions.FromCache(match).Name}(false, {classInstanceVariable});",
                         $@"return true;"
                     }
                 });
-                if (isFirst) { isFirst = false; }
+                isFirst = false;
             }
             methodDefinition.Add($@"{resetable}.reset();");
             methodDefinition.Add($@"return false;");
