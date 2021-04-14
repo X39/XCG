@@ -1726,7 +1726,12 @@ namespace XCG.Parsing
                         int length = this.index - start;
                         string? referenceContents = this.contents.Substring(start, length);
                         char lb = this.PeekChar(-1);
-                        if (!((la >= 'a' && la <= 'z') || (la >= 'A' && la <= 'Z') || la == '_'))
+                        if (String.IsNullOrWhiteSpace(referenceContents))
+                        {
+                            this.parseNotes.Add(this.err($@"Reference match is empty."));
+                            this.NextChar();
+                        }
+                        else if (!((la >= 'a' && la <= 'z') || (la >= 'A' && la <= 'Z') || la == '_'))
                         {
                             this.parseNotes.Add(this.err($@"Reference ends with invalid character '{la}' while only {{ a-z, A-Z, 0-9, _ }} was accepted."));
                         }

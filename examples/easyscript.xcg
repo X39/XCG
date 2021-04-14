@@ -1,0 +1,137 @@
+token integer
+    require plus { 0-9 }
+
+token scalar
+    require once { integer }
+    require once .
+    require once { integer }
+    
+token slash: "/"
+    require once /
+    
+token star: "*"
+    require once *
+    
+token plus: "+"
+    require once +
+    
+token minus: "-"
+    require once -
+    
+token underscore: "_"
+    require once _
+
+token ident
+    require once { a-z, A-Z, underscore, minus }
+    require [0, *) { a-z, A-Z, 0-9, underscore, minus }
+    backtrack not once -
+
+production exp-nullar
+    alternatives
+        match "(" @[value]statement ")"
+        match @[value]scalar
+        match @[value]integer
+        match @[value]ident
+
+left-recursive exp-arithmetic-2
+	match @[left]exp-arithmetic-2 "/" @[right]exp-nullar
+		set capture op '/'
+	match @[left]exp-arithmetic-2 "*" @[right]exp-nullar
+		set capture op '*'
+	match @[left]exp-nullar
+
+left-recursive exp-arithmetic-1
+	match @[left]exp-arithmetic-1 "+" @[right]exp-arithmetic-2
+		set capture op '+'
+	match @[left]exp-arithmetic-1 "-" @[right]exp-arithmetic-2
+		set capture op '-'
+	match @[left]exp-arithmetic-2
+    
+left-recursive exp-compare
+	match @[left]exp-compare "<=" @[right]exp-arithmetic-1
+		set capture op1 '<'
+		set capture eq2 '='
+	match @[left]exp-compare "<" @[right]exp-arithmetic-1
+		set capture op1 '<'
+	match @[left]exp-compare ">=" @[right]exp-arithmetic-1
+		set capture op1 '>'
+		set capture op2 '='
+	match @[left]exp-compare ">" @[right]exp-arithmetic-1
+		set capture op1 '>'
+	match @[left]exp-arithmetic-1
+    
+left-recursive exp-equality
+	match @[left]exp-equality "<=" @[right]exp-compare
+		set capture op1 '<'
+		set capture eq2 '='
+	match @[left]exp-equality "<" @[right]exp-compare
+		set capture op1 '<'
+	match @[left]exp-equality ">=" @[right]exp-compare
+		set capture op1 '>'
+		set capture op2 '='
+	match @[left]exp-equality ">" @[right]exp-compare
+		set capture op1 '>'
+	match @[left]exp-compare
+    
+left-recursive exp-and
+	match @[left]exp-and "and" @[right]exp-equality
+	match @[left]exp-equality
+    
+left-recursive exp-or
+	match @[left]exp-or "or" @[right]exp-equality
+	match @[left]exp-equality
+    
+production exp-assignment
+    match @[name] "=" @[value]statement
+
+production statement
+    alternatives
+        match exp-assignment
+        match exp-or
+
+production function-arg
+    match @[name]ident
+    
+production scope
+    match "{"
+    while not match "}"
+        alternatives
+            match control-structure
+            match statement
+    match "}"
+
+production function
+    match "func" @[name]ident "("
+    if match function-arg
+        match @[args]function-arg
+        while not match ")"
+            match "," @[args]function-arg
+    match ")" @[body]scope
+
+production while-loop
+    match "while" "(" @[condition]statement ")" @[body]scope
+
+production if-else
+    match "if" "(" @[condition]statement ")"
+    alternatives
+        match @[if-body]scope
+        match @[if-body]control-structure
+        match @[if-body]statement
+    if match "else"
+        match "else"
+        alternatives
+            match @[else-body]scope
+            match @[else-body]control-structure
+            match @[else-body]statement
+
+production control-structure
+    alternatives
+        match function
+        match while-loop
+        match if-else
+        match scope
+
+production main
+    alternatives
+        match control-structure
+        match statement
