@@ -32,9 +32,9 @@ namespace XCG.Generators.Cpp
             return HashCode.Combine(this.Type, this.TypeString, this.ReferenceCount, this.PointerCount);
         }
 
-        public override string ToString()
+        public string ToString(CppOptions cppOptions)
         {
-            return $"{(TypeString ?? this.Type.GetCppType())}{new string('*', this.PointerCount)}{new string('&', this.ReferenceCount)}";
+            return $"{(TypeString ?? this.Type.GetCppType(cppOptions))}{new string('*', this.PointerCount)}{new string('&', this.ReferenceCount)}";
         }
     }
 }

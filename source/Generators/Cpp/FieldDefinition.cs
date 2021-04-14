@@ -16,14 +16,14 @@ namespace XCG.Generators.Cpp
         {
             this.Type = typeImpl;
         }
-        public void WriteHeader(CppOptions options, StreamWriter writer, string whitespace)
+        public void WriteHeader(CppOptions cppOptions, StreamWriter writer, string whitespace)
         {
             writer.Write(whitespace);
-            writer.Write(Type.ToString());
+            writer.Write(Type.ToString(cppOptions));
             writer.WriteLine(";");
         }
 
-        public void WriteImplementation(CppOptions options, StreamWriter writer, string whitespace)
+        public void WriteImplementation(CppOptions cppOptions, StreamWriter writer, string whitespace)
         {
         }
     }

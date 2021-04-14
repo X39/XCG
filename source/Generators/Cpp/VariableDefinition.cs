@@ -48,10 +48,10 @@ namespace XCG.Generators.Cpp
         {
         }
 
-        public void WriteImplementation(CppOptions options, StreamWriter writer, string whitespace)
+        public void WriteImplementation(CppOptions cppOptions, StreamWriter writer, string whitespace)
         {
             writer.Write(whitespace);
-            writer.Write(Type.GetCppType());
+            writer.Write(Type.GetCppType(cppOptions));
             writer.Write(" ");
             writer.Write(VariableName);
             if (DefaultValue is not null)

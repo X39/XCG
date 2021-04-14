@@ -53,6 +53,10 @@ namespace XCG.Generators.Cpp
                         $@"t.offset = m_offset;",
                         $@"t.length = length;",
                         $@"t.type = type;",
+                        $@"for (auto i = 0; i < length; i++)",
+                        $@"{{",
+                        $@"    next();",
+                        $@"}}",
                         $@"return t;",
                     }
                 },
@@ -192,11 +196,14 @@ namespace XCG.Generators.Cpp
                     Parsing.Token token => token.ToParts(this.Options),
                     _ => throw new NotImplementedException(),
                 }));
-            instanceClass.PublicParts.AddRange(
-                Array.Empty<Parsing.IStatement>()
+
+            var captureClasses = Array.Empty<Parsing.IStatement>()
                 .Concat(parser.Productions.Cast<Parsing.IStatement>())
                 .Concat(parser.LeftRecursives.Cast<Parsing.IStatement>())
-                .Select((q) => Extensions.GetClassDefinition(q, this.Options)));
+                .Select((q) => Extensions.GetClassDefinition(q, this.Options))
+                .ToArray();
+            instanceClass.PublicParts.AddRange(captureClasses);
+            instanceClass.PublicParts.AddRange(captureClasses.Select((q) => q.CreatePrintTreeMethodDefinition(this.Options)));
 
             instanceClass.PublicParts.Add(new MethodDefinition(mainProduction.ToCppTypeName(this.Options, true).ToCppSharedPtrType(), "parse")
             {
@@ -211,6 +218,8 @@ namespace XCG.Generators.Cpp
                 writer.WriteLine($@"#include <string_view>");
                 writer.WriteLine($@"#include <optional>");
                 writer.WriteLine($@"#include <variant>");
+                writer.WriteLine($@"#include <sstream>");
+                writer.WriteLine($@"#include <vector>");
                 writer.WriteLine();
                 if (this.Options.NamespaceName is null)
                 {

@@ -22,5 +22,6 @@
         OptionalStringView,
         OptionalSizeT,
         OptionalChar,
+        Token
     }
 }

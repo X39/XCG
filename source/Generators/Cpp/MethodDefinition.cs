@@ -48,11 +48,11 @@ namespace XCG.Generators.Cpp
         public MethodDefinition(string returnType, string name, params ArgImpl[] arguments) : this(returnType, name, null, arguments as IEnumerable<ArgImpl>) { }
         public MethodDefinition(string returnType, string name, string afterMethodImpl, params ArgImpl[] arguments) : this(returnType, name, afterMethodImpl, arguments as IEnumerable<ArgImpl>) { }
 
-        public override void WriteHeader(CppOptions options, StreamWriter writer, string whitespace)
+        public override void WriteHeader(CppOptions cppOptions, StreamWriter writer, string whitespace)
         {
             if (this.HeaderOnly)
             {
-                this.WriteImplementationActual(options, writer, whitespace);
+                this.WriteImplementationActual(cppOptions, writer, whitespace);
                 return;
             }
             writer.Write(whitespace);
@@ -62,7 +62,7 @@ namespace XCG.Generators.Cpp
             }
             if (this.ReturnTypeString is null)
             {
-                writer.Write(this.ReturnType.GetCppType());
+                writer.Write(this.ReturnType.GetCppType(cppOptions));
                 writer.Write(" ");
             }
             else if (!String.IsNullOrWhiteSpace(this.ReturnTypeString))
@@ -72,7 +72,7 @@ namespace XCG.Generators.Cpp
             }
             writer.Write(this.FullName);
             writer.Write("(");
-            writer.Write(String.Join(", ", this.Arguments.Select((q) => q.ToString())));
+            writer.Write(String.Join(", ", this.Arguments.Select((q) => q.ToString(cppOptions))));
             writer.WriteLine(");");
         }
 
@@ -83,12 +83,12 @@ namespace XCG.Generators.Cpp
                 this.WriteImplementationActual(options, writer, whitespace);
             }
         }
-        private void WriteImplementationActual(CppOptions options, StreamWriter writer, string whitespace)
+        private void WriteImplementationActual(CppOptions cppOptions, StreamWriter writer, string whitespace)
         {
             writer.Write(whitespace);
             if (this.ReturnTypeString is null)
             {
-                writer.Write(this.ReturnType.GetCppType());
+                writer.Write(this.ReturnType.GetCppType(cppOptions));
                 writer.Write(" ");
             }
             else if (!String.IsNullOrWhiteSpace(this.ReturnTypeString))
@@ -98,7 +98,7 @@ namespace XCG.Generators.Cpp
             }
             writer.Write(this.FullName);
             writer.Write("(");
-            writer.Write(String.Join(", ", this.Arguments.Select((q) => q.ToString())));
+            writer.Write(String.Join(", ", this.Arguments.Select((q) => q.ToString(cppOptions))));
             writer.Write(")");
             writer.WriteLine(this.AfterMethodImpl ?? String.Empty);
 
@@ -108,7 +108,7 @@ namespace XCG.Generators.Cpp
             string? subWhitespace = String.Concat(whitespace, "    ");
             foreach (var generatorPart in this.Parts)
             {
-                generatorPart.WriteImplementation(options, writer, subWhitespace);
+                generatorPart.WriteImplementation(cppOptions, writer, subWhitespace);
             }
 
             writer.Write(whitespace);

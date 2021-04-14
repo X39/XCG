@@ -13,9 +13,9 @@
         public int PointerCount { get; init; }
         public string Name { get; init; }
 
-        public override string ToString()
+        public string ToString(CppOptions cppOptions)
         {
-            return $"{(TypeString ?? this.Type.GetCppType())}{new string('*', this.PointerCount)}{new string('&', this.ReferenceCount)} {this.Name}";
+            return $"{(TypeString ?? this.Type.GetCppType(cppOptions))}{new string('*', this.PointerCount)}{new string('&', this.ReferenceCount)} {this.Name}";
         }
     }
 }

@@ -8,7 +8,7 @@ namespace XCG.Generators.Cpp
 {
     internal static class ETypeExtensions
     {
-        internal static string GetCppType(this EType type)
+        internal static string GetCppType(this EType type, CppOptions cppOptions)
         {
             return type switch
             {
@@ -32,6 +32,7 @@ namespace XCG.Generators.Cpp
                 EType.OptionalStringView    => "std::optional<std::string_view>",
                 EType.OptionalSizeT         => "std::optional<size_t>",
                 EType.OptionalChar          => "std::optional<char>",
+                EType.Token => String.Concat(cppOptions.TypePrefix, cppOptions.TokenName),
                 _ => throw new NotImplementedException(),
             };
         }

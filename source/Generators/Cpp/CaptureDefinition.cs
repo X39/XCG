@@ -15,7 +15,7 @@ namespace XCG.Generators.Cpp
             this.Name = name;
             this.Types = typeImpls.ToList();
         }
-        public void WriteHeader(CppOptions options, StreamWriter writer, string whitespace)
+        public void WriteHeader(CppOptions cppOptions, StreamWriter writer, string whitespace)
         {
             if (this.Types.Count == 0)
             {
@@ -25,7 +25,7 @@ namespace XCG.Generators.Cpp
             {
                 var typeImpl = this.Types.First();
                 writer.Write(whitespace);
-                writer.Write(typeImpl.ToString());
+                writer.Write(typeImpl.ToString(cppOptions));
                 writer.Write($" ");
                 writer.Write(this.Name);
                 writer.WriteLine(";");
@@ -38,7 +38,7 @@ namespace XCG.Generators.Cpp
                 foreach (var typeImpl in this.Types)
                 {
                     if (isFirst) { isFirst = false; } else { writer.Write(", "); }
-                    writer.Write(typeImpl.ToString());
+                    writer.Write(typeImpl.ToString(cppOptions));
                 }
                 writer.Write($"> ");
                 writer.Write(this.Name);
@@ -46,7 +46,7 @@ namespace XCG.Generators.Cpp
             }
         }
 
-        public void WriteImplementation(CppOptions options, StreamWriter writer, string whitespace)
+        public void WriteImplementation(CppOptions cppOptions, StreamWriter writer, string whitespace)
         {
         }
     }
