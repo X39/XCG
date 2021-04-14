@@ -552,18 +552,24 @@ namespace XCG
                 return hints;
             });
 
-            // grammar has a main production
-            // left-recursive last match has exactly one part
+            // require only ever refers to tokens
             validator.Register("XCG", ESeverity.Error, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
-                var mainProduction = parser.Productions.FirstOrDefault((q) => q.Identifier == "main");
-                if (mainProduction is null)
+                var requires = parser.Tokens.SelectMany((q) => q.Statements.WhereIs<Parsing.TokenStatements.Require>());
+                foreach (var require in requires)
                 {
-                    hints.Add(new Validation.Hint
+                    var references = require.Parts.WhereIs<Parsing.Reference>();
+                    foreach (var reference in references)
                     {
-                        Message = $@"No ""main"" production found."
-                    });
+                        if (reference.Refered is not Parsing.Token)
+                        {
+                            hints.Add(new Validation.Hint
+                            {
+                                Message = $@"Require may only refer to tokens."
+                            });
+                        }
+                    }
                 }
                 return hints;
             });

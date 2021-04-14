@@ -23,22 +23,41 @@ namespace XCG.Generators.Cpp
         /// the provided values in as comma separated list.
         /// </summary>
         public string[] Args { get; set; }
-        public EType Type { get; set; }
+        public TypeImpl Type { get; set; }
 
         public VariableDefinition(EType typeImpl, string variableName)
+        {
+            this.Type = new TypeImpl { Type = typeImpl };
+            this.VariableName = variableName;
+            this.Args = Array.Empty<string>();
+        }
+        public VariableDefinition(EType typeImpl, string variableName, string defaultValue)
+        {
+            this.Type = new TypeImpl { Type = typeImpl };
+            this.VariableName = variableName;
+            this.DefaultValue = defaultValue;
+            this.Args = Array.Empty<string>();
+        }
+        public VariableDefinition(EType typeImpl, string variableName, params string[] defaultValue)
+        {
+            this.Type = new TypeImpl { Type = typeImpl };
+            this.VariableName = variableName;
+            this.Args = defaultValue;
+        }
+        public VariableDefinition(TypeImpl typeImpl, string variableName)
         {
             this.Type = typeImpl;
             this.VariableName = variableName;
             this.Args = Array.Empty<string>();
         }
-        public VariableDefinition(EType typeImpl, string variableName, string defaultValue)
+        public VariableDefinition(TypeImpl typeImpl, string variableName, string defaultValue)
         {
             this.Type = typeImpl;
             this.VariableName = variableName;
             this.DefaultValue = defaultValue;
             this.Args = Array.Empty<string>();
         }
-        public VariableDefinition(EType typeImpl, string variableName, params string[] defaultValue)
+        public VariableDefinition(TypeImpl typeImpl, string variableName, params string[] defaultValue)
         {
             this.Type = typeImpl;
             this.VariableName = variableName;
@@ -51,7 +70,7 @@ namespace XCG.Generators.Cpp
         public void WriteImplementation(CppOptions cppOptions, StreamWriter writer, string whitespace)
         {
             writer.Write(whitespace);
-            writer.Write(Type.GetCppType(cppOptions));
+            writer.Write(Type.ToString(cppOptions));
             writer.Write(" ");
             writer.Write(VariableName);
             if (DefaultValue is not null)
