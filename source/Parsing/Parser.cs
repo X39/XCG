@@ -800,7 +800,7 @@ namespace XCG.Parsing
                     this.NextChar();
                     value = new Expressions.Character(this.NextChar());
                     if (this.PeekChar() == '\'')
-                    { NextChar(); }
+                    { this.NextChar(); }
                     else { this.parseNotes.Add(this.err($"Expected character to be ended with `'` but got `{this.PeekChar()}`")); }
                     return true;
                 }
@@ -1352,31 +1352,39 @@ namespace XCG.Parsing
                 statement.Negated = true;
                 this.Skip();
             }
-            while (this.PeekChar() != '\n')
+            IStatement? part = null;
+            if (this.TryMatchNoCapture("match"))
             {
-                IStatement? part = null;
-                if (this.TryMatchNoCapture("match"))
+                part = this.ParseMatch(0, skipWhitespace: false, allowCaptures: false, allowChildren: false);
+            }
+            else if (this.TryMatchNoCapture("get"))
+            {
+                part = this.ParseGet(0, skipWhitespace: false);
+            }
+            else if (this.TryMatch("eval"))
+            {
+                part = this.ParseValueExpression();
+            }
+            else
+            {
+                this.parseNotes.Add(this.err("Cannot parse while contents"));
+                while (!Char.IsWhiteSpace(this.PeekChar())) { this.NextChar(); }
+            }
+            if (part != null)
+            {
+                statement.Condition = part;
+            }
+            this.Skip();
+            if (this.PeekChar() != '\n')
+            {
+                if (statement.Condition is null)
                 {
-                    part = this.ParseMatch(0, skipWhitespace: false, allowCaptures: false, allowChildren: false);
+                    this.parseNotes.Add(this.wrn("Content after while condition. Ignoring"));
                 }
-                else if (this.TryMatchNoCapture("get"))
+                while (this.PeekChar() != '\n')
                 {
-                    part = this.ParseGet(0, skipWhitespace: false);
+                    this.NextChar();
                 }
-                else if (this.TryMatch("eval"))
-                {
-                    part = this.ParseValueExpression();
-                }
-                else
-                {
-                    this.parseNotes.Add(this.err("Cannot parse while contents"));
-                    while (!Char.IsWhiteSpace(this.PeekChar())) { this.NextChar(); }
-                }
-                if (part != null)
-                {
-                    statement.Condition.Add(part);
-                }
-                this.Skip();
             }
             this.SkipLine();
             int newWsLevel;
@@ -1408,31 +1416,44 @@ namespace XCG.Parsing
                 statement.Negated = true;
                 this.Skip();
             }
-            while (this.PeekChar() != '\n')
+            IStatement? part = null;
+            if (this.TryMatchNoCapture("match"))
             {
-                IStatement? part = null;
-                if (this.TryMatchNoCapture("match"))
+                part = this.ParseMatch(0, skipWhitespace: false, allowCaptures: false, allowChildren: false);
+            }
+            else if (this.TryMatchNoCapture("get"))
+            {
+                part = this.ParseGet(0, skipWhitespace: false);
+            }
+            else if (this.TryMatch("eval"))
+            {
+                part = this.ParseValueExpression();
+            }
+            else
+            {
+                this.parseNotes.Add(this.err("Cannot parse if contents"));
+                while (!Char.IsWhiteSpace(this.PeekChar())) { this.NextChar(); }
+            }
+            if (part != null)
+            {
+                statement.Condition = part;
+            }
+            this.Skip();
+            if (this.PeekChar() != '\n')
+            {
+                if (statement.Condition is null)
                 {
-                    part = this.ParseMatch(0, skipWhitespace: false, allowCaptures: false, allowChildren: false);
+                    this.parseNotes.Add(this.wrn("Content after if condition. Ignoring"));
                 }
-                else if (this.TryMatchNoCapture("get"))
+                while (this.PeekChar() != '\n')
                 {
-                    part = this.ParseGet(0, skipWhitespace: false);
+                    this.NextChar();
                 }
-                else if (this.TryMatch("eval"))
-                {
-                    part = this.ParseValueExpression();
-                }
-                else
-                {
-                    this.parseNotes.Add(this.err("Cannot parse if contents"));
-                    while (!Char.IsWhiteSpace(this.PeekChar())) { this.NextChar(); }
-                }
-                if (part != null)
-                {
-                    statement.Condition.Add(part);
-                }
-                this.Skip();
+            }
+
+            if (statement.Condition is null)
+            {
+                this.parseNotes.Add(this.err("If requires condition"));
             }
             this.SkipLine();
             int newWsLevel;

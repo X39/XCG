@@ -13,6 +13,7 @@ namespace XCG.Generators.Cpp
         public string? TypeString { get; init; }
         public int ReferenceCount { get; init; }
         public int PointerCount { get; init; }
+        public bool IsConst { get; init; }
 
         public override bool Equals(object? obj)
         {
@@ -34,7 +35,7 @@ namespace XCG.Generators.Cpp
 
         public string ToString(CppOptions cppOptions)
         {
-            return $"{(TypeString ?? this.Type.GetCppType(cppOptions))}{new string('*', this.PointerCount)}{new string('&', this.ReferenceCount)}";
+            return $"{(IsConst ? "const " : String.Empty)}{(TypeString ?? this.Type.GetCppType(cppOptions))}{new string('*', this.PointerCount)}{new string('&', this.ReferenceCount)}";
         }
     }
 }

@@ -183,6 +183,7 @@ namespace XCG.Generators.Cpp
             CaptureDefinition[] captureDefinitions = this.PublicParts.Concat(this.ProtectedParts).Concat(this.PrivateParts).WhereIs<CaptureDefinition>().ToArray();
             for (int i = 0; i < captureDefinitions.Length; i++)
             {
+                var labelname = $"l{i:000}";
                 IEnumerable<ICppPart> getPrintMethod(CaptureDefinition def, TypeImpl type, bool getRequired)
                 {
                     var nav = $"node{n}{def.Name}";
@@ -246,7 +247,7 @@ namespace XCG.Generators.Cpp
                             case EType.Token:
                                 yield return new ScopePart
                                 {
-                                    getRequired ? $@"auto tmp = std::get<{type.ToString(cppOptions)}>({nav});" : $@"auto tmp = {nav}",
+                                    getRequired ? $@"auto tmp = std::get<{type.ToString(cppOptions)}>({nav});" : $@"auto tmp = {nav};",
                                     $@"sstream << ""token (L"" << tmp.line << ""; C"" << tmp.column << ""; O"" << tmp.offset << "") `"" << contents.substr(tmp.offset, tmp.length) << ""`\n"";"
                                 };
                                 yield break;
@@ -324,7 +325,7 @@ namespace XCG.Generators.Cpp
                 if (captureDefinition.Types.Count == 1)
                 {
                     var type = captureDefinition.Types.First();
-                    methodDefinition.AddRange(getWhitespaceGood(captureDefinition, type, false, new FullBody { }, new FullBody { $@"return;" }));
+                    methodDefinition.AddRange(getWhitespaceGood(captureDefinition, type, false, new FullBody { }, new FullBody { $@"goto {labelname};" }));
                 }
                 else
                 {
@@ -335,7 +336,7 @@ namespace XCG.Generators.Cpp
                     foreach (var type in captureDefinition.Types)
                     {
                         switchScope.Add($"case {index++}:");
-                        switchScope.AddRange(getWhitespaceGood(captureDefinition, type, true, new FullBody { }, new FullBody { $@"return;" }));
+                        switchScope.AddRange(getWhitespaceGood(captureDefinition, type, true, new FullBody { }, new FullBody { $@"goto {labelname};" }));
                         switchScope.Add("break;");
                     }
                 }
@@ -401,6 +402,7 @@ namespace XCG.Generators.Cpp
                 methodDefinition.Add($@"v.pop_back();");
                 methodDefinition.Add($@"v.pop_back();");
                 methodDefinition.Add($@"v.pop_back();");
+                methodDefinition.Add($@"{labelname}:");
             }
 
 

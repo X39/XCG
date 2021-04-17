@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 
@@ -12,6 +13,8 @@ namespace XCG.Generators.Cpp
 
         public CaptureDefinition(string name, params TypeImpl[] typeImpls)
         {
+            Contract.Assert(!name.Contains('-'));
+            Contract.Assert(!name.Contains('@'));
             this.Name = name;
             this.Types = typeImpls.ToList();
         }

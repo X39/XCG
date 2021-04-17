@@ -4,12 +4,17 @@ using System.IO;
 
 namespace XCG.Generators.Cpp
 {
-    internal class WhileLoopPart : CppContainerBase
+    internal class WhilePart : CppContainerBase
     {
         private readonly EUsage usage;
         private readonly string condition;
         #region ICppPart
-        public WhileLoopPart(string condition, EUsage usage = EUsage.Implementation)
+        public WhilePart(EUsage usage = EUsage.Implementation)
+        {
+            this.condition = "true";
+            this.usage = usage;
+        }
+        public WhilePart(string condition, EUsage usage = EUsage.Implementation)
         {
             this.condition = condition;
             this.usage = usage;

@@ -8,7 +8,7 @@ namespace XCG.Parsing.Statements
 {
     public class While : IStatement
     {
-        public List<IStatement> Condition { get; set; } = new List<IStatement>();
+        public IStatement? Condition { get; set; } = null;
         public List<IStatement> Statements { get; set; } = new List<IStatement>();
         public bool Negated { get; internal set; }
         public Diagnostic Diagnostics { get; internal set; }

@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -27,12 +28,16 @@ namespace XCG.Generators.Cpp
 
         public VariableDefinition(EType typeImpl, string variableName)
         {
+            Contract.Assert(!variableName.Contains('-'));
+            Contract.Assert(!variableName.Contains('@'));
             this.Type = new TypeImpl { Type = typeImpl };
             this.VariableName = variableName;
             this.Args = Array.Empty<string>();
         }
         public VariableDefinition(EType typeImpl, string variableName, string defaultValue)
         {
+            Contract.Assert(!variableName.Contains('-'));
+            Contract.Assert(!variableName.Contains('@'));
             this.Type = new TypeImpl { Type = typeImpl };
             this.VariableName = variableName;
             this.DefaultValue = defaultValue;
@@ -40,18 +45,24 @@ namespace XCG.Generators.Cpp
         }
         public VariableDefinition(EType typeImpl, string variableName, params string[] defaultValue)
         {
+            Contract.Assert(!variableName.Contains('-'));
+            Contract.Assert(!variableName.Contains('@'));
             this.Type = new TypeImpl { Type = typeImpl };
             this.VariableName = variableName;
             this.Args = defaultValue;
         }
         public VariableDefinition(TypeImpl typeImpl, string variableName)
         {
+            Contract.Assert(!variableName.Contains('-'));
+            Contract.Assert(!variableName.Contains('@'));
             this.Type = typeImpl;
             this.VariableName = variableName;
             this.Args = Array.Empty<string>();
         }
         public VariableDefinition(TypeImpl typeImpl, string variableName, string defaultValue)
         {
+            Contract.Assert(!variableName.Contains('-'));
+            Contract.Assert(!variableName.Contains('@'));
             this.Type = typeImpl;
             this.VariableName = variableName;
             this.DefaultValue = defaultValue;
@@ -59,6 +70,8 @@ namespace XCG.Generators.Cpp
         }
         public VariableDefinition(TypeImpl typeImpl, string variableName, params string[] defaultValue)
         {
+            Contract.Assert(!variableName.Contains('-'));
+            Contract.Assert(!variableName.Contains('@'));
             this.Type = typeImpl;
             this.VariableName = variableName;
             this.Args = defaultValue;
