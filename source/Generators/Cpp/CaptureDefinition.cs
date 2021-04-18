@@ -11,7 +11,8 @@ namespace XCG.Generators.Cpp
         public List<TypeImpl> Types { get; set; }
         public string Name { get; init; }
 
-        public CaptureDefinition(string name, params TypeImpl[] typeImpls)
+        public CaptureDefinition(string name, params TypeImpl[] typeImpls) : this(name, typeImpls as IEnumerable<TypeImpl>) {}
+        public CaptureDefinition(string name, IEnumerable<TypeImpl> typeImpls)
         {
             Contract.Assert(!name.Contains('-'));
             Contract.Assert(!name.Contains('@'));

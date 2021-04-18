@@ -201,14 +201,27 @@ namespace XCG.Generators.Cpp
                 .Concat(parser.Productions.Cast<Parsing.IStatement>())
                 .Concat(parser.LeftRecursives.Cast<Parsing.IStatement>())
                 .Select((q) => Extensions.GetClassDefinition(q, this.Options))
+                .NotNull()
+                .ToArray();
+            var stateClasses = Array.Empty<Parsing.IStatement>()
+                .Concat(parser.Productions.Cast<Parsing.IStatement>())
+                .Concat(parser.LeftRecursives.Cast<Parsing.IStatement>())
+                .Select((q) => Extensions.GetStateDefinition(q, this.Options))
+                .NotNull()
                 .ToArray();
             instanceClass.PublicParts.AddRange(captureClasses);
+            instanceClass.PublicParts.AddRange(stateClasses);
             instanceClass.PublicParts.AddRange(captureClasses.Select((q) => q.CreatePrintTreeMethodDefinition(this.Options)));
 
             instanceClass.PublicParts.Add(new MethodDefinition(mainProduction.ToCppTypeName(this.Options, true).ToCppSharedPtrType(), "parse")
             {
                 $@"return {mainProduction.ToCppMatchMethodName(this.Options)}();"
             });
+            instanceClass.PublicParts.AddRange(parser.Productions
+                .SelectMany((q) => q.FindChildren<Parsing.Statements.Set>())
+                .Where((q) => q.ActiveScope == EActiveScope.global)
+                .GroupBy((q) => q.Key)
+                .Select((g) => new CaptureDefinition(g.Key, g.Select((q) => q.ToTypeImpl(this.Options)))));
 
             System.IO.Directory.CreateDirectory(output);
             using (var writer = new System.IO.StreamWriter(System.IO.Path.Combine(output, this.Options.HeaderFileName)))

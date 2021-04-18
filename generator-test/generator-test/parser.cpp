@@ -773,7 +773,7 @@ std::optional<size_t> yaoosl::parsing::instance::token__auto_94()
     resetable1.reset();
     return resultVariable24;
 }
-bool yaoosl::parsing::instance::m_auto7_statement_auto9_25(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar> actual)
+bool yaoosl::parsing::instance::m_auto7_statement_auto9_25(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar> actual, yaoosl::parsing::instance::exp_nullar_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token__auto_7();
@@ -850,7 +850,7 @@ bool yaoosl::parsing::instance::m_auto7_statement_auto9_25(bool is_can, std::sha
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_scalar_26(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar> actual)
+bool yaoosl::parsing::instance::m_scalar_26(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar> actual, yaoosl::parsing::instance::exp_nullar_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token_scalar();
@@ -882,7 +882,7 @@ bool yaoosl::parsing::instance::m_scalar_26(bool is_can, std::shared_ptr<yaoosl:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_integer_27(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar> actual)
+bool yaoosl::parsing::instance::m_integer_27(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar> actual, yaoosl::parsing::instance::exp_nullar_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token_integer();
@@ -914,7 +914,7 @@ bool yaoosl::parsing::instance::m_integer_27(bool is_can, std::shared_ptr<yaoosl
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_ident_28(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar> actual)
+bool yaoosl::parsing::instance::m_ident_28(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar> actual, yaoosl::parsing::instance::exp_nullar_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token_ident();
@@ -946,10 +946,10 @@ bool yaoosl::parsing::instance::m_ident_28(bool is_can, std::shared_ptr<yaoosl::
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives29(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar> actual)
+bool yaoosl::parsing::instance::alternatives29(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar> actual, yaoosl::parsing::instance::exp_nullar_state& state)
 {
     resetable resetable1(*this);
-    if (m_auto7_statement_auto9_25(true, {}))
+    if (m_auto7_statement_auto9_25(true, {}, state))
     {
         if (is_can)
         {
@@ -958,11 +958,11 @@ bool yaoosl::parsing::instance::alternatives29(bool is_can, std::shared_ptr<yaoo
         else
         {
             resetable1.reset();
-            m_auto7_statement_auto9_25(false, actual);
+            m_auto7_statement_auto9_25(false, actual, state);
             return true;
         }
     }
-    else if (m_scalar_26(true, {}))
+    else if (m_scalar_26(true, {}, state))
     {
         if (is_can)
         {
@@ -971,11 +971,11 @@ bool yaoosl::parsing::instance::alternatives29(bool is_can, std::shared_ptr<yaoo
         else
         {
             resetable1.reset();
-            m_scalar_26(false, actual);
+            m_scalar_26(false, actual, state);
             return true;
         }
     }
-    else if (m_integer_27(true, {}))
+    else if (m_integer_27(true, {}, state))
     {
         if (is_can)
         {
@@ -984,11 +984,11 @@ bool yaoosl::parsing::instance::alternatives29(bool is_can, std::shared_ptr<yaoo
         else
         {
             resetable1.reset();
-            m_integer_27(false, actual);
+            m_integer_27(false, actual, state);
             return true;
         }
     }
-    else if (m_ident_28(true, {}))
+    else if (m_ident_28(true, {}, state))
     {
         if (is_can)
         {
@@ -997,7 +997,7 @@ bool yaoosl::parsing::instance::alternatives29(bool is_can, std::shared_ptr<yaoo
         else
         {
             resetable1.reset();
-            m_ident_28(false, actual);
+            m_ident_28(false, actual, state);
             return true;
         }
     }
@@ -1007,7 +1007,8 @@ bool yaoosl::parsing::instance::alternatives29(bool is_can, std::shared_ptr<yaoo
 bool yaoosl::parsing::instance::p_can_exp_nullar()
 {
     resetable resetable1(*this);
-    if (!alternatives29(true, {}))
+    exp_nullar_state state;
+    if (!alternatives29(true, {}, state))
     {
         resetable1.reset();
         return false;
@@ -1017,11 +1018,12 @@ bool yaoosl::parsing::instance::p_can_exp_nullar()
 std::shared_ptr<yaoosl::parsing::instance::exp_nullar> yaoosl::parsing::instance::p_match_exp_nullar()
 {
     auto actual = std::make_shared<yaoosl::parsing::instance::exp_nullar>();
+    exp_nullar_state state;
     resetable resetable2(*this);
-    if (alternatives29(true, {}))
+    if (alternatives29(true, {}, state))
     {
         resetable2.reset();
-        alternatives29(false, actual);
+        alternatives29(false, actual, state);
     }
     else
     {
@@ -1029,7 +1031,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_nullar> yaoosl::parsing::instance
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_integer_auto62_statement_30(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_assignment> actual)
+bool yaoosl::parsing::instance::m_integer_auto62_statement_30(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_assignment> actual, yaoosl::parsing::instance::exp_assignment_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token_integer();
@@ -1106,7 +1108,8 @@ bool yaoosl::parsing::instance::m_integer_auto62_statement_30(bool is_can, std::
 bool yaoosl::parsing::instance::p_can_exp_assignment()
 {
     resetable resetable1(*this);
-    if (!m_integer_auto62_statement_30(true, {}))
+    exp_assignment_state state;
+    if (!m_integer_auto62_statement_30(true, {}, state))
     {
         resetable1.reset();
         return false;
@@ -1116,11 +1119,12 @@ bool yaoosl::parsing::instance::p_can_exp_assignment()
 std::shared_ptr<yaoosl::parsing::instance::exp_assignment> yaoosl::parsing::instance::p_match_exp_assignment()
 {
     auto actual = std::make_shared<yaoosl::parsing::instance::exp_assignment>();
+    exp_assignment_state state;
     resetable resetable2(*this);
-    if (m_integer_auto62_statement_30(true, {}))
+    if (m_integer_auto62_statement_30(true, {}, state))
     {
         resetable2.reset();
-        m_integer_auto62_statement_30(false, actual);
+        m_integer_auto62_statement_30(false, actual, state);
     }
     else
     {
@@ -1128,7 +1132,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_assignment> yaoosl::parsing::inst
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_expassignment_31(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement> actual)
+bool yaoosl::parsing::instance::m_expassignment_31(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement> actual, yaoosl::parsing::instance::statement_state& state)
 {
     resetable resetable1(*this);
     if (p_can_exp_assignment())
@@ -1154,7 +1158,7 @@ bool yaoosl::parsing::instance::m_expassignment_31(bool is_can, std::shared_ptr<
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expor_32(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement> actual)
+bool yaoosl::parsing::instance::m_expor_32(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement> actual, yaoosl::parsing::instance::statement_state& state)
 {
     resetable resetable1(*this);
     if (lr_can_exp_or())
@@ -1180,10 +1184,10 @@ bool yaoosl::parsing::instance::m_expor_32(bool is_can, std::shared_ptr<yaoosl::
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives33(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement> actual)
+bool yaoosl::parsing::instance::alternatives33(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement> actual, yaoosl::parsing::instance::statement_state& state)
 {
     resetable resetable1(*this);
-    if (m_expassignment_31(true, {}))
+    if (m_expassignment_31(true, {}, state))
     {
         if (is_can)
         {
@@ -1192,11 +1196,11 @@ bool yaoosl::parsing::instance::alternatives33(bool is_can, std::shared_ptr<yaoo
         else
         {
             resetable1.reset();
-            m_expassignment_31(false, actual);
+            m_expassignment_31(false, actual, state);
             return true;
         }
     }
-    else if (m_expor_32(true, {}))
+    else if (m_expor_32(true, {}, state))
     {
         if (is_can)
         {
@@ -1205,7 +1209,7 @@ bool yaoosl::parsing::instance::alternatives33(bool is_can, std::shared_ptr<yaoo
         else
         {
             resetable1.reset();
-            m_expor_32(false, actual);
+            m_expor_32(false, actual, state);
             return true;
         }
     }
@@ -1215,7 +1219,8 @@ bool yaoosl::parsing::instance::alternatives33(bool is_can, std::shared_ptr<yaoo
 bool yaoosl::parsing::instance::p_can_statement()
 {
     resetable resetable1(*this);
-    if (!alternatives33(true, {}))
+    statement_state state;
+    if (!alternatives33(true, {}, state))
     {
         resetable1.reset();
         return false;
@@ -1225,11 +1230,12 @@ bool yaoosl::parsing::instance::p_can_statement()
 std::shared_ptr<yaoosl::parsing::instance::statement> yaoosl::parsing::instance::p_match_statement()
 {
     auto actual = std::make_shared<yaoosl::parsing::instance::statement>();
+    statement_state state;
     resetable resetable2(*this);
-    if (alternatives33(true, {}))
+    if (alternatives33(true, {}, state))
     {
         resetable2.reset();
-        alternatives33(false, actual);
+        alternatives33(false, actual, state);
     }
     else
     {
@@ -1237,7 +1243,7 @@ std::shared_ptr<yaoosl::parsing::instance::statement> yaoosl::parsing::instance:
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_ident_34(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function_arg> actual)
+bool yaoosl::parsing::instance::m_ident_34(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function_arg> actual, yaoosl::parsing::instance::function_arg_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token_ident();
@@ -1272,7 +1278,8 @@ bool yaoosl::parsing::instance::m_ident_34(bool is_can, std::shared_ptr<yaoosl::
 bool yaoosl::parsing::instance::p_can_function_arg()
 {
     resetable resetable1(*this);
-    if (!m_ident_34(true, {}))
+    function_arg_state state;
+    if (!m_ident_34(true, {}, state))
     {
         resetable1.reset();
         return false;
@@ -1282,11 +1289,12 @@ bool yaoosl::parsing::instance::p_can_function_arg()
 std::shared_ptr<yaoosl::parsing::instance::function_arg> yaoosl::parsing::instance::p_match_function_arg()
 {
     auto actual = std::make_shared<yaoosl::parsing::instance::function_arg>();
+    function_arg_state state;
     resetable resetable2(*this);
-    if (m_ident_34(true, {}))
+    if (m_ident_34(true, {}, state))
     {
         resetable2.reset();
-        m_ident_34(false, actual);
+        m_ident_34(false, actual, state);
     }
     else
     {
@@ -1294,7 +1302,7 @@ std::shared_ptr<yaoosl::parsing::instance::function_arg> yaoosl::parsing::instan
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_auto67_35(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope> actual)
+bool yaoosl::parsing::instance::m_auto67_35(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope> actual, yaoosl::parsing::instance::scope_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token__auto_67();
@@ -1329,7 +1337,7 @@ bool yaoosl::parsing::instance::m_auto67_35(bool is_can, std::shared_ptr<yaoosl:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_controlstructure_36(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope> actual)
+bool yaoosl::parsing::instance::m_controlstructure_36(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope> actual, yaoosl::parsing::instance::scope_state& state)
 {
     resetable resetable1(*this);
     if (p_can_control_structure())
@@ -1355,7 +1363,7 @@ bool yaoosl::parsing::instance::m_controlstructure_36(bool is_can, std::shared_p
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_statement_37(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope> actual)
+bool yaoosl::parsing::instance::m_statement_37(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope> actual, yaoosl::parsing::instance::scope_state& state)
 {
     resetable resetable1(*this);
     if (p_can_statement())
@@ -1381,10 +1389,10 @@ bool yaoosl::parsing::instance::m_statement_37(bool is_can, std::shared_ptr<yaoo
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives38(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope> actual)
+bool yaoosl::parsing::instance::alternatives38(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope> actual, yaoosl::parsing::instance::scope_state& state)
 {
     resetable resetable1(*this);
-    if (m_controlstructure_36(true, {}))
+    if (m_controlstructure_36(true, {}, state))
     {
         if (is_can)
         {
@@ -1393,11 +1401,11 @@ bool yaoosl::parsing::instance::alternatives38(bool is_can, std::shared_ptr<yaoo
         else
         {
             resetable1.reset();
-            m_controlstructure_36(false, actual);
+            m_controlstructure_36(false, actual, state);
             return true;
         }
     }
-    else if (m_statement_37(true, {}))
+    else if (m_statement_37(true, {}, state))
     {
         if (is_can)
         {
@@ -1406,14 +1414,14 @@ bool yaoosl::parsing::instance::alternatives38(bool is_can, std::shared_ptr<yaoo
         else
         {
             resetable1.reset();
-            m_statement_37(false, actual);
+            m_statement_37(false, actual, state);
             return true;
         }
     }
     resetable1.reset();
     return false;
 }
-bool yaoosl::parsing::instance::m_auto68_39(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope> actual)
+bool yaoosl::parsing::instance::m_auto68_39(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope> actual, yaoosl::parsing::instance::scope_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token__auto_68();
@@ -1448,19 +1456,19 @@ bool yaoosl::parsing::instance::m_auto68_39(bool is_can, std::shared_ptr<yaoosl:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::while40_41(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope> actual)
+bool yaoosl::parsing::instance::while40_41(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope> actual, yaoosl::parsing::instance::scope_state& state)
 {
     resetable resetable1(*this);
-    bool cond2 = m_auto68_39(true, {});
+    bool cond2 = m_auto68_39(true, {}, state);
     while (cond2)
     {
         return false;
-        alternatives38(false, actual);
-        bool cond2 = m_auto68_39(true, {});
+        alternatives38(false, actual, state);
+        bool cond2 = m_auto68_39(true, {}, state);
     }
     return true;
 }
-bool yaoosl::parsing::instance::m_auto68_42(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope> actual)
+bool yaoosl::parsing::instance::m_auto68_42(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope> actual, yaoosl::parsing::instance::scope_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token__auto_68();
@@ -1498,17 +1506,18 @@ bool yaoosl::parsing::instance::m_auto68_42(bool is_can, std::shared_ptr<yaoosl:
 bool yaoosl::parsing::instance::p_can_scope()
 {
     resetable resetable1(*this);
-    if (!m_auto67_35(true, {}))
+    scope_state state;
+    if (!m_auto67_35(true, {}, state))
     {
         resetable1.reset();
         return false;
     }
-    else if (!while40_41(true, {}))
+    else if (!while40_41(true, {}, state))
     {
         resetable1.reset();
         return false;
     }
-    else if (!m_auto68_42(true, {}))
+    else if (!m_auto68_42(true, {}, state))
     {
         resetable1.reset();
         return false;
@@ -1518,31 +1527,32 @@ bool yaoosl::parsing::instance::p_can_scope()
 std::shared_ptr<yaoosl::parsing::instance::scope> yaoosl::parsing::instance::p_match_scope()
 {
     auto actual = std::make_shared<yaoosl::parsing::instance::scope>();
+    scope_state state;
     resetable resetable2(*this);
-    if (m_auto67_35(true, {}))
+    if (m_auto67_35(true, {}, state))
     {
         resetable2.reset();
-        m_auto67_35(false, actual);
+        m_auto67_35(false, actual, state);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)");
     }
     resetable resetable3(*this);
-    if (while40_41(true, {}))
+    if (while40_41(true, {}, state))
     {
         resetable3.reset();
-        while40_41(false, actual);
+        while40_41(false, actual, state);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)");
     }
     resetable resetable4(*this);
-    if (m_auto68_42(true, {}))
+    if (m_auto68_42(true, {}, state))
     {
         resetable4.reset();
-        m_auto68_42(false, actual);
+        m_auto68_42(false, actual, state);
     }
     else
     {
@@ -1550,7 +1560,7 @@ std::shared_ptr<yaoosl::parsing::instance::scope> yaoosl::parsing::instance::p_m
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_auto72_ident_auto7_43(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function> actual)
+bool yaoosl::parsing::instance::m_auto72_ident_auto7_43(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function> actual, yaoosl::parsing::instance::function_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token__auto_72();
@@ -1632,7 +1642,7 @@ bool yaoosl::parsing::instance::m_auto72_ident_auto7_43(bool is_can, std::shared
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_functionarg_44(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function> actual)
+bool yaoosl::parsing::instance::m_functionarg_44(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function> actual, yaoosl::parsing::instance::function_state& state)
 {
     resetable resetable1(*this);
     if (p_can_function_arg())
@@ -1659,7 +1669,7 @@ bool yaoosl::parsing::instance::m_functionarg_44(bool is_can, std::shared_ptr<ya
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_auto78_functionarg_45(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function> actual)
+bool yaoosl::parsing::instance::m_auto78_functionarg_45(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function> actual, yaoosl::parsing::instance::function_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token__auto_78();
@@ -1711,7 +1721,7 @@ bool yaoosl::parsing::instance::m_auto78_functionarg_45(bool is_can, std::shared
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_auto9_46(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function> actual)
+bool yaoosl::parsing::instance::m_auto9_46(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function> actual, yaoosl::parsing::instance::function_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token__auto_9();
@@ -1746,19 +1756,19 @@ bool yaoosl::parsing::instance::m_auto9_46(bool is_can, std::shared_ptr<yaoosl::
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::while47_48(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function> actual)
+bool yaoosl::parsing::instance::while47_48(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function> actual, yaoosl::parsing::instance::function_state& state)
 {
     resetable resetable1(*this);
-    bool cond2 = m_auto9_46(true, {});
+    bool cond2 = m_auto9_46(true, {}, state);
     while (cond2)
     {
         return false;
-        m_auto78_functionarg_45(false, actual);
-        bool cond2 = m_auto9_46(true, {});
+        m_auto78_functionarg_45(false, actual, state);
+        bool cond2 = m_auto9_46(true, {}, state);
     }
     return true;
 }
-bool yaoosl::parsing::instance::m_functionarg_49(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function> actual)
+bool yaoosl::parsing::instance::m_functionarg_49(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function> actual, yaoosl::parsing::instance::function_state& state)
 {
     resetable resetable1(*this);
     if (p_can_function_arg())
@@ -1784,19 +1794,19 @@ bool yaoosl::parsing::instance::m_functionarg_49(bool is_can, std::shared_ptr<ya
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::if50_51(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function> actual)
+bool yaoosl::parsing::instance::if50_51(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function> actual, yaoosl::parsing::instance::function_state& state)
 {
     resetable resetable1(*this);
-    bool cond2 = m_functionarg_49(true, {});
+    bool cond2 = m_functionarg_49(true, {}, state);
     if (!cond2)
     {
         return false;
     }
-    m_functionarg_44(false, actual);
-    while47_48(false, actual);
+    m_functionarg_44(false, actual, state);
+    while47_48(false, actual, state);
     return true;
 }
-bool yaoosl::parsing::instance::m_auto9_scope_52(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function> actual)
+bool yaoosl::parsing::instance::m_auto9_scope_52(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function> actual, yaoosl::parsing::instance::function_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token__auto_9();
@@ -1851,17 +1861,18 @@ bool yaoosl::parsing::instance::m_auto9_scope_52(bool is_can, std::shared_ptr<ya
 bool yaoosl::parsing::instance::p_can_function()
 {
     resetable resetable1(*this);
-    if (!m_auto72_ident_auto7_43(true, {}))
+    function_state state;
+    if (!m_auto72_ident_auto7_43(true, {}, state))
     {
         resetable1.reset();
         return false;
     }
-    else if (!if50_51(true, {}))
+    else if (!if50_51(true, {}, state))
     {
         resetable1.reset();
         return false;
     }
-    else if (!m_auto9_scope_52(true, {}))
+    else if (!m_auto9_scope_52(true, {}, state))
     {
         resetable1.reset();
         return false;
@@ -1871,31 +1882,32 @@ bool yaoosl::parsing::instance::p_can_function()
 std::shared_ptr<yaoosl::parsing::instance::function> yaoosl::parsing::instance::p_match_function()
 {
     auto actual = std::make_shared<yaoosl::parsing::instance::function>();
+    function_state state;
     resetable resetable2(*this);
-    if (m_auto72_ident_auto7_43(true, {}))
+    if (m_auto72_ident_auto7_43(true, {}, state))
     {
         resetable2.reset();
-        m_auto72_ident_auto7_43(false, actual);
+        m_auto72_ident_auto7_43(false, actual, state);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)");
     }
     resetable resetable3(*this);
-    if (if50_51(true, {}))
+    if (if50_51(true, {}, state))
     {
         resetable3.reset();
-        if50_51(false, actual);
+        if50_51(false, actual, state);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)");
     }
     resetable resetable4(*this);
-    if (m_auto9_scope_52(true, {}))
+    if (m_auto9_scope_52(true, {}, state))
     {
         resetable4.reset();
-        m_auto9_scope_52(false, actual);
+        m_auto9_scope_52(false, actual, state);
     }
     else
     {
@@ -1903,7 +1915,7 @@ std::shared_ptr<yaoosl::parsing::instance::function> yaoosl::parsing::instance::
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_auto82_auto7_statement_auto9_scope_53(bool is_can, std::shared_ptr<yaoosl::parsing::instance::while_loop> actual)
+bool yaoosl::parsing::instance::m_auto82_auto7_statement_auto9_scope_53(bool is_can, std::shared_ptr<yaoosl::parsing::instance::while_loop> actual, yaoosl::parsing::instance::while_loop_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token__auto_82();
@@ -2025,7 +2037,8 @@ bool yaoosl::parsing::instance::m_auto82_auto7_statement_auto9_scope_53(bool is_
 bool yaoosl::parsing::instance::p_can_while_loop()
 {
     resetable resetable1(*this);
-    if (!m_auto82_auto7_statement_auto9_scope_53(true, {}))
+    while_loop_state state;
+    if (!m_auto82_auto7_statement_auto9_scope_53(true, {}, state))
     {
         resetable1.reset();
         return false;
@@ -2035,11 +2048,12 @@ bool yaoosl::parsing::instance::p_can_while_loop()
 std::shared_ptr<yaoosl::parsing::instance::while_loop> yaoosl::parsing::instance::p_match_while_loop()
 {
     auto actual = std::make_shared<yaoosl::parsing::instance::while_loop>();
+    while_loop_state state;
     resetable resetable2(*this);
-    if (m_auto82_auto7_statement_auto9_scope_53(true, {}))
+    if (m_auto82_auto7_statement_auto9_scope_53(true, {}, state))
     {
         resetable2.reset();
-        m_auto82_auto7_statement_auto9_scope_53(false, actual);
+        m_auto82_auto7_statement_auto9_scope_53(false, actual, state);
     }
     else
     {
@@ -2047,7 +2061,7 @@ std::shared_ptr<yaoosl::parsing::instance::while_loop> yaoosl::parsing::instance
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_auto87_auto7_statement_auto9_54(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else> actual)
+bool yaoosl::parsing::instance::m_auto87_auto7_statement_auto9_54(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else> actual, yaoosl::parsing::instance::if_else_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token__auto_87();
@@ -2149,7 +2163,7 @@ bool yaoosl::parsing::instance::m_auto87_auto7_statement_auto9_54(bool is_can, s
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_scope_55(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else> actual)
+bool yaoosl::parsing::instance::m_scope_55(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else> actual, yaoosl::parsing::instance::if_else_state& state)
 {
     resetable resetable1(*this);
     if (p_can_scope())
@@ -2176,7 +2190,7 @@ bool yaoosl::parsing::instance::m_scope_55(bool is_can, std::shared_ptr<yaoosl::
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_controlstructure_56(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else> actual)
+bool yaoosl::parsing::instance::m_controlstructure_56(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else> actual, yaoosl::parsing::instance::if_else_state& state)
 {
     resetable resetable1(*this);
     if (p_can_control_structure())
@@ -2203,7 +2217,7 @@ bool yaoosl::parsing::instance::m_controlstructure_56(bool is_can, std::shared_p
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_statement_57(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else> actual)
+bool yaoosl::parsing::instance::m_statement_57(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else> actual, yaoosl::parsing::instance::if_else_state& state)
 {
     resetable resetable1(*this);
     if (p_can_statement())
@@ -2230,10 +2244,10 @@ bool yaoosl::parsing::instance::m_statement_57(bool is_can, std::shared_ptr<yaoo
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives58(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else> actual)
+bool yaoosl::parsing::instance::alternatives58(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else> actual, yaoosl::parsing::instance::if_else_state& state)
 {
     resetable resetable1(*this);
-    if (m_scope_55(true, {}))
+    if (m_scope_55(true, {}, state))
     {
         if (is_can)
         {
@@ -2242,11 +2256,11 @@ bool yaoosl::parsing::instance::alternatives58(bool is_can, std::shared_ptr<yaoo
         else
         {
             resetable1.reset();
-            m_scope_55(false, actual);
+            m_scope_55(false, actual, state);
             return true;
         }
     }
-    else if (m_controlstructure_56(true, {}))
+    else if (m_controlstructure_56(true, {}, state))
     {
         if (is_can)
         {
@@ -2255,11 +2269,11 @@ bool yaoosl::parsing::instance::alternatives58(bool is_can, std::shared_ptr<yaoo
         else
         {
             resetable1.reset();
-            m_controlstructure_56(false, actual);
+            m_controlstructure_56(false, actual, state);
             return true;
         }
     }
-    else if (m_statement_57(true, {}))
+    else if (m_statement_57(true, {}, state))
     {
         if (is_can)
         {
@@ -2268,14 +2282,14 @@ bool yaoosl::parsing::instance::alternatives58(bool is_can, std::shared_ptr<yaoo
         else
         {
             resetable1.reset();
-            m_statement_57(false, actual);
+            m_statement_57(false, actual, state);
             return true;
         }
     }
     resetable1.reset();
     return false;
 }
-bool yaoosl::parsing::instance::m_auto94_59(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else> actual)
+bool yaoosl::parsing::instance::m_auto94_59(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else> actual, yaoosl::parsing::instance::if_else_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token__auto_94();
@@ -2310,7 +2324,7 @@ bool yaoosl::parsing::instance::m_auto94_59(bool is_can, std::shared_ptr<yaoosl:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_scope_60(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else> actual)
+bool yaoosl::parsing::instance::m_scope_60(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else> actual, yaoosl::parsing::instance::if_else_state& state)
 {
     resetable resetable1(*this);
     if (p_can_scope())
@@ -2337,7 +2351,7 @@ bool yaoosl::parsing::instance::m_scope_60(bool is_can, std::shared_ptr<yaoosl::
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_controlstructure_61(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else> actual)
+bool yaoosl::parsing::instance::m_controlstructure_61(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else> actual, yaoosl::parsing::instance::if_else_state& state)
 {
     resetable resetable1(*this);
     if (p_can_control_structure())
@@ -2364,7 +2378,7 @@ bool yaoosl::parsing::instance::m_controlstructure_61(bool is_can, std::shared_p
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_statement_62(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else> actual)
+bool yaoosl::parsing::instance::m_statement_62(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else> actual, yaoosl::parsing::instance::if_else_state& state)
 {
     resetable resetable1(*this);
     if (p_can_statement())
@@ -2391,10 +2405,10 @@ bool yaoosl::parsing::instance::m_statement_62(bool is_can, std::shared_ptr<yaoo
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives63(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else> actual)
+bool yaoosl::parsing::instance::alternatives63(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else> actual, yaoosl::parsing::instance::if_else_state& state)
 {
     resetable resetable1(*this);
-    if (m_scope_60(true, {}))
+    if (m_scope_60(true, {}, state))
     {
         if (is_can)
         {
@@ -2403,11 +2417,11 @@ bool yaoosl::parsing::instance::alternatives63(bool is_can, std::shared_ptr<yaoo
         else
         {
             resetable1.reset();
-            m_scope_60(false, actual);
+            m_scope_60(false, actual, state);
             return true;
         }
     }
-    else if (m_controlstructure_61(true, {}))
+    else if (m_controlstructure_61(true, {}, state))
     {
         if (is_can)
         {
@@ -2416,11 +2430,11 @@ bool yaoosl::parsing::instance::alternatives63(bool is_can, std::shared_ptr<yaoo
         else
         {
             resetable1.reset();
-            m_controlstructure_61(false, actual);
+            m_controlstructure_61(false, actual, state);
             return true;
         }
     }
-    else if (m_statement_62(true, {}))
+    else if (m_statement_62(true, {}, state))
     {
         if (is_can)
         {
@@ -2429,14 +2443,14 @@ bool yaoosl::parsing::instance::alternatives63(bool is_can, std::shared_ptr<yaoo
         else
         {
             resetable1.reset();
-            m_statement_62(false, actual);
+            m_statement_62(false, actual, state);
             return true;
         }
     }
     resetable1.reset();
     return false;
 }
-bool yaoosl::parsing::instance::m_auto94_64(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else> actual)
+bool yaoosl::parsing::instance::m_auto94_64(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else> actual, yaoosl::parsing::instance::if_else_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token__auto_94();
@@ -2471,32 +2485,33 @@ bool yaoosl::parsing::instance::m_auto94_64(bool is_can, std::shared_ptr<yaoosl:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::if65_66(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else> actual)
+bool yaoosl::parsing::instance::if65_66(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else> actual, yaoosl::parsing::instance::if_else_state& state)
 {
     resetable resetable1(*this);
-    bool cond2 = m_auto94_64(true, {});
+    bool cond2 = m_auto94_64(true, {}, state);
     if (!cond2)
     {
         return false;
     }
-    m_auto94_59(false, actual);
-    alternatives63(false, actual);
+    m_auto94_59(false, actual, state);
+    alternatives63(false, actual, state);
     return true;
 }
 bool yaoosl::parsing::instance::p_can_if_else()
 {
     resetable resetable1(*this);
-    if (!m_auto87_auto7_statement_auto9_54(true, {}))
+    if_else_state state;
+    if (!m_auto87_auto7_statement_auto9_54(true, {}, state))
     {
         resetable1.reset();
         return false;
     }
-    else if (!alternatives58(true, {}))
+    else if (!alternatives58(true, {}, state))
     {
         resetable1.reset();
         return false;
     }
-    else if (!if65_66(true, {}))
+    else if (!if65_66(true, {}, state))
     {
         resetable1.reset();
         return false;
@@ -2506,31 +2521,32 @@ bool yaoosl::parsing::instance::p_can_if_else()
 std::shared_ptr<yaoosl::parsing::instance::if_else> yaoosl::parsing::instance::p_match_if_else()
 {
     auto actual = std::make_shared<yaoosl::parsing::instance::if_else>();
+    if_else_state state;
     resetable resetable2(*this);
-    if (m_auto87_auto7_statement_auto9_54(true, {}))
+    if (m_auto87_auto7_statement_auto9_54(true, {}, state))
     {
         resetable2.reset();
-        m_auto87_auto7_statement_auto9_54(false, actual);
+        m_auto87_auto7_statement_auto9_54(false, actual, state);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)");
     }
     resetable resetable3(*this);
-    if (alternatives58(true, {}))
+    if (alternatives58(true, {}, state))
     {
         resetable3.reset();
-        alternatives58(false, actual);
+        alternatives58(false, actual, state);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)");
     }
     resetable resetable4(*this);
-    if (if65_66(true, {}))
+    if (if65_66(true, {}, state))
     {
         resetable4.reset();
-        if65_66(false, actual);
+        if65_66(false, actual, state);
     }
     else
     {
@@ -2538,7 +2554,7 @@ std::shared_ptr<yaoosl::parsing::instance::if_else> yaoosl::parsing::instance::p
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_function_67(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure> actual)
+bool yaoosl::parsing::instance::m_function_67(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure> actual, yaoosl::parsing::instance::control_structure_state& state)
 {
     resetable resetable1(*this);
     if (p_can_function())
@@ -2564,7 +2580,7 @@ bool yaoosl::parsing::instance::m_function_67(bool is_can, std::shared_ptr<yaoos
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_whileloop_68(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure> actual)
+bool yaoosl::parsing::instance::m_whileloop_68(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure> actual, yaoosl::parsing::instance::control_structure_state& state)
 {
     resetable resetable1(*this);
     if (p_can_while_loop())
@@ -2590,7 +2606,7 @@ bool yaoosl::parsing::instance::m_whileloop_68(bool is_can, std::shared_ptr<yaoo
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_ifelse_69(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure> actual)
+bool yaoosl::parsing::instance::m_ifelse_69(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure> actual, yaoosl::parsing::instance::control_structure_state& state)
 {
     resetable resetable1(*this);
     if (p_can_if_else())
@@ -2616,7 +2632,7 @@ bool yaoosl::parsing::instance::m_ifelse_69(bool is_can, std::shared_ptr<yaoosl:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_scope_70(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure> actual)
+bool yaoosl::parsing::instance::m_scope_70(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure> actual, yaoosl::parsing::instance::control_structure_state& state)
 {
     resetable resetable1(*this);
     if (p_can_scope())
@@ -2642,10 +2658,10 @@ bool yaoosl::parsing::instance::m_scope_70(bool is_can, std::shared_ptr<yaoosl::
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives71(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure> actual)
+bool yaoosl::parsing::instance::alternatives71(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure> actual, yaoosl::parsing::instance::control_structure_state& state)
 {
     resetable resetable1(*this);
-    if (m_function_67(true, {}))
+    if (m_function_67(true, {}, state))
     {
         if (is_can)
         {
@@ -2654,11 +2670,11 @@ bool yaoosl::parsing::instance::alternatives71(bool is_can, std::shared_ptr<yaoo
         else
         {
             resetable1.reset();
-            m_function_67(false, actual);
+            m_function_67(false, actual, state);
             return true;
         }
     }
-    else if (m_whileloop_68(true, {}))
+    else if (m_whileloop_68(true, {}, state))
     {
         if (is_can)
         {
@@ -2667,11 +2683,11 @@ bool yaoosl::parsing::instance::alternatives71(bool is_can, std::shared_ptr<yaoo
         else
         {
             resetable1.reset();
-            m_whileloop_68(false, actual);
+            m_whileloop_68(false, actual, state);
             return true;
         }
     }
-    else if (m_ifelse_69(true, {}))
+    else if (m_ifelse_69(true, {}, state))
     {
         if (is_can)
         {
@@ -2680,11 +2696,11 @@ bool yaoosl::parsing::instance::alternatives71(bool is_can, std::shared_ptr<yaoo
         else
         {
             resetable1.reset();
-            m_ifelse_69(false, actual);
+            m_ifelse_69(false, actual, state);
             return true;
         }
     }
-    else if (m_scope_70(true, {}))
+    else if (m_scope_70(true, {}, state))
     {
         if (is_can)
         {
@@ -2693,7 +2709,7 @@ bool yaoosl::parsing::instance::alternatives71(bool is_can, std::shared_ptr<yaoo
         else
         {
             resetable1.reset();
-            m_scope_70(false, actual);
+            m_scope_70(false, actual, state);
             return true;
         }
     }
@@ -2703,7 +2719,8 @@ bool yaoosl::parsing::instance::alternatives71(bool is_can, std::shared_ptr<yaoo
 bool yaoosl::parsing::instance::p_can_control_structure()
 {
     resetable resetable1(*this);
-    if (!alternatives71(true, {}))
+    control_structure_state state;
+    if (!alternatives71(true, {}, state))
     {
         resetable1.reset();
         return false;
@@ -2713,11 +2730,12 @@ bool yaoosl::parsing::instance::p_can_control_structure()
 std::shared_ptr<yaoosl::parsing::instance::control_structure> yaoosl::parsing::instance::p_match_control_structure()
 {
     auto actual = std::make_shared<yaoosl::parsing::instance::control_structure>();
+    control_structure_state state;
     resetable resetable2(*this);
-    if (alternatives71(true, {}))
+    if (alternatives71(true, {}, state))
     {
         resetable2.reset();
-        alternatives71(false, actual);
+        alternatives71(false, actual, state);
     }
     else
     {
@@ -2725,7 +2743,7 @@ std::shared_ptr<yaoosl::parsing::instance::control_structure> yaoosl::parsing::i
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_controlstructure_72(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main> actual)
+bool yaoosl::parsing::instance::m_controlstructure_72(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main> actual, yaoosl::parsing::instance::main_state& state)
 {
     resetable resetable1(*this);
     if (p_can_control_structure())
@@ -2751,7 +2769,7 @@ bool yaoosl::parsing::instance::m_controlstructure_72(bool is_can, std::shared_p
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_statement_73(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main> actual)
+bool yaoosl::parsing::instance::m_statement_73(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main> actual, yaoosl::parsing::instance::main_state& state)
 {
     resetable resetable1(*this);
     if (p_can_statement())
@@ -2777,10 +2795,10 @@ bool yaoosl::parsing::instance::m_statement_73(bool is_can, std::shared_ptr<yaoo
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives74(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main> actual)
+bool yaoosl::parsing::instance::alternatives74(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main> actual, yaoosl::parsing::instance::main_state& state)
 {
     resetable resetable1(*this);
-    if (m_controlstructure_72(true, {}))
+    if (m_controlstructure_72(true, {}, state))
     {
         if (is_can)
         {
@@ -2789,11 +2807,11 @@ bool yaoosl::parsing::instance::alternatives74(bool is_can, std::shared_ptr<yaoo
         else
         {
             resetable1.reset();
-            m_controlstructure_72(false, actual);
+            m_controlstructure_72(false, actual, state);
             return true;
         }
     }
-    else if (m_statement_73(true, {}))
+    else if (m_statement_73(true, {}, state))
     {
         if (is_can)
         {
@@ -2802,7 +2820,7 @@ bool yaoosl::parsing::instance::alternatives74(bool is_can, std::shared_ptr<yaoo
         else
         {
             resetable1.reset();
-            m_statement_73(false, actual);
+            m_statement_73(false, actual, state);
             return true;
         }
     }
@@ -2812,7 +2830,8 @@ bool yaoosl::parsing::instance::alternatives74(bool is_can, std::shared_ptr<yaoo
 bool yaoosl::parsing::instance::p_can_main()
 {
     resetable resetable1(*this);
-    if (!alternatives74(true, {}))
+    main_state state;
+    if (!alternatives74(true, {}, state))
     {
         resetable1.reset();
         return false;
@@ -2822,11 +2841,12 @@ bool yaoosl::parsing::instance::p_can_main()
 std::shared_ptr<yaoosl::parsing::instance::main> yaoosl::parsing::instance::p_match_main()
 {
     auto actual = std::make_shared<yaoosl::parsing::instance::main>();
+    main_state state;
     resetable resetable2(*this);
-    if (alternatives74(true, {}))
+    if (alternatives74(true, {}, state))
     {
         resetable2.reset();
-        alternatives74(false, actual);
+        alternatives74(false, actual, state);
     }
     else
     {
@@ -2834,7 +2854,7 @@ std::shared_ptr<yaoosl::parsing::instance::main> yaoosl::parsing::instance::p_ma
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_exparithmetic2_slash_expnullar_75(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2> actual)
+bool yaoosl::parsing::instance::m_exparithmetic2_slash_expnullar_75(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2> actual, yaoosl::parsing::instance::exp_arithmetic_2_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token_slash();
@@ -2890,7 +2910,7 @@ bool yaoosl::parsing::instance::m_exparithmetic2_slash_expnullar_75(bool is_can,
     }
     return true;
 }
-bool yaoosl::parsing::instance::m_exparithmetic2_star_expnullar_76(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2> actual)
+bool yaoosl::parsing::instance::m_exparithmetic2_star_expnullar_76(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2> actual, yaoosl::parsing::instance::exp_arithmetic_2_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token_star();
@@ -2946,7 +2966,7 @@ bool yaoosl::parsing::instance::m_exparithmetic2_star_expnullar_76(bool is_can, 
     }
     return true;
 }
-bool yaoosl::parsing::instance::m_expnullar_77(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2> actual)
+bool yaoosl::parsing::instance::m_expnullar_77(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2> actual, yaoosl::parsing::instance::exp_arithmetic_2_state& state)
 {
     resetable resetable1(*this);
     if (p_can_exp_nullar())
@@ -2976,7 +2996,8 @@ bool yaoosl::parsing::instance::m_expnullar_77(bool is_can, std::shared_ptr<yaoo
 bool yaoosl::parsing::instance::lr_can_exp_arithmetic_2()
 {
     resetable resetable1(*this);
-    if (!m_expnullar_77(true, {}))
+    exp_arithmetic_2_state state;
+    if (!m_expnullar_77(true, {}, state))
     {
         return false;
     }
@@ -2984,10 +3005,10 @@ bool yaoosl::parsing::instance::lr_can_exp_arithmetic_2()
     {
         skip();
         resetable resetable1(*this);
-        if (m_exparithmetic2_slash_expnullar_75(true, {}))
+        if (m_exparithmetic2_slash_expnullar_75(true, {}, state))
         {
         }
-        else if (m_exparithmetic2_star_expnullar_76(true, {}))
+        else if (m_exparithmetic2_star_expnullar_76(true, {}, state))
         {
         }
         else
@@ -2999,7 +3020,8 @@ bool yaoosl::parsing::instance::lr_can_exp_arithmetic_2()
 std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2> yaoosl::parsing::instance::lr_match_exp_arithmetic_2()
 {
     auto actual = std::make_shared<yaoosl::parsing::instance::exp_arithmetic_2>();
-    if (!m_expnullar_77(false, actual))
+    exp_arithmetic_2_state state;
+    if (!m_expnullar_77(false, actual, state))
     {
         report("Something moved wrong (todo: improve error messages)");
         return {};
@@ -3009,7 +3031,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2> yaoosl::parsing::in
     {
         skip();
         resetable resetable1(*this);
-        if (m_exparithmetic2_slash_expnullar_75(true, {}))
+        if (m_exparithmetic2_slash_expnullar_75(true, {}, state))
         {
             resetable1.reset();
             if (!is_first2)
@@ -3019,9 +3041,9 @@ std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2> yaoosl::parsing::in
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_exparithmetic2_slash_expnullar_75(false, actual);
+            m_exparithmetic2_slash_expnullar_75(false, actual, state);
         }
-        else if (m_exparithmetic2_star_expnullar_76(true, {}))
+        else if (m_exparithmetic2_star_expnullar_76(true, {}, state))
         {
             resetable1.reset();
             if (!is_first2)
@@ -3031,7 +3053,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2> yaoosl::parsing::in
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_exparithmetic2_star_expnullar_76(false, actual);
+            m_exparithmetic2_star_expnullar_76(false, actual, state);
         }
         else
         {
@@ -3041,7 +3063,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2> yaoosl::parsing::in
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_exparithmetic1_plus_exparithmetic2_78(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1> actual)
+bool yaoosl::parsing::instance::m_exparithmetic1_plus_exparithmetic2_78(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1> actual, yaoosl::parsing::instance::exp_arithmetic_1_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token_plus();
@@ -3097,7 +3119,7 @@ bool yaoosl::parsing::instance::m_exparithmetic1_plus_exparithmetic2_78(bool is_
     }
     return true;
 }
-bool yaoosl::parsing::instance::m_exparithmetic1_minus_exparithmetic2_79(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1> actual)
+bool yaoosl::parsing::instance::m_exparithmetic1_minus_exparithmetic2_79(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1> actual, yaoosl::parsing::instance::exp_arithmetic_1_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token_minus();
@@ -3153,7 +3175,7 @@ bool yaoosl::parsing::instance::m_exparithmetic1_minus_exparithmetic2_79(bool is
     }
     return true;
 }
-bool yaoosl::parsing::instance::m_exparithmetic2_80(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1> actual)
+bool yaoosl::parsing::instance::m_exparithmetic2_80(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1> actual, yaoosl::parsing::instance::exp_arithmetic_1_state& state)
 {
     resetable resetable1(*this);
     if (lr_can_exp_arithmetic_2())
@@ -3183,7 +3205,8 @@ bool yaoosl::parsing::instance::m_exparithmetic2_80(bool is_can, std::shared_ptr
 bool yaoosl::parsing::instance::lr_can_exp_arithmetic_1()
 {
     resetable resetable1(*this);
-    if (!m_exparithmetic2_80(true, {}))
+    exp_arithmetic_1_state state;
+    if (!m_exparithmetic2_80(true, {}, state))
     {
         return false;
     }
@@ -3191,10 +3214,10 @@ bool yaoosl::parsing::instance::lr_can_exp_arithmetic_1()
     {
         skip();
         resetable resetable1(*this);
-        if (m_exparithmetic1_plus_exparithmetic2_78(true, {}))
+        if (m_exparithmetic1_plus_exparithmetic2_78(true, {}, state))
         {
         }
-        else if (m_exparithmetic1_minus_exparithmetic2_79(true, {}))
+        else if (m_exparithmetic1_minus_exparithmetic2_79(true, {}, state))
         {
         }
         else
@@ -3206,7 +3229,8 @@ bool yaoosl::parsing::instance::lr_can_exp_arithmetic_1()
 std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1> yaoosl::parsing::instance::lr_match_exp_arithmetic_1()
 {
     auto actual = std::make_shared<yaoosl::parsing::instance::exp_arithmetic_1>();
-    if (!m_exparithmetic2_80(false, actual))
+    exp_arithmetic_1_state state;
+    if (!m_exparithmetic2_80(false, actual, state))
     {
         report("Something moved wrong (todo: improve error messages)");
         return {};
@@ -3216,7 +3240,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1> yaoosl::parsing::in
     {
         skip();
         resetable resetable1(*this);
-        if (m_exparithmetic1_plus_exparithmetic2_78(true, {}))
+        if (m_exparithmetic1_plus_exparithmetic2_78(true, {}, state))
         {
             resetable1.reset();
             if (!is_first2)
@@ -3226,9 +3250,9 @@ std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1> yaoosl::parsing::in
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_exparithmetic1_plus_exparithmetic2_78(false, actual);
+            m_exparithmetic1_plus_exparithmetic2_78(false, actual, state);
         }
-        else if (m_exparithmetic1_minus_exparithmetic2_79(true, {}))
+        else if (m_exparithmetic1_minus_exparithmetic2_79(true, {}, state))
         {
             resetable1.reset();
             if (!is_first2)
@@ -3238,7 +3262,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1> yaoosl::parsing::in
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_exparithmetic1_minus_exparithmetic2_79(false, actual);
+            m_exparithmetic1_minus_exparithmetic2_79(false, actual, state);
         }
         else
         {
@@ -3248,7 +3272,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1> yaoosl::parsing::in
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_expcompare_auto28_exparithmetic1_81(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare> actual)
+bool yaoosl::parsing::instance::m_expcompare_auto28_exparithmetic1_81(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare> actual, yaoosl::parsing::instance::exp_compare_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token__auto_28();
@@ -3308,7 +3332,7 @@ bool yaoosl::parsing::instance::m_expcompare_auto28_exparithmetic1_81(bool is_ca
     }
     return true;
 }
-bool yaoosl::parsing::instance::m_expcompare_auto31_exparithmetic1_82(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare> actual)
+bool yaoosl::parsing::instance::m_expcompare_auto31_exparithmetic1_82(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare> actual, yaoosl::parsing::instance::exp_compare_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token__auto_31();
@@ -3364,7 +3388,7 @@ bool yaoosl::parsing::instance::m_expcompare_auto31_exparithmetic1_82(bool is_ca
     }
     return true;
 }
-bool yaoosl::parsing::instance::m_expcompare_auto34_exparithmetic1_83(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare> actual)
+bool yaoosl::parsing::instance::m_expcompare_auto34_exparithmetic1_83(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare> actual, yaoosl::parsing::instance::exp_compare_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token__auto_34();
@@ -3424,7 +3448,7 @@ bool yaoosl::parsing::instance::m_expcompare_auto34_exparithmetic1_83(bool is_ca
     }
     return true;
 }
-bool yaoosl::parsing::instance::m_expcompare_auto37_exparithmetic1_84(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare> actual)
+bool yaoosl::parsing::instance::m_expcompare_auto37_exparithmetic1_84(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare> actual, yaoosl::parsing::instance::exp_compare_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token__auto_37();
@@ -3480,7 +3504,7 @@ bool yaoosl::parsing::instance::m_expcompare_auto37_exparithmetic1_84(bool is_ca
     }
     return true;
 }
-bool yaoosl::parsing::instance::m_exparithmetic1_85(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare> actual)
+bool yaoosl::parsing::instance::m_exparithmetic1_85(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare> actual, yaoosl::parsing::instance::exp_compare_state& state)
 {
     resetable resetable1(*this);
     if (lr_can_exp_arithmetic_1())
@@ -3510,7 +3534,8 @@ bool yaoosl::parsing::instance::m_exparithmetic1_85(bool is_can, std::shared_ptr
 bool yaoosl::parsing::instance::lr_can_exp_compare()
 {
     resetable resetable1(*this);
-    if (!m_exparithmetic1_85(true, {}))
+    exp_compare_state state;
+    if (!m_exparithmetic1_85(true, {}, state))
     {
         return false;
     }
@@ -3518,16 +3543,16 @@ bool yaoosl::parsing::instance::lr_can_exp_compare()
     {
         skip();
         resetable resetable1(*this);
-        if (m_expcompare_auto28_exparithmetic1_81(true, {}))
+        if (m_expcompare_auto28_exparithmetic1_81(true, {}, state))
         {
         }
-        else if (m_expcompare_auto31_exparithmetic1_82(true, {}))
+        else if (m_expcompare_auto31_exparithmetic1_82(true, {}, state))
         {
         }
-        else if (m_expcompare_auto34_exparithmetic1_83(true, {}))
+        else if (m_expcompare_auto34_exparithmetic1_83(true, {}, state))
         {
         }
-        else if (m_expcompare_auto37_exparithmetic1_84(true, {}))
+        else if (m_expcompare_auto37_exparithmetic1_84(true, {}, state))
         {
         }
         else
@@ -3539,7 +3564,8 @@ bool yaoosl::parsing::instance::lr_can_exp_compare()
 std::shared_ptr<yaoosl::parsing::instance::exp_compare> yaoosl::parsing::instance::lr_match_exp_compare()
 {
     auto actual = std::make_shared<yaoosl::parsing::instance::exp_compare>();
-    if (!m_exparithmetic1_85(false, actual))
+    exp_compare_state state;
+    if (!m_exparithmetic1_85(false, actual, state))
     {
         report("Something moved wrong (todo: improve error messages)");
         return {};
@@ -3549,7 +3575,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_compare> yaoosl::parsing::instanc
     {
         skip();
         resetable resetable1(*this);
-        if (m_expcompare_auto28_exparithmetic1_81(true, {}))
+        if (m_expcompare_auto28_exparithmetic1_81(true, {}, state))
         {
             resetable1.reset();
             if (!is_first2)
@@ -3559,9 +3585,9 @@ std::shared_ptr<yaoosl::parsing::instance::exp_compare> yaoosl::parsing::instanc
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expcompare_auto28_exparithmetic1_81(false, actual);
+            m_expcompare_auto28_exparithmetic1_81(false, actual, state);
         }
-        else if (m_expcompare_auto31_exparithmetic1_82(true, {}))
+        else if (m_expcompare_auto31_exparithmetic1_82(true, {}, state))
         {
             resetable1.reset();
             if (!is_first2)
@@ -3571,9 +3597,9 @@ std::shared_ptr<yaoosl::parsing::instance::exp_compare> yaoosl::parsing::instanc
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expcompare_auto31_exparithmetic1_82(false, actual);
+            m_expcompare_auto31_exparithmetic1_82(false, actual, state);
         }
-        else if (m_expcompare_auto34_exparithmetic1_83(true, {}))
+        else if (m_expcompare_auto34_exparithmetic1_83(true, {}, state))
         {
             resetable1.reset();
             if (!is_first2)
@@ -3583,9 +3609,9 @@ std::shared_ptr<yaoosl::parsing::instance::exp_compare> yaoosl::parsing::instanc
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expcompare_auto34_exparithmetic1_83(false, actual);
+            m_expcompare_auto34_exparithmetic1_83(false, actual, state);
         }
-        else if (m_expcompare_auto37_exparithmetic1_84(true, {}))
+        else if (m_expcompare_auto37_exparithmetic1_84(true, {}, state))
         {
             resetable1.reset();
             if (!is_first2)
@@ -3595,7 +3621,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_compare> yaoosl::parsing::instanc
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expcompare_auto37_exparithmetic1_84(false, actual);
+            m_expcompare_auto37_exparithmetic1_84(false, actual, state);
         }
         else
         {
@@ -3605,7 +3631,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_compare> yaoosl::parsing::instanc
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_expequality_auto28_expcompare_86(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality> actual)
+bool yaoosl::parsing::instance::m_expequality_auto28_expcompare_86(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality> actual, yaoosl::parsing::instance::exp_equality_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token__auto_28();
@@ -3665,7 +3691,7 @@ bool yaoosl::parsing::instance::m_expequality_auto28_expcompare_86(bool is_can, 
     }
     return true;
 }
-bool yaoosl::parsing::instance::m_expequality_auto31_expcompare_87(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality> actual)
+bool yaoosl::parsing::instance::m_expequality_auto31_expcompare_87(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality> actual, yaoosl::parsing::instance::exp_equality_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token__auto_31();
@@ -3721,7 +3747,7 @@ bool yaoosl::parsing::instance::m_expequality_auto31_expcompare_87(bool is_can, 
     }
     return true;
 }
-bool yaoosl::parsing::instance::m_expequality_auto34_expcompare_88(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality> actual)
+bool yaoosl::parsing::instance::m_expequality_auto34_expcompare_88(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality> actual, yaoosl::parsing::instance::exp_equality_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token__auto_34();
@@ -3781,7 +3807,7 @@ bool yaoosl::parsing::instance::m_expequality_auto34_expcompare_88(bool is_can, 
     }
     return true;
 }
-bool yaoosl::parsing::instance::m_expequality_auto37_expcompare_89(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality> actual)
+bool yaoosl::parsing::instance::m_expequality_auto37_expcompare_89(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality> actual, yaoosl::parsing::instance::exp_equality_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token__auto_37();
@@ -3837,7 +3863,7 @@ bool yaoosl::parsing::instance::m_expequality_auto37_expcompare_89(bool is_can, 
     }
     return true;
 }
-bool yaoosl::parsing::instance::m_expcompare_90(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality> actual)
+bool yaoosl::parsing::instance::m_expcompare_90(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality> actual, yaoosl::parsing::instance::exp_equality_state& state)
 {
     resetable resetable1(*this);
     if (lr_can_exp_compare())
@@ -3867,7 +3893,8 @@ bool yaoosl::parsing::instance::m_expcompare_90(bool is_can, std::shared_ptr<yao
 bool yaoosl::parsing::instance::lr_can_exp_equality()
 {
     resetable resetable1(*this);
-    if (!m_expcompare_90(true, {}))
+    exp_equality_state state;
+    if (!m_expcompare_90(true, {}, state))
     {
         return false;
     }
@@ -3875,16 +3902,16 @@ bool yaoosl::parsing::instance::lr_can_exp_equality()
     {
         skip();
         resetable resetable1(*this);
-        if (m_expequality_auto28_expcompare_86(true, {}))
+        if (m_expequality_auto28_expcompare_86(true, {}, state))
         {
         }
-        else if (m_expequality_auto31_expcompare_87(true, {}))
+        else if (m_expequality_auto31_expcompare_87(true, {}, state))
         {
         }
-        else if (m_expequality_auto34_expcompare_88(true, {}))
+        else if (m_expequality_auto34_expcompare_88(true, {}, state))
         {
         }
-        else if (m_expequality_auto37_expcompare_89(true, {}))
+        else if (m_expequality_auto37_expcompare_89(true, {}, state))
         {
         }
         else
@@ -3896,7 +3923,8 @@ bool yaoosl::parsing::instance::lr_can_exp_equality()
 std::shared_ptr<yaoosl::parsing::instance::exp_equality> yaoosl::parsing::instance::lr_match_exp_equality()
 {
     auto actual = std::make_shared<yaoosl::parsing::instance::exp_equality>();
-    if (!m_expcompare_90(false, actual))
+    exp_equality_state state;
+    if (!m_expcompare_90(false, actual, state))
     {
         report("Something moved wrong (todo: improve error messages)");
         return {};
@@ -3906,7 +3934,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_equality> yaoosl::parsing::instan
     {
         skip();
         resetable resetable1(*this);
-        if (m_expequality_auto28_expcompare_86(true, {}))
+        if (m_expequality_auto28_expcompare_86(true, {}, state))
         {
             resetable1.reset();
             if (!is_first2)
@@ -3916,9 +3944,9 @@ std::shared_ptr<yaoosl::parsing::instance::exp_equality> yaoosl::parsing::instan
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expequality_auto28_expcompare_86(false, actual);
+            m_expequality_auto28_expcompare_86(false, actual, state);
         }
-        else if (m_expequality_auto31_expcompare_87(true, {}))
+        else if (m_expequality_auto31_expcompare_87(true, {}, state))
         {
             resetable1.reset();
             if (!is_first2)
@@ -3928,9 +3956,9 @@ std::shared_ptr<yaoosl::parsing::instance::exp_equality> yaoosl::parsing::instan
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expequality_auto31_expcompare_87(false, actual);
+            m_expequality_auto31_expcompare_87(false, actual, state);
         }
-        else if (m_expequality_auto34_expcompare_88(true, {}))
+        else if (m_expequality_auto34_expcompare_88(true, {}, state))
         {
             resetable1.reset();
             if (!is_first2)
@@ -3940,9 +3968,9 @@ std::shared_ptr<yaoosl::parsing::instance::exp_equality> yaoosl::parsing::instan
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expequality_auto34_expcompare_88(false, actual);
+            m_expequality_auto34_expcompare_88(false, actual, state);
         }
-        else if (m_expequality_auto37_expcompare_89(true, {}))
+        else if (m_expequality_auto37_expcompare_89(true, {}, state))
         {
             resetable1.reset();
             if (!is_first2)
@@ -3952,7 +3980,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_equality> yaoosl::parsing::instan
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expequality_auto37_expcompare_89(false, actual);
+            m_expequality_auto37_expcompare_89(false, actual, state);
         }
         else
         {
@@ -3962,7 +3990,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_equality> yaoosl::parsing::instan
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_expand_auto54_expequality_91(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_and> actual)
+bool yaoosl::parsing::instance::m_expand_auto54_expequality_91(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_and> actual, yaoosl::parsing::instance::exp_and_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token__auto_54();
@@ -4014,7 +4042,7 @@ bool yaoosl::parsing::instance::m_expand_auto54_expequality_91(bool is_can, std:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expequality_92(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_and> actual)
+bool yaoosl::parsing::instance::m_expequality_92(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_and> actual, yaoosl::parsing::instance::exp_and_state& state)
 {
     resetable resetable1(*this);
     if (lr_can_exp_equality())
@@ -4044,7 +4072,8 @@ bool yaoosl::parsing::instance::m_expequality_92(bool is_can, std::shared_ptr<ya
 bool yaoosl::parsing::instance::lr_can_exp_and()
 {
     resetable resetable1(*this);
-    if (!m_expequality_92(true, {}))
+    exp_and_state state;
+    if (!m_expequality_92(true, {}, state))
     {
         return false;
     }
@@ -4052,7 +4081,7 @@ bool yaoosl::parsing::instance::lr_can_exp_and()
     {
         skip();
         resetable resetable1(*this);
-        if (m_expand_auto54_expequality_91(true, {}))
+        if (m_expand_auto54_expequality_91(true, {}, state))
         {
         }
         else
@@ -4064,7 +4093,8 @@ bool yaoosl::parsing::instance::lr_can_exp_and()
 std::shared_ptr<yaoosl::parsing::instance::exp_and> yaoosl::parsing::instance::lr_match_exp_and()
 {
     auto actual = std::make_shared<yaoosl::parsing::instance::exp_and>();
-    if (!m_expequality_92(false, actual))
+    exp_and_state state;
+    if (!m_expequality_92(false, actual, state))
     {
         report("Something moved wrong (todo: improve error messages)");
         return {};
@@ -4074,7 +4104,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_and> yaoosl::parsing::instance::l
     {
         skip();
         resetable resetable1(*this);
-        if (m_expand_auto54_expequality_91(true, {}))
+        if (m_expand_auto54_expequality_91(true, {}, state))
         {
             resetable1.reset();
             if (!is_first2)
@@ -4084,7 +4114,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_and> yaoosl::parsing::instance::l
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expand_auto54_expequality_91(false, actual);
+            m_expand_auto54_expequality_91(false, actual, state);
         }
         else
         {
@@ -4094,7 +4124,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_and> yaoosl::parsing::instance::l
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_expor_auto58_expequality_93(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_or> actual)
+bool yaoosl::parsing::instance::m_expor_auto58_expequality_93(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_or> actual, yaoosl::parsing::instance::exp_or_state& state)
 {
     resetable resetable1(*this);
     auto l2 = token__auto_58();
@@ -4146,7 +4176,7 @@ bool yaoosl::parsing::instance::m_expor_auto58_expequality_93(bool is_can, std::
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expequality_94(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_or> actual)
+bool yaoosl::parsing::instance::m_expequality_94(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_or> actual, yaoosl::parsing::instance::exp_or_state& state)
 {
     resetable resetable1(*this);
     if (lr_can_exp_equality())
@@ -4176,7 +4206,8 @@ bool yaoosl::parsing::instance::m_expequality_94(bool is_can, std::shared_ptr<ya
 bool yaoosl::parsing::instance::lr_can_exp_or()
 {
     resetable resetable1(*this);
-    if (!m_expequality_94(true, {}))
+    exp_or_state state;
+    if (!m_expequality_94(true, {}, state))
     {
         return false;
     }
@@ -4184,7 +4215,7 @@ bool yaoosl::parsing::instance::lr_can_exp_or()
     {
         skip();
         resetable resetable1(*this);
-        if (m_expor_auto58_expequality_93(true, {}))
+        if (m_expor_auto58_expequality_93(true, {}, state))
         {
         }
         else
@@ -4196,7 +4227,8 @@ bool yaoosl::parsing::instance::lr_can_exp_or()
 std::shared_ptr<yaoosl::parsing::instance::exp_or> yaoosl::parsing::instance::lr_match_exp_or()
 {
     auto actual = std::make_shared<yaoosl::parsing::instance::exp_or>();
-    if (!m_expequality_94(false, actual))
+    exp_or_state state;
+    if (!m_expequality_94(false, actual, state))
     {
         report("Something moved wrong (todo: improve error messages)");
         return {};
@@ -4206,7 +4238,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_or> yaoosl::parsing::instance::lr
     {
         skip();
         resetable resetable1(*this);
-        if (m_expor_auto58_expequality_93(true, {}))
+        if (m_expor_auto58_expequality_93(true, {}, state))
         {
             resetable1.reset();
             if (!is_first2)
@@ -4216,7 +4248,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_or> yaoosl::parsing::instance::lr
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expor_auto58_expequality_93(false, actual);
+            m_expor_auto58_expequality_93(false, actual, state);
         }
         else
         {
