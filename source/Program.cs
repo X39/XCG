@@ -48,6 +48,45 @@ namespace XCG
             }
         }
 
+        private static string? ToStringRepresentation(char c)
+        {
+            return c switch
+            {
+                '\\' => "back-slash",
+                '\'' => "single-quotation",
+                '$' => "dollar",
+                '*' => "star",
+                '/' => "slash",
+                '+' => "plus",
+                '-' => "minus",
+                '_' => "underscore",
+                '!' => "exclamation",
+                '?' => "question",
+                '~' => "tilde",
+                '.' => "dot",
+                ',' => "comma",
+                '"' => "double-quotation",
+                '|' => "vertical-bar",
+                '&' => "ampersand",
+                '^' => "circumflex",
+                '%' => "percent",
+                '§' => "paragraph",
+                '=' => "equal",
+                ':' => "colon",
+                '#' => "hash",
+                '°' => "degree",
+                '<' => "less-then",
+                '>' => "greater-then",
+                '(' => "round-bracked-open",
+                ')' => "round-bracked-close",
+                '[' => "square-bracked-open",
+                ']' => "square-bracked-close",
+                '{' => "curly-bracked-open",
+                '}' => "curly-bracked-close",
+                _ => null,
+            };
+        }
+
         private static int Main(string[] args)
         {
             CLIOptions? cliOptions = null;
@@ -127,10 +166,23 @@ namespace XCG
                 possibleActual = parser.LeftRecursives.FirstOrDefault((q) => q.Identifier == reference.Text);
                 if (possibleActual is not null) { reference.Refered = possibleActual; continue; }
 
+                string identifier;
+                if (reference.Text.All((c) => ToStringRepresentation(c) != null))
+                {
+                    identifier = string.Concat("@", String.Join("-", reference.Text.Select(ToStringRepresentation)));
+                }
+                else if(reference.Text.All((c) => char.IsLetterOrDigit(c) || c == '-'))
+                {
+                    identifier = String.Concat("@", reference.Text.ToLower());
+                }
+                else
+                {
+                    identifier = $"@auto-{generatedReferences}";
+                }
                 var token = new Parsing.Token
                 {
                     Alias = reference.Text,
-                    Identifier = $"@auto-{generatedReferences}",
+                    Identifier = identifier,
                     Statements = new List<Parsing.ITokenStatement>
                     {
                         new Parsing.TokenStatements.Require
