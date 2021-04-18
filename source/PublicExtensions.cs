@@ -65,6 +65,35 @@ namespace XCG
             }
         }
 
+        /// <summary>
+        /// Returns all occurances of <typeparamref name="T"/> inside of the <see cref="Parsing.IStatement"/>.
+        /// Will not descend into the found ones.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="statement"></param>
+        /// <returns></returns>
+        public static IEnumerable<(T, Parsing.IStatement[])> FindChildrenWithParents<T>(this Parsing.IStatement statement)
+        {
+            IEnumerable<(T, Parsing.IStatement[])> recurse(Parsing.IStatement l)
+            {
+                foreach (var it in l.Statements)
+                {
+                    if (it is T t)
+                    {
+                        yield return (t, new Parsing.IStatement[] { l });
+                    }
+                    else
+                    {
+                        foreach (var found in recurse(it))
+                        {
+                            yield return (found.Item1, found.Item2.Append(l).ToArray());
+                        }
+                    }
+                }
+            }
+            return recurse(statement);
+        }
+
 
         /// <summary>
         /// Extracts the whole stacktrace, including possible datamembers and inner exceptions, from the provided exception.

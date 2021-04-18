@@ -86,8 +86,8 @@ production exp-assignment
 
 production statement
     alternatives
-        match exp-assignment
-        match exp-or
+        match @[expression]exp-assignment
+        match @[expression]exp-or
 
 production function-arg
     match @[name]ident
@@ -96,8 +96,8 @@ production scope
     match "{"
     while not match "}"
         alternatives
-            match control-structure
-            match statement
+            match @[body]control-structure
+            match @[body]statement
     match "}"
 
 production function
@@ -126,12 +126,12 @@ production if-else
 
 production control-structure
     alternatives
-        match function
-        match while-loop
-        match if-else
-        match scope
+        match @[content]function
+        match @[content]while-loop
+        match @[content]if-else
+        match @[content]scope
 
 production main
     alternatives
-        match control-structure
-        match statement
+        match @[content]control-structure
+        match @[content]statement

@@ -10,6 +10,7 @@ namespace XCG.Generators.Cpp
         public string? BaseName { get; set; }
         public List<TypeImpl> Types { get; set; }
         public string Name { get; init; }
+        public bool IsSingleHit { get; set; } = true;
 
         public CaptureDefinition(string name, params TypeImpl[] typeImpls) : this(name, typeImpls as IEnumerable<TypeImpl>) {}
         public CaptureDefinition(string name, IEnumerable<TypeImpl> typeImpls)
@@ -29,7 +30,9 @@ namespace XCG.Generators.Cpp
             {
                 var typeImpl = this.Types.First();
                 writer.Write(whitespace);
+                if (!this.IsSingleHit) { writer.Write("std::vector<"); }
                 writer.Write(typeImpl.ToString(cppOptions));
+                if (!this.IsSingleHit) { writer.Write(">"); }
                 writer.Write($" ");
                 writer.Write(this.Name);
                 writer.WriteLine(";");
@@ -37,6 +40,7 @@ namespace XCG.Generators.Cpp
             else
             {
                 writer.Write(whitespace);
+                if (!this.IsSingleHit) { writer.Write("std::vector<"); }
                 writer.Write($"std::variant<");
                 bool isFirst = true;
                 foreach (var typeImpl in this.Types)
@@ -44,7 +48,9 @@ namespace XCG.Generators.Cpp
                     if (isFirst) { isFirst = false; } else { writer.Write(", "); }
                     writer.Write(typeImpl.ToString(cppOptions));
                 }
-                writer.Write($"> ");
+                writer.Write($">");
+                if (!this.IsSingleHit) { writer.Write(">"); }
+                writer.Write($" ");
                 writer.Write(this.Name);
                 writer.WriteLine(";");
             }

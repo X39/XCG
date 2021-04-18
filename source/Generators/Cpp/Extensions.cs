@@ -255,17 +255,15 @@ namespace XCG.Generators.Cpp
 
         public static ClassDefinition GetClassDefinition(Parsing.IStatement statement, CppOptions cppOptions)
         {
-            var captureModifyingSets = statement.FindChildren<Parsing.Statements.Set>()
-                .Where((q) => q.ActiveScope == Parsing.EActiveScope.capture)
+            var captureModifyingSetTuples = statement.FindChildrenWithParents<Parsing.Statements.Set>()
+                .Where((q) => q.Item1.ActiveScope == Parsing.EActiveScope.capture)
                 .ToArray();
-            var captureContainingReferences = statement.FindChildren<Parsing.Statements.Match>()
-                .SelectMany((q) => q.Parts)
-                .Where((q) => q is Parsing.Reference)
-                .Cast<Parsing.Reference>()
-                .Where((q) => q.IsCaptured)
+            var captureContainingReferenceTuples = statement.FindChildrenWithParents<Parsing.Statements.Match>()
+                .SelectMany((q) => q.Item1.Parts.Where((q) => q is Parsing.Reference).Cast<Parsing.Reference>().Select((part) => (Reference: part, Parents: q.Item2)))
+                .Where((q) => q.Reference.IsCaptured)
                 .ToArray();
             var captureDefinitions = new Dictionary<string, CaptureDefinition>();
-            foreach (var captureModifyingSet in captureModifyingSets)
+            foreach ((var captureModifyingSet, var parents) in captureModifyingSetTuples)
             {
                 string? captureName = captureModifyingSet.Property.ToCppName();
                 if (!captureDefinitions.TryGetValue(captureName, out var captureDefinition))
@@ -290,8 +288,13 @@ namespace XCG.Generators.Cpp
                 {
                     captureDefinition.Types.Add(typeImpl);
                 }
+                if (parents.Any((q) => q is Parsing.Statements.While))
+                {
+                    captureDefinition.IsSingleHit = false;
+                }
+                cppOptions.CaptureDefinitionsMap.Add(captureModifyingSet, captureDefinition);
             }
-            foreach (var captureContainingReference in captureContainingReferences)
+            foreach ((var captureContainingReference, var parents)  in captureContainingReferenceTuples)
             {
                 TypeImpl typeImpl = captureContainingReference.Refered switch
                 {
@@ -310,6 +313,11 @@ namespace XCG.Generators.Cpp
                 {
                     captureDefinition.Types.Add(typeImpl);
                 }
+                if (parents.Any((q) => q is Parsing.Statements.While))
+                {
+                    captureDefinition.IsSingleHit = false;
+                }
+                cppOptions.CaptureDefinitionsMap.Add(captureContainingReference, captureDefinition);
             }
 
             return new ClassDefinition(statement switch
