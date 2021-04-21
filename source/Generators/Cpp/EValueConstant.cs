@@ -12,6 +12,7 @@ namespace XCG.Generators.Cpp
         EmptyClosure,
         True,
         False,
+        NullChar,
     }
     internal static class EValueConstantExtensions
     {
@@ -23,6 +24,7 @@ namespace XCG.Generators.Cpp
                 EValueConstant.EmptyClosure => "{}",
                 EValueConstant.True => "true",
                 EValueConstant.False => "false",
+                EValueConstant.NullChar => "'\\0'",
                 _ => throw new NotImplementedException(),
             };
         }

@@ -20,8 +20,8 @@ namespace XCG.Generators.Cpp
                 {
                     new MethodDefinition(String.Empty, String.Concat(Options.TypePrefix, Options.ClassName),
                     " : m_contents(contents), m_file(file), m_line(1), m_column(1), m_offset(0)",
-                    new ArgImpl{ Type = EType.StringView, Name = "contents" },
-                    new ArgImpl{ Type = EType.String, Name = "file" })
+                    new ArgImpl { Type = EType.StringView, Name = "contents" },
+                    new ArgImpl { Type = EType.String, Name = "file" })
                     {
                         HeaderOnly = true
                     },
@@ -44,8 +44,8 @@ namespace XCG.Generators.Cpp
                     new MethodDefinition(
                         String.Concat(Options.RootClassName, Options.TypePrefix, Options.TokenName),
                         "create_token",
-                        new ArgImpl{ Type = EType.SizeT, Name = "length" },
-                        new ArgImpl{ TypeString = String.Concat(Options.TypePrefix, Options.TokenEnumName), Name = "type" })
+                        new ArgImpl { Type = EType.SizeT, Name = "length" },
+                        new ArgImpl { TypeString = String.Concat(Options.TypePrefix, Options.TokenEnumName), Name = "type" })
                     {
                         $@"{String.Concat(Options.TypePrefix, Options.TokenName)} t;",
                         $@"t.file = m_file;",
@@ -68,7 +68,7 @@ namespace XCG.Generators.Cpp
                     new FieldDefinition(new ArgImpl { Name = "m_line", Type = EType.SizeT }),
                     new FieldDefinition(new ArgImpl { Name = "m_column", Type = EType.SizeT }),
                     new FieldDefinition(new ArgImpl { Name = "m_offset", Type = EType.SizeT }),
-                    new MethodDefinition(EType.Void, "report", new ArgImpl{ Name = "message", Type = EType.StringView })
+                    new MethodDefinition(EType.Void, "report", new ArgImpl { Name = "message", Type = EType.StringView })
                     {
                         IsVirtual = true,
                         Parts = new List<ICppPart>
@@ -119,57 +119,48 @@ namespace XCG.Generators.Cpp
                     new FullBody(EUsage.Header) { $@"friend class resetable;" },
                     new MethodDefinition(EType.Void, "skip")
                     {
-                        new FullBody
+                        new WhilePart("m_contents.length() > m_offset")
                         {
-                            @"while (m_contents.length() > m_offset)",
+                            new VariableDefinition(EType.Char, "c", "m_contents[m_offset]"),
+                            @"switch (c)",
                             @"{",
-                            @"    char c = m_contents[m_offset];",
-                            @"    switch (c)",
-                            @"    {",
-                            @"        case '\r':",
-                            @"        case '\t':",
-                            @"        case ' ': m_column++; m_offset++; break;",
-                            @"        case '\n': m_line++; m_column = 1; m_offset++; break;",
-                            @"        default: return;",
-                            @"    }",
+                            @"    case '\r':",
+                            @"    case '\t':",
+                            @"    case ' ': m_column++; m_offset++; break;",
+                            @"    case '\n': m_line++; m_column = 1; m_offset++; break;",
+                            @"    default: return;",
                             @"}",
                         }
                     },
                     new MethodDefinition(EType.Boolean, "next")
                     {
-                        new FullBody
+                        new IfPart(IfPart.EIfScope.If, "m_contents.length() > m_offset")
                         {
-                            @"if (m_contents.length() > m_offset)",
+                            new VariableDefinition(EType.Char, "c", "m_contents[m_offset]"),
+                            @"switch (c)",
                             @"{",
-                            @"    char c = m_contents[m_offset];",
-                            @"    switch (c)",
-                            @"    {",
-                            @"        case '\r':",
-                            @"        case '\t':",
-                            @"        case ' ':",
-                            @"        default: m_column++; m_offset++; break;",
-                            @"        case '\n': m_line++; m_column = 1; m_offset++; break;",
-                            @"    }",
-                            @"    return true;",
+                            @"    case '\r':",
+                            @"    case '\t':",
+                            @"    case ' ':",
+                            @"    default: m_column++; m_offset++; break;",
+                            @"    case '\n': m_line++; m_column = 1; m_offset++; break;",
                             @"}",
-                            @"else",
-                            @"{",
-                            @"    return false;",
-                            @"}",
+                            new ReturnPart(EValueConstant.True)
+                        },
+                        new IfPart(IfPart.EIfScope.Else, null)
+                        {
+                            new ReturnPart(EValueConstant.False)
                         }
                     },
                     new MethodDefinition(EType.Char, "current")
                     {
-                        new FullBody
+                        new IfPart(IfPart.EIfScope.If, "m_contents.length() > m_offset")
                         {
-                            @"if (m_contents.length() > m_offset)",
-                            @"{",
-                            @"    return m_contents[m_offset];",
-                            @"}",
-                            @"else",
-                            @"{",
-                            @"    return '\0';",
-                            @"}",
+                            new ReturnPart("m_contents[m_offset]"),
+                        },
+                        new IfPart(IfPart.EIfScope.Else, null)
+                        {
+                            new ReturnPart(EValueConstant.NullChar),
                         }
                     }
                 }
