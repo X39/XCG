@@ -29,7 +29,7 @@ namespace XCG.Generators.Cpp
     }
     internal static class ETypeExtensions
     {
-        internal static string GetCppType(this EType type, CppOptions cppOptions)
+        internal static string ToCppString(this EType type, CppOptions cppOptions)
         {
             return type switch
             {

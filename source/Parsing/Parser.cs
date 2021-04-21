@@ -571,6 +571,13 @@ namespace XCG.Parsing
                     this.SkipLine();
                     continue;
                 }
+                else if (this.TryMatchNoCapture("error", skipWS: true))
+                {
+                    Skip();
+                    TryMatch("error");
+                    statement.CatchesErrors = true;
+                    continue;
+                }
                 var match = this.ParseMatch(newWsLevel);
                 if (match != null)
                 {
@@ -1364,6 +1371,10 @@ namespace XCG.Parsing
             else if (this.TryMatch("eval"))
             {
                 part = this.ParseValueExpression();
+            }
+            else if (this.TryMatch("eof"))
+            {
+                part = new EOF();
             }
             else
             {

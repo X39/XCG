@@ -84,6 +84,19 @@ keywords:
             Checks children top to bottom.
         accepts:
             - match
+            - error
+    error:
+        help: >-
+            error
+        description: >-
+            Meta-keyword to mark that an alternatives capture might catch errors.
+            Only available in situations where further evaluation is available. (eg. inside of {{while}})
+    eof:
+        help: >-
+            eof
+        description: >-
+            Meta-keyword to mark that something is supposed to match eof.
+            Usually used inverted in conjunction with {{while}} 
     match:
         meta:
         - weak-scoping

@@ -618,7 +618,55 @@ namespace XCG
                         {
                             hints.Add(new Validation.Hint
                             {
+                                Line = require.Diagnostics.Line,
+                                File = require.Diagnostics.File,
                                 Message = $@"Require may only refer to tokens."
+                            });
+                        }
+                    }
+                }
+                return hints;
+            });
+            // alternatives with error is always direct child of while
+            validator.Register("XCG", ESeverity.Error, (parser) =>
+            {
+                var hints = new List<Validation.Hint>();
+                foreach (var production in parser.Productions)
+                {
+                    var result = production.FindChildrenWithParents<Parsing.Statements.Alternatives>();
+                    
+                    foreach ((var alternatives, var parents) in result)
+                    {
+                        if (alternatives.CatchesErrors && parents.First() is not Parsing.Statements.While)
+                        {
+                            hints.Add(new Validation.Hint
+                            {
+                                Line = alternatives.Diagnostics.Line,
+                                File = alternatives.Diagnostics.File,
+                                Message = $@"Alternatives with error may only occur inside of a while."
+                            });
+                        }
+                    }
+                }
+                return hints;
+            });
+            // while with alternatives having error may only have that single alternatives entry
+            validator.Register("XCG", ESeverity.Error, (parser) =>
+            {
+                var hints = new List<Validation.Hint>();
+                foreach (var production in parser.Productions)
+                {
+                    var result = production.FindChildrenWithParents<Parsing.Statements.Alternatives>();
+                    
+                    foreach ((var alternatives, var parents) in result)
+                    {
+                        if (alternatives.CatchesErrors && parents.First() is Parsing.Statements.While @while && @while.Statements.Count != 1)
+                        {
+                            hints.Add(new Validation.Hint
+                            {
+                                Line = @while.Diagnostics.Line,
+                                File = @while.Diagnostics.File,
+                                Message = $@"A while containing alternatives catching errors may not contain anything but that alternatives."
                             });
                         }
                     }

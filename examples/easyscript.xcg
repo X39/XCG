@@ -98,6 +98,7 @@ production scope
         alternatives
             match @[body]control-structure
             match @[body]statement
+            error
     match "}"
 
 production function
@@ -132,6 +133,8 @@ production control-structure
         match @[content]scope
 
 production main
-    alternatives
-        match @[content]control-structure
-        match @[content]statement
+    while not eof
+        alternatives
+            match @[content]control-structure
+            match @[content]statement
+            error

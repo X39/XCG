@@ -62,7 +62,7 @@ namespace XCG.Generators.Cpp
             }
             if (this.ReturnTypeString is null)
             {
-                writer.Write(this.ReturnType.GetCppType(cppOptions));
+                writer.Write(this.ReturnType.ToCppString(cppOptions));
                 writer.Write(" ");
             }
             else if (!String.IsNullOrWhiteSpace(this.ReturnTypeString))
@@ -88,7 +88,7 @@ namespace XCG.Generators.Cpp
             writer.Write(whitespace);
             if (this.ReturnTypeString is null)
             {
-                writer.Write(this.ReturnType.GetCppType(cppOptions));
+                writer.Write(this.ReturnType.ToCppString(cppOptions));
                 writer.Write(" ");
             }
             else if (!String.IsNullOrWhiteSpace(this.ReturnTypeString))

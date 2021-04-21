@@ -173,7 +173,7 @@ namespace XCG.Generators.Cpp
                 EType.Void, String.Concat(cppOptions.MethodsPrefix, "print_tree"),
                 new ArgImpl { Name = "node", TypeString = this.FullName.ToCppSharedPtrType() },
                 new ArgImpl { Name = "v", TypeString = "std::vector<char>" },
-                new ArgImpl { Name = "contents", Type = EType.StringView, ReferenceCount = 1 },
+                new ArgImpl { Name = "contents", Type = EType.StringView },
                 new ArgImpl { Name = "sstream", TypeString = "std::stringstream", ReferenceCount = 1 })
             {
                 whitespaceBody,
@@ -184,12 +184,13 @@ namespace XCG.Generators.Cpp
             for (int i = 0; i < captureDefinitions.Length; i++)
             {
                 var labelname = $"l{i:000}";
+                var iteratorName = $"it{i:000}";
                 IEnumerable<ICppPart> getPrintMethod(CaptureDefinition def, TypeImpl type, bool getRequired)
                 {
-                    var nav = $"node{n}{def.Name}";
+                    var nav = def.IsSingleHit ? $"node{n}{def.Name}" : iteratorName;
                     if (type.TypeString is not null)
                     {
-                        yield return new FullBody
+                        yield return new IfPart(IfPart.EIfScope.If, getRequired ? $"std::get<{type.ToString(cppOptions)}>({nav})" : nav)
                         {
                             $"{String.Concat(cppOptions.MethodsPrefix, "print_tree")}(" +
                             (getRequired ? $"std::get<{type.ToString(cppOptions)}>({nav})" : nav) +
@@ -257,7 +258,8 @@ namespace XCG.Generators.Cpp
                 IEnumerable<ICppPart> getWhitespaceGood(CaptureDefinition def, TypeImpl type, bool getRequired, ICppPart? success, ICppPart? failure)
                 {
                     if (success is null && failure is null) { yield break; }
-                    var nav = $"node{n}{def.Name}";
+
+                    var nav = def.IsSingleHit ? $"node{n}{def.Name}" : iteratorName;
                     if (type.TypeString is not null)
                     {
                         yield return new IfPart(IfPart.EIfScope.If, String.Concat(success is null ? "!" : String.Empty, getRequired ? $"std::get<{type.ToString(cppOptions)}>({nav})" : nav))
@@ -317,77 +319,76 @@ namespace XCG.Generators.Cpp
                         }
                     }
                 }
+                IEnumerable<ICppPart> checkCanPrint(CaptureDefinition def, ICppPart? success, ICppPart? failure)
+                {
+                    var nav = def.IsSingleHit ? $"node{n}{def.Name}" : iteratorName;
+                    if (def.Types.Count == 1)
+                    {
+                        var type = def.Types.First();
+                        foreach (var yielded in getWhitespaceGood(def, type, false, success, failure))
+                        {
+                            yield return yielded;
+                        }
+                    }
+                    else
+                    {
+                        yield return $@"switch ({nav}.index())".ToCppPart();
+                        var switchScope = new ScopePart();
+                        int index = 0;
+                        foreach (var type in def.Types)
+                        {
+                            switchScope.Add($"case {index++}:");
+                            switchScope.AddRange(getWhitespaceGood(def, type, true, success, failure));
+                            switchScope.Add("break;");
+                        }
+                        yield return switchScope;
+                    }
+                }
                 CaptureDefinition captureDefinition = captureDefinitions[i];
                 CaptureDefinition? captureDefinitionLA = captureDefinitions.Length > i + 1 ? captureDefinitions[i + 1] : null;
 
+                CppContainerBase container = methodDefinition;
+
+                if (!captureDefinition.IsSingleHit)
+                {
+                    container = new ScopePart();
+                    methodDefinition.Add($"for (auto {iteratorName} : node{n}{captureDefinition.Name})");
+                    methodDefinition.Add(container);
+                }
+
                 // Ensure this can be printed
-                #region Safety Exist
-                if (captureDefinition.Types.Count == 1)
-                {
-                    var type = captureDefinition.Types.First();
-                    methodDefinition.AddRange(getWhitespaceGood(captureDefinition, type, false, new FullBody { }, new FullBody { $@"goto {labelname};" }));
-                }
-                else
-                {
-                    methodDefinition.Add($@"switch (node{n}{captureDefinition.Name}.index())");
-                    var switchScope = new ScopePart();
-                    methodDefinition.Add(switchScope);
-                    int index = 0;
-                    foreach (var type in captureDefinition.Types)
-                    {
-                        switchScope.Add($"case {index++}:");
-                        switchScope.AddRange(getWhitespaceGood(captureDefinition, type, true, new FullBody { }, new FullBody { $@"goto {labelname};" }));
-                        switchScope.Add("break;");
-                    }
-                }
-                #endregion
+                checkCanPrint(captureDefinition, new FullBody { }, new FullBody { $@"goto {labelname};" });
 
                 // Print out whitespace character stuff
                 #region Whitespace Handling
                 if (captureDefinitionLA is null)
                 {
-                    methodDefinition.Add($@"v.push_back({print_bs});");
-                    methodDefinition.Add($@"v.push_back({print_ws});");
-                    methodDefinition.Add($@"v.push_back({print_ws});");
+                    container.Add($@"v.push_back({print_bs});");
+                    container.Add($@"v.push_back({print_ws});");
+                    container.Add($@"v.push_back({print_ws});");
                 }
                 else
                 {
-                    if (captureDefinitionLA.Types.Count == 1)
-                    {
-                        var type = captureDefinitionLA.Types.First();
-                        methodDefinition.AddRange(getWhitespaceGood(captureDefinitionLA, type, false, new FullBody { $@"v.push_back({print_hr});" }, new FullBody { $@"v.push_back({print_bs});" }));
-                    }
-                    else
-                    {
-                        methodDefinition.Add($@"switch (node{n}{captureDefinitionLA.Name}.index())");
-                        var switchScope = new ScopePart();
-                        methodDefinition.Add(switchScope);
-                        int index = 0;
-                        foreach (var type in captureDefinitionLA.Types)
-                        {
-                            switchScope.Add($"case {index++}:");
-                            switchScope.AddRange(getWhitespaceGood(captureDefinitionLA, type, true, new FullBody { $@"v.push_back({print_hr});" }, new FullBody { $@"v.push_back({print_bs});" }));
-                            switchScope.Add("break;");
-                        }
-                    }
+                    checkCanPrint(captureDefinitionLA, new FullBody { $@"v.push_back({print_hr});" }, new FullBody { $@"v.push_back({print_bs});" });
 
-                    methodDefinition.Add($@"v.push_back({print_ws});");
-                    methodDefinition.Add($@"v.push_back({print_ws});");
+                    container.Add($@"v.push_back({print_ws});");
+                    container.Add($@"v.push_back({print_ws});");
                 }
                 #endregion
 
                 // Print out actual tree stuff
                 #region Tree
+                var nav = captureDefinition.IsSingleHit ? $"node{n}{captureDefinition.Name}" : iteratorName;
                 if (captureDefinition.Types.Count == 1)
                 {
                     var type = captureDefinition.Types.First();
-                    methodDefinition.AddRange(getPrintMethod(captureDefinition, type, false));
+                    container.AddRange(getPrintMethod(captureDefinition, type, false));
                 }
                 else
                 {
-                    methodDefinition.Add($@"switch (node{n}{captureDefinition.Name}.index())");
+                    container.Add($@"switch ({nav}.index())");
                     var switchScope = new ScopePart();
-                    methodDefinition.Add(switchScope);
+                    container.Add(switchScope);
                     int index = 0;
                     foreach (var type in captureDefinition.Types)
                     {
@@ -399,13 +400,17 @@ namespace XCG.Generators.Cpp
                 #endregion
 
                 // Cleanup whitespace stuff
-                methodDefinition.Add($@"v.pop_back();");
-                methodDefinition.Add($@"v.pop_back();");
-                methodDefinition.Add($@"v.pop_back();");
-                methodDefinition.Add($@"{labelname}:");
+                container.Add($@"v.pop_back();");
+                container.Add($@"v.pop_back();");
+                container.Add($@"v.pop_back();");
+                container.Add($@"{labelname}:");
+                if (!captureDefinition.IsSingleHit)
+                {
+                    container.Add($"continue;");
+                }
             }
 
-
+            methodDefinition.Add(new ReturnPart());
             return methodDefinition;
         }
     }

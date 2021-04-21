@@ -10,9 +10,13 @@ namespace XCG.Generators.Cpp
         public List<ICppPart> Parts { get; init; } = new List<ICppPart>();
 
 
+        public void Add(params ICppPart[] parts) => this.AddRange(parts);
         public void AddRange(IEnumerable<ICppPart> parts)
         {
-            this.Parts.AddRange(parts);
+            foreach (var part in parts)
+            {
+                this.Add(part);
+            }
         }
 
         public void Add(string item)

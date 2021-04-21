@@ -35,7 +35,7 @@ namespace XCG.Generators.Cpp
 
         public string ToString(CppOptions cppOptions)
         {
-            return $"{(IsConst ? "const " : String.Empty)}{(TypeString ?? this.Type.GetCppType(cppOptions))}{new string('*', this.PointerCount)}{new string('&', this.ReferenceCount)}";
+            return $"{(IsConst ? "const " : String.Empty)}{(TypeString ?? this.Type.ToCppString(cppOptions))}{new string('*', this.PointerCount)}{new string('&', this.ReferenceCount)}";
         }
     }
 }

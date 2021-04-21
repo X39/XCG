@@ -8,10 +8,15 @@ namespace XCG.Generators.Cpp
     {
         private const string isCanVariable = "is_can";
         private const string classInstanceVariable = "actual";
+        private const string classInstanceFakeVariable = "fake";
         private const string stateInstanceVariable = "state";
         public static string ToCppSharedPtrType(this string str)
         {
             return String.Concat("std::shared_ptr<", str, ">");
+        }
+        public static ICppPart ToCppPart(this string str, EUsage usage = EUsage.Implementation)
+        {
+            return new FullBody(usage) { str };
         }
         public static string ToCppSharedPtrMake(this string str, params string[] args)
         {
@@ -96,7 +101,7 @@ namespace XCG.Generators.Cpp
                             {
                                 var wordHolderVariable = toUnique("str");
                                 localLoop.Add(new VariableDefinition(new TypeImpl { Type = EType.Char, PointerCount = 1, IsConst = true }, wordHolderVariable, $@"""{word.Text.Replace("\"", "\\\"")}"""));
-                                localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"m_contents.length() - m_offset < {word.Text.Length} && std::equal(m_contents.begin() + m_offset, m_contents.begin() + m_offset + {word.Text.Length}, {wordHolderVariable}, {wordHolderVariable} + {word.Text.Length})")
+                                localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"m_contents.length() - m_offset >= {word.Text.Length} && std::equal(m_contents.begin() + m_offset, m_contents.begin() + m_offset + {word.Text.Length}, {wordHolderVariable}, {wordHolderVariable} + {word.Text.Length})")
                                 {
                                     $@"{countVariable}++;",
                                     $@"for (size_t i = 0; i < {word.Text.Length}; i++)",
@@ -158,7 +163,7 @@ namespace XCG.Generators.Cpp
                         methodDefinition.Add(new IfPart(IfPart.EIfScope.If, $@"{countVariable} < {require.Range.From}")
                         {
                             $@"{resetable}.reset();",
-                            $@"return {{}};",
+                            new ReturnPart(EValueConstant.EmptyClosure),
                         });
                     }
                 }
@@ -166,9 +171,9 @@ namespace XCG.Generators.Cpp
                 {
                     string countVariable = toUnique("count");
                     string localOffsetVariable = toUnique("loff");
-                    methodDefinition.Add(new VariableDefinition(EType.SizeT, countVariable, "0"));
+                    methodDefinition.Add(new VariableDefinition(EType.SizeT, countVariable, backtrack.Range.To.ToString()));
                     methodDefinition.Add(new VariableDefinition(EType.SizeT, localOffsetVariable, "0"));
-                    var localLoop = backtrack.Range.To != Int32.MaxValue ? new WhilePart($"current() != '\\0' && {countVariable} < {backtrack.Range.To}") : new WhilePart("current() != '\\0'");
+                    var localLoop = backtrack.Range.To != Int32.MaxValue ? new WhilePart($"current() != '\\0' && {countVariable} > 0") : new WhilePart("current() != '\\0'");
                     methodDefinition.Add(localLoop);
                     int localsCount = 0;
                     bool isFirst = true;
@@ -182,18 +187,14 @@ namespace XCG.Generators.Cpp
                                 localLoop.Add(new VariableDefinition(new TypeImpl { Type = EType.Char, PointerCount = 1, IsConst = true }, wordHolderVariable, $@"""{word.Text.Replace("\"", "\\\"")}"""));
                                 localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"m_offset >= {word.Text.Length} && std::equal(m_contents.begin() + m_offset - {word.Text.Length}, m_contents.begin() + m_offset, l{localsCount}, l{localsCount} + {word.Text.Length})")
                                 {
-                                    $@"{countVariable}++;",
-                                    $@"{localOffsetVariable} += {word.Text.Length};",
-                                    $@"continue;",
+                                    $@"break;"
                                 });
                             }
                             else
                             {
                                 localLoop.Add(new IfPart (IfPart.EIfScope.If, $@"m_offset >= 1 && m_contents[m_offset - 1] == '{word.Text.First()}'")
                                 {
-                                    $@"{countVariable}++;",
-                                    $@"{localOffsetVariable} += 1;",
-                                    $@"continue;",
+                                    $@"break;"
                                 });
                             }
                         }
@@ -201,9 +202,7 @@ namespace XCG.Generators.Cpp
                         {
                             localLoop.Add(new IfPart(isFirst, $@"'m_offset >= 1 && {range.Start}' <= m_contents[m_offset - 1] && m_contents[m_offset - 1] <= '{range.End}'")
                             {
-                                $@"{countVariable}++;",
-                                $@"{localOffsetVariable} += 1;",
-                                $@"continue;",
+                                $@"break;"
                             });
                         }
                         else
@@ -212,15 +211,12 @@ namespace XCG.Generators.Cpp
                         }
                         isFirst = false;
                     }
-                    localLoop.Add(new FullBody { $@"break;" });
-                    if (backtrack.Range.From > 0)
+                    localLoop.Add(new FullBody { $@"{countVariable}--;" });
+                    methodDefinition.Add(new IfPart(IfPart.EIfScope.If, $@"{countVariable} {(backtrack.Range.From > 0 ? ">=" : "!=")} {backtrack.Range.From}")
                     {
-                        methodDefinition.Add(new IfPart(IfPart.EIfScope.If, $@"{countVariable} < {backtrack.Range.From}")
-                        {
-                            $@"{resetable}.reset();",
-                            $@"return {{}};",
-                        });
-                    }
+                        $@"{resetable}.reset();",
+                        new ReturnPart(EValueConstant.EmptyClosure),
+                    });
                 }
                 else
                 {
@@ -399,6 +395,7 @@ namespace XCG.Generators.Cpp
                     case Parsing.Statements.Print print:
                     case Parsing.Statements.Set set:
                     case Parsing.Statements.Get get:
+                    case Parsing.EOF:
                         break;
                     default:
                         throw new NotImplementedException();
@@ -428,7 +425,8 @@ namespace XCG.Generators.Cpp
             var canMatchMethodDefinition = new MethodDefinition(EType.Boolean, production.ToCppCanMatchMethodName(cppOptions))
             {
                 $@"resetable {resetable}(*this);",
-                $"{production.ToCppStateTypeName(cppOptions, false)} {stateInstanceVariable};"
+                new VariableDefinition(new TypeImpl {  TypeString = production.ToCppTypeName(cppOptions, true).ToCppSharedPtrType() }, classInstanceFakeVariable),
+                new VariableDefinition(new TypeImpl {  TypeString = production.ToCppStateTypeName(cppOptions, false) }, stateInstanceVariable),
             };
             bool isFirst = true;
             foreach (var statement in production.Statements)
@@ -436,31 +434,31 @@ namespace XCG.Generators.Cpp
                 switch (statement)
                 {
                     case Parsing.Statements.Match match:
-                        canMatchMethodDefinition.Add(new IfPart(isIf: isFirst, $@"!{cppOptions.FromCache(match).Name}(true, {{}}, {stateInstanceVariable})")
+                        canMatchMethodDefinition.Add(new IfPart(isIf: isFirst, $@"!{cppOptions.FromCache(match).Name}(true, {classInstanceFakeVariable}, {stateInstanceVariable})")
                         {
                             $@"{resetable}.reset();",
-                            $@"return false;",
+                            new ReturnPart(EValueConstant.False),
                         });
                         break;
                     case Parsing.Statements.Alternatives alternatives:
-                        canMatchMethodDefinition.Add(new IfPart(isIf: isFirst, $@"!{cppOptions.FromCache(alternatives).Name}(true, {{}}, {stateInstanceVariable})")
+                        canMatchMethodDefinition.Add(new IfPart(isIf: isFirst, $@"!{cppOptions.FromCache(alternatives).Name}(true, {classInstanceFakeVariable}, {stateInstanceVariable})")
                         {
                             $@"{resetable}.reset();",
-                            $@"return false;",
+                            new ReturnPart(EValueConstant.False),
                         });
                         break;
                     case Parsing.Statements.If @if:
-                        canMatchMethodDefinition.Add(new IfPart(isIf: isFirst, $@"!{cppOptions.FromCache(@if).Name}(true, {{}}, {stateInstanceVariable})")
+                        canMatchMethodDefinition.Add(new IfPart(isIf: isFirst, $@"!{cppOptions.FromCache(@if).Name}(true, {classInstanceFakeVariable}, {stateInstanceVariable})")
                         {
                             $@"{resetable}.reset();",
-                            $@"return false;",
+                            new ReturnPart(EValueConstant.False),
                         });
                         break;
                     case Parsing.Statements.While @while:
-                        canMatchMethodDefinition.Add(new IfPart(isIf: isFirst, $@"!{cppOptions.FromCache(@while).Name}(true, {{}}, {stateInstanceVariable})")
+                        canMatchMethodDefinition.Add(new IfPart(isIf: isFirst, $@"!{cppOptions.FromCache(@while).Name}(true, {classInstanceFakeVariable}, {stateInstanceVariable})")
                         {
                             $@"{resetable}.reset();",
-                            $@"return false;",
+                            new ReturnPart(EValueConstant.False),
                         });
                         break;
                     case Parsing.Statements.Set:
@@ -470,14 +468,15 @@ namespace XCG.Generators.Cpp
                 }
                 isFirst = false;
             }
-            canMatchMethodDefinition.Add($@"return true;");
+            canMatchMethodDefinition.Add(new ReturnPart(EValueConstant.True));
             yield return canMatchMethodDefinition;
 
             // Generate match method
             var matchMethodDefinition = new MethodDefinition(production.ToCppTypeName(cppOptions, true).ToCppSharedPtrType(), production.ToCppMatchMethodName(cppOptions))
             {
-                $@"auto {classInstanceVariable} = {production.ToCppTypeName(cppOptions, true).ToCppSharedPtrMake()};",
-                $"{production.ToCppStateTypeName(cppOptions, false)} {stateInstanceVariable};"
+                new VariableDefinition(EType.Auto, classInstanceVariable, production.ToCppTypeName(cppOptions, true).ToCppSharedPtrMake()),
+                new VariableDefinition(new TypeImpl {  TypeString = production.ToCppTypeName(cppOptions, true).ToCppSharedPtrType() }, classInstanceFakeVariable),
+                new VariableDefinition(new TypeImpl {  TypeString = production.ToCppStateTypeName(cppOptions, false) }, stateInstanceVariable),
             };
             isFirst = true;
             foreach (var statement in production.Statements)
@@ -487,7 +486,7 @@ namespace XCG.Generators.Cpp
                 switch (statement)
                 {
                     case Parsing.Statements.Match match:
-                        matchMethodDefinition.Add(new IfPart(IfPart.EIfScope.If, $@"{cppOptions.FromCache(match).Name}(true, {{}}, {stateInstanceVariable})")
+                        matchMethodDefinition.Add(new IfPart(IfPart.EIfScope.If, $@"{cppOptions.FromCache(match).Name}(true, {classInstanceFakeVariable}, {stateInstanceVariable})")
                         {
                             $@"{resetable}.reset();",
                             $@"{cppOptions.FromCache(match).Name}(false, {classInstanceVariable}, {stateInstanceVariable});",
@@ -498,7 +497,7 @@ namespace XCG.Generators.Cpp
                         });
                         break;
                     case Parsing.Statements.While @while:
-                        matchMethodDefinition.Add(new IfPart(IfPart.EIfScope.If, $@"{cppOptions.FromCache(@while).Name}(true, {{}}, {stateInstanceVariable})")
+                        matchMethodDefinition.Add(new IfPart(IfPart.EIfScope.If, $@"{cppOptions.FromCache(@while).Name}(true, {classInstanceFakeVariable}, {stateInstanceVariable})")
                         {
                             $@"{resetable}.reset();",
                             $@"{cppOptions.FromCache(@while).Name}(false, {classInstanceVariable}, {stateInstanceVariable});",
@@ -509,7 +508,7 @@ namespace XCG.Generators.Cpp
                         });
                         break;
                     case Parsing.Statements.If @if:
-                        matchMethodDefinition.Add(new IfPart(IfPart.EIfScope.If, $@"{cppOptions.FromCache(@if).Name}(true, {{}}, {stateInstanceVariable})")
+                        matchMethodDefinition.Add(new IfPart(IfPart.EIfScope.If, $@"{cppOptions.FromCache(@if).Name}(true, {classInstanceFakeVariable}, {stateInstanceVariable})")
                         {
                             $@"{resetable}.reset();",
                             $@"{cppOptions.FromCache(@if).Name}(false, {classInstanceVariable}, {stateInstanceVariable});",
@@ -520,7 +519,7 @@ namespace XCG.Generators.Cpp
                         });
                         break;
                     case Parsing.Statements.Alternatives alternatives:
-                        matchMethodDefinition.Add(new IfPart(IfPart.EIfScope.If, $@"{cppOptions.FromCache(alternatives).Name}(true, {{}}, {stateInstanceVariable})")
+                        matchMethodDefinition.Add(new IfPart(IfPart.EIfScope.If, $@"{cppOptions.FromCache(alternatives).Name}(true, {classInstanceFakeVariable}, {stateInstanceVariable})")
                         {
                             $@"{resetable}.reset();",
                             $@"{cppOptions.FromCache(alternatives).Name}(false, {classInstanceVariable}, {stateInstanceVariable});",
@@ -580,22 +579,23 @@ namespace XCG.Generators.Cpp
             var canMatchMethodDefinition = new MethodDefinition(EType.Boolean, leftRecursive.ToCppCanMatchMethodName(cppOptions))
             {
                 $@"resetable {resetable}(*this);",
-                $"{leftRecursive.ToCppStateTypeName(cppOptions, false)} {stateInstanceVariable};",
-                new IfPart(IfPart.EIfScope.If, $@"!{cppOptions.FromCache(lastMatch).Name}(true, {{}}, {stateInstanceVariable})")
+                new VariableDefinition(new TypeImpl {  TypeString = leftRecursive.ToCppTypeName(cppOptions, true).ToCppSharedPtrType() }, classInstanceFakeVariable),
+                new VariableDefinition(new TypeImpl {  TypeString = leftRecursive.ToCppStateTypeName(cppOptions, false) }, stateInstanceVariable),
+                new IfPart(IfPart.EIfScope.If, $@"!{cppOptions.FromCache(lastMatch).Name}(true, {classInstanceFakeVariable}, {stateInstanceVariable})")
                 {
-                    $@"return false;",
+                    new ReturnPart(EValueConstant.False),
                 },
                 whileScope
             };
             bool isFirst = true;
             foreach (var match in matches.Take(matches.Length - 1))
             {
-                whileScope.Add(new IfPart(isFirst, $"{cppOptions.FromCache(match).Name}(true, {{}}, {stateInstanceVariable})"));
+                whileScope.Add(new IfPart(isFirst, $"{cppOptions.FromCache(match).Name}(true, {classInstanceFakeVariable}, {stateInstanceVariable})"));
                 isFirst = false;
             }
             whileScope.Add(new IfPart(IfPart.EIfScope.Else, null)
             {
-                $@"return true;"
+                new ReturnPart(EValueConstant.True)
             });
 
             yield return canMatchMethodDefinition;
@@ -612,11 +612,12 @@ namespace XCG.Generators.Cpp
             var matchMethodDefinition = new MethodDefinition(leftRecursive.ToCppTypeName(cppOptions, true).ToCppSharedPtrType(), leftRecursive.ToCppMatchMethodName(cppOptions))
             {
                 new VariableDefinition(EType.Auto, classInstanceVariable, leftRecursive.ToCppTypeName(cppOptions, true).ToCppSharedPtrMake()),
-                $"{leftRecursive.ToCppStateTypeName(cppOptions, false)} {stateInstanceVariable};",
+                new VariableDefinition(new TypeImpl {  TypeString = leftRecursive.ToCppTypeName(cppOptions, true).ToCppSharedPtrType() }, classInstanceFakeVariable),
+                new VariableDefinition(new TypeImpl {  TypeString = leftRecursive.ToCppStateTypeName(cppOptions, false) }, stateInstanceVariable),
                 new IfPart(IfPart.EIfScope.If, $@"!{cppOptions.FromCache(lastMatch).Name}(false, {classInstanceVariable}, {stateInstanceVariable})")
                 {
                     $@"report(""Something moved wrong (todo: improve error messages)"");",
-                    $@"return {{}};",
+                    new ReturnPart(EValueConstant.EmptyClosure),
                 },
                 $@"bool {isFirstVariable} = true;",
                 whileScope
@@ -624,7 +625,7 @@ namespace XCG.Generators.Cpp
             isFirst = true;
             foreach (var match in matches.Take(matches.Length - 1))
             {
-                whileScope.Add(new IfPart(isFirst, $"{cppOptions.FromCache(match).Name}(true, {{}}, {stateInstanceVariable})")
+                whileScope.Add(new IfPart(isFirst, $"{cppOptions.FromCache(match).Name}(true, {classInstanceFakeVariable}, {stateInstanceVariable})")
                 {
                     $@"{resetable}.reset();",
                     new IfPart(IfPart.EIfScope.If, $"!{isFirstVariable}")
@@ -647,6 +648,77 @@ namespace XCG.Generators.Cpp
             matchMethodDefinition.Add($@"return {classInstanceVariable};");
             yield return matchMethodDefinition;
         }
+
+        public static IEnumerable<ICppPart> GetEvaluationResult(this Parsing.IStatement statement, CppOptions cppOptions, string variable)
+        {
+            switch (statement)
+            {
+                default:
+                    throw new NotImplementedException();
+                case Parsing.Statements.Match match:
+                    yield return new VariableDefinition(EType.Boolean, variable, $@"{cppOptions.FromCache(match).Name}(true, {classInstanceVariable}, {stateInstanceVariable})");
+                    break;
+                case Parsing.EOF:
+                    yield return new VariableDefinition(EType.Boolean, variable, $@"current() == '\0'");
+                    break;
+                case Parsing.Statements.Get get:
+                    throw new NotImplementedException();
+            }
+        }
+
+        public static IEnumerable<ICppPart> Handle(this IEnumerable<Parsing.IStatement> statements, CppOptions cppOptions, bool isCan, Func<string, string> toUnique)
+        {
+
+            foreach (var it in statements)
+            {
+                switch (it)
+                {
+                    case Parsing.Statements.Match match:
+                        yield return new FullBody { $"{cppOptions.FromCache(match).Name}({isCan.ToString().ToLower()}, {classInstanceVariable}, {stateInstanceVariable});" };
+                        break;
+                    case Parsing.Statements.Alternatives alternatives:
+                        if (alternatives.CatchesErrors)
+                        {
+                            if (isCan)
+                            {
+                                yield return new WhilePart($@"!{cppOptions.FromCache(alternatives).Name}(false, {classInstanceVariable}, {stateInstanceVariable}) && current() != '\0'")
+                                {
+                                    "next();"
+                                };
+                            }
+                            else
+                            {
+                                yield return new IfPart(IfPart.EIfScope.If, $@"{cppOptions.FromCache(alternatives).Name}({isCan.ToString().ToLower()}, {classInstanceVariable}, {stateInstanceVariable})")
+                                {
+                                    new WhilePart($@"!{cppOptions.FromCache(alternatives).Name}(true, {classInstanceVariable}, {stateInstanceVariable}) && current() != '\0'")
+                                    {
+                                        "next();"
+                                    },
+                                };
+                            }
+                        }
+                        else
+                        {
+                            yield return new FullBody { $"{cppOptions.FromCache(alternatives).Name}({isCan.ToString().ToLower()}, {classInstanceVariable}, {stateInstanceVariable});" };
+                        }
+                        break;
+                    case Parsing.Statements.If @if:
+                        yield return new FullBody { $"{cppOptions.FromCache(@if).Name}({isCan.ToString().ToLower()}, {classInstanceVariable}, {stateInstanceVariable});" };
+                        break;
+                    case Parsing.Statements.While @while2:
+                        yield return new FullBody { $"{cppOptions.FromCache(@while2).Name}({isCan.ToString().ToLower()}, {classInstanceVariable}, {stateInstanceVariable});" };
+                        break;
+                    case Parsing.Statements.Set set:
+                        foreach (var part in set.ToParts(cppOptions))
+                        {
+                            yield return part;
+                        }
+                        break;
+                    default: throw new NotImplementedException();
+                }
+            }
+        }
+
         /// <summary>
         /// Creates the <see cref="MethodDefinition"/> for a provided <paramref name="if"/>.
         /// </summary>
@@ -671,7 +743,7 @@ namespace XCG.Generators.Cpp
                 EType.Boolean,
                 cppOptions.ToUnique(String.Concat(cppOptions.MethodsPrefix, ifName, "_")),
                 new ArgImpl { Name = isCanVariable, Type = EType.Boolean },
-                new ArgImpl { Name = classInstanceVariable, TypeString = typeName },
+                new ArgImpl { Name = classInstanceVariable, TypeString = typeName, ReferenceCount = 1 },
                 new ArgImpl { Name = stateInstanceVariable, TypeString = stateTypeName, ReferenceCount = 1 }
             )
             {
@@ -679,45 +751,29 @@ namespace XCG.Generators.Cpp
             };
 
             var conditionVariable = toUnique("cond");
-            switch (@if.Condition)
+            methodDefinition.AddRange(@if.Condition!.GetEvaluationResult(cppOptions, conditionVariable));
+
+            var ifPart = new IfPart(IfPart.EIfScope.If, @if.Negated ? $"!{conditionVariable}" : conditionVariable);
+            methodDefinition.Add(ifPart);
+            // Handle any if statements
+            ifPart.AddRange(@if.Statements.Handle(cppOptions, true, toUnique));
+            ifPart.Add(new ReturnPart(EValueConstant.True));
+
+
+            if (@if.Else.Any())
             {
-                default:
-                    throw new NotImplementedException();
-                case Parsing.Statements.Match match:
-                    methodDefinition.Add(new VariableDefinition(EType.Boolean, conditionVariable, $"{cppOptions.FromCache(match).Name}(true, {{}}, {stateInstanceVariable})"));
-                    break;
-                case Parsing.Statements.Get get:
-                    throw new NotImplementedException();
-                    break;
+                var elsePart = new IfPart(IfPart.EIfScope.Else, null);
+                methodDefinition.Add(elsePart);
+
+                // Handle any else statements
+                elsePart.AddRange(@if.Else.Handle(cppOptions, true, toUnique));
+                elsePart.Add(new ReturnPart(EValueConstant.True));
             }
-            methodDefinition.Add(new IfPart(IfPart.EIfScope.If, @if.Negated ? conditionVariable : $"!{conditionVariable}")
+            else
             {
-                "return false;"
-            });
-            // Handle any following statement
-            foreach (var it in @if.Statements)
-            {
-                switch (it)
-                {
-                    case Parsing.Statements.Match match:
-                        methodDefinition.Add($"{cppOptions.FromCache(match).Name}(false, {classInstanceVariable}, {stateInstanceVariable});");
-                        break;
-                    case Parsing.Statements.Alternatives alternatives:
-                        methodDefinition.Add($"{cppOptions.FromCache(alternatives).Name}(false, {classInstanceVariable}, {stateInstanceVariable});");
-                        break;
-                    case Parsing.Statements.If @if2:
-                        methodDefinition.Add($"{cppOptions.FromCache(@if2).Name}(false, {classInstanceVariable}, {stateInstanceVariable});");
-                        break;
-                    case Parsing.Statements.While @while:
-                        methodDefinition.Add($"{cppOptions.FromCache(@while).Name}(false, {classInstanceVariable}, {stateInstanceVariable});");
-                        break;
-                    case Parsing.Statements.Set set:
-                        methodDefinition.AddRange(set.ToParts(cppOptions));
-                        break;
-                    default: throw new NotImplementedException();
-                }
+                // Handle any else statements
+                methodDefinition.Add(new ReturnPart(EValueConstant.False));
             }
-            methodDefinition.Add("return true;");
             return methodDefinition;
         }
         /// <summary>
@@ -744,7 +800,7 @@ namespace XCG.Generators.Cpp
                 EType.Boolean,
                 cppOptions.ToUnique(String.Concat(cppOptions.MethodsPrefix, whileName, "_")),
                 new ArgImpl { Name = isCanVariable, Type = EType.Boolean },
-                new ArgImpl { Name = classInstanceVariable, TypeString = typeName },
+                new ArgImpl { Name = classInstanceVariable, TypeString = typeName, ReferenceCount = 1 },
                 new ArgImpl { Name = stateInstanceVariable, TypeString = stateTypeName, ReferenceCount = 1 }
             )
             {
@@ -752,57 +808,42 @@ namespace XCG.Generators.Cpp
             };
 
             var conditionVariable = toUnique("cond");
-            switch (@while.Condition)
-            {
-                default:
-                    throw new NotImplementedException();
-                case Parsing.Statements.Match match:
-                    methodDefinition.Add(new VariableDefinition(EType.Boolean, conditionVariable, $"{cppOptions.FromCache(match).Name}(true, {{}}, {stateInstanceVariable})"));
-                    break;
-                case Parsing.Statements.Get get:
-                    throw new NotImplementedException();
-                    break;
-            }
-            var whilePart = new WhilePart(@while.Negated ? conditionVariable : $"!{conditionVariable}")
-            {
-                "return false;"
-            };
-            methodDefinition.Add(whilePart);
+            methodDefinition.AddRange(@while.Condition!.GetEvaluationResult(cppOptions, conditionVariable));
+            #region IsCan
+            var isCanIf = new IfPart(IfPart.EIfScope.If, isCanVariable);
+            methodDefinition.Add(isCanIf);
+
+            // Create while loop
+            var whilePart = new WhilePart(@while.Negated ? $"!{conditionVariable}" : conditionVariable);
+            isCanIf.Add(whilePart);
+
             // Handle any following statement
-            foreach (var it in @while.Statements)
-            {
-                switch (it)
-                {
-                    case Parsing.Statements.Match match:
-                        whilePart.Add($"{cppOptions.FromCache(match).Name}(false, {classInstanceVariable}, {stateInstanceVariable});");
-                        break;
-                    case Parsing.Statements.Alternatives alternatives:
-                        whilePart.Add($"{cppOptions.FromCache(alternatives).Name}(false, {classInstanceVariable}, {stateInstanceVariable});");
-                        break;
-                    case Parsing.Statements.If @if:
-                        whilePart.Add($"{cppOptions.FromCache(@if).Name}(false, {classInstanceVariable}, {stateInstanceVariable});");
-                        break;
-                    case Parsing.Statements.While @while2:
-                        whilePart.Add($"{cppOptions.FromCache(@while2).Name}(false, {classInstanceVariable}, {stateInstanceVariable});");
-                        break;
-                    case Parsing.Statements.Set set:
-                        whilePart.AddRange(set.ToParts(cppOptions));
-                        break;
-                    default: throw new NotImplementedException();
-                }
-            }
-            switch (@while.Condition)
-            {
-                default:
-                    throw new NotImplementedException();
-                case Parsing.Statements.Match match:
-                    whilePart.Add(new VariableDefinition(EType.Boolean, conditionVariable, $"{cppOptions.FromCache(match).Name}(true, {{}}, {stateInstanceVariable})"));
-                    break;
-                case Parsing.Statements.Get get:
-                    throw new NotImplementedException();
-                    break;
-            }
-            methodDefinition.Add("return true;");
+            whilePart.AddRange(@while.Statements.Handle(cppOptions, true, toUnique));
+
+            // and re-evaluate the while condition
+            whilePart.AddRange(@while.Condition!.GetEvaluationResult(cppOptions, conditionVariable));
+
+            // finally return true
+            isCanIf.Add(new ReturnPart(EValueConstant.True));
+            #endregion
+            #region IsNotCan
+            // Create Else
+            var isNotCanif = new IfPart(IfPart.EIfScope.Else, null);
+            methodDefinition.Add(isNotCanif);
+
+            // Create while loop
+            whilePart = new WhilePart(@while.Negated ? $"!{conditionVariable}" : conditionVariable);
+            isNotCanif.Add(whilePart);
+
+            // Handle any following statement
+            whilePart.AddRange(@while.Statements.Handle(cppOptions, false, toUnique));
+
+            // and re-evaluate the while condition
+            whilePart.AddRange(@while.Condition!.GetEvaluationResult(cppOptions, conditionVariable));
+
+            // finally return true
+            isNotCanif.Add(new ReturnPart(EValueConstant.True));
+            #endregion
             return methodDefinition;
         }
         /// <summary>
@@ -841,7 +882,7 @@ namespace XCG.Generators.Cpp
                 EType.Boolean,
                 cppOptions.ToUnique(String.Concat(cppOptions.MethodsPrefix, matchName, "_")),
                 new ArgImpl { Name = isCanVariable, Type = EType.Boolean },
-                new ArgImpl { Name = classInstanceVariable, TypeString = typeName },
+                new ArgImpl { Name = classInstanceVariable, TypeString = typeName, ReferenceCount = 1 },
                 new ArgImpl { Name = stateInstanceVariable, TypeString = stateTypeName, ReferenceCount = 1 }
             )
             {
@@ -889,17 +930,17 @@ namespace XCG.Generators.Cpp
                 methodDefinition.Add(new IfPart(IfPart.EIfScope.Else, isCanVariable)
                 {
                     $@"{resetable}.reset();",
-                    $@"return false;",
+                    new ReturnPart(EValueConstant.False),
                 });
                 methodDefinition.Add(new IfPart(IfPart.EIfScope.Else, null)
                 {
                     $@"report(""Something moved wrong (todo: improve error messages)"");",
-                    $@"return false;",
+                    new ReturnPart(EValueConstant.False),
                 });
             }
             methodDefinition.Add(new IfPart(IfPart.EIfScope.If, $@"{isCanVariable}")
             {
-                "return true;"
+                new ReturnPart(EValueConstant.True)
             });
             methodDefinition.Add($@"{resetable}.reset();");
 
@@ -909,6 +950,7 @@ namespace XCG.Generators.Cpp
                 string? valueVariable = toUnique("val");
                 if (reference.IsCaptured)
                 {
+                    var captureDefinition = cppOptions.CaptureDefinitionsMap.GetValueOrDefault(reference) ?? throw new FatalException();
                     string? call = reference.Refered switch
                     {
                         // Match the different possible refered things into proper conditions
@@ -917,11 +959,15 @@ namespace XCG.Generators.Cpp
                         Parsing.LeftRecursive leftRecursive => String.Concat(leftRecursive.ToCppMatchMethodName(cppOptions), "()"),
                         _ => throw new FatalException()
                     };
-                    methodDefinition.Add(new FullBody
+                    methodDefinition.Add(new VariableDefinition(EType.Auto, valueVariable, call));
+                    if (captureDefinition.IsSingleHit)
                     {
-                        $"auto {valueVariable} = {call};",
-                        $"{classInstanceVariable}->{reference.CaptureName.ToCppName() ?? throw new FatalException()} = {valueVariable};"
-                    });
+                        methodDefinition.Add($"{classInstanceVariable}->{reference.CaptureName?.ToCppName() ?? throw new FatalException()} = {valueVariable};");
+                    }
+                    else
+                    {
+                        methodDefinition.Add($"{classInstanceVariable}->{reference.CaptureName?.ToCppName() ?? throw new FatalException()}.push_back({valueVariable});");
+                    }
                 }
                 else
                 {
@@ -951,29 +997,9 @@ namespace XCG.Generators.Cpp
             }
 
             // Handle any following statement too
-            foreach (var it in match.Statements)
-            {
-                switch (it)
-                {
-                    case Parsing.Statements.Match match2:
-                        methodDefinition.Add($"{cppOptions.FromCache(match2).Name}(false, {classInstanceVariable}, {stateInstanceVariable});");
-                        break;
-                    case Parsing.Statements.Alternatives alternatives:
-                        methodDefinition.Add($"{cppOptions.FromCache(alternatives).Name}(false, {classInstanceVariable}, {stateInstanceVariable});");
-                        break;
-                    case Parsing.Statements.If @if:
-                        methodDefinition.Add($"{cppOptions.FromCache(@if).Name}(false, {classInstanceVariable}, {stateInstanceVariable});");
-                        break;
-                    case Parsing.Statements.While @while:
-                        methodDefinition.Add($"{cppOptions.FromCache(@while).Name}(false, {classInstanceVariable}, {stateInstanceVariable});");
-                        break;
-                    case Parsing.Statements.Set set:
-                        methodDefinition.AddRange(set.ToParts(cppOptions));
-                        break;
-                    default: throw new NotImplementedException();
-                }
-            }
-            methodDefinition.Add("return true;");
+            methodDefinition.AddRange(match.Statements.Handle(cppOptions, false, toUnique));
+
+            methodDefinition.Add(new ReturnPart(EValueConstant.True));
             return methodDefinition;
         }
         /// <summary>
@@ -996,7 +1022,7 @@ namespace XCG.Generators.Cpp
                 EType.Boolean,
                 cppOptions.ToUnique(String.Concat(cppOptions.MethodsPrefix, "alternatives")),
                 new ArgImpl { Name = isCanVariable, Type = EType.Boolean },
-                new ArgImpl { Name = classInstanceVariable, TypeString = typeName },
+                new ArgImpl { Name = classInstanceVariable, TypeString = typeName, ReferenceCount = 1 },
                 new ArgImpl { Name = stateInstanceVariable, TypeString = stateTypeName, ReferenceCount = 1 }
             );
             // Unique Variables
@@ -1014,23 +1040,23 @@ namespace XCG.Generators.Cpp
             bool isFirst = true;
             foreach (var match in matches)
             {
-                methodDefinition.Add(new IfPart(isFirst, $@"{cppOptions.FromCache(match).Name}(true, {{}}, {stateInstanceVariable})")
+                methodDefinition.Add(new IfPart(isFirst, $@"{cppOptions.FromCache(match).Name}(true, {classInstanceVariable}, {stateInstanceVariable})")
                 {
                     new IfPart(IfPart.EIfScope.If, isCanVariable)
                     {
-                        $@"return true;"
+                        new ReturnPart(EValueConstant.True)
                     },
                     new IfPart(IfPart.EIfScope.Else, null)
                     {
                         $@"{resetable}.reset();",
                         $@"{cppOptions.FromCache(match).Name}(false, {classInstanceVariable}, {stateInstanceVariable});",
-                        $@"return true;"
+                        new ReturnPart(EValueConstant.True)
                     }
                 });
                 isFirst = false;
             }
             methodDefinition.Add($@"{resetable}.reset();");
-            methodDefinition.Add($@"return false;");
+            methodDefinition.Add(new ReturnPart(EValueConstant.False));
             return methodDefinition;
         }
         public static IEnumerable<ICppPart> ToParts(this Parsing.Statements.Set set, CppOptions cppOptions)

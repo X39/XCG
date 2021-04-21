@@ -15,7 +15,7 @@
 
         public string ToString(CppOptions cppOptions)
         {
-            return $"{(TypeString ?? this.Type.GetCppType(cppOptions))}{new string('*', this.PointerCount)}{new string('&', this.ReferenceCount)} {this.Name}";
+            return $"{(TypeString ?? this.Type.ToCppString(cppOptions))}{new string('*', this.PointerCount)}{new string('&', this.ReferenceCount)} {this.Name}";
         }
     }
 }
