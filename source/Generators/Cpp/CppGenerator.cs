@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using XCG.Generators.Cpp.Extensive;
 using XCG.Parsing;
 using XCG.Validation;
 
@@ -178,13 +179,13 @@ namespace XCG.Generators.Cpp
             var captureClasses = Array.Empty<Parsing.IStatement>()
                 .Concat(parser.Productions.Cast<Parsing.IStatement>())
                 .Concat(parser.LeftRecursives.Cast<Parsing.IStatement>())
-                .Select((q) => Extensions.GetClassDefinition(q, this.Options))
+                .Select((q) => q.GetClassDefinition(this.Options))
                 .NotNull()
                 .ToArray();
             var stateClasses = Array.Empty<Parsing.IStatement>()
                 .Concat(parser.Productions.Cast<Parsing.IStatement>())
                 .Concat(parser.LeftRecursives.Cast<Parsing.IStatement>())
-                .Select((q) => Extensions.GetStateDefinition(q, this.Options))
+                .Select((q) => q.GetStateDefinition(this.Options))
                 .NotNull()
                 .ToArray();
             instanceClass.PublicParts.AddRange(captureClasses);
