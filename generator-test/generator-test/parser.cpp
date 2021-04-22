@@ -1618,8 +1618,14 @@ bool yaoosl::parsing::instance::while43_44(bool is_can, std::shared_ptr<yaoosl::
         {
             if (!alternatives41(false, actual, state))
             {
-                while (!alternatives41(true, actual, state) && current() != '\0')
+                while (current() != '\0')
                 {
+                    resetable resetable4(*this);
+                    if (alternatives41(true, actual, state))
+                    {
+                        resetable4.reset();
+                        break;
+                    }
                     next();
                 }
             }
@@ -3096,8 +3102,14 @@ bool yaoosl::parsing::instance::while78_79(bool is_can, std::shared_ptr<yaoosl::
         {
             if (!alternatives77(false, actual, state))
             {
-                while (!alternatives77(true, actual, state) && current() != '\0')
+                while (current() != '\0')
                 {
+                    resetable resetable4(*this);
+                    if (alternatives77(true, actual, state))
+                    {
+                        resetable4.reset();
+                        break;
+                    }
                     next();
                 }
             }

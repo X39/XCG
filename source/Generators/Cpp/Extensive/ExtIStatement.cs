@@ -231,10 +231,17 @@ namespace XCG.Generators.Cpp.Extensive
                             }
                             else
                             {
+                                var resetable = toUnique("resetable");
                                 yield return new IfPart(IfPart.EIfScope.If, $@"!{cppOptions.FromCache(alternatives).Name}(false, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable})")
                                 {
-                                    new WhilePart($@"!{cppOptions.FromCache(alternatives).Name}(true, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable}) && current() != '\0'")
+                                    new WhilePart($@"current() != '\0'")
                                     {
+                                        $@"resetable {resetable}(*this);",
+                                        new IfPart(IfPart.EIfScope.If, $@"{cppOptions.FromCache(alternatives).Name}(true, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable})")
+                                        {
+                                            $@"{resetable}.reset();",
+                                            $@"break;",
+                                        },
                                         "next();"
                                     },
                                 };
