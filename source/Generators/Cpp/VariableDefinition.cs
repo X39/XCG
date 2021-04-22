@@ -51,6 +51,31 @@ namespace XCG.Generators.Cpp
             this.VariableName = variableName;
             this.Args = defaultValue;
         }
+        public VariableDefinition(string typeImpl, string variableName)
+        {
+            Contract.Assert(!variableName.Contains('-'));
+            Contract.Assert(!variableName.Contains('@'));
+            this.Type = new TypeImpl { TypeString = typeImpl };
+            this.VariableName = variableName;
+            this.Args = Array.Empty<string>();
+        }
+        public VariableDefinition(string typeImpl, string variableName, string defaultValue)
+        {
+            Contract.Assert(!variableName.Contains('-'));
+            Contract.Assert(!variableName.Contains('@'));
+            this.Type = new TypeImpl { TypeString = typeImpl };
+            this.VariableName = variableName;
+            this.DefaultValue = defaultValue;
+            this.Args = Array.Empty<string>();
+        }
+        public VariableDefinition(string typeImpl, string variableName, params string[] defaultValue)
+        {
+            Contract.Assert(!variableName.Contains('-'));
+            Contract.Assert(!variableName.Contains('@'));
+            this.Type = new TypeImpl { TypeString = typeImpl };
+            this.VariableName = variableName;
+            this.Args = defaultValue;
+        }
         public VariableDefinition(TypeImpl typeImpl, string variableName)
         {
             Contract.Assert(!variableName.Contains('-'));

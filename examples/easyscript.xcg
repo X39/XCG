@@ -82,10 +82,14 @@ left-recursive exp-or
 	match @[left]exp-equality
     
 production exp-assignment
-    match @[name] "=" @[value]statement
+    match @[name]"=" @[value]statement
+    
+production return-statement
+    match "return" @[expression]exp-or
 
 production statement
     alternatives
+        match @[expression]return-statement
         match @[expression]exp-assignment
         match @[expression]exp-or
 

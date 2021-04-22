@@ -75,7 +75,7 @@ namespace XCG.Generators.Cpp
                         {
                             new FullBody
                             {
-                                $@"std::cout << ""[L"" << m_line << ""]"" << ""[C"" << m_column << ""] "" << message;"
+                                $@"std::cout << ""[L"" << m_line << ""]"" << ""[C"" << m_column << ""] "" << message << ""\n"";"
                             }
                         }
                     }

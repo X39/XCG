@@ -21,8 +21,12 @@ int main()
         yaoosl::parsing::instance i(*file, "NA");
         auto res = i.parse();
         std::stringstream sstream;
-        i.print_tree(res, {}, *file, sstream);
-        cout << sstream.str();
+        auto lines = i.create_string_tree(res, *file);
+        for (auto line : lines)
+        {
+            cout << line << "\n";
+        }
+        cout << std::endl;
         return 0;
     }
     else
@@ -40,6 +44,7 @@ bool file_exists(std::string_view filename)
 
 std::optional<std::string> read_file_from_disk(std::string_view physical_path)
 {
+    
     if (!file_exists(physical_path))
     {
         return {};

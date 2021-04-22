@@ -37,7 +37,8 @@ namespace XCG.Generators.Cpp.Extensive
             };
 
             var conditionVariable = toUnique("cond");
-            methodDefinition.AddRange(@if.Condition!.GetEvaluationResult(cppOptions, conditionVariable));
+            methodDefinition.AddRange(@if.Condition!.GetEvaluationResult(cppOptions, conditionVariable, true));
+            methodDefinition.Add($@"{resetable}.reset();");
 
             var ifPart = new IfPart(IfPart.EIfScope.If, @if.Negated ? $"!{conditionVariable}" : conditionVariable);
             methodDefinition.Add(ifPart);

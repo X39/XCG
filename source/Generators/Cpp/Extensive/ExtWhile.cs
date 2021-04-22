@@ -22,6 +22,7 @@ namespace XCG.Generators.Cpp.Extensive
             int ___localsCount = 0;
             string toUnique(string str) => String.Concat(str, (++___localsCount).ToString());
             string? resetable = toUnique("resetable");
+            string? resetable_condition = toUnique("resetable");
 
             var whileName = cppOptions.ToUnique("while");
             var methodDefinition = new MethodDefinition(
@@ -36,20 +37,24 @@ namespace XCG.Generators.Cpp.Extensive
             };
 
             var conditionVariable = toUnique("cond");
-            methodDefinition.AddRange(@while.Condition!.GetEvaluationResult(cppOptions, conditionVariable));
+            var effectiveCondition = String.Concat(@while.Negated ? $"!{conditionVariable}" : conditionVariable, " && current() != '\\0'");
+            methodDefinition.AddRange(@while.Condition!.GetEvaluationResult(cppOptions, conditionVariable, true));
+            methodDefinition.Add($@"{resetable}.reset();");
             #region IsCan
             var isCanIf = new IfPart(IfPart.EIfScope.If, Constants.isCanVariable);
             methodDefinition.Add(isCanIf);
 
             // Create while loop
-            var whilePart = new WhilePart(@while.Negated ? $"!{conditionVariable}" : conditionVariable);
+            var whilePart = new WhilePart(effectiveCondition);
             isCanIf.Add(whilePart);
 
             // Handle any following statement
             whilePart.AddRange(@while.Statements.Handle(cppOptions, true, toUnique));
 
             // and re-evaluate the while condition
-            whilePart.AddRange(@while.Condition!.GetEvaluationResult(cppOptions, conditionVariable));
+            whilePart.Add($@"resetable {resetable_condition}(*this);");
+            whilePart.AddRange(@while.Condition!.GetEvaluationResult(cppOptions, conditionVariable, false));
+            whilePart.Add($@"{resetable_condition}.reset();");
 
             // finally return true
             isCanIf.Add(new ReturnPart(EValueConstant.True));
@@ -60,14 +65,14 @@ namespace XCG.Generators.Cpp.Extensive
             methodDefinition.Add(isNotCanif);
 
             // Create while loop
-            whilePart = new WhilePart(@while.Negated ? $"!{conditionVariable}" : conditionVariable);
+            whilePart = new WhilePart(effectiveCondition);
             isNotCanif.Add(whilePart);
 
             // Handle any following statement
             whilePart.AddRange(@while.Statements.Handle(cppOptions, false, toUnique));
 
             // and re-evaluate the while condition
-            whilePart.AddRange(@while.Condition!.GetEvaluationResult(cppOptions, conditionVariable));
+            whilePart.AddRange(@while.Condition!.GetEvaluationResult(cppOptions, conditionVariable, false));
 
             // finally return true
             isNotCanif.Add(new ReturnPart(EValueConstant.True));

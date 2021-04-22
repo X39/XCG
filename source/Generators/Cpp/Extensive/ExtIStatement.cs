@@ -167,17 +167,31 @@ namespace XCG.Generators.Cpp.Extensive
                 PublicParts = new List<ICppPart>(captureDefinitions.Values)
             };
         }
-        public static IEnumerable<ICppPart> GetEvaluationResult(this Parsing.IStatement statement, CppOptions cppOptions, string variable)
+        public static IEnumerable<ICppPart> GetEvaluationResult(this Parsing.IStatement statement, CppOptions cppOptions, string variable, bool createVariable)
         {
             switch (statement)
             {
                 default:
                     throw new NotImplementedException();
                 case Parsing.Statements.Match match:
-                    yield return new VariableDefinition(EType.Boolean, variable, $@"{cppOptions.FromCache(match).Name}(true, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable})");
+                    if (createVariable)
+                    {
+                        yield return new VariableDefinition(EType.Boolean, variable, $@"{cppOptions.FromCache(match).Name}(true, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable})");
+                    }
+                    else
+                    {
+                        yield return new FullBody { $@"{variable} = {cppOptions.FromCache(match).Name}(true, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable});" };
+                    }
                     break;
                 case Parsing.EOF:
-                    yield return new VariableDefinition(EType.Boolean, variable, $@"current() == '\0'");
+                    if (createVariable)
+                    {
+                        yield return new VariableDefinition(EType.Boolean, variable, $@"current() == '\0'");
+                    }
+                    else
+                    {
+                        yield return new FullBody { $@"{variable} = current() == '\0';" };
+                    }
                     break;
                 case Parsing.Statements.Get get:
                     throw new NotImplementedException();
@@ -191,21 +205,33 @@ namespace XCG.Generators.Cpp.Extensive
                 switch (it)
                 {
                     case Parsing.Statements.Match match:
-                        yield return new FullBody { $"{cppOptions.FromCache(match).Name}({isCan.ToString().ToLower()}, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable});" };
+                        yield return new IfPart(IfPart.EIfScope.If, $"{cppOptions.FromCache(match).Name}({isCan.ToString().ToLower()}, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable})")
+                        {
+                            $@"skip();",
+                        };
+                        yield return new IfPart(IfPart.EIfScope.Else, Constants.isCanVariable)
+                        {
+                            new ReturnPart(EValueConstant.False),
+                        };
+                        yield return new IfPart(IfPart.EIfScope.Else, null)
+                        {
+                            $@"report(""Something moved wrong (todo: improve error messages)"");",
+                            new ReturnPart(EValueConstant.False),
+                        };
                         break;
                     case Parsing.Statements.Alternatives alternatives:
                         if (alternatives.CatchesErrors)
                         {
                             if (isCan)
                             {
-                                yield return new WhilePart($@"!{cppOptions.FromCache(alternatives).Name}(false, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable}) && current() != '\0'")
+                                yield return new WhilePart($@"!{cppOptions.FromCache(alternatives).Name}(true, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable}) && current() != '\0'")
                                 {
                                     "next();"
                                 };
                             }
                             else
                             {
-                                yield return new IfPart(IfPart.EIfScope.If, $@"{cppOptions.FromCache(alternatives).Name}({isCan.ToString().ToLower()}, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable})")
+                                yield return new IfPart(IfPart.EIfScope.If, $@"!{cppOptions.FromCache(alternatives).Name}(false, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable})")
                                 {
                                     new WhilePart($@"!{cppOptions.FromCache(alternatives).Name}(true, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable}) && current() != '\0'")
                                     {

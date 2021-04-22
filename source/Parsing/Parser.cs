@@ -1334,6 +1334,10 @@ namespace XCG.Parsing
                 text = text.Trim('"');
                 isAlias = true;
             }
+            if (String.IsNullOrWhiteSpace(text))
+            {
+                this.parseNotes.Add(this.err("Empty reference. "));
+            }
             var reference = new Reference(text)
             {
                 Diagnostics = this.GetDiagnostic(),

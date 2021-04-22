@@ -16,6 +16,7 @@ namespace yaoosl::parsing
         class token;
         class exp_nullar;
         class exp_assignment;
+        class return_statement;
         class statement;
         class function_arg;
         class scope;
@@ -32,6 +33,7 @@ namespace yaoosl::parsing
         class exp_or;
         class exp_nullar_state;
         class exp_assignment_state;
+        class return_statement_state;
         class statement_state;
         class function_arg_state;
         class scope_state;
@@ -80,6 +82,7 @@ namespace yaoosl::parsing
         std::optional<size_t> token__and();
         std::optional<size_t> token__or();
         std::optional<size_t> token__equal();
+        std::optional<size_t> token__return();
         std::optional<size_t> token__curly_bracked_open();
         std::optional<size_t> token__curly_bracked_close();
         std::optional<size_t> token__func();
@@ -87,103 +90,107 @@ namespace yaoosl::parsing
         std::optional<size_t> token__while();
         std::optional<size_t> token__if();
         std::optional<size_t> token__else();
-        bool m_roundbrackedopen_statement_roundbrackedclose_25(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state);
-        bool m_scalar_26(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state);
-        bool m_integer_27(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state);
-        bool m_ident_28(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state);
-        bool alternatives29(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state);
+        bool m_roundbrackedopen_statement_roundbrackedclose_26(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state);
+        bool m_scalar_27(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state);
+        bool m_integer_28(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state);
+        bool m_ident_29(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state);
+        bool alternatives30(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state);
         bool p_can_exp_nullar();
         std::shared_ptr<yaoosl::parsing::instance::exp_nullar> p_match_exp_nullar();
-        bool m_integer_equal_statement_30(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_assignment>& actual, yaoosl::parsing::instance::exp_assignment_state& state);
+        bool m_equal_statement_31(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_assignment>& actual, yaoosl::parsing::instance::exp_assignment_state& state);
         bool p_can_exp_assignment();
         std::shared_ptr<yaoosl::parsing::instance::exp_assignment> p_match_exp_assignment();
-        bool m_expassignment_31(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement>& actual, yaoosl::parsing::instance::statement_state& state);
-        bool m_expor_32(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement>& actual, yaoosl::parsing::instance::statement_state& state);
-        bool alternatives33(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement>& actual, yaoosl::parsing::instance::statement_state& state);
+        bool m_return_expor_32(bool is_can, std::shared_ptr<yaoosl::parsing::instance::return_statement>& actual, yaoosl::parsing::instance::return_statement_state& state);
+        bool p_can_return_statement();
+        std::shared_ptr<yaoosl::parsing::instance::return_statement> p_match_return_statement();
+        bool m_returnstatement_33(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement>& actual, yaoosl::parsing::instance::statement_state& state);
+        bool m_expassignment_34(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement>& actual, yaoosl::parsing::instance::statement_state& state);
+        bool m_expor_35(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement>& actual, yaoosl::parsing::instance::statement_state& state);
+        bool alternatives36(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement>& actual, yaoosl::parsing::instance::statement_state& state);
         bool p_can_statement();
         std::shared_ptr<yaoosl::parsing::instance::statement> p_match_statement();
-        bool m_ident_34(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function_arg>& actual, yaoosl::parsing::instance::function_arg_state& state);
+        bool m_ident_37(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function_arg>& actual, yaoosl::parsing::instance::function_arg_state& state);
         bool p_can_function_arg();
         std::shared_ptr<yaoosl::parsing::instance::function_arg> p_match_function_arg();
-        bool m_curlybrackedopen_35(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state);
-        bool m_controlstructure_36(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state);
-        bool m_statement_37(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state);
-        bool alternatives38(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state);
-        bool m_curlybrackedclose_39(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state);
-        bool while40_41(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state);
+        bool m_curlybrackedopen_38(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state);
+        bool m_controlstructure_39(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state);
+        bool m_statement_40(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state);
+        bool alternatives41(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state);
         bool m_curlybrackedclose_42(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state);
+        bool while43_44(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state);
+        bool m_curlybrackedclose_45(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state);
         bool p_can_scope();
         std::shared_ptr<yaoosl::parsing::instance::scope> p_match_scope();
-        bool m_func_ident_roundbrackedopen_43(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state);
-        bool m_functionarg_44(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state);
-        bool m_comma_functionarg_45(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state);
-        bool m_roundbrackedclose_46(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state);
-        bool while47_48(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state);
-        bool m_functionarg_49(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state);
-        bool if50_51(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state);
-        bool m_roundbrackedclose_scope_52(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state);
+        bool m_func_ident_roundbrackedopen_46(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state);
+        bool m_functionarg_47(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state);
+        bool m_comma_functionarg_48(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state);
+        bool m_roundbrackedclose_49(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state);
+        bool while50_51(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state);
+        bool m_functionarg_52(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state);
+        bool if53_54(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state);
+        bool m_roundbrackedclose_scope_55(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state);
         bool p_can_function();
         std::shared_ptr<yaoosl::parsing::instance::function> p_match_function();
-        bool m_while_roundbrackedopen_statement_roundbrackedclose_scope_53(bool is_can, std::shared_ptr<yaoosl::parsing::instance::while_loop>& actual, yaoosl::parsing::instance::while_loop_state& state);
+        bool m_while_roundbrackedopen_statement_roundbrackedclose_scope_56(bool is_can, std::shared_ptr<yaoosl::parsing::instance::while_loop>& actual, yaoosl::parsing::instance::while_loop_state& state);
         bool p_can_while_loop();
         std::shared_ptr<yaoosl::parsing::instance::while_loop> p_match_while_loop();
-        bool m_if_roundbrackedopen_statement_roundbrackedclose_54(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state);
-        bool m_scope_55(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state);
-        bool m_controlstructure_56(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state);
-        bool m_statement_57(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state);
-        bool alternatives58(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state);
-        bool m_else_59(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state);
-        bool m_scope_60(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state);
-        bool m_controlstructure_61(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state);
-        bool m_statement_62(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state);
-        bool alternatives63(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state);
-        bool m_else_64(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state);
-        bool if65_66(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state);
+        bool m_if_roundbrackedopen_statement_roundbrackedclose_57(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state);
+        bool m_scope_58(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state);
+        bool m_controlstructure_59(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state);
+        bool m_statement_60(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state);
+        bool alternatives61(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state);
+        bool m_else_62(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state);
+        bool m_scope_63(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state);
+        bool m_controlstructure_64(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state);
+        bool m_statement_65(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state);
+        bool alternatives66(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state);
+        bool m_else_67(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state);
+        bool if68_69(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state);
         bool p_can_if_else();
         std::shared_ptr<yaoosl::parsing::instance::if_else> p_match_if_else();
-        bool m_function_67(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state);
-        bool m_whileloop_68(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state);
-        bool m_ifelse_69(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state);
-        bool m_scope_70(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state);
-        bool alternatives71(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state);
+        bool m_function_70(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state);
+        bool m_whileloop_71(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state);
+        bool m_ifelse_72(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state);
+        bool m_scope_73(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state);
+        bool alternatives74(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state);
         bool p_can_control_structure();
         std::shared_ptr<yaoosl::parsing::instance::control_structure> p_match_control_structure();
-        bool m_controlstructure_72(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state);
-        bool m_statement_73(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state);
-        bool alternatives74(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state);
-        bool while75_76(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state);
+        bool m_controlstructure_75(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state);
+        bool m_statement_76(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state);
+        bool alternatives77(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state);
+        bool while78_79(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state);
         bool p_can_main();
         std::shared_ptr<yaoosl::parsing::instance::main> p_match_main();
-        bool m_exparithmetic2_slash_expnullar_77(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2>& actual, yaoosl::parsing::instance::exp_arithmetic_2_state& state);
-        bool m_exparithmetic2_star_expnullar_78(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2>& actual, yaoosl::parsing::instance::exp_arithmetic_2_state& state);
-        bool m_expnullar_79(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2>& actual, yaoosl::parsing::instance::exp_arithmetic_2_state& state);
+        bool m_exparithmetic2_slash_expnullar_80(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2>& actual, yaoosl::parsing::instance::exp_arithmetic_2_state& state);
+        bool m_exparithmetic2_star_expnullar_81(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2>& actual, yaoosl::parsing::instance::exp_arithmetic_2_state& state);
+        bool m_expnullar_82(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2>& actual, yaoosl::parsing::instance::exp_arithmetic_2_state& state);
         bool lr_can_exp_arithmetic_2();
         std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2> lr_match_exp_arithmetic_2();
-        bool m_exparithmetic1_plus_exparithmetic2_80(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1>& actual, yaoosl::parsing::instance::exp_arithmetic_1_state& state);
-        bool m_exparithmetic1_minus_exparithmetic2_81(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1>& actual, yaoosl::parsing::instance::exp_arithmetic_1_state& state);
-        bool m_exparithmetic2_82(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1>& actual, yaoosl::parsing::instance::exp_arithmetic_1_state& state);
+        bool m_exparithmetic1_plus_exparithmetic2_83(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1>& actual, yaoosl::parsing::instance::exp_arithmetic_1_state& state);
+        bool m_exparithmetic1_minus_exparithmetic2_84(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1>& actual, yaoosl::parsing::instance::exp_arithmetic_1_state& state);
+        bool m_exparithmetic2_85(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1>& actual, yaoosl::parsing::instance::exp_arithmetic_1_state& state);
         bool lr_can_exp_arithmetic_1();
         std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1> lr_match_exp_arithmetic_1();
-        bool m_expcompare_lessthenequal_exparithmetic1_83(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state);
-        bool m_expcompare_lessthen_exparithmetic1_84(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state);
-        bool m_expcompare_greaterthenequal_exparithmetic1_85(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state);
-        bool m_expcompare_greaterthen_exparithmetic1_86(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state);
-        bool m_exparithmetic1_87(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state);
+        bool m_expcompare_lessthenequal_exparithmetic1_86(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state);
+        bool m_expcompare_lessthen_exparithmetic1_87(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state);
+        bool m_expcompare_greaterthenequal_exparithmetic1_88(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state);
+        bool m_expcompare_greaterthen_exparithmetic1_89(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state);
+        bool m_exparithmetic1_90(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state);
         bool lr_can_exp_compare();
         std::shared_ptr<yaoosl::parsing::instance::exp_compare> lr_match_exp_compare();
-        bool m_expequality_lessthenequal_expcompare_88(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state);
-        bool m_expequality_lessthen_expcompare_89(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state);
-        bool m_expequality_greaterthenequal_expcompare_90(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state);
-        bool m_expequality_greaterthen_expcompare_91(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state);
-        bool m_expcompare_92(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state);
+        bool m_expequality_lessthenequal_expcompare_91(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state);
+        bool m_expequality_lessthen_expcompare_92(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state);
+        bool m_expequality_greaterthenequal_expcompare_93(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state);
+        bool m_expequality_greaterthen_expcompare_94(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state);
+        bool m_expcompare_95(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state);
         bool lr_can_exp_equality();
         std::shared_ptr<yaoosl::parsing::instance::exp_equality> lr_match_exp_equality();
-        bool m_expand_and_expequality_93(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_and>& actual, yaoosl::parsing::instance::exp_and_state& state);
-        bool m_expequality_94(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_and>& actual, yaoosl::parsing::instance::exp_and_state& state);
+        bool m_expand_and_expequality_96(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_and>& actual, yaoosl::parsing::instance::exp_and_state& state);
+        bool m_expequality_97(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_and>& actual, yaoosl::parsing::instance::exp_and_state& state);
         bool lr_can_exp_and();
         std::shared_ptr<yaoosl::parsing::instance::exp_and> lr_match_exp_and();
-        bool m_expor_or_expequality_95(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_or>& actual, yaoosl::parsing::instance::exp_or_state& state);
-        bool m_expequality_96(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_or>& actual, yaoosl::parsing::instance::exp_or_state& state);
+        bool m_expor_or_expequality_98(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_or>& actual, yaoosl::parsing::instance::exp_or_state& state);
+        bool m_expequality_99(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_or>& actual, yaoosl::parsing::instance::exp_or_state& state);
         bool lr_can_exp_or();
         std::shared_ptr<yaoosl::parsing::instance::exp_or> lr_match_exp_or();
     protected:
@@ -216,6 +223,7 @@ namespace yaoosl::parsing
             _AND,
             _OR,
             _EQUAL,
+            _RETURN,
             _CURLY_BRACKED_OPEN,
             _CURLY_BRACKED_CLOSE,
             _FUNC,
@@ -247,10 +255,15 @@ namespace yaoosl::parsing
             token name;
             std::shared_ptr<statement> value;
         };
+        class return_statement
+        {
+        public:
+            std::shared_ptr<exp_or> expression;
+        };
         class statement
         {
         public:
-            std::variant<std::shared_ptr<exp_assignment>, std::shared_ptr<exp_or>> expression;
+            std::variant<std::shared_ptr<return_statement>, std::shared_ptr<exp_assignment>, std::shared_ptr<exp_or>> expression;
         };
         class function_arg
         {
@@ -342,6 +355,9 @@ namespace yaoosl::parsing
         class exp_assignment_state
         {
         };
+        class return_statement_state
+        {
+        };
         class statement_state
         {
         };
@@ -385,21 +401,22 @@ namespace yaoosl::parsing
         {
         };
         std::shared_ptr<yaoosl::parsing::instance::main> parse();
-        void print_tree(std::shared_ptr<exp_nullar> node, std::vector<char> v, std::string_view contents, std::stringstream& sstream);
-        void print_tree(std::shared_ptr<exp_assignment> node, std::vector<char> v, std::string_view contents, std::stringstream& sstream);
-        void print_tree(std::shared_ptr<statement> node, std::vector<char> v, std::string_view contents, std::stringstream& sstream);
-        void print_tree(std::shared_ptr<function_arg> node, std::vector<char> v, std::string_view contents, std::stringstream& sstream);
-        void print_tree(std::shared_ptr<scope> node, std::vector<char> v, std::string_view contents, std::stringstream& sstream);
-        void print_tree(std::shared_ptr<function> node, std::vector<char> v, std::string_view contents, std::stringstream& sstream);
-        void print_tree(std::shared_ptr<while_loop> node, std::vector<char> v, std::string_view contents, std::stringstream& sstream);
-        void print_tree(std::shared_ptr<if_else> node, std::vector<char> v, std::string_view contents, std::stringstream& sstream);
-        void print_tree(std::shared_ptr<control_structure> node, std::vector<char> v, std::string_view contents, std::stringstream& sstream);
-        void print_tree(std::shared_ptr<main> node, std::vector<char> v, std::string_view contents, std::stringstream& sstream);
-        void print_tree(std::shared_ptr<exp_arithmetic_2> node, std::vector<char> v, std::string_view contents, std::stringstream& sstream);
-        void print_tree(std::shared_ptr<exp_arithmetic_1> node, std::vector<char> v, std::string_view contents, std::stringstream& sstream);
-        void print_tree(std::shared_ptr<exp_compare> node, std::vector<char> v, std::string_view contents, std::stringstream& sstream);
-        void print_tree(std::shared_ptr<exp_equality> node, std::vector<char> v, std::string_view contents, std::stringstream& sstream);
-        void print_tree(std::shared_ptr<exp_and> node, std::vector<char> v, std::string_view contents, std::stringstream& sstream);
-        void print_tree(std::shared_ptr<exp_or> node, std::vector<char> v, std::string_view contents, std::stringstream& sstream);
+        std::vector<std::string> create_string_tree(std::shared_ptr<exp_nullar> node, std::string_view contents);
+        std::vector<std::string> create_string_tree(std::shared_ptr<exp_assignment> node, std::string_view contents);
+        std::vector<std::string> create_string_tree(std::shared_ptr<return_statement> node, std::string_view contents);
+        std::vector<std::string> create_string_tree(std::shared_ptr<statement> node, std::string_view contents);
+        std::vector<std::string> create_string_tree(std::shared_ptr<function_arg> node, std::string_view contents);
+        std::vector<std::string> create_string_tree(std::shared_ptr<scope> node, std::string_view contents);
+        std::vector<std::string> create_string_tree(std::shared_ptr<function> node, std::string_view contents);
+        std::vector<std::string> create_string_tree(std::shared_ptr<while_loop> node, std::string_view contents);
+        std::vector<std::string> create_string_tree(std::shared_ptr<if_else> node, std::string_view contents);
+        std::vector<std::string> create_string_tree(std::shared_ptr<control_structure> node, std::string_view contents);
+        std::vector<std::string> create_string_tree(std::shared_ptr<main> node, std::string_view contents);
+        std::vector<std::string> create_string_tree(std::shared_ptr<exp_arithmetic_2> node, std::string_view contents);
+        std::vector<std::string> create_string_tree(std::shared_ptr<exp_arithmetic_1> node, std::string_view contents);
+        std::vector<std::string> create_string_tree(std::shared_ptr<exp_compare> node, std::string_view contents);
+        std::vector<std::string> create_string_tree(std::shared_ptr<exp_equality> node, std::string_view contents);
+        std::vector<std::string> create_string_tree(std::shared_ptr<exp_and> node, std::string_view contents);
+        std::vector<std::string> create_string_tree(std::shared_ptr<exp_or> node, std::string_view contents);
     };
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace XCG.Generators.Cpp.Extensive
 {
@@ -56,6 +57,13 @@ namespace XCG.Generators.Cpp.Extensive
                     }
                 });
                 isFirst = false;
+            }
+            if (alternatives.CatchesErrors)
+            {
+                methodDefinition.Add(new IfPart(IfPart.EIfScope.Else, $@"!{Constants.isCanVariable}")
+                {
+                    $@"report(""Failed to match one of the following: {{ {String.Join(", ", matches.SelectMany((q) => q.Parts.OfType<Parsing.Reference>()).Select((q) => q.Text))} }}"");",
+                });
             }
             methodDefinition.Add($@"{resetable}.reset();");
             methodDefinition.Add(new ReturnPart(EValueConstant.False));
