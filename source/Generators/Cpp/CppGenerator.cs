@@ -68,7 +68,7 @@ namespace XCG.Generators.Cpp
                     new FieldDefinition(new ArgImpl { Name = "m_line", Type = EType.SizeT }),
                     new FieldDefinition(new ArgImpl { Name = "m_column", Type = EType.SizeT }),
                     new FieldDefinition(new ArgImpl { Name = "m_offset", Type = EType.SizeT }),
-                    new MethodDefinition(EType.Void, "report", new ArgImpl { Name = "message", Type = EType.StringView })
+                    new MethodDefinition(EType.Void, "report", new ArgImpl { Name = "message", Type = EType.StringView }, new ArgImpl { Name = "depth", Type = EType.SizeT })
                     {
                         IsVirtual = true,
                         Parts = new List<ICppPart>
@@ -76,6 +76,20 @@ namespace XCG.Generators.Cpp
                             new FullBody
                             {
                                 $@"std::cout << ""[L"" << m_line << ""]"" << ""[C"" << m_column << ""] "" << message << ""\n"";"
+                            }
+                        }
+                    },
+                    new DebugPart
+                    {
+                        new MethodDefinition(EType.Void, "trace", new ArgImpl { Name = "message", Type = EType.StringView }, new ArgImpl { Name = "depth", Type = EType.SizeT })
+                        {
+                            IsVirtual = true,
+                            Parts = new List<ICppPart>
+                            {
+                                new FullBody
+                                {
+                                    $@"std::cout << std::string(depth, ' ') << ""[L"" << m_line << ""]"" << ""[C"" << m_column << ""] "" << message << ""\n"";"
+                                }
                             }
                         }
                     }
@@ -207,7 +221,7 @@ namespace XCG.Generators.Cpp
 
             instanceClass.PublicParts.Add(new MethodDefinition(mainProduction.ToCppTypeName(this.Options, true).ToCppSharedPtrType(), "parse")
             {
-                $@"return {mainProduction.ToCppMatchMethodName(this.Options)}();"
+                $@"return {mainProduction.ToCppMatchMethodName(this.Options)}(0);"
             });
             instanceClass.PublicParts.AddRange(parser.Productions
                 .SelectMany((q) => q.FindChildren<Parsing.Statements.Set>())

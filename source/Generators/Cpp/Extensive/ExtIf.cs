@@ -30,7 +30,8 @@ namespace XCG.Generators.Cpp.Extensive
                 cppOptions.ToUnique(String.Concat(cppOptions.MethodsPrefix, ifName, "_")),
                 new ArgImpl { Name = Constants.isCanVariable, Type = EType.Boolean },
                 new ArgImpl { Name = Constants.classInstanceVariable, TypeString = typeName, ReferenceCount = 1 },
-                new ArgImpl { Name = Constants.stateInstanceVariable, TypeString = stateTypeName, ReferenceCount = 1 }
+                new ArgImpl { Name = Constants.stateInstanceVariable, TypeString = stateTypeName, ReferenceCount = 1 },
+                new ArgImpl { Name = Constants.depthVariable, Type = EType.SizeT }
             )
             {
                 $@"resetable {resetable}(*this);"
@@ -52,6 +53,7 @@ namespace XCG.Generators.Cpp.Extensive
                 isCanIf.Add(ifPart);
                 // Handle any if statements
                 ifPart.AddRange(@if.Statements.Handle(cppOptions, isCan, toUnique));
+                ifPart.Add(new DebugPart { $@"trace(""Returning true on {methodDefinition.Name}"", {Constants.depthVariable});" });
                 ifPart.Add(new ReturnPart(EValueConstant.True));
 
 
@@ -62,12 +64,14 @@ namespace XCG.Generators.Cpp.Extensive
 
                     // Handle any else statements
                     elsePart.AddRange(@if.Else.Handle(cppOptions, isCan, toUnique));
+                    elsePart.Add(new DebugPart { $@"trace(""Returning true on {methodDefinition.Name}"", {Constants.depthVariable});" });
                     elsePart.Add(new ReturnPart(EValueConstant.True));
                 }
                 else
                 {
                     // Handle any else statements
-                    isCanIf.Add(new ReturnPart(EValueConstant.False));
+                    isCanIf.Add(new DebugPart { $@"trace(""Returning true on {methodDefinition.Name}"", {Constants.depthVariable});" });
+                    isCanIf.Add(new ReturnPart(EValueConstant.True));
                 }
             }
             return methodDefinition;

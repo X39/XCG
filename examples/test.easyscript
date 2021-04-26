@@ -3,5 +3,14 @@ func plus(arg1, arg2)
     return arg1 + arg2;
 }
 
+myVar = plus(1, 2);
+if (myVar > 1)
+{
+    print("some random stuff");
+    while (myVar > 1)
+    {
+        print(myVar);
+    }
+}
 
 print(plus(1, 2));

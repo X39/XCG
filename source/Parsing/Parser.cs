@@ -109,13 +109,20 @@ namespace XCG.Parsing
         /// </summary>
         /// <param name="la">Look-Ahead offset</param>
         /// <returns></returns>
-        private char PeekChar(int la = 1)
+        private char PeekChar(ref int localIndex, int la = 1)
         {
             la -= 1;
-            return this.index < 0 ?
-                (this.index - la < 0 ? '\0' : this.contents[this.index - la]) :
-                (this.index + la < this.contents.Length ? this.contents[this.index + la] : '\0');
+            return localIndex < 0 ?
+                (localIndex - la < 0 ? '\0' : this.contents[localIndex - la]) :
+                (localIndex + la < this.contents.Length ? this.contents[localIndex + la] : '\0');
         }
+
+        /// <summary>
+        /// Peeks the offset of <paramref name="la"/> in correspondance to <see cref="index"/> character from <see cref="contents"/>
+        /// </summary>
+        /// <param name="la">Look-Ahead offset</param>
+        /// <returns></returns>
+        private char PeekChar(int la = 1) => PeekChar(ref this.index, la);
         /// <summary>
         /// Consumes a single character from <see cref="contents"/>.
         /// </summary>
@@ -228,9 +235,32 @@ namespace XCG.Parsing
         /// <param name="localIndex">Index to progress</param>
         private void Skip(ref int localIndex, string chars = " \t\r")
         {
-            for (; localIndex < this.contents.Length; localIndex++)
+            char la;
+            bool commentMode = false;
+            while ((la = this.PeekChar(ref localIndex)) != '\0')
             {
-                if (!chars.Contains(this.contents[localIndex]))
+                if (commentMode)
+                {
+                    if (la == '*' && this.PeekChar(ref localIndex, 2) == '/')
+                    {
+                        localIndex += 2;
+                        commentMode = false;
+                    }
+                    else
+                    {
+                        localIndex++;
+                    }
+                }
+                else if (la == '/' && this.PeekChar(ref localIndex, 2) == '*')
+                {
+                    localIndex += 2;
+                    commentMode = true;
+                }
+                else if (chars.Contains(la))
+                {
+                    localIndex++;
+                }
+                else
                 {
                     break;
                 }
@@ -1638,7 +1668,7 @@ namespace XCG.Parsing
                 if (this.PeekChar() == '*')
                 {
                     this.NextChar();
-                    range.To = Int32.MinValue;
+                    range.To = Int32.MaxValue;
                 }
                 else
                 {
@@ -1661,7 +1691,7 @@ namespace XCG.Parsing
 
                 switch (this.NextChar())
                 {
-                    case ')': range.To++; break;
+                    case ')': if (range.To != Int32.MaxValue) { range.To++; } break;
                     case ']': break;
                     default: this.parseNotes.Add(this.err($"Unexpected range end `{this.CurrentChar()}'")); break;
                 }

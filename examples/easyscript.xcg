@@ -1,3 +1,4 @@
+/* comment */
 token integer
     require plus { 0-9 }
 
@@ -26,21 +27,31 @@ token ident
     require [0, *) { a-z, A-Z, 0-9, underscore, minus }
     backtrack not once -
 
+token string
+    require once "
+    require not [0, *) "
+    require once "
+
+/*"*/
 
 production call
     match @[method]ident "("
     if match expression
         match @[args]expression
         while not match ")"
-            match "," @[args]expression
+            alternatives
+                match "," @[args]expression
+                match ","
+                error
     match ")"
 
 production exp-nullar
     alternatives
+        match @[value]call
         match "(" @[value]statement ")"
         match @[value]scalar
+        match @[value]string
         match @[value]integer
-        match @[value]call
         match @[value]ident
 
 left-recursive exp-arithmetic-2
@@ -92,7 +103,7 @@ left-recursive exp-or
 	match @[left]exp-equality
     
 production exp-assignment
-    match @[name]"=" @[value]statement
+    match @[name]ident "=" @[value]expression
     
 production return-statement
     match "return" @[expression]exp-or
@@ -129,10 +140,14 @@ production function
     match ")" @[body]scope
 
 production while-loop
-    match "while" "(" @[condition]statement ")" @[body]scope
+    match "while" "(" @[condition]expression ")"
+    alternatives
+        match @[body]scope
+        match @[body]control-structure
+        match @[body]statement
 
 production if-else
-    match "if" "(" @[condition]statement ")"
+    match "if" "(" @[condition]expression ")"
     alternatives
         match @[if-body]scope
         match @[if-body]control-structure

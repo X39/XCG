@@ -23,7 +23,8 @@ namespace XCG.Generators.Cpp.Extensive
             int ___localsCount = 0;
             string toUnique(string str) => String.Concat(str, (++___localsCount).ToString());
             string? resetable = toUnique("resetable");
-            var methodDefinition = new MethodDefinition(EType.OptionalSizeT, token.GetMethodName())
+            var methodDefinition = new MethodDefinition(EType.OptionalSizeT, token.GetMethodName(),
+                new ArgImpl { Name = Constants.depthVariable, Type = EType.SizeT })
             {
                 new FullBody { $@"resetable {resetable}(*this);" }
             };
@@ -45,7 +46,7 @@ namespace XCG.Generators.Cpp.Extensive
                             {
                                 var wordHolderVariable = toUnique("str");
                                 localLoop.Add(new VariableDefinition(new TypeImpl { Type = EType.Char, PointerCount = 1, IsConst = true }, wordHolderVariable, $@"""{word.Text.Replace("\"", "\\\"")}"""));
-                                localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"m_contents.length() - m_offset >= {word.Text.Length} && std::equal(m_contents.begin() + m_offset, m_contents.begin() + m_offset + {word.Text.Length}, {wordHolderVariable}, {wordHolderVariable} + {word.Text.Length})")
+                                localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"m_contents.length() - m_offset >= {word.Text.Length} && {(require.Negated ? "!" : String.Empty)}std::equal(m_contents.begin() + m_offset, m_contents.begin() + m_offset + {word.Text.Length}, {wordHolderVariable}, {wordHolderVariable} + {word.Text.Length})")
                                 {
                                     $@"{countVariable}++;",
                                     $@"for (size_t i = 0; i < {word.Text.Length}; i++)",
@@ -57,7 +58,7 @@ namespace XCG.Generators.Cpp.Extensive
                             }
                             else
                             {
-                                localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"current() == '{word.Text.First()}'")
+                                localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"current() {(require.Negated ? "!" : "=")}= '{word.Text.First()}'")
                                 {
                                     $@"{countVariable}++;",
                                     $@"next();",
@@ -67,7 +68,7 @@ namespace XCG.Generators.Cpp.Extensive
                         }
                         else if (part is Parsing.CharacterRange range)
                         {
-                            localLoop.Add(new IfPart(isFirst, $@"'{range.Start}' <= current() && current() <= '{range.End}'")
+                            localLoop.Add(new IfPart(isFirst, $@"{(require.Negated ? "!" : String.Empty)}('{range.Start}' <= current() && current() <= '{range.End}')")
                             {
                                 $@"{countVariable}++;",
                                 $@"next();",
@@ -79,7 +80,7 @@ namespace XCG.Generators.Cpp.Extensive
                             if (reference.Refered is Parsing.Token referedToken)
                             {
                                 var tokenHolderVariable = toUnique("res");
-                                localLoop.Add(new VariableDefinition(new TypeImpl { Type = EType.OptionalSizeT }, tokenHolderVariable, $@"{referedToken.GetMethodName()}()"));
+                                localLoop.Add(new VariableDefinition(new TypeImpl { Type = EType.OptionalSizeT }, tokenHolderVariable, $@"{referedToken.GetMethodName()}({Constants.depthVariable} + 1)"));
                                 localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"{tokenHolderVariable}.has_value()")
                                 {
                                     $@"{countVariable}++;",
@@ -107,6 +108,7 @@ namespace XCG.Generators.Cpp.Extensive
                         methodDefinition.Add(new IfPart(IfPart.EIfScope.If, $@"{countVariable} < {require.Range.From}")
                         {
                             $@"{resetable}.reset();",
+                            new DebugPart { $@"trace(""Returning EmptyClosure on {token.Identifier}"", {Constants.depthVariable});" },
                             new ReturnPart(EValueConstant.EmptyClosure),
                         });
                     }
@@ -129,14 +131,14 @@ namespace XCG.Generators.Cpp.Extensive
                             {
                                 var wordHolderVariable = toUnique("str");
                                 localLoop.Add(new VariableDefinition(new TypeImpl { Type = EType.Char, PointerCount = 1, IsConst = true }, wordHolderVariable, $@"""{word.Text.Replace("\"", "\\\"")}"""));
-                                localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"m_offset >= {word.Text.Length} && std::equal(m_contents.begin() + m_offset - {word.Text.Length}, m_contents.begin() + m_offset, l{localsCount}, l{localsCount} + {word.Text.Length})")
+                                localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"m_offset >= {word.Text.Length} && {(!backtrack.Negated ? "!" : String.Empty)}std::equal(m_contents.begin() + m_offset - {word.Text.Length}, m_contents.begin() + m_offset, l{localsCount}, l{localsCount} + {word.Text.Length})")
                                 {
                                     $@"break;"
                                 });
                             }
                             else
                             {
-                                localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"m_offset >= 1 && m_contents[m_offset - 1] == '{word.Text.First()}'")
+                                localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"m_offset >= 1 && m_contents[m_offset - 1] {(!backtrack.Negated ? "!" : "=")}= '{word.Text.First()}'")
                                 {
                                     $@"break;"
                                 });
@@ -144,7 +146,7 @@ namespace XCG.Generators.Cpp.Extensive
                         }
                         else if (part is Parsing.CharacterRange range)
                         {
-                            localLoop.Add(new IfPart(isFirst, $@"'m_offset >= 1 && {range.Start}' <= m_contents[m_offset - 1] && m_contents[m_offset - 1] <= '{range.End}'")
+                            localLoop.Add(new IfPart(isFirst, $@"'m_offset >= 1 && {(!backtrack.Negated ? "!" : String.Empty)}({range.Start}' <= m_contents[m_offset - 1] && m_contents[m_offset - 1] <= '{range.End}')")
                             {
                                 $@"break;"
                             });
@@ -159,6 +161,7 @@ namespace XCG.Generators.Cpp.Extensive
                     methodDefinition.Add(new IfPart(IfPart.EIfScope.If, $@"{countVariable} {(backtrack.Range.From > 0 ? ">=" : "!=")} {backtrack.Range.From}")
                     {
                         $@"{resetable}.reset();",
+                        new DebugPart { $@"trace(""Returning EmptyClosure on {token.Identifier}"", {Constants.depthVariable});" },
                         new ReturnPart(EValueConstant.EmptyClosure),
                     });
                 }
@@ -169,11 +172,10 @@ namespace XCG.Generators.Cpp.Extensive
             }
 
             var resultVariable = cppOptions.ToUnique("resultVariable");
-            methodDefinition.Add(new FullBody {
-                $@"auto {resultVariable} = m_offset - {resetable}.m_offset;",
-                $@"{resetable}.reset();",
-                $@"return {resultVariable};",
-            });
+            methodDefinition.Add($@"auto {resultVariable} = m_offset - {resetable}.m_offset;");
+            methodDefinition.Add($@"{resetable}.reset();");
+            methodDefinition.Add(new DebugPart { $@"trace((std::string(""Returning "") + std::to_string({resultVariable}) + "" on {token.Identifier}"").c_str(), {Constants.depthVariable});" });
+            methodDefinition.Add(new ReturnPart(resultVariable));
             return new[] { methodDefinition };
         }
     }

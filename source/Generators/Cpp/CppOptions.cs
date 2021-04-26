@@ -35,6 +35,9 @@ namespace XCG.Generators.Cpp
         [CppOption("console-color-capture-name")]
         public bool ConsoleColorCaptureName { get; set; } = true;
 
+        [CppOption("debug")]
+        public bool Debug { get; set; } = false;
+
         internal Dictionary<object, CaptureDefinition> CaptureDefinitionsMap { get; } = new Dictionary<object, CaptureDefinition>();
         public string RootClassName => String.Concat(this.NamespaceName ?? String.Empty, this.NamespaceName is null ? String.Empty : "::", this.ClassName, "::");
         /// <summary>

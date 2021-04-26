@@ -176,11 +176,11 @@ namespace XCG.Generators.Cpp.Extensive
                 case Parsing.Statements.Match match:
                     if (createVariable)
                     {
-                        yield return new VariableDefinition(EType.Boolean, variable, $@"{cppOptions.FromCache(match).Name}(true, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable})");
+                        yield return new VariableDefinition(EType.Boolean, variable, $@"{cppOptions.FromCache(match).Name}(true, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable}, {Constants.depthVariable} + 1)");
                     }
                     else
                     {
-                        yield return new FullBody { $@"{variable} = {cppOptions.FromCache(match).Name}(true, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable});" };
+                        yield return new FullBody { $@"{variable} = {cppOptions.FromCache(match).Name}(true, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable}, {Constants.depthVariable} + 1);" };
                     }
                     break;
                 case Parsing.EOF:
@@ -205,17 +205,19 @@ namespace XCG.Generators.Cpp.Extensive
                 switch (it)
                 {
                     case Parsing.Statements.Match match:
-                        yield return new IfPart(IfPart.EIfScope.If, $"{cppOptions.FromCache(match).Name}({isCan.ToString().ToLower()}, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable})")
+                        yield return new IfPart(IfPart.EIfScope.If, $"{cppOptions.FromCache(match).Name}({isCan.ToString().ToLower()}, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable}, {Constants.depthVariable} + 1)")
                         {
                             $@"skip();",
                         };
                         yield return new IfPart(IfPart.EIfScope.Else, Constants.isCanVariable)
                         {
+                            new DebugPart { $@"trace(""Returning false on {match}"", {Constants.depthVariable});" },
                             new ReturnPart(EValueConstant.False),
                         };
                         yield return new IfPart(IfPart.EIfScope.Else, null)
                         {
-                            $@"report(""Failed to match {{ {String.Join(", ", match.Parts.Select((q) => q.ToString()))} }}"");",
+                            $@"report(""Failed to match {{ {String.Join(", ", match.Parts.Select((q) => q.ToString()))} }}"", {Constants.depthVariable});",
+                            new DebugPart { $@"trace(""Returning false on {match}"", {Constants.depthVariable});" },
                             new ReturnPart(EValueConstant.False),
                         };
                         break;
@@ -224,7 +226,7 @@ namespace XCG.Generators.Cpp.Extensive
                         {
                             if (isCan)
                             {
-                                yield return new WhilePart($@"!{cppOptions.FromCache(alternatives).Name}(true, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable}) && current() != '\0'")
+                                yield return new WhilePart($@"!{cppOptions.FromCache(alternatives).Name}(true, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable}, {Constants.depthVariable} + 1) && current() != '\0'")
                                 {
                                     "next();"
                                 };
@@ -232,12 +234,12 @@ namespace XCG.Generators.Cpp.Extensive
                             else
                             {
                                 var resetable = toUnique("resetable");
-                                yield return new IfPart(IfPart.EIfScope.If, $@"!{cppOptions.FromCache(alternatives).Name}(false, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable})")
+                                yield return new IfPart(IfPart.EIfScope.If, $@"!{cppOptions.FromCache(alternatives).Name}(false, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable}, {Constants.depthVariable} + 1)")
                                 {
                                     new WhilePart($@"current() != '\0'")
                                     {
                                         $@"resetable {resetable}(*this);",
-                                        new IfPart(IfPart.EIfScope.If, $@"{cppOptions.FromCache(alternatives).Name}(true, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable})")
+                                        new IfPart(IfPart.EIfScope.If, $@"{cppOptions.FromCache(alternatives).Name}(true, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable}, {Constants.depthVariable} + 1)")
                                         {
                                             $@"{resetable}.reset();",
                                             $@"break;",
@@ -249,14 +251,14 @@ namespace XCG.Generators.Cpp.Extensive
                         }
                         else
                         {
-                            yield return new FullBody { $"{cppOptions.FromCache(alternatives).Name}({isCan.ToString().ToLower()}, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable});" };
+                            yield return new FullBody { $"{cppOptions.FromCache(alternatives).Name}({isCan.ToString().ToLower()}, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable}, {Constants.depthVariable} + 1);" };
                         }
                         break;
                     case Parsing.Statements.If @if:
-                        yield return new FullBody { $"{cppOptions.FromCache(@if).Name}({isCan.ToString().ToLower()}, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable});" };
+                        yield return new FullBody { $"{cppOptions.FromCache(@if).Name}({isCan.ToString().ToLower()}, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable}, {Constants.depthVariable} + 1);" };
                         break;
                     case Parsing.Statements.While @while2:
-                        yield return new FullBody { $"{cppOptions.FromCache(@while2).Name}({isCan.ToString().ToLower()}, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable});" };
+                        yield return new FullBody { $"{cppOptions.FromCache(@while2).Name}({isCan.ToString().ToLower()}, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable}, {Constants.depthVariable} + 1);" };
                         break;
                     case Parsing.Statements.Set set:
                         foreach (var part in set.ToParts(cppOptions))

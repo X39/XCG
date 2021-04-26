@@ -26,7 +26,8 @@ namespace XCG.Generators.Cpp.Extensive
                 cppOptions.ToUnique(String.Concat(cppOptions.MethodsPrefix, "alternatives")),
                 new ArgImpl { Name = Constants.isCanVariable, Type = EType.Boolean },
                 new ArgImpl { Name = Constants.classInstanceVariable, TypeString = typeName, ReferenceCount = 1 },
-                new ArgImpl { Name = Constants.stateInstanceVariable, TypeString = stateTypeName, ReferenceCount = 1 }
+                new ArgImpl { Name = Constants.stateInstanceVariable, TypeString = stateTypeName, ReferenceCount = 1 },
+                new ArgImpl { Name = Constants.depthVariable, Type = EType.SizeT }
             );
             // Unique Variables
             string? resetable = toUnique("resetable");
@@ -43,16 +44,18 @@ namespace XCG.Generators.Cpp.Extensive
             bool isFirst = true;
             foreach (var match in matches)
             {
-                methodDefinition.Add(new IfPart(isFirst, $@"{cppOptions.FromCache(match).Name}(true, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable})")
+                methodDefinition.Add(new IfPart(isFirst, $@"{cppOptions.FromCache(match).Name}(true, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable}, {Constants.depthVariable} + 1)")
                 {
                     new IfPart(IfPart.EIfScope.If, Constants.isCanVariable)
                     {
+                        new DebugPart { $@"trace(""Returning true on {methodDefinition.Name}"", {Constants.depthVariable});" },
                         new ReturnPart(EValueConstant.True)
                     },
                     new IfPart(IfPart.EIfScope.Else, null)
                     {
                         $@"{resetable}.reset();",
-                        $@"{cppOptions.FromCache(match).Name}(false, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable});",
+                        $@"{cppOptions.FromCache(match).Name}(false, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable}, {Constants.depthVariable} + 1);",
+                        new DebugPart { $@"trace(""Returning true on {methodDefinition.Name}"", {Constants.depthVariable});" },
                         new ReturnPart(EValueConstant.True)
                     }
                 });
@@ -62,10 +65,11 @@ namespace XCG.Generators.Cpp.Extensive
             {
                 methodDefinition.Add(new IfPart(IfPart.EIfScope.Else, $@"!{Constants.isCanVariable}")
                 {
-                    $@"report(""Failed to match one of the following: {{ {String.Join(", ", matches.SelectMany((q) => q.Parts.OfType<Parsing.Reference>()).Select((q) => q.Text))} }}"");",
+                    $@"report(""Failed to match one of the following: {{ {String.Join(", ", matches.SelectMany((q) => q.Parts.OfType<Parsing.Reference>()).Select((q) => q.Text))} }}"", {Constants.depthVariable});",
                 });
             }
             methodDefinition.Add($@"{resetable}.reset();");
+            methodDefinition.Add(new DebugPart { $@"trace(""Returning false on {methodDefinition.Name}"", {Constants.depthVariable});" });
             methodDefinition.Add(new ReturnPart(EValueConstant.False));
             return methodDefinition;
         }

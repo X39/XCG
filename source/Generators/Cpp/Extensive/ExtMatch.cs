@@ -43,7 +43,8 @@ namespace XCG.Generators.Cpp.Extensive
                 cppOptions.ToUnique(String.Concat(cppOptions.MethodsPrefix, matchName, "_")),
                 new ArgImpl { Name = Constants.isCanVariable, Type = EType.Boolean },
                 new ArgImpl { Name = Constants.classInstanceVariable, TypeString = typeName, ReferenceCount = 1 },
-                new ArgImpl { Name = Constants.stateInstanceVariable, TypeString = stateTypeName, ReferenceCount = 1 }
+                new ArgImpl { Name = Constants.stateInstanceVariable, TypeString = stateTypeName, ReferenceCount = 1 },
+                new ArgImpl { Name = Constants.depthVariable, Type = EType.SizeT }
             )
             {
                 $@"resetable {resetable}(*this);"
@@ -58,7 +59,7 @@ namespace XCG.Generators.Cpp.Extensive
                         {
                             var lengthVariable = toUnique("l");
                             var indexVariable = toUnique("i");
-                            methodDefinition.Add($@"auto {lengthVariable} = {token.GetMethodName()}();");
+                            methodDefinition.Add($@"auto {lengthVariable} = {token.GetMethodName()}({Constants.depthVariable} + 1);");
                             methodDefinition.Add(new IfPart(IfPart.EIfScope.If, $@"{lengthVariable}.has_value()")
                             {
                                 $@"for (auto {indexVariable} = {lengthVariable}.value(); {indexVariable} != 0; {indexVariable}--)",
@@ -72,7 +73,7 @@ namespace XCG.Generators.Cpp.Extensive
                         break;
                     case Parsing.Production production:
                         {
-                            methodDefinition.Add(new IfPart(IfPart.EIfScope.If, String.Concat(production.ToCppCanMatchMethodName(cppOptions), "()"))
+                            methodDefinition.Add(new IfPart(IfPart.EIfScope.If, String.Concat(production.ToCppCanMatchMethodName(cppOptions), $@"({Constants.depthVariable} + 1)"))
                             {
                                 $@"skip();"
                             });
@@ -80,7 +81,7 @@ namespace XCG.Generators.Cpp.Extensive
                         break;
                     case Parsing.LeftRecursive leftRecursive:
                         {
-                            methodDefinition.Add(new IfPart(IfPart.EIfScope.If, String.Concat(leftRecursive.ToCppCanMatchMethodName(cppOptions), "()"))
+                            methodDefinition.Add(new IfPart(IfPart.EIfScope.If, String.Concat(leftRecursive.ToCppCanMatchMethodName(cppOptions), $@"({Constants.depthVariable} + 1)"))
                             {
                                 $@"skip();"
                             });
@@ -90,16 +91,19 @@ namespace XCG.Generators.Cpp.Extensive
                 methodDefinition.Add(new IfPart(IfPart.EIfScope.Else, Constants.isCanVariable)
                 {
                     $@"{resetable}.reset();",
+                    new DebugPart { $@"trace(""Returning false on {methodDefinition.Name}"", {Constants.depthVariable});" },
                     new ReturnPart(EValueConstant.False),
                 });
                 methodDefinition.Add(new IfPart(IfPart.EIfScope.Else, null)
                 {
-                    $@"report(""Something moved wrong (todo: improve error messages)"");",
+                    $@"report(""Something moved wrong (todo: improve error messages)"", {Constants.depthVariable});",
+                    new DebugPart { $@"trace(""Returning false on {methodDefinition.Name}"", {Constants.depthVariable});" },
                     new ReturnPart(EValueConstant.False),
                 });
             }
             methodDefinition.Add(new IfPart(IfPart.EIfScope.If, $@"{Constants.isCanVariable}")
             {
+                new DebugPart { $@"trace(""Returning true on {methodDefinition.Name}"", {Constants.depthVariable});" },
                 new ReturnPart(EValueConstant.True)
             });
             methodDefinition.Add($@"{resetable}.reset();");
@@ -114,9 +118,9 @@ namespace XCG.Generators.Cpp.Extensive
                     string? call = reference.Refered switch
                     {
                         // Match the different possible refered things into proper conditions
-                        Parsing.Token token => String.Concat("create_token(", token.GetMethodName(), "().value(), ", cppOptions.TokenEnumName, "::", token.GetCppEnumName(), ")"),
-                        Parsing.Production production => String.Concat(production.ToCppMatchMethodName(cppOptions), "()"),
-                        Parsing.LeftRecursive leftRecursive => String.Concat(leftRecursive.ToCppMatchMethodName(cppOptions), "()"),
+                        Parsing.Token token => String.Concat("create_token(", token.GetMethodName(), $@"({Constants.depthVariable} + 1).value(), ", cppOptions.TokenEnumName, "::", token.GetCppEnumName(), ")"),
+                        Parsing.Production production => String.Concat(production.ToCppMatchMethodName(cppOptions), $@"({Constants.depthVariable} + 1)"),
+                        Parsing.LeftRecursive leftRecursive => String.Concat(leftRecursive.ToCppMatchMethodName(cppOptions), $@"({Constants.depthVariable} + 1)"),
                         _ => throw new FatalException()
                     };
                     methodDefinition.Add(new VariableDefinition(EType.Auto, valueVariable, call));
@@ -136,7 +140,7 @@ namespace XCG.Generators.Cpp.Extensive
                         // Match the different possible refered things into proper conditions
                         case Parsing.Token token:
                             var localVar = toUnique("l");
-                            methodDefinition.Add(String.Concat("auto ", localVar, " = ", token.GetMethodName(), "().value();"));
+                            methodDefinition.Add(String.Concat("auto ", localVar, " = ", token.GetMethodName(), $@"({Constants.depthVariable} + 1).value();"));
 
                             methodDefinition.Add($"for (;{localVar} != 0; {localVar}--)");
                             methodDefinition.Add(new ScopePart
@@ -145,10 +149,10 @@ namespace XCG.Generators.Cpp.Extensive
                             });
                             break;
                        case Parsing.Production production:
-                            methodDefinition.Add(String.Concat(production.ToCppMatchMethodName(cppOptions), "();"));
+                            methodDefinition.Add(String.Concat(production.ToCppMatchMethodName(cppOptions), $@"({Constants.depthVariable} + 1);"));
                             break;
                        case Parsing.LeftRecursive leftRecursive:
-                            methodDefinition.Add(String.Concat(leftRecursive.ToCppMatchMethodName(cppOptions), "();"));
+                            methodDefinition.Add(String.Concat(leftRecursive.ToCppMatchMethodName(cppOptions), $@"({Constants.depthVariable} + 1);"));
                             break;
                        default: throw new FatalException();
                     }
@@ -159,6 +163,7 @@ namespace XCG.Generators.Cpp.Extensive
             // Handle any following statement too
             methodDefinition.AddRange(match.Statements.Handle(cppOptions, false, toUnique));
 
+            methodDefinition.Add(new DebugPart { $@"trace(""Returning true on {methodDefinition.Name}"", {Constants.depthVariable});" });
             methodDefinition.Add(new ReturnPart(EValueConstant.True));
             return methodDefinition;
         }

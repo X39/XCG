@@ -30,7 +30,8 @@ namespace XCG.Generators.Cpp.Extensive
                 cppOptions.ToUnique(String.Concat(cppOptions.MethodsPrefix, whileName, "_")),
                 new ArgImpl { Name = Constants.isCanVariable, Type = EType.Boolean },
                 new ArgImpl { Name = Constants.classInstanceVariable, TypeString = typeName, ReferenceCount = 1 },
-                new ArgImpl { Name = Constants.stateInstanceVariable, TypeString = stateTypeName, ReferenceCount = 1 }
+                new ArgImpl { Name = Constants.stateInstanceVariable, TypeString = stateTypeName, ReferenceCount = 1 },
+                new ArgImpl { Name = Constants.depthVariable, Type = EType.SizeT }
             )
             {
                 $@"resetable {resetable}(*this);"
@@ -58,6 +59,7 @@ namespace XCG.Generators.Cpp.Extensive
                 whilePart.Add($@"{resetable_condition}.reset();");
 
                 // finally return true
+                isCanIf.Add(new DebugPart { $@"trace(""Returning true on {methodDefinition.Name}"", {Constants.depthVariable});" });
                 isCanIf.Add(new ReturnPart(EValueConstant.True));
             }
             return methodDefinition;
