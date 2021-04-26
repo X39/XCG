@@ -9,7 +9,7 @@ namespace XCG
     {
         private class CLIOptions
         {
-            [Option('i', "input", Required = true, HelpText = "Declares a single input xcg file.", MetaValue = "PATH")]
+            [Option('i', "input", Required = true, HelpText = "Declares a single input xcg file.", MetaValue = "PATH ...")]
             public IEnumerable<string>? Input { get; set; }
 
             [Option('g', "generator", Required = true, HelpText = "Sets the generator to use. Might be a path to a file or one of the build-in ones.", MetaValue = "GENERATOR")]
@@ -18,7 +18,7 @@ namespace XCG
             [Option('o', "output", HelpText = "Set the output filepath to where the generated file(s) should be generated to.", MetaValue = "PATH", Default = "output")]
             public string? Output { get; set; }
 
-            [Option('s', "set", HelpText = "Allows to change generator-dependant settings.", MetaValue = "OPTION:VALUE")]
+            [Option('s', "set", HelpText = "Allows to change generator-dependant settings.", MetaValue = "OPTION:VALUE ...")]
             public IEnumerable<string>? Settings { get; set; }
         }
 
@@ -672,6 +672,50 @@ namespace XCG
                     }
                 }
                 return hints;
+            });
+            // find unused productions
+            validator.Register("XCG", ESeverity.Warning, (parser) =>
+            {
+                var productionDictionary = parser.Productions.ToDictionary((q) => q, (q) => 0);
+                foreach (var match in parser.Productions.Concat<Parsing.IStatement>(parser.LeftRecursives).SelectMany((production) => production.FindChildren<Parsing.Statements.Match>()))
+                {
+                    foreach (var reference in match.Parts.OfType<Parsing.Reference>())
+                    {
+                        if (reference.Refered is Parsing.Production production)
+                        {
+                            productionDictionary[production]++;
+                        }
+                    }
+                }
+
+                return productionDictionary.Where((kvp) => kvp.Value == 0).Where((kvp) => kvp.Key.Identifier.ToLower() != "main").Select((kvp) => new Validation.Hint
+                {
+                    Line = kvp.Key.Diagnostics.Line,
+                    File = kvp.Key.Diagnostics.File,
+                    Message = $@"Production {kvp.Key.Identifier} is unused."
+                });
+            });
+            // find unused left-recursives
+            validator.Register("XCG", ESeverity.Warning, (parser) =>
+            {
+                var productionDictionary = parser.LeftRecursives.ToDictionary((q) => q, (q) => 0);
+                foreach (var match in parser.Productions.Concat<Parsing.IStatement>(parser.LeftRecursives).SelectMany((production) => production.FindChildren<Parsing.Statements.Match>()))
+                {
+                    foreach (var reference in match.Parts.OfType<Parsing.Reference>())
+                    {
+                        if (reference.Refered is Parsing.LeftRecursive leftRecursive)
+                        {
+                            productionDictionary[leftRecursive]++;
+                        }
+                    }
+                }
+
+                return productionDictionary.Where((kvp) => kvp.Value == 0).Where((kvp) => kvp.Key.Identifier.ToLower() != "main").Select((kvp) => new Validation.Hint
+                {
+                    Line = kvp.Key.Diagnostics.Line,
+                    File = kvp.Key.Diagnostics.File,
+                    Message = $@"Left-Recursive {kvp.Key.Identifier} is unused."
+                });
             });
         }
     }

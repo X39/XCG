@@ -26,11 +26,21 @@ token ident
     require [0, *) { a-z, A-Z, 0-9, underscore, minus }
     backtrack not once -
 
+
+production call
+    match @[method]ident "("
+    if match expression
+        match @[args]expression
+        while not match ")"
+            match "," @[args]expression
+    match ")"
+
 production exp-nullar
     alternatives
         match "(" @[value]statement ")"
         match @[value]scalar
         match @[value]integer
+        match @[value]call
         match @[value]ident
 
 left-recursive exp-arithmetic-2
@@ -86,12 +96,17 @@ production exp-assignment
     
 production return-statement
     match "return" @[expression]exp-or
+    
+production expression
+    alternatives
+        match @[expression]exp-assignment
+        match @[expression]exp-or
 
 production statement
     alternatives
-        match @[expression]return-statement
-        match @[expression]exp-assignment
-        match @[expression]exp-or
+        match @[expression]return-statement ";"
+        match @[expression]expression ";"
+        match ";"
 
 production function-arg
     match @[name]ident

@@ -40,43 +40,26 @@ namespace XCG.Generators.Cpp.Extensive
             var effectiveCondition = String.Concat(@while.Negated ? $"!{conditionVariable}" : conditionVariable, " && current() != '\\0'");
             methodDefinition.AddRange(@while.Condition!.GetEvaluationResult(cppOptions, conditionVariable, true));
             methodDefinition.Add($@"{resetable}.reset();");
-            #region IsCan
-            var isCanIf = new IfPart(IfPart.EIfScope.If, Constants.isCanVariable);
-            methodDefinition.Add(isCanIf);
+            foreach (var isCan in Constants.TrueFalseArray)
+            {
+                var isCanIf = isCan ? new IfPart(IfPart.EIfScope.If, Constants.isCanVariable) : new IfPart(IfPart.EIfScope.Else, null);
+                methodDefinition.Add(isCanIf);
 
-            // Create while loop
-            var whilePart = new WhilePart(effectiveCondition);
-            isCanIf.Add(whilePart);
+                // Create while loop
+                var whilePart = new WhilePart(effectiveCondition);
+                isCanIf.Add(whilePart);
 
-            // Handle any following statement
-            whilePart.AddRange(@while.Statements.Handle(cppOptions, true, toUnique));
+                // Handle any following statement
+                whilePart.AddRange(@while.Statements.Handle(cppOptions, isCan, toUnique));
 
-            // and re-evaluate the while condition
-            whilePart.Add($@"resetable {resetable_condition}(*this);");
-            whilePart.AddRange(@while.Condition!.GetEvaluationResult(cppOptions, conditionVariable, false));
-            whilePart.Add($@"{resetable_condition}.reset();");
+                // and re-evaluate the while condition
+                whilePart.Add($@"resetable {resetable_condition}(*this);");
+                whilePart.AddRange(@while.Condition!.GetEvaluationResult(cppOptions, conditionVariable, false));
+                whilePart.Add($@"{resetable_condition}.reset();");
 
-            // finally return true
-            isCanIf.Add(new ReturnPart(EValueConstant.True));
-            #endregion
-            #region IsNotCan
-            // Create Else
-            var isNotCanif = new IfPart(IfPart.EIfScope.Else, null);
-            methodDefinition.Add(isNotCanif);
-
-            // Create while loop
-            whilePart = new WhilePart(effectiveCondition);
-            isNotCanif.Add(whilePart);
-
-            // Handle any following statement
-            whilePart.AddRange(@while.Statements.Handle(cppOptions, false, toUnique));
-
-            // and re-evaluate the while condition
-            whilePart.AddRange(@while.Condition!.GetEvaluationResult(cppOptions, conditionVariable, false));
-
-            // finally return true
-            isNotCanif.Add(new ReturnPart(EValueConstant.True));
-            #endregion
+                // finally return true
+                isCanIf.Add(new ReturnPart(EValueConstant.True));
+            }
             return methodDefinition;
         }
     }

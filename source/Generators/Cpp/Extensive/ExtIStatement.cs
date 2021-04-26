@@ -215,7 +215,7 @@ namespace XCG.Generators.Cpp.Extensive
                         };
                         yield return new IfPart(IfPart.EIfScope.Else, null)
                         {
-                            $@"report(""Something moved wrong (todo: improve error messages)"");",
+                            $@"report(""Failed to match {{ {String.Join(", ", match.Parts.Select((q) => q.ToString()))} }}"");",
                             new ReturnPart(EValueConstant.False),
                         };
                         break;

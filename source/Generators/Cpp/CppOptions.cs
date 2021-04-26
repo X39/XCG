@@ -29,6 +29,12 @@ namespace XCG.Generators.Cpp
         [CppOption("prefix-type", Nullable = true)]
         public string? TypePrefix { get; set; } = null;
 
+        [CppOption("create-string-tree-spaces")]
+        public int CreateStringTreeSpaces { get; set; } = 2;
+
+        [CppOption("console-color-capture-name")]
+        public bool ConsoleColorCaptureName { get; set; } = true;
+
         internal Dictionary<object, CaptureDefinition> CaptureDefinitionsMap { get; } = new Dictionary<object, CaptureDefinition>();
         public string RootClassName => String.Concat(this.NamespaceName ?? String.Empty, this.NamespaceName is null ? String.Empty : "::", this.ClassName, "::");
         /// <summary>

@@ -131,8 +131,8 @@ namespace XCG.Generators.Cpp
 
         public MethodDefinition CreatePrintTreeMethodDefinition(CppOptions cppOptions)
         {
-            string level     = $@"std::string(""    "")";
-            string level_alt = $@"std::string(""  - "")";
+            string level     = $@"std::string(""{new string(' ', cppOptions.CreateStringTreeSpaces)}  "")";
+            string level_alt = $@"std::string(""{new string(' ', cppOptions.CreateStringTreeSpaces)}- "")";
             var methodDefinition = new MethodDefinition(
                 "std::vector<std::string>", String.Concat(cppOptions.MethodsPrefix, "create_string_tree"),
                 new ArgImpl { Name = "node", TypeString = this.FullName.ToCppSharedPtrType() },
@@ -142,10 +142,13 @@ namespace XCG.Generators.Cpp
                 $@"output.push_back(""{this.Name}:"");",
             };
 
+            var captureNameColoringStart = !cppOptions.ConsoleColorCaptureName ? string.Empty : string.Concat("\"", TerminalColor.ForegroundBrightBlack, "\"");
+            var captureNameColoringEnd = !cppOptions.ConsoleColorCaptureName ? string.Empty : string.Concat("\"", TerminalColor.Reset, "\"");
+
             CaptureDefinition[] captureDefinitions = this.PublicParts.Concat(this.ProtectedParts).Concat(this.PrivateParts).WhereIs<CaptureDefinition>().ToArray();
             for (int i = 0; i < captureDefinitions.Length; i++)
             {
-                void handleSingle(CppContainerBase container, TypeImpl type, string nav)
+                void handleSingle(CppContainerBase container, TypeImpl type, string nav, string captureName)
                 {
                     if (type.TypeString is not null)
                     {
@@ -156,7 +159,7 @@ namespace XCG.Generators.Cpp
                             $@"for (auto line : lines)",
                             new ScopePart
                             {
-                                $@"output.push_back((first ? {level_alt} : {level}) + line);",
+                                $@"output.push_back((first ? {level_alt} : {level}) + (first ? line + {captureNameColoringStart} "" [{captureName}]"" {captureNameColoringEnd} : line));",
                                 $@"first = false;",
                             }
                         });
@@ -208,12 +211,12 @@ namespace XCG.Generators.Cpp
                         }
                     }
                 }
-                void handle(CaptureDefinition def, CppContainerBase container, string nav)
+                void handle(CaptureDefinition def, CppContainerBase container, string nav, string captureName)
                 {
                     if (def.Types.Count == 1)
                     {
                         var type = def.Types.First();
-                        handleSingle(container, type, nav);
+                        handleSingle(container, type, nav, captureName);
                     }
                     else
                     {
@@ -226,7 +229,7 @@ namespace XCG.Generators.Cpp
                         {
                             var type = def.Types[typeIndex];
                             scope.Add($@"case {typeIndex}:");
-                            handleSingle(scope, type, $@"std::get<{type.ToString(cppOptions)}>({nav})");
+                            handleSingle(scope, type, $@"std::get<{type.ToString(cppOptions)}>({nav})", captureName);
                             scope.Add($@"break;");
                         }
                     }
@@ -236,7 +239,7 @@ namespace XCG.Generators.Cpp
                 if (captureDefinition.IsSingleHit)
                 {
                     var nav = $"node->{captureDefinition.Name}";
-                    handle(captureDefinition, methodDefinition, nav);
+                    handle(captureDefinition, methodDefinition, nav, captureDefinition.Name);
                 }
                 else
                 {
@@ -244,7 +247,7 @@ namespace XCG.Generators.Cpp
                     methodDefinition.Add($@"for (auto element : node->{captureDefinition.Name})");
                     var scope = new ScopePart();
                     methodDefinition.Add(scope);
-                    handle(captureDefinition, scope, nav);
+                    handle(captureDefinition, scope, nav, captureDefinition.Name);
                 }
             }
 

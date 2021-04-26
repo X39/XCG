@@ -36,30 +36,39 @@ namespace XCG.Generators.Cpp.Extensive
                 $@"resetable {resetable}(*this);"
             };
 
+
             var conditionVariable = toUnique("cond");
             methodDefinition.AddRange(@if.Condition!.GetEvaluationResult(cppOptions, conditionVariable, true));
             methodDefinition.Add($@"{resetable}.reset();");
 
-            var ifPart = new IfPart(IfPart.EIfScope.If, @if.Negated ? $"!{conditionVariable}" : conditionVariable);
-            methodDefinition.Add(ifPart);
-            // Handle any if statements
-            ifPart.AddRange(@if.Statements.Handle(cppOptions, true, toUnique));
-            ifPart.Add(new ReturnPart(EValueConstant.True));
 
-
-            if (@if.Else.Any())
+            foreach (var isCan in Constants.TrueFalseArray)
             {
-                var elsePart = new IfPart(IfPart.EIfScope.Else, null);
-                methodDefinition.Add(elsePart);
+                var isCanIf = isCan ? new IfPart(IfPart.EIfScope.If, Constants.isCanVariable) : new IfPart(IfPart.EIfScope.Else, null);
+                methodDefinition.Add(isCanIf);
 
-                // Handle any else statements
-                elsePart.AddRange(@if.Else.Handle(cppOptions, true, toUnique));
-                elsePart.Add(new ReturnPart(EValueConstant.True));
-            }
-            else
-            {
-                // Handle any else statements
-                methodDefinition.Add(new ReturnPart(EValueConstant.False));
+
+                var ifPart = new IfPart(IfPart.EIfScope.If, @if.Negated ? $"!{conditionVariable}" : conditionVariable);
+                isCanIf.Add(ifPart);
+                // Handle any if statements
+                ifPart.AddRange(@if.Statements.Handle(cppOptions, isCan, toUnique));
+                ifPart.Add(new ReturnPart(EValueConstant.True));
+
+
+                if (@if.Else.Any())
+                {
+                    var elsePart = new IfPart(IfPart.EIfScope.Else, null);
+                    isCanIf.Add(elsePart);
+
+                    // Handle any else statements
+                    elsePart.AddRange(@if.Else.Handle(cppOptions, isCan, toUnique));
+                    elsePart.Add(new ReturnPart(EValueConstant.True));
+                }
+                else
+                {
+                    // Handle any else statements
+                    isCanIf.Add(new ReturnPart(EValueConstant.False));
+                }
             }
             return methodDefinition;
         }

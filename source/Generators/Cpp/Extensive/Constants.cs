@@ -6,5 +6,7 @@
         public const string classInstanceVariable = "actual";
         public const string classInstanceFakeVariable = "fake";
         public const string stateInstanceVariable = "state";
+
+        public static readonly bool[] TrueFalseArray = new bool[] { true, false };
     }
 }
