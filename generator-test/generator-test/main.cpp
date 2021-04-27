@@ -5,6 +5,7 @@
 #include <fstream>
 #include <filesystem>
 #include <vector>
+#include <chrono>
 
 #include "main.hpp"
 #include "parser.hpp"
@@ -19,7 +20,14 @@ int main()
     if (file.has_value())
     {
         yaoosl::parsing::instance i(*file, "NA");
+        auto now = std::chrono::high_resolution_clock::now();
         auto res = i.parse();
+        auto then = std::chrono::high_resolution_clock::now();
+        cout << "Time needed for parsing: " << std::endl;
+        cout << " - " << std::chrono::duration_cast<std::chrono::minutes>(then - now) << std::endl;
+        cout << " - " << std::chrono::duration_cast<std::chrono::seconds>(then - now) << std::endl;
+        cout << " - " << std::chrono::duration_cast<std::chrono::milliseconds>(then - now) << std::endl;
+        cout << " - " << std::chrono::duration_cast<std::chrono::nanoseconds>(then - now) << std::endl;
         std::stringstream sstream;
         auto lines = i.create_string_tree(res, *file);
         for (auto line : lines)
@@ -44,7 +52,6 @@ bool file_exists(std::string_view filename)
 
 std::optional<std::string> read_file_from_disk(std::string_view physical_path)
 {
-    
     if (!file_exists(physical_path))
     {
         return {};

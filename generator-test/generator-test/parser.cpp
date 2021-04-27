@@ -80,12 +80,10 @@ std::optional<size_t> yaoosl::parsing::instance::token_integer(size_t depth)
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on integer", depth);
         return {};
     }
     auto resultVariable1 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable1) + " on integer").c_str(), depth);
     return resultVariable1;
 }
 std::optional<size_t> yaoosl::parsing::instance::token_scalar(size_t depth)
@@ -109,7 +107,6 @@ std::optional<size_t> yaoosl::parsing::instance::token_scalar(size_t depth)
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on scalar", depth);
         return {};
     }
     size_t count4 = 0;
@@ -126,7 +123,6 @@ std::optional<size_t> yaoosl::parsing::instance::token_scalar(size_t depth)
     if (count4 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on scalar", depth);
         return {};
     }
     size_t count5 = 0;
@@ -147,12 +143,10 @@ std::optional<size_t> yaoosl::parsing::instance::token_scalar(size_t depth)
     if (count5 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on scalar", depth);
         return {};
     }
     auto resultVariable2 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable2) + " on scalar").c_str(), depth);
     return resultVariable2;
 }
 std::optional<size_t> yaoosl::parsing::instance::token_slash(size_t depth)
@@ -172,12 +166,10 @@ std::optional<size_t> yaoosl::parsing::instance::token_slash(size_t depth)
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on slash", depth);
         return {};
     }
     auto resultVariable3 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable3) + " on slash").c_str(), depth);
     return resultVariable3;
 }
 std::optional<size_t> yaoosl::parsing::instance::token_star(size_t depth)
@@ -197,12 +189,10 @@ std::optional<size_t> yaoosl::parsing::instance::token_star(size_t depth)
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on star", depth);
         return {};
     }
     auto resultVariable4 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable4) + " on star").c_str(), depth);
     return resultVariable4;
 }
 std::optional<size_t> yaoosl::parsing::instance::token_plus(size_t depth)
@@ -222,12 +212,10 @@ std::optional<size_t> yaoosl::parsing::instance::token_plus(size_t depth)
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on plus", depth);
         return {};
     }
     auto resultVariable5 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable5) + " on plus").c_str(), depth);
     return resultVariable5;
 }
 std::optional<size_t> yaoosl::parsing::instance::token_minus(size_t depth)
@@ -247,12 +235,10 @@ std::optional<size_t> yaoosl::parsing::instance::token_minus(size_t depth)
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on minus", depth);
         return {};
     }
     auto resultVariable6 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable6) + " on minus").c_str(), depth);
     return resultVariable6;
 }
 std::optional<size_t> yaoosl::parsing::instance::token_underscore(size_t depth)
@@ -272,12 +258,10 @@ std::optional<size_t> yaoosl::parsing::instance::token_underscore(size_t depth)
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on underscore", depth);
         return {};
     }
     auto resultVariable7 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable7) + " on underscore").c_str(), depth);
     return resultVariable7;
 }
 std::optional<size_t> yaoosl::parsing::instance::token_ident(size_t depth)
@@ -323,7 +307,6 @@ std::optional<size_t> yaoosl::parsing::instance::token_ident(size_t depth)
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on ident", depth);
         return {};
     }
     size_t count5 = 0;
@@ -382,12 +365,10 @@ std::optional<size_t> yaoosl::parsing::instance::token_ident(size_t depth)
     if (count8 >= 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on ident", depth);
         return {};
     }
     auto resultVariable8 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable8) + " on ident").c_str(), depth);
     return resultVariable8;
 }
 std::optional<size_t> yaoosl::parsing::instance::token_string(size_t depth)
@@ -407,7 +388,6 @@ std::optional<size_t> yaoosl::parsing::instance::token_string(size_t depth)
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on string", depth);
         return {};
     }
     size_t count3 = 0;
@@ -435,12 +415,10 @@ std::optional<size_t> yaoosl::parsing::instance::token_string(size_t depth)
     if (count4 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on string", depth);
         return {};
     }
     auto resultVariable9 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable9) + " on string").c_str(), depth);
     return resultVariable9;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__round_bracked_open(size_t depth)
@@ -460,12 +438,10 @@ std::optional<size_t> yaoosl::parsing::instance::token__round_bracked_open(size_
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on @round-bracked-open", depth);
         return {};
     }
     auto resultVariable10 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable10) + " on @round-bracked-open").c_str(), depth);
     return resultVariable10;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__round_bracked_close(size_t depth)
@@ -485,12 +461,10 @@ std::optional<size_t> yaoosl::parsing::instance::token__round_bracked_close(size
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on @round-bracked-close", depth);
         return {};
     }
     auto resultVariable11 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable11) + " on @round-bracked-close").c_str(), depth);
     return resultVariable11;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__comma(size_t depth)
@@ -510,12 +484,10 @@ std::optional<size_t> yaoosl::parsing::instance::token__comma(size_t depth)
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on @comma", depth);
         return {};
     }
     auto resultVariable12 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable12) + " on @comma").c_str(), depth);
     return resultVariable12;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__less_then_equal(size_t depth)
@@ -539,12 +511,10 @@ std::optional<size_t> yaoosl::parsing::instance::token__less_then_equal(size_t d
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on @less-then-equal", depth);
         return {};
     }
     auto resultVariable13 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable13) + " on @less-then-equal").c_str(), depth);
     return resultVariable13;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__less_then(size_t depth)
@@ -564,12 +534,10 @@ std::optional<size_t> yaoosl::parsing::instance::token__less_then(size_t depth)
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on @less-then", depth);
         return {};
     }
     auto resultVariable14 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable14) + " on @less-then").c_str(), depth);
     return resultVariable14;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__greater_then_equal(size_t depth)
@@ -593,12 +561,10 @@ std::optional<size_t> yaoosl::parsing::instance::token__greater_then_equal(size_
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on @greater-then-equal", depth);
         return {};
     }
     auto resultVariable15 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable15) + " on @greater-then-equal").c_str(), depth);
     return resultVariable15;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__greater_then(size_t depth)
@@ -618,12 +584,10 @@ std::optional<size_t> yaoosl::parsing::instance::token__greater_then(size_t dept
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on @greater-then", depth);
         return {};
     }
     auto resultVariable16 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable16) + " on @greater-then").c_str(), depth);
     return resultVariable16;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__and(size_t depth)
@@ -647,12 +611,10 @@ std::optional<size_t> yaoosl::parsing::instance::token__and(size_t depth)
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on @and", depth);
         return {};
     }
     auto resultVariable17 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable17) + " on @and").c_str(), depth);
     return resultVariable17;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__or(size_t depth)
@@ -676,12 +638,10 @@ std::optional<size_t> yaoosl::parsing::instance::token__or(size_t depth)
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on @or", depth);
         return {};
     }
     auto resultVariable18 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable18) + " on @or").c_str(), depth);
     return resultVariable18;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__equal(size_t depth)
@@ -701,12 +661,10 @@ std::optional<size_t> yaoosl::parsing::instance::token__equal(size_t depth)
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on @equal", depth);
         return {};
     }
     auto resultVariable19 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable19) + " on @equal").c_str(), depth);
     return resultVariable19;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__return(size_t depth)
@@ -730,12 +688,10 @@ std::optional<size_t> yaoosl::parsing::instance::token__return(size_t depth)
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on @return", depth);
         return {};
     }
     auto resultVariable20 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable20) + " on @return").c_str(), depth);
     return resultVariable20;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__auto_80(size_t depth)
@@ -755,12 +711,10 @@ std::optional<size_t> yaoosl::parsing::instance::token__auto_80(size_t depth)
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on @auto-80", depth);
         return {};
     }
     auto resultVariable21 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable21) + " on @auto-80").c_str(), depth);
     return resultVariable21;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__curly_bracked_open(size_t depth)
@@ -780,12 +734,10 @@ std::optional<size_t> yaoosl::parsing::instance::token__curly_bracked_open(size_
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on @curly-bracked-open", depth);
         return {};
     }
     auto resultVariable22 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable22) + " on @curly-bracked-open").c_str(), depth);
     return resultVariable22;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__curly_bracked_close(size_t depth)
@@ -805,12 +757,10 @@ std::optional<size_t> yaoosl::parsing::instance::token__curly_bracked_close(size
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on @curly-bracked-close", depth);
         return {};
     }
     auto resultVariable23 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable23) + " on @curly-bracked-close").c_str(), depth);
     return resultVariable23;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__func(size_t depth)
@@ -834,12 +784,10 @@ std::optional<size_t> yaoosl::parsing::instance::token__func(size_t depth)
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on @func", depth);
         return {};
     }
     auto resultVariable24 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable24) + " on @func").c_str(), depth);
     return resultVariable24;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__while(size_t depth)
@@ -863,12 +811,10 @@ std::optional<size_t> yaoosl::parsing::instance::token__while(size_t depth)
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on @while", depth);
         return {};
     }
     auto resultVariable25 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable25) + " on @while").c_str(), depth);
     return resultVariable25;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__if(size_t depth)
@@ -892,12 +838,10 @@ std::optional<size_t> yaoosl::parsing::instance::token__if(size_t depth)
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on @if", depth);
         return {};
     }
     auto resultVariable26 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable26) + " on @if").c_str(), depth);
     return resultVariable26;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__else(size_t depth)
@@ -921,12 +865,10 @@ std::optional<size_t> yaoosl::parsing::instance::token__else(size_t depth)
     if (count2 < 1)
     {
         resetable1.reset();
-        trace("Returning EmptyClosure on @else", depth);
         return {};
     }
     auto resultVariable27 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    trace((std::string("Returning ") + std::to_string(resultVariable27) + " on @else").c_str(), depth);
     return resultVariable27;
 }
 bool yaoosl::parsing::instance::m_ident_roundbrackedopen_28(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
@@ -944,13 +886,11 @@ bool yaoosl::parsing::instance::m_ident_roundbrackedopen_28(bool is_can, std::sh
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_ident_roundbrackedopen_28", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_ident_roundbrackedopen_28", depth);
         return false;
     }
     auto l4 = token__round_bracked_open(depth + 1);
@@ -965,18 +905,15 @@ bool yaoosl::parsing::instance::m_ident_roundbrackedopen_28(bool is_can, std::sh
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_ident_roundbrackedopen_28", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_ident_roundbrackedopen_28", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_ident_roundbrackedopen_28", depth);
         return true;
     }
     resetable1.reset();
@@ -989,7 +926,6 @@ bool yaoosl::parsing::instance::m_ident_roundbrackedopen_28(bool is_can, std::sh
         next();
     }
     skip();
-    trace("Returning true on m_ident_roundbrackedopen_28", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_expression_29(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
@@ -1002,25 +938,21 @@ bool yaoosl::parsing::instance::m_expression_29(bool is_can, std::shared_ptr<yao
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expression_29", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expression_29", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_expression_29", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = p_match_expression(depth + 1);
     actual->args.push_back(val2);
     skip();
-    trace("Returning true on m_expression_29", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_comma_expression_30(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
@@ -1038,13 +970,11 @@ bool yaoosl::parsing::instance::m_comma_expression_30(bool is_can, std::shared_p
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_comma_expression_30", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_comma_expression_30", depth);
         return false;
     }
     if (p_can_expression(depth + 1))
@@ -1054,18 +984,15 @@ bool yaoosl::parsing::instance::m_comma_expression_30(bool is_can, std::shared_p
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_comma_expression_30", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_comma_expression_30", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_comma_expression_30", depth);
         return true;
     }
     resetable1.reset();
@@ -1078,7 +1005,6 @@ bool yaoosl::parsing::instance::m_comma_expression_30(bool is_can, std::shared_p
     auto val6 = p_match_expression(depth + 1);
     actual->args.push_back(val6);
     skip();
-    trace("Returning true on m_comma_expression_30", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_comma_31(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
@@ -1096,18 +1022,15 @@ bool yaoosl::parsing::instance::m_comma_31(bool is_can, std::shared_ptr<yaoosl::
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_comma_31", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_comma_31", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_comma_31", depth);
         return true;
     }
     resetable1.reset();
@@ -1117,7 +1040,6 @@ bool yaoosl::parsing::instance::m_comma_31(bool is_can, std::shared_ptr<yaoosl::
         next();
     }
     skip();
-    trace("Returning true on m_comma_31", depth);
     return true;
 }
 bool yaoosl::parsing::instance::alternatives32(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
@@ -1127,14 +1049,12 @@ bool yaoosl::parsing::instance::alternatives32(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives32", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_comma_expression_30(false, actual, state, depth + 1);
-            trace("Returning true on alternatives32", depth);
             return true;
         }
     }
@@ -1142,14 +1062,12 @@ bool yaoosl::parsing::instance::alternatives32(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives32", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_comma_31(false, actual, state, depth + 1);
-            trace("Returning true on alternatives32", depth);
             return true;
         }
     }
@@ -1158,7 +1076,6 @@ bool yaoosl::parsing::instance::alternatives32(bool is_can, std::shared_ptr<yaoo
         report("Failed to match one of the following: { ,, expression, , }", depth);
     }
     resetable1.reset();
-    trace("Returning false on alternatives32", depth);
     return false;
 }
 bool yaoosl::parsing::instance::m_roundbrackedclose_33(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
@@ -1176,18 +1093,15 @@ bool yaoosl::parsing::instance::m_roundbrackedclose_33(bool is_can, std::shared_
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_roundbrackedclose_33", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_roundbrackedclose_33", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_roundbrackedclose_33", depth);
         return true;
     }
     resetable1.reset();
@@ -1197,7 +1111,6 @@ bool yaoosl::parsing::instance::m_roundbrackedclose_33(bool is_can, std::shared_
         next();
     }
     skip();
-    trace("Returning true on m_roundbrackedclose_33", depth);
     return true;
 }
 bool yaoosl::parsing::instance::while34_35(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
@@ -1217,7 +1130,6 @@ bool yaoosl::parsing::instance::while34_35(bool is_can, std::shared_ptr<yaoosl::
             cond3 = m_roundbrackedclose_33(true, actual, state, depth + 1);
             resetable2.reset();
         }
-        trace("Returning true on while34_35", depth);
         return true;
     }
     else
@@ -1241,7 +1153,6 @@ bool yaoosl::parsing::instance::while34_35(bool is_can, std::shared_ptr<yaoosl::
             cond3 = m_roundbrackedclose_33(true, actual, state, depth + 1);
             resetable2.reset();
         }
-        trace("Returning true on while34_35", depth);
         return true;
     }
 }
@@ -1255,24 +1166,20 @@ bool yaoosl::parsing::instance::m_expression_36(bool is_can, std::shared_ptr<yao
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expression_36", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expression_36", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_expression_36", depth);
         return true;
     }
     resetable1.reset();
     p_match_expression(depth + 1);
     skip();
-    trace("Returning true on m_expression_36", depth);
     return true;
 }
 bool yaoosl::parsing::instance::if37_38(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
@@ -1290,20 +1197,16 @@ bool yaoosl::parsing::instance::if37_38(bool is_can, std::shared_ptr<yaoosl::par
             }
             else if (is_can)
             {
-                trace("Returning false on XCG.Parsing.Statements.Match", depth);
                 return false;
             }
             else
             {
                 report("Failed to match { $ref: expression (XCG.Parsing.Production) }", depth);
-                trace("Returning false on XCG.Parsing.Statements.Match", depth);
                 return false;
             }
             while34_35(true, actual, state, depth + 1);
-            trace("Returning true on if37_38", depth);
             return true;
         }
-        trace("Returning true on if37_38", depth);
         return true;
     }
     else
@@ -1316,20 +1219,16 @@ bool yaoosl::parsing::instance::if37_38(bool is_can, std::shared_ptr<yaoosl::par
             }
             else if (is_can)
             {
-                trace("Returning false on XCG.Parsing.Statements.Match", depth);
                 return false;
             }
             else
             {
                 report("Failed to match { $ref: expression (XCG.Parsing.Production) }", depth);
-                trace("Returning false on XCG.Parsing.Statements.Match", depth);
                 return false;
             }
             while34_35(false, actual, state, depth + 1);
-            trace("Returning true on if37_38", depth);
             return true;
         }
-        trace("Returning true on if37_38", depth);
         return true;
     }
 }
@@ -1348,18 +1247,15 @@ bool yaoosl::parsing::instance::m_roundbrackedclose_39(bool is_can, std::shared_
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_roundbrackedclose_39", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_roundbrackedclose_39", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_roundbrackedclose_39", depth);
         return true;
     }
     resetable1.reset();
@@ -1369,7 +1265,6 @@ bool yaoosl::parsing::instance::m_roundbrackedclose_39(bool is_can, std::shared_
         next();
     }
     skip();
-    trace("Returning true on m_roundbrackedclose_39", depth);
     return true;
 }
 bool yaoosl::parsing::instance::p_can_call(size_t depth)
@@ -1380,22 +1275,18 @@ bool yaoosl::parsing::instance::p_can_call(size_t depth)
     if (!m_ident_roundbrackedopen_28(true, fake, state, depth + 1))
     {
         resetable1.reset();
-        trace("Returning false on call", depth);
         return false;
     }
     else if (!if37_38(true, fake, state, depth + 1))
     {
         resetable1.reset();
-        trace("Returning false on call", depth);
         return false;
     }
     else if (!m_roundbrackedclose_39(true, fake, state, depth + 1))
     {
         resetable1.reset();
-        trace("Returning false on call", depth);
         return false;
     }
-    trace("Returning true on call", depth);
     return true;
 }
 std::shared_ptr<yaoosl::parsing::instance::call> yaoosl::parsing::instance::p_match_call(size_t depth)
@@ -1445,25 +1336,21 @@ bool yaoosl::parsing::instance::m_call_40(bool is_can, std::shared_ptr<yaoosl::p
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_call_40", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_call_40", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_call_40", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = p_match_call(depth + 1);
     actual->value = val2;
     skip();
-    trace("Returning true on m_call_40", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_roundbrackedopen_statement_roundbrackedclose_41(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state, size_t depth)
@@ -1481,13 +1368,11 @@ bool yaoosl::parsing::instance::m_roundbrackedopen_statement_roundbrackedclose_4
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_roundbrackedopen_statement_roundbrackedclose_41", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_roundbrackedopen_statement_roundbrackedclose_41", depth);
         return false;
     }
     if (p_can_statement(depth + 1))
@@ -1497,13 +1382,11 @@ bool yaoosl::parsing::instance::m_roundbrackedopen_statement_roundbrackedclose_4
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_roundbrackedopen_statement_roundbrackedclose_41", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_roundbrackedopen_statement_roundbrackedclose_41", depth);
         return false;
     }
     auto l4 = token__round_bracked_close(depth + 1);
@@ -1518,18 +1401,15 @@ bool yaoosl::parsing::instance::m_roundbrackedopen_statement_roundbrackedclose_4
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_roundbrackedopen_statement_roundbrackedclose_41", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_roundbrackedopen_statement_roundbrackedclose_41", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_roundbrackedopen_statement_roundbrackedclose_41", depth);
         return true;
     }
     resetable1.reset();
@@ -1548,7 +1428,6 @@ bool yaoosl::parsing::instance::m_roundbrackedopen_statement_roundbrackedclose_4
         next();
     }
     skip();
-    trace("Returning true on m_roundbrackedopen_statement_roundbrackedclose_41", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_scalar_42(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state, size_t depth)
@@ -1566,25 +1445,21 @@ bool yaoosl::parsing::instance::m_scalar_42(bool is_can, std::shared_ptr<yaoosl:
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_scalar_42", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_scalar_42", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_scalar_42", depth);
         return true;
     }
     resetable1.reset();
     auto val4 = create_token(token_scalar(depth + 1).value(), tok::SCALAR);
     actual->value = val4;
     skip();
-    trace("Returning true on m_scalar_42", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_string_43(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state, size_t depth)
@@ -1602,25 +1477,21 @@ bool yaoosl::parsing::instance::m_string_43(bool is_can, std::shared_ptr<yaoosl:
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_string_43", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_string_43", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_string_43", depth);
         return true;
     }
     resetable1.reset();
     auto val4 = create_token(token_string(depth + 1).value(), tok::STRING);
     actual->value = val4;
     skip();
-    trace("Returning true on m_string_43", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_integer_44(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state, size_t depth)
@@ -1638,25 +1509,21 @@ bool yaoosl::parsing::instance::m_integer_44(bool is_can, std::shared_ptr<yaoosl
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_integer_44", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_integer_44", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_integer_44", depth);
         return true;
     }
     resetable1.reset();
     auto val4 = create_token(token_integer(depth + 1).value(), tok::INTEGER);
     actual->value = val4;
     skip();
-    trace("Returning true on m_integer_44", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_ident_45(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state, size_t depth)
@@ -1674,25 +1541,21 @@ bool yaoosl::parsing::instance::m_ident_45(bool is_can, std::shared_ptr<yaoosl::
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_ident_45", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_ident_45", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_ident_45", depth);
         return true;
     }
     resetable1.reset();
     auto val4 = create_token(token_ident(depth + 1).value(), tok::IDENT);
     actual->value = val4;
     skip();
-    trace("Returning true on m_ident_45", depth);
     return true;
 }
 bool yaoosl::parsing::instance::alternatives46(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state, size_t depth)
@@ -1702,14 +1565,12 @@ bool yaoosl::parsing::instance::alternatives46(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives46", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_call_40(false, actual, state, depth + 1);
-            trace("Returning true on alternatives46", depth);
             return true;
         }
     }
@@ -1717,14 +1578,12 @@ bool yaoosl::parsing::instance::alternatives46(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives46", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_roundbrackedopen_statement_roundbrackedclose_41(false, actual, state, depth + 1);
-            trace("Returning true on alternatives46", depth);
             return true;
         }
     }
@@ -1732,14 +1591,12 @@ bool yaoosl::parsing::instance::alternatives46(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives46", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_scalar_42(false, actual, state, depth + 1);
-            trace("Returning true on alternatives46", depth);
             return true;
         }
     }
@@ -1747,14 +1604,12 @@ bool yaoosl::parsing::instance::alternatives46(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives46", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_string_43(false, actual, state, depth + 1);
-            trace("Returning true on alternatives46", depth);
             return true;
         }
     }
@@ -1762,14 +1617,12 @@ bool yaoosl::parsing::instance::alternatives46(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives46", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_integer_44(false, actual, state, depth + 1);
-            trace("Returning true on alternatives46", depth);
             return true;
         }
     }
@@ -1777,19 +1630,16 @@ bool yaoosl::parsing::instance::alternatives46(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives46", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_ident_45(false, actual, state, depth + 1);
-            trace("Returning true on alternatives46", depth);
             return true;
         }
     }
     resetable1.reset();
-    trace("Returning false on alternatives46", depth);
     return false;
 }
 bool yaoosl::parsing::instance::p_can_exp_nullar(size_t depth)
@@ -1800,10 +1650,8 @@ bool yaoosl::parsing::instance::p_can_exp_nullar(size_t depth)
     if (!alternatives46(true, fake, state, depth + 1))
     {
         resetable1.reset();
-        trace("Returning false on exp-nullar", depth);
         return false;
     }
-    trace("Returning true on exp-nullar", depth);
     return true;
 }
 std::shared_ptr<yaoosl::parsing::instance::exp_nullar> yaoosl::parsing::instance::p_match_exp_nullar(size_t depth)
@@ -1838,13 +1686,11 @@ bool yaoosl::parsing::instance::m_ident_equal_expression_47(bool is_can, std::sh
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_ident_equal_expression_47", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_ident_equal_expression_47", depth);
         return false;
     }
     auto l4 = token__equal(depth + 1);
@@ -1859,13 +1705,11 @@ bool yaoosl::parsing::instance::m_ident_equal_expression_47(bool is_can, std::sh
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_ident_equal_expression_47", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_ident_equal_expression_47", depth);
         return false;
     }
     if (p_can_expression(depth + 1))
@@ -1875,18 +1719,15 @@ bool yaoosl::parsing::instance::m_ident_equal_expression_47(bool is_can, std::sh
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_ident_equal_expression_47", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_ident_equal_expression_47", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_ident_equal_expression_47", depth);
         return true;
     }
     resetable1.reset();
@@ -1902,7 +1743,6 @@ bool yaoosl::parsing::instance::m_ident_equal_expression_47(bool is_can, std::sh
     auto val9 = p_match_expression(depth + 1);
     actual->value = val9;
     skip();
-    trace("Returning true on m_ident_equal_expression_47", depth);
     return true;
 }
 bool yaoosl::parsing::instance::p_can_exp_assignment(size_t depth)
@@ -1913,10 +1753,8 @@ bool yaoosl::parsing::instance::p_can_exp_assignment(size_t depth)
     if (!m_ident_equal_expression_47(true, fake, state, depth + 1))
     {
         resetable1.reset();
-        trace("Returning false on exp-assignment", depth);
         return false;
     }
-    trace("Returning true on exp-assignment", depth);
     return true;
 }
 std::shared_ptr<yaoosl::parsing::instance::exp_assignment> yaoosl::parsing::instance::p_match_exp_assignment(size_t depth)
@@ -1951,13 +1789,11 @@ bool yaoosl::parsing::instance::m_return_expor_48(bool is_can, std::shared_ptr<y
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_return_expor_48", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_return_expor_48", depth);
         return false;
     }
     if (lr_can_exp_or(depth + 1))
@@ -1967,18 +1803,15 @@ bool yaoosl::parsing::instance::m_return_expor_48(bool is_can, std::shared_ptr<y
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_return_expor_48", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_return_expor_48", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_return_expor_48", depth);
         return true;
     }
     resetable1.reset();
@@ -1991,7 +1824,6 @@ bool yaoosl::parsing::instance::m_return_expor_48(bool is_can, std::shared_ptr<y
     auto val6 = lr_match_exp_or(depth + 1);
     actual->expression = val6;
     skip();
-    trace("Returning true on m_return_expor_48", depth);
     return true;
 }
 bool yaoosl::parsing::instance::p_can_return_statement(size_t depth)
@@ -2002,10 +1834,8 @@ bool yaoosl::parsing::instance::p_can_return_statement(size_t depth)
     if (!m_return_expor_48(true, fake, state, depth + 1))
     {
         resetable1.reset();
-        trace("Returning false on return-statement", depth);
         return false;
     }
-    trace("Returning true on return-statement", depth);
     return true;
 }
 std::shared_ptr<yaoosl::parsing::instance::return_statement> yaoosl::parsing::instance::p_match_return_statement(size_t depth)
@@ -2035,25 +1865,21 @@ bool yaoosl::parsing::instance::m_expassignment_49(bool is_can, std::shared_ptr<
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expassignment_49", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expassignment_49", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_expassignment_49", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = p_match_exp_assignment(depth + 1);
     actual->expression = val2;
     skip();
-    trace("Returning true on m_expassignment_49", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_expor_50(bool is_can, std::shared_ptr<yaoosl::parsing::instance::expression>& actual, yaoosl::parsing::instance::expression_state& state, size_t depth)
@@ -2066,25 +1892,21 @@ bool yaoosl::parsing::instance::m_expor_50(bool is_can, std::shared_ptr<yaoosl::
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expor_50", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expor_50", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_expor_50", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = lr_match_exp_or(depth + 1);
     actual->expression = val2;
     skip();
-    trace("Returning true on m_expor_50", depth);
     return true;
 }
 bool yaoosl::parsing::instance::alternatives51(bool is_can, std::shared_ptr<yaoosl::parsing::instance::expression>& actual, yaoosl::parsing::instance::expression_state& state, size_t depth)
@@ -2094,14 +1916,12 @@ bool yaoosl::parsing::instance::alternatives51(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives51", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_expassignment_49(false, actual, state, depth + 1);
-            trace("Returning true on alternatives51", depth);
             return true;
         }
     }
@@ -2109,19 +1929,16 @@ bool yaoosl::parsing::instance::alternatives51(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives51", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_expor_50(false, actual, state, depth + 1);
-            trace("Returning true on alternatives51", depth);
             return true;
         }
     }
     resetable1.reset();
-    trace("Returning false on alternatives51", depth);
     return false;
 }
 bool yaoosl::parsing::instance::p_can_expression(size_t depth)
@@ -2132,10 +1949,8 @@ bool yaoosl::parsing::instance::p_can_expression(size_t depth)
     if (!alternatives51(true, fake, state, depth + 1))
     {
         resetable1.reset();
-        trace("Returning false on expression", depth);
         return false;
     }
-    trace("Returning true on expression", depth);
     return true;
 }
 std::shared_ptr<yaoosl::parsing::instance::expression> yaoosl::parsing::instance::p_match_expression(size_t depth)
@@ -2165,13 +1980,11 @@ bool yaoosl::parsing::instance::m_returnstatement_auto80_52(bool is_can, std::sh
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_returnstatement_auto80_52", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_returnstatement_auto80_52", depth);
         return false;
     }
     auto l2 = token__auto_80(depth + 1);
@@ -2186,18 +1999,15 @@ bool yaoosl::parsing::instance::m_returnstatement_auto80_52(bool is_can, std::sh
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_returnstatement_auto80_52", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_returnstatement_auto80_52", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_returnstatement_auto80_52", depth);
         return true;
     }
     resetable1.reset();
@@ -2210,7 +2020,6 @@ bool yaoosl::parsing::instance::m_returnstatement_auto80_52(bool is_can, std::sh
         next();
     }
     skip();
-    trace("Returning true on m_returnstatement_auto80_52", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_expression_auto80_53(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement>& actual, yaoosl::parsing::instance::statement_state& state, size_t depth)
@@ -2223,13 +2032,11 @@ bool yaoosl::parsing::instance::m_expression_auto80_53(bool is_can, std::shared_
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expression_auto80_53", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expression_auto80_53", depth);
         return false;
     }
     auto l2 = token__auto_80(depth + 1);
@@ -2244,18 +2051,15 @@ bool yaoosl::parsing::instance::m_expression_auto80_53(bool is_can, std::shared_
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expression_auto80_53", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expression_auto80_53", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_expression_auto80_53", depth);
         return true;
     }
     resetable1.reset();
@@ -2268,7 +2072,6 @@ bool yaoosl::parsing::instance::m_expression_auto80_53(bool is_can, std::shared_
         next();
     }
     skip();
-    trace("Returning true on m_expression_auto80_53", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_auto80_54(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement>& actual, yaoosl::parsing::instance::statement_state& state, size_t depth)
@@ -2286,18 +2089,15 @@ bool yaoosl::parsing::instance::m_auto80_54(bool is_can, std::shared_ptr<yaoosl:
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_auto80_54", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_auto80_54", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_auto80_54", depth);
         return true;
     }
     resetable1.reset();
@@ -2307,7 +2107,6 @@ bool yaoosl::parsing::instance::m_auto80_54(bool is_can, std::shared_ptr<yaoosl:
         next();
     }
     skip();
-    trace("Returning true on m_auto80_54", depth);
     return true;
 }
 bool yaoosl::parsing::instance::alternatives55(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement>& actual, yaoosl::parsing::instance::statement_state& state, size_t depth)
@@ -2317,14 +2116,12 @@ bool yaoosl::parsing::instance::alternatives55(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives55", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_returnstatement_auto80_52(false, actual, state, depth + 1);
-            trace("Returning true on alternatives55", depth);
             return true;
         }
     }
@@ -2332,14 +2129,12 @@ bool yaoosl::parsing::instance::alternatives55(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives55", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_expression_auto80_53(false, actual, state, depth + 1);
-            trace("Returning true on alternatives55", depth);
             return true;
         }
     }
@@ -2347,19 +2142,16 @@ bool yaoosl::parsing::instance::alternatives55(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives55", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_auto80_54(false, actual, state, depth + 1);
-            trace("Returning true on alternatives55", depth);
             return true;
         }
     }
     resetable1.reset();
-    trace("Returning false on alternatives55", depth);
     return false;
 }
 bool yaoosl::parsing::instance::p_can_statement(size_t depth)
@@ -2370,10 +2162,8 @@ bool yaoosl::parsing::instance::p_can_statement(size_t depth)
     if (!alternatives55(true, fake, state, depth + 1))
     {
         resetable1.reset();
-        trace("Returning false on statement", depth);
         return false;
     }
-    trace("Returning true on statement", depth);
     return true;
 }
 std::shared_ptr<yaoosl::parsing::instance::statement> yaoosl::parsing::instance::p_match_statement(size_t depth)
@@ -2408,25 +2198,21 @@ bool yaoosl::parsing::instance::m_ident_56(bool is_can, std::shared_ptr<yaoosl::
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_ident_56", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_ident_56", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_ident_56", depth);
         return true;
     }
     resetable1.reset();
     auto val4 = create_token(token_ident(depth + 1).value(), tok::IDENT);
     actual->name = val4;
     skip();
-    trace("Returning true on m_ident_56", depth);
     return true;
 }
 bool yaoosl::parsing::instance::p_can_function_arg(size_t depth)
@@ -2437,10 +2223,8 @@ bool yaoosl::parsing::instance::p_can_function_arg(size_t depth)
     if (!m_ident_56(true, fake, state, depth + 1))
     {
         resetable1.reset();
-        trace("Returning false on function-arg", depth);
         return false;
     }
-    trace("Returning true on function-arg", depth);
     return true;
 }
 std::shared_ptr<yaoosl::parsing::instance::function_arg> yaoosl::parsing::instance::p_match_function_arg(size_t depth)
@@ -2475,18 +2259,15 @@ bool yaoosl::parsing::instance::m_curlybrackedopen_57(bool is_can, std::shared_p
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_curlybrackedopen_57", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_curlybrackedopen_57", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_curlybrackedopen_57", depth);
         return true;
     }
     resetable1.reset();
@@ -2496,7 +2277,6 @@ bool yaoosl::parsing::instance::m_curlybrackedopen_57(bool is_can, std::shared_p
         next();
     }
     skip();
-    trace("Returning true on m_curlybrackedopen_57", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_controlstructure_58(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth)
@@ -2509,25 +2289,21 @@ bool yaoosl::parsing::instance::m_controlstructure_58(bool is_can, std::shared_p
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_controlstructure_58", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_controlstructure_58", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_controlstructure_58", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = p_match_control_structure(depth + 1);
     actual->body.push_back(val2);
     skip();
-    trace("Returning true on m_controlstructure_58", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_statement_59(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth)
@@ -2540,25 +2316,21 @@ bool yaoosl::parsing::instance::m_statement_59(bool is_can, std::shared_ptr<yaoo
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_statement_59", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_statement_59", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_statement_59", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = p_match_statement(depth + 1);
     actual->body.push_back(val2);
     skip();
-    trace("Returning true on m_statement_59", depth);
     return true;
 }
 bool yaoosl::parsing::instance::alternatives60(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth)
@@ -2568,14 +2340,12 @@ bool yaoosl::parsing::instance::alternatives60(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives60", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_controlstructure_58(false, actual, state, depth + 1);
-            trace("Returning true on alternatives60", depth);
             return true;
         }
     }
@@ -2583,14 +2353,12 @@ bool yaoosl::parsing::instance::alternatives60(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives60", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_statement_59(false, actual, state, depth + 1);
-            trace("Returning true on alternatives60", depth);
             return true;
         }
     }
@@ -2599,7 +2367,6 @@ bool yaoosl::parsing::instance::alternatives60(bool is_can, std::shared_ptr<yaoo
         report("Failed to match one of the following: { control-structure, statement }", depth);
     }
     resetable1.reset();
-    trace("Returning false on alternatives60", depth);
     return false;
 }
 bool yaoosl::parsing::instance::m_curlybrackedclose_61(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth)
@@ -2617,18 +2384,15 @@ bool yaoosl::parsing::instance::m_curlybrackedclose_61(bool is_can, std::shared_
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_curlybrackedclose_61", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_curlybrackedclose_61", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_curlybrackedclose_61", depth);
         return true;
     }
     resetable1.reset();
@@ -2638,7 +2402,6 @@ bool yaoosl::parsing::instance::m_curlybrackedclose_61(bool is_can, std::shared_
         next();
     }
     skip();
-    trace("Returning true on m_curlybrackedclose_61", depth);
     return true;
 }
 bool yaoosl::parsing::instance::while62_63(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth)
@@ -2658,7 +2421,6 @@ bool yaoosl::parsing::instance::while62_63(bool is_can, std::shared_ptr<yaoosl::
             cond3 = m_curlybrackedclose_61(true, actual, state, depth + 1);
             resetable2.reset();
         }
-        trace("Returning true on while62_63", depth);
         return true;
     }
     else
@@ -2682,7 +2444,6 @@ bool yaoosl::parsing::instance::while62_63(bool is_can, std::shared_ptr<yaoosl::
             cond3 = m_curlybrackedclose_61(true, actual, state, depth + 1);
             resetable2.reset();
         }
-        trace("Returning true on while62_63", depth);
         return true;
     }
 }
@@ -2701,18 +2462,15 @@ bool yaoosl::parsing::instance::m_curlybrackedclose_64(bool is_can, std::shared_
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_curlybrackedclose_64", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_curlybrackedclose_64", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_curlybrackedclose_64", depth);
         return true;
     }
     resetable1.reset();
@@ -2722,7 +2480,6 @@ bool yaoosl::parsing::instance::m_curlybrackedclose_64(bool is_can, std::shared_
         next();
     }
     skip();
-    trace("Returning true on m_curlybrackedclose_64", depth);
     return true;
 }
 bool yaoosl::parsing::instance::p_can_scope(size_t depth)
@@ -2733,22 +2490,18 @@ bool yaoosl::parsing::instance::p_can_scope(size_t depth)
     if (!m_curlybrackedopen_57(true, fake, state, depth + 1))
     {
         resetable1.reset();
-        trace("Returning false on scope", depth);
         return false;
     }
     else if (!while62_63(true, fake, state, depth + 1))
     {
         resetable1.reset();
-        trace("Returning false on scope", depth);
         return false;
     }
     else if (!m_curlybrackedclose_64(true, fake, state, depth + 1))
     {
         resetable1.reset();
-        trace("Returning false on scope", depth);
         return false;
     }
-    trace("Returning true on scope", depth);
     return true;
 }
 std::shared_ptr<yaoosl::parsing::instance::scope> yaoosl::parsing::instance::p_match_scope(size_t depth)
@@ -2803,13 +2556,11 @@ bool yaoosl::parsing::instance::m_func_ident_roundbrackedopen_65(bool is_can, st
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_func_ident_roundbrackedopen_65", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_func_ident_roundbrackedopen_65", depth);
         return false;
     }
     auto l4 = token_ident(depth + 1);
@@ -2824,13 +2575,11 @@ bool yaoosl::parsing::instance::m_func_ident_roundbrackedopen_65(bool is_can, st
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_func_ident_roundbrackedopen_65", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_func_ident_roundbrackedopen_65", depth);
         return false;
     }
     auto l6 = token__round_bracked_open(depth + 1);
@@ -2845,18 +2594,15 @@ bool yaoosl::parsing::instance::m_func_ident_roundbrackedopen_65(bool is_can, st
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_func_ident_roundbrackedopen_65", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_func_ident_roundbrackedopen_65", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_func_ident_roundbrackedopen_65", depth);
         return true;
     }
     resetable1.reset();
@@ -2875,7 +2621,6 @@ bool yaoosl::parsing::instance::m_func_ident_roundbrackedopen_65(bool is_can, st
         next();
     }
     skip();
-    trace("Returning true on m_func_ident_roundbrackedopen_65", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_functionarg_66(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state, size_t depth)
@@ -2888,25 +2633,21 @@ bool yaoosl::parsing::instance::m_functionarg_66(bool is_can, std::shared_ptr<ya
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_functionarg_66", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_functionarg_66", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_functionarg_66", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = p_match_function_arg(depth + 1);
     actual->args.push_back(val2);
     skip();
-    trace("Returning true on m_functionarg_66", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_comma_functionarg_67(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state, size_t depth)
@@ -2924,13 +2665,11 @@ bool yaoosl::parsing::instance::m_comma_functionarg_67(bool is_can, std::shared_
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_comma_functionarg_67", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_comma_functionarg_67", depth);
         return false;
     }
     if (p_can_function_arg(depth + 1))
@@ -2940,18 +2679,15 @@ bool yaoosl::parsing::instance::m_comma_functionarg_67(bool is_can, std::shared_
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_comma_functionarg_67", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_comma_functionarg_67", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_comma_functionarg_67", depth);
         return true;
     }
     resetable1.reset();
@@ -2964,7 +2700,6 @@ bool yaoosl::parsing::instance::m_comma_functionarg_67(bool is_can, std::shared_
     auto val6 = p_match_function_arg(depth + 1);
     actual->args.push_back(val6);
     skip();
-    trace("Returning true on m_comma_functionarg_67", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_roundbrackedclose_68(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state, size_t depth)
@@ -2982,18 +2717,15 @@ bool yaoosl::parsing::instance::m_roundbrackedclose_68(bool is_can, std::shared_
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_roundbrackedclose_68", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_roundbrackedclose_68", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_roundbrackedclose_68", depth);
         return true;
     }
     resetable1.reset();
@@ -3003,7 +2735,6 @@ bool yaoosl::parsing::instance::m_roundbrackedclose_68(bool is_can, std::shared_
         next();
     }
     skip();
-    trace("Returning true on m_roundbrackedclose_68", depth);
     return true;
 }
 bool yaoosl::parsing::instance::while69_70(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state, size_t depth)
@@ -3021,20 +2752,17 @@ bool yaoosl::parsing::instance::while69_70(bool is_can, std::shared_ptr<yaoosl::
             }
             else if (is_can)
             {
-                trace("Returning false on XCG.Parsing.Statements.Match", depth);
                 return false;
             }
             else
             {
                 report("Failed to match { $ref: , ({ Token: , (,)}), $ref: function-arg (XCG.Parsing.Production) }", depth);
-                trace("Returning false on XCG.Parsing.Statements.Match", depth);
                 return false;
             }
             resetable resetable2(*this);
             cond3 = m_roundbrackedclose_68(true, actual, state, depth + 1);
             resetable2.reset();
         }
-        trace("Returning true on while69_70", depth);
         return true;
     }
     else
@@ -3047,20 +2775,17 @@ bool yaoosl::parsing::instance::while69_70(bool is_can, std::shared_ptr<yaoosl::
             }
             else if (is_can)
             {
-                trace("Returning false on XCG.Parsing.Statements.Match", depth);
                 return false;
             }
             else
             {
                 report("Failed to match { $ref: , ({ Token: , (,)}), $ref: function-arg (XCG.Parsing.Production) }", depth);
-                trace("Returning false on XCG.Parsing.Statements.Match", depth);
                 return false;
             }
             resetable resetable2(*this);
             cond3 = m_roundbrackedclose_68(true, actual, state, depth + 1);
             resetable2.reset();
         }
-        trace("Returning true on while69_70", depth);
         return true;
     }
 }
@@ -3074,24 +2799,20 @@ bool yaoosl::parsing::instance::m_functionarg_71(bool is_can, std::shared_ptr<ya
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_functionarg_71", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_functionarg_71", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_functionarg_71", depth);
         return true;
     }
     resetable1.reset();
     p_match_function_arg(depth + 1);
     skip();
-    trace("Returning true on m_functionarg_71", depth);
     return true;
 }
 bool yaoosl::parsing::instance::if72_73(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state, size_t depth)
@@ -3109,20 +2830,16 @@ bool yaoosl::parsing::instance::if72_73(bool is_can, std::shared_ptr<yaoosl::par
             }
             else if (is_can)
             {
-                trace("Returning false on XCG.Parsing.Statements.Match", depth);
                 return false;
             }
             else
             {
                 report("Failed to match { $ref: function-arg (XCG.Parsing.Production) }", depth);
-                trace("Returning false on XCG.Parsing.Statements.Match", depth);
                 return false;
             }
             while69_70(true, actual, state, depth + 1);
-            trace("Returning true on if72_73", depth);
             return true;
         }
-        trace("Returning true on if72_73", depth);
         return true;
     }
     else
@@ -3135,20 +2852,16 @@ bool yaoosl::parsing::instance::if72_73(bool is_can, std::shared_ptr<yaoosl::par
             }
             else if (is_can)
             {
-                trace("Returning false on XCG.Parsing.Statements.Match", depth);
                 return false;
             }
             else
             {
                 report("Failed to match { $ref: function-arg (XCG.Parsing.Production) }", depth);
-                trace("Returning false on XCG.Parsing.Statements.Match", depth);
                 return false;
             }
             while69_70(false, actual, state, depth + 1);
-            trace("Returning true on if72_73", depth);
             return true;
         }
-        trace("Returning true on if72_73", depth);
         return true;
     }
 }
@@ -3167,13 +2880,11 @@ bool yaoosl::parsing::instance::m_roundbrackedclose_scope_74(bool is_can, std::s
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_roundbrackedclose_scope_74", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_roundbrackedclose_scope_74", depth);
         return false;
     }
     if (p_can_scope(depth + 1))
@@ -3183,18 +2894,15 @@ bool yaoosl::parsing::instance::m_roundbrackedclose_scope_74(bool is_can, std::s
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_roundbrackedclose_scope_74", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_roundbrackedclose_scope_74", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_roundbrackedclose_scope_74", depth);
         return true;
     }
     resetable1.reset();
@@ -3207,7 +2915,6 @@ bool yaoosl::parsing::instance::m_roundbrackedclose_scope_74(bool is_can, std::s
     auto val6 = p_match_scope(depth + 1);
     actual->body = val6;
     skip();
-    trace("Returning true on m_roundbrackedclose_scope_74", depth);
     return true;
 }
 bool yaoosl::parsing::instance::p_can_function(size_t depth)
@@ -3218,22 +2925,18 @@ bool yaoosl::parsing::instance::p_can_function(size_t depth)
     if (!m_func_ident_roundbrackedopen_65(true, fake, state, depth + 1))
     {
         resetable1.reset();
-        trace("Returning false on function", depth);
         return false;
     }
     else if (!if72_73(true, fake, state, depth + 1))
     {
         resetable1.reset();
-        trace("Returning false on function", depth);
         return false;
     }
     else if (!m_roundbrackedclose_scope_74(true, fake, state, depth + 1))
     {
         resetable1.reset();
-        trace("Returning false on function", depth);
         return false;
     }
-    trace("Returning true on function", depth);
     return true;
 }
 std::shared_ptr<yaoosl::parsing::instance::function> yaoosl::parsing::instance::p_match_function(size_t depth)
@@ -3288,13 +2991,11 @@ bool yaoosl::parsing::instance::m_while_roundbrackedopen_expression_roundbracked
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_while_roundbrackedopen_expression_roundbrackedclose_75", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_while_roundbrackedopen_expression_roundbrackedclose_75", depth);
         return false;
     }
     auto l4 = token__round_bracked_open(depth + 1);
@@ -3309,13 +3010,11 @@ bool yaoosl::parsing::instance::m_while_roundbrackedopen_expression_roundbracked
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_while_roundbrackedopen_expression_roundbrackedclose_75", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_while_roundbrackedopen_expression_roundbrackedclose_75", depth);
         return false;
     }
     if (p_can_expression(depth + 1))
@@ -3325,13 +3024,11 @@ bool yaoosl::parsing::instance::m_while_roundbrackedopen_expression_roundbracked
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_while_roundbrackedopen_expression_roundbrackedclose_75", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_while_roundbrackedopen_expression_roundbrackedclose_75", depth);
         return false;
     }
     auto l6 = token__round_bracked_close(depth + 1);
@@ -3346,18 +3043,15 @@ bool yaoosl::parsing::instance::m_while_roundbrackedopen_expression_roundbracked
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_while_roundbrackedopen_expression_roundbrackedclose_75", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_while_roundbrackedopen_expression_roundbrackedclose_75", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_while_roundbrackedopen_expression_roundbrackedclose_75", depth);
         return true;
     }
     resetable1.reset();
@@ -3382,7 +3076,6 @@ bool yaoosl::parsing::instance::m_while_roundbrackedopen_expression_roundbracked
         next();
     }
     skip();
-    trace("Returning true on m_while_roundbrackedopen_expression_roundbrackedclose_75", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_scope_76(bool is_can, std::shared_ptr<yaoosl::parsing::instance::while_loop>& actual, yaoosl::parsing::instance::while_loop_state& state, size_t depth)
@@ -3395,25 +3088,21 @@ bool yaoosl::parsing::instance::m_scope_76(bool is_can, std::shared_ptr<yaoosl::
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_scope_76", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_scope_76", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_scope_76", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = p_match_scope(depth + 1);
     actual->body = val2;
     skip();
-    trace("Returning true on m_scope_76", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_controlstructure_77(bool is_can, std::shared_ptr<yaoosl::parsing::instance::while_loop>& actual, yaoosl::parsing::instance::while_loop_state& state, size_t depth)
@@ -3426,25 +3115,21 @@ bool yaoosl::parsing::instance::m_controlstructure_77(bool is_can, std::shared_p
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_controlstructure_77", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_controlstructure_77", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_controlstructure_77", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = p_match_control_structure(depth + 1);
     actual->body = val2;
     skip();
-    trace("Returning true on m_controlstructure_77", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_statement_78(bool is_can, std::shared_ptr<yaoosl::parsing::instance::while_loop>& actual, yaoosl::parsing::instance::while_loop_state& state, size_t depth)
@@ -3457,25 +3142,21 @@ bool yaoosl::parsing::instance::m_statement_78(bool is_can, std::shared_ptr<yaoo
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_statement_78", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_statement_78", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_statement_78", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = p_match_statement(depth + 1);
     actual->body = val2;
     skip();
-    trace("Returning true on m_statement_78", depth);
     return true;
 }
 bool yaoosl::parsing::instance::alternatives79(bool is_can, std::shared_ptr<yaoosl::parsing::instance::while_loop>& actual, yaoosl::parsing::instance::while_loop_state& state, size_t depth)
@@ -3485,14 +3166,12 @@ bool yaoosl::parsing::instance::alternatives79(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives79", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_scope_76(false, actual, state, depth + 1);
-            trace("Returning true on alternatives79", depth);
             return true;
         }
     }
@@ -3500,14 +3179,12 @@ bool yaoosl::parsing::instance::alternatives79(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives79", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_controlstructure_77(false, actual, state, depth + 1);
-            trace("Returning true on alternatives79", depth);
             return true;
         }
     }
@@ -3515,19 +3192,16 @@ bool yaoosl::parsing::instance::alternatives79(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives79", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_statement_78(false, actual, state, depth + 1);
-            trace("Returning true on alternatives79", depth);
             return true;
         }
     }
     resetable1.reset();
-    trace("Returning false on alternatives79", depth);
     return false;
 }
 bool yaoosl::parsing::instance::p_can_while_loop(size_t depth)
@@ -3538,16 +3212,13 @@ bool yaoosl::parsing::instance::p_can_while_loop(size_t depth)
     if (!m_while_roundbrackedopen_expression_roundbrackedclose_75(true, fake, state, depth + 1))
     {
         resetable1.reset();
-        trace("Returning false on while-loop", depth);
         return false;
     }
     else if (!alternatives79(true, fake, state, depth + 1))
     {
         resetable1.reset();
-        trace("Returning false on while-loop", depth);
         return false;
     }
-    trace("Returning true on while-loop", depth);
     return true;
 }
 std::shared_ptr<yaoosl::parsing::instance::while_loop> yaoosl::parsing::instance::p_match_while_loop(size_t depth)
@@ -3592,13 +3263,11 @@ bool yaoosl::parsing::instance::m_if_roundbrackedopen_expression_roundbrackedclo
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_if_roundbrackedopen_expression_roundbrackedclose_80", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_if_roundbrackedopen_expression_roundbrackedclose_80", depth);
         return false;
     }
     auto l4 = token__round_bracked_open(depth + 1);
@@ -3613,13 +3282,11 @@ bool yaoosl::parsing::instance::m_if_roundbrackedopen_expression_roundbrackedclo
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_if_roundbrackedopen_expression_roundbrackedclose_80", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_if_roundbrackedopen_expression_roundbrackedclose_80", depth);
         return false;
     }
     if (p_can_expression(depth + 1))
@@ -3629,13 +3296,11 @@ bool yaoosl::parsing::instance::m_if_roundbrackedopen_expression_roundbrackedclo
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_if_roundbrackedopen_expression_roundbrackedclose_80", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_if_roundbrackedopen_expression_roundbrackedclose_80", depth);
         return false;
     }
     auto l6 = token__round_bracked_close(depth + 1);
@@ -3650,18 +3315,15 @@ bool yaoosl::parsing::instance::m_if_roundbrackedopen_expression_roundbrackedclo
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_if_roundbrackedopen_expression_roundbrackedclose_80", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_if_roundbrackedopen_expression_roundbrackedclose_80", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_if_roundbrackedopen_expression_roundbrackedclose_80", depth);
         return true;
     }
     resetable1.reset();
@@ -3686,7 +3348,6 @@ bool yaoosl::parsing::instance::m_if_roundbrackedopen_expression_roundbrackedclo
         next();
     }
     skip();
-    trace("Returning true on m_if_roundbrackedopen_expression_roundbrackedclose_80", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_scope_81(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth)
@@ -3699,25 +3360,21 @@ bool yaoosl::parsing::instance::m_scope_81(bool is_can, std::shared_ptr<yaoosl::
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_scope_81", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_scope_81", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_scope_81", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = p_match_scope(depth + 1);
     actual->if_body = val2;
     skip();
-    trace("Returning true on m_scope_81", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_controlstructure_82(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth)
@@ -3730,25 +3387,21 @@ bool yaoosl::parsing::instance::m_controlstructure_82(bool is_can, std::shared_p
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_controlstructure_82", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_controlstructure_82", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_controlstructure_82", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = p_match_control_structure(depth + 1);
     actual->if_body = val2;
     skip();
-    trace("Returning true on m_controlstructure_82", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_statement_83(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth)
@@ -3761,25 +3414,21 @@ bool yaoosl::parsing::instance::m_statement_83(bool is_can, std::shared_ptr<yaoo
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_statement_83", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_statement_83", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_statement_83", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = p_match_statement(depth + 1);
     actual->if_body = val2;
     skip();
-    trace("Returning true on m_statement_83", depth);
     return true;
 }
 bool yaoosl::parsing::instance::alternatives84(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth)
@@ -3789,14 +3438,12 @@ bool yaoosl::parsing::instance::alternatives84(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives84", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_scope_81(false, actual, state, depth + 1);
-            trace("Returning true on alternatives84", depth);
             return true;
         }
     }
@@ -3804,14 +3451,12 @@ bool yaoosl::parsing::instance::alternatives84(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives84", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_controlstructure_82(false, actual, state, depth + 1);
-            trace("Returning true on alternatives84", depth);
             return true;
         }
     }
@@ -3819,19 +3464,16 @@ bool yaoosl::parsing::instance::alternatives84(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives84", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_statement_83(false, actual, state, depth + 1);
-            trace("Returning true on alternatives84", depth);
             return true;
         }
     }
     resetable1.reset();
-    trace("Returning false on alternatives84", depth);
     return false;
 }
 bool yaoosl::parsing::instance::m_else_85(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth)
@@ -3849,18 +3491,15 @@ bool yaoosl::parsing::instance::m_else_85(bool is_can, std::shared_ptr<yaoosl::p
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_else_85", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_else_85", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_else_85", depth);
         return true;
     }
     resetable1.reset();
@@ -3870,7 +3509,6 @@ bool yaoosl::parsing::instance::m_else_85(bool is_can, std::shared_ptr<yaoosl::p
         next();
     }
     skip();
-    trace("Returning true on m_else_85", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_scope_86(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth)
@@ -3883,25 +3521,21 @@ bool yaoosl::parsing::instance::m_scope_86(bool is_can, std::shared_ptr<yaoosl::
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_scope_86", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_scope_86", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_scope_86", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = p_match_scope(depth + 1);
     actual->else_body = val2;
     skip();
-    trace("Returning true on m_scope_86", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_controlstructure_87(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth)
@@ -3914,25 +3548,21 @@ bool yaoosl::parsing::instance::m_controlstructure_87(bool is_can, std::shared_p
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_controlstructure_87", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_controlstructure_87", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_controlstructure_87", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = p_match_control_structure(depth + 1);
     actual->else_body = val2;
     skip();
-    trace("Returning true on m_controlstructure_87", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_statement_88(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth)
@@ -3945,25 +3575,21 @@ bool yaoosl::parsing::instance::m_statement_88(bool is_can, std::shared_ptr<yaoo
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_statement_88", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_statement_88", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_statement_88", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = p_match_statement(depth + 1);
     actual->else_body = val2;
     skip();
-    trace("Returning true on m_statement_88", depth);
     return true;
 }
 bool yaoosl::parsing::instance::alternatives89(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth)
@@ -3973,14 +3599,12 @@ bool yaoosl::parsing::instance::alternatives89(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives89", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_scope_86(false, actual, state, depth + 1);
-            trace("Returning true on alternatives89", depth);
             return true;
         }
     }
@@ -3988,14 +3612,12 @@ bool yaoosl::parsing::instance::alternatives89(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives89", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_controlstructure_87(false, actual, state, depth + 1);
-            trace("Returning true on alternatives89", depth);
             return true;
         }
     }
@@ -4003,19 +3625,16 @@ bool yaoosl::parsing::instance::alternatives89(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives89", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_statement_88(false, actual, state, depth + 1);
-            trace("Returning true on alternatives89", depth);
             return true;
         }
     }
     resetable1.reset();
-    trace("Returning false on alternatives89", depth);
     return false;
 }
 bool yaoosl::parsing::instance::m_else_90(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth)
@@ -4033,18 +3652,15 @@ bool yaoosl::parsing::instance::m_else_90(bool is_can, std::shared_ptr<yaoosl::p
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_else_90", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_else_90", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_else_90", depth);
         return true;
     }
     resetable1.reset();
@@ -4054,7 +3670,6 @@ bool yaoosl::parsing::instance::m_else_90(bool is_can, std::shared_ptr<yaoosl::p
         next();
     }
     skip();
-    trace("Returning true on m_else_90", depth);
     return true;
 }
 bool yaoosl::parsing::instance::if91_92(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth)
@@ -4072,20 +3687,16 @@ bool yaoosl::parsing::instance::if91_92(bool is_can, std::shared_ptr<yaoosl::par
             }
             else if (is_can)
             {
-                trace("Returning false on XCG.Parsing.Statements.Match", depth);
                 return false;
             }
             else
             {
                 report("Failed to match { $ref: else ({ Token: else (else)}) }", depth);
-                trace("Returning false on XCG.Parsing.Statements.Match", depth);
                 return false;
             }
             alternatives89(true, actual, state, depth + 1);
-            trace("Returning true on if91_92", depth);
             return true;
         }
-        trace("Returning true on if91_92", depth);
         return true;
     }
     else
@@ -4098,20 +3709,16 @@ bool yaoosl::parsing::instance::if91_92(bool is_can, std::shared_ptr<yaoosl::par
             }
             else if (is_can)
             {
-                trace("Returning false on XCG.Parsing.Statements.Match", depth);
                 return false;
             }
             else
             {
                 report("Failed to match { $ref: else ({ Token: else (else)}) }", depth);
-                trace("Returning false on XCG.Parsing.Statements.Match", depth);
                 return false;
             }
             alternatives89(false, actual, state, depth + 1);
-            trace("Returning true on if91_92", depth);
             return true;
         }
-        trace("Returning true on if91_92", depth);
         return true;
     }
 }
@@ -4123,22 +3730,18 @@ bool yaoosl::parsing::instance::p_can_if_else(size_t depth)
     if (!m_if_roundbrackedopen_expression_roundbrackedclose_80(true, fake, state, depth + 1))
     {
         resetable1.reset();
-        trace("Returning false on if-else", depth);
         return false;
     }
     else if (!alternatives84(true, fake, state, depth + 1))
     {
         resetable1.reset();
-        trace("Returning false on if-else", depth);
         return false;
     }
     else if (!if91_92(true, fake, state, depth + 1))
     {
         resetable1.reset();
-        trace("Returning false on if-else", depth);
         return false;
     }
-    trace("Returning true on if-else", depth);
     return true;
 }
 std::shared_ptr<yaoosl::parsing::instance::if_else> yaoosl::parsing::instance::p_match_if_else(size_t depth)
@@ -4188,25 +3791,21 @@ bool yaoosl::parsing::instance::m_function_93(bool is_can, std::shared_ptr<yaoos
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_function_93", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_function_93", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_function_93", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = p_match_function(depth + 1);
     actual->content = val2;
     skip();
-    trace("Returning true on m_function_93", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_whileloop_94(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state, size_t depth)
@@ -4219,25 +3818,21 @@ bool yaoosl::parsing::instance::m_whileloop_94(bool is_can, std::shared_ptr<yaoo
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_whileloop_94", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_whileloop_94", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_whileloop_94", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = p_match_while_loop(depth + 1);
     actual->content = val2;
     skip();
-    trace("Returning true on m_whileloop_94", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_ifelse_95(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state, size_t depth)
@@ -4250,25 +3845,21 @@ bool yaoosl::parsing::instance::m_ifelse_95(bool is_can, std::shared_ptr<yaoosl:
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_ifelse_95", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_ifelse_95", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_ifelse_95", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = p_match_if_else(depth + 1);
     actual->content = val2;
     skip();
-    trace("Returning true on m_ifelse_95", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_scope_96(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state, size_t depth)
@@ -4281,25 +3872,21 @@ bool yaoosl::parsing::instance::m_scope_96(bool is_can, std::shared_ptr<yaoosl::
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_scope_96", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_scope_96", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_scope_96", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = p_match_scope(depth + 1);
     actual->content = val2;
     skip();
-    trace("Returning true on m_scope_96", depth);
     return true;
 }
 bool yaoosl::parsing::instance::alternatives97(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state, size_t depth)
@@ -4309,14 +3896,12 @@ bool yaoosl::parsing::instance::alternatives97(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives97", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_function_93(false, actual, state, depth + 1);
-            trace("Returning true on alternatives97", depth);
             return true;
         }
     }
@@ -4324,14 +3909,12 @@ bool yaoosl::parsing::instance::alternatives97(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives97", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_whileloop_94(false, actual, state, depth + 1);
-            trace("Returning true on alternatives97", depth);
             return true;
         }
     }
@@ -4339,14 +3922,12 @@ bool yaoosl::parsing::instance::alternatives97(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives97", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_ifelse_95(false, actual, state, depth + 1);
-            trace("Returning true on alternatives97", depth);
             return true;
         }
     }
@@ -4354,19 +3935,16 @@ bool yaoosl::parsing::instance::alternatives97(bool is_can, std::shared_ptr<yaoo
     {
         if (is_can)
         {
-            trace("Returning true on alternatives97", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_scope_96(false, actual, state, depth + 1);
-            trace("Returning true on alternatives97", depth);
             return true;
         }
     }
     resetable1.reset();
-    trace("Returning false on alternatives97", depth);
     return false;
 }
 bool yaoosl::parsing::instance::p_can_control_structure(size_t depth)
@@ -4377,10 +3955,8 @@ bool yaoosl::parsing::instance::p_can_control_structure(size_t depth)
     if (!alternatives97(true, fake, state, depth + 1))
     {
         resetable1.reset();
-        trace("Returning false on control-structure", depth);
         return false;
     }
-    trace("Returning true on control-structure", depth);
     return true;
 }
 std::shared_ptr<yaoosl::parsing::instance::control_structure> yaoosl::parsing::instance::p_match_control_structure(size_t depth)
@@ -4410,25 +3986,21 @@ bool yaoosl::parsing::instance::m_controlstructure_98(bool is_can, std::shared_p
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_controlstructure_98", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_controlstructure_98", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_controlstructure_98", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = p_match_control_structure(depth + 1);
     actual->content.push_back(val2);
     skip();
-    trace("Returning true on m_controlstructure_98", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_statement_99(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth)
@@ -4441,25 +4013,21 @@ bool yaoosl::parsing::instance::m_statement_99(bool is_can, std::shared_ptr<yaoo
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_statement_99", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_statement_99", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_statement_99", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = p_match_statement(depth + 1);
     actual->content.push_back(val2);
     skip();
-    trace("Returning true on m_statement_99", depth);
     return true;
 }
 bool yaoosl::parsing::instance::alternatives100(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth)
@@ -4469,14 +4037,12 @@ bool yaoosl::parsing::instance::alternatives100(bool is_can, std::shared_ptr<yao
     {
         if (is_can)
         {
-            trace("Returning true on alternatives100", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_controlstructure_98(false, actual, state, depth + 1);
-            trace("Returning true on alternatives100", depth);
             return true;
         }
     }
@@ -4484,14 +4050,12 @@ bool yaoosl::parsing::instance::alternatives100(bool is_can, std::shared_ptr<yao
     {
         if (is_can)
         {
-            trace("Returning true on alternatives100", depth);
             return true;
         }
         else
         {
             resetable1.reset();
             m_statement_99(false, actual, state, depth + 1);
-            trace("Returning true on alternatives100", depth);
             return true;
         }
     }
@@ -4500,7 +4064,6 @@ bool yaoosl::parsing::instance::alternatives100(bool is_can, std::shared_ptr<yao
         report("Failed to match one of the following: { control-structure, statement }", depth);
     }
     resetable1.reset();
-    trace("Returning false on alternatives100", depth);
     return false;
 }
 bool yaoosl::parsing::instance::while101_102(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth)
@@ -4520,7 +4083,6 @@ bool yaoosl::parsing::instance::while101_102(bool is_can, std::shared_ptr<yaoosl
             cond3 = current() == '\0';
             resetable2.reset();
         }
-        trace("Returning true on while101_102", depth);
         return true;
     }
     else
@@ -4544,7 +4106,6 @@ bool yaoosl::parsing::instance::while101_102(bool is_can, std::shared_ptr<yaoosl
             cond3 = current() == '\0';
             resetable2.reset();
         }
-        trace("Returning true on while101_102", depth);
         return true;
     }
 }
@@ -4556,10 +4117,8 @@ bool yaoosl::parsing::instance::p_can_main(size_t depth)
     if (!while101_102(true, fake, state, depth + 1))
     {
         resetable1.reset();
-        trace("Returning false on main", depth);
         return false;
     }
-    trace("Returning true on main", depth);
     return true;
 }
 std::shared_ptr<yaoosl::parsing::instance::main> yaoosl::parsing::instance::p_match_main(size_t depth)
@@ -4594,13 +4153,11 @@ bool yaoosl::parsing::instance::m_exparithmetic2_slash_expnullar_103(bool is_can
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_exparithmetic2_slash_expnullar_103", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_exparithmetic2_slash_expnullar_103", depth);
         return false;
     }
     if (p_can_exp_nullar(depth + 1))
@@ -4610,18 +4167,15 @@ bool yaoosl::parsing::instance::m_exparithmetic2_slash_expnullar_103(bool is_can
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_exparithmetic2_slash_expnullar_103", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_exparithmetic2_slash_expnullar_103", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_exparithmetic2_slash_expnullar_103", depth);
         return true;
     }
     resetable1.reset();
@@ -4638,7 +4192,6 @@ bool yaoosl::parsing::instance::m_exparithmetic2_slash_expnullar_103(bool is_can
     {
         actual->op = '/';
     }
-    trace("Returning true on m_exparithmetic2_slash_expnullar_103", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_exparithmetic2_star_expnullar_104(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2>& actual, yaoosl::parsing::instance::exp_arithmetic_2_state& state, size_t depth)
@@ -4656,13 +4209,11 @@ bool yaoosl::parsing::instance::m_exparithmetic2_star_expnullar_104(bool is_can,
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_exparithmetic2_star_expnullar_104", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_exparithmetic2_star_expnullar_104", depth);
         return false;
     }
     if (p_can_exp_nullar(depth + 1))
@@ -4672,18 +4223,15 @@ bool yaoosl::parsing::instance::m_exparithmetic2_star_expnullar_104(bool is_can,
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_exparithmetic2_star_expnullar_104", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_exparithmetic2_star_expnullar_104", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_exparithmetic2_star_expnullar_104", depth);
         return true;
     }
     resetable1.reset();
@@ -4700,7 +4248,6 @@ bool yaoosl::parsing::instance::m_exparithmetic2_star_expnullar_104(bool is_can,
     {
         actual->op = '*';
     }
-    trace("Returning true on m_exparithmetic2_star_expnullar_104", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_expnullar_105(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2>& actual, yaoosl::parsing::instance::exp_arithmetic_2_state& state, size_t depth)
@@ -4713,25 +4260,21 @@ bool yaoosl::parsing::instance::m_expnullar_105(bool is_can, std::shared_ptr<yao
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expnullar_105", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expnullar_105", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_expnullar_105", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = p_match_exp_nullar(depth + 1);
     actual->left = val2;
     skip();
-    trace("Returning true on m_expnullar_105", depth);
     return true;
 }
 bool yaoosl::parsing::instance::lr_can_exp_arithmetic_2(size_t depth)
@@ -4741,7 +4284,6 @@ bool yaoosl::parsing::instance::lr_can_exp_arithmetic_2(size_t depth)
     exp_arithmetic_2_state state;
     if (!m_expnullar_105(true, fake, state, depth + 1))
     {
-        trace("Returning false on exp-arithmetic-2", depth);
         return false;
     }
     while (true)
@@ -4756,7 +4298,6 @@ bool yaoosl::parsing::instance::lr_can_exp_arithmetic_2(size_t depth)
         }
         else
         {
-            trace("Returning true on exp-arithmetic-2", depth);
             return true;
         }
     }
@@ -4769,7 +4310,6 @@ std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2> yaoosl::parsing::in
     if (!m_expnullar_105(false, actual, state, depth + 1))
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning EmptyClosure on exp-arithmetic-2", depth);
         return {};
     }
     bool is_first2 = true;
@@ -4824,13 +4364,11 @@ bool yaoosl::parsing::instance::m_exparithmetic1_plus_exparithmetic2_106(bool is
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_exparithmetic1_plus_exparithmetic2_106", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_exparithmetic1_plus_exparithmetic2_106", depth);
         return false;
     }
     if (lr_can_exp_arithmetic_2(depth + 1))
@@ -4840,18 +4378,15 @@ bool yaoosl::parsing::instance::m_exparithmetic1_plus_exparithmetic2_106(bool is
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_exparithmetic1_plus_exparithmetic2_106", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_exparithmetic1_plus_exparithmetic2_106", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_exparithmetic1_plus_exparithmetic2_106", depth);
         return true;
     }
     resetable1.reset();
@@ -4868,7 +4403,6 @@ bool yaoosl::parsing::instance::m_exparithmetic1_plus_exparithmetic2_106(bool is
     {
         actual->op = '+';
     }
-    trace("Returning true on m_exparithmetic1_plus_exparithmetic2_106", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_exparithmetic1_minus_exparithmetic2_107(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1>& actual, yaoosl::parsing::instance::exp_arithmetic_1_state& state, size_t depth)
@@ -4886,13 +4420,11 @@ bool yaoosl::parsing::instance::m_exparithmetic1_minus_exparithmetic2_107(bool i
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_exparithmetic1_minus_exparithmetic2_107", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_exparithmetic1_minus_exparithmetic2_107", depth);
         return false;
     }
     if (lr_can_exp_arithmetic_2(depth + 1))
@@ -4902,18 +4434,15 @@ bool yaoosl::parsing::instance::m_exparithmetic1_minus_exparithmetic2_107(bool i
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_exparithmetic1_minus_exparithmetic2_107", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_exparithmetic1_minus_exparithmetic2_107", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_exparithmetic1_minus_exparithmetic2_107", depth);
         return true;
     }
     resetable1.reset();
@@ -4930,7 +4459,6 @@ bool yaoosl::parsing::instance::m_exparithmetic1_minus_exparithmetic2_107(bool i
     {
         actual->op = '-';
     }
-    trace("Returning true on m_exparithmetic1_minus_exparithmetic2_107", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_exparithmetic2_108(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1>& actual, yaoosl::parsing::instance::exp_arithmetic_1_state& state, size_t depth)
@@ -4943,25 +4471,21 @@ bool yaoosl::parsing::instance::m_exparithmetic2_108(bool is_can, std::shared_pt
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_exparithmetic2_108", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_exparithmetic2_108", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_exparithmetic2_108", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = lr_match_exp_arithmetic_2(depth + 1);
     actual->left = val2;
     skip();
-    trace("Returning true on m_exparithmetic2_108", depth);
     return true;
 }
 bool yaoosl::parsing::instance::lr_can_exp_arithmetic_1(size_t depth)
@@ -4971,7 +4495,6 @@ bool yaoosl::parsing::instance::lr_can_exp_arithmetic_1(size_t depth)
     exp_arithmetic_1_state state;
     if (!m_exparithmetic2_108(true, fake, state, depth + 1))
     {
-        trace("Returning false on exp-arithmetic-1", depth);
         return false;
     }
     while (true)
@@ -4986,7 +4509,6 @@ bool yaoosl::parsing::instance::lr_can_exp_arithmetic_1(size_t depth)
         }
         else
         {
-            trace("Returning true on exp-arithmetic-1", depth);
             return true;
         }
     }
@@ -4999,7 +4521,6 @@ std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1> yaoosl::parsing::in
     if (!m_exparithmetic2_108(false, actual, state, depth + 1))
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning EmptyClosure on exp-arithmetic-1", depth);
         return {};
     }
     bool is_first2 = true;
@@ -5054,13 +4575,11 @@ bool yaoosl::parsing::instance::m_expcompare_lessthenequal_exparithmetic1_109(bo
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expcompare_lessthenequal_exparithmetic1_109", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expcompare_lessthenequal_exparithmetic1_109", depth);
         return false;
     }
     if (lr_can_exp_arithmetic_1(depth + 1))
@@ -5070,18 +4589,15 @@ bool yaoosl::parsing::instance::m_expcompare_lessthenequal_exparithmetic1_109(bo
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expcompare_lessthenequal_exparithmetic1_109", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expcompare_lessthenequal_exparithmetic1_109", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_expcompare_lessthenequal_exparithmetic1_109", depth);
         return true;
     }
     resetable1.reset();
@@ -5102,7 +4618,6 @@ bool yaoosl::parsing::instance::m_expcompare_lessthenequal_exparithmetic1_109(bo
     {
         actual->eq2 = '=';
     }
-    trace("Returning true on m_expcompare_lessthenequal_exparithmetic1_109", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_expcompare_lessthen_exparithmetic1_110(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth)
@@ -5120,13 +4635,11 @@ bool yaoosl::parsing::instance::m_expcompare_lessthen_exparithmetic1_110(bool is
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expcompare_lessthen_exparithmetic1_110", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expcompare_lessthen_exparithmetic1_110", depth);
         return false;
     }
     if (lr_can_exp_arithmetic_1(depth + 1))
@@ -5136,18 +4649,15 @@ bool yaoosl::parsing::instance::m_expcompare_lessthen_exparithmetic1_110(bool is
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expcompare_lessthen_exparithmetic1_110", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expcompare_lessthen_exparithmetic1_110", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_expcompare_lessthen_exparithmetic1_110", depth);
         return true;
     }
     resetable1.reset();
@@ -5164,7 +4674,6 @@ bool yaoosl::parsing::instance::m_expcompare_lessthen_exparithmetic1_110(bool is
     {
         actual->op1 = '<';
     }
-    trace("Returning true on m_expcompare_lessthen_exparithmetic1_110", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_expcompare_greaterthenequal_exparithmetic1_111(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth)
@@ -5182,13 +4691,11 @@ bool yaoosl::parsing::instance::m_expcompare_greaterthenequal_exparithmetic1_111
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expcompare_greaterthenequal_exparithmetic1_111", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expcompare_greaterthenequal_exparithmetic1_111", depth);
         return false;
     }
     if (lr_can_exp_arithmetic_1(depth + 1))
@@ -5198,18 +4705,15 @@ bool yaoosl::parsing::instance::m_expcompare_greaterthenequal_exparithmetic1_111
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expcompare_greaterthenequal_exparithmetic1_111", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expcompare_greaterthenequal_exparithmetic1_111", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_expcompare_greaterthenequal_exparithmetic1_111", depth);
         return true;
     }
     resetable1.reset();
@@ -5230,7 +4734,6 @@ bool yaoosl::parsing::instance::m_expcompare_greaterthenequal_exparithmetic1_111
     {
         actual->op2 = '=';
     }
-    trace("Returning true on m_expcompare_greaterthenequal_exparithmetic1_111", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_expcompare_greaterthen_exparithmetic1_112(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth)
@@ -5248,13 +4751,11 @@ bool yaoosl::parsing::instance::m_expcompare_greaterthen_exparithmetic1_112(bool
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expcompare_greaterthen_exparithmetic1_112", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expcompare_greaterthen_exparithmetic1_112", depth);
         return false;
     }
     if (lr_can_exp_arithmetic_1(depth + 1))
@@ -5264,18 +4765,15 @@ bool yaoosl::parsing::instance::m_expcompare_greaterthen_exparithmetic1_112(bool
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expcompare_greaterthen_exparithmetic1_112", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expcompare_greaterthen_exparithmetic1_112", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_expcompare_greaterthen_exparithmetic1_112", depth);
         return true;
     }
     resetable1.reset();
@@ -5292,7 +4790,6 @@ bool yaoosl::parsing::instance::m_expcompare_greaterthen_exparithmetic1_112(bool
     {
         actual->op1 = '>';
     }
-    trace("Returning true on m_expcompare_greaterthen_exparithmetic1_112", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_exparithmetic1_113(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth)
@@ -5305,25 +4802,21 @@ bool yaoosl::parsing::instance::m_exparithmetic1_113(bool is_can, std::shared_pt
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_exparithmetic1_113", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_exparithmetic1_113", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_exparithmetic1_113", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = lr_match_exp_arithmetic_1(depth + 1);
     actual->left = val2;
     skip();
-    trace("Returning true on m_exparithmetic1_113", depth);
     return true;
 }
 bool yaoosl::parsing::instance::lr_can_exp_compare(size_t depth)
@@ -5333,7 +4826,6 @@ bool yaoosl::parsing::instance::lr_can_exp_compare(size_t depth)
     exp_compare_state state;
     if (!m_exparithmetic1_113(true, fake, state, depth + 1))
     {
-        trace("Returning false on exp-compare", depth);
         return false;
     }
     while (true)
@@ -5354,7 +4846,6 @@ bool yaoosl::parsing::instance::lr_can_exp_compare(size_t depth)
         }
         else
         {
-            trace("Returning true on exp-compare", depth);
             return true;
         }
     }
@@ -5367,7 +4858,6 @@ std::shared_ptr<yaoosl::parsing::instance::exp_compare> yaoosl::parsing::instanc
     if (!m_exparithmetic1_113(false, actual, state, depth + 1))
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning EmptyClosure on exp-compare", depth);
         return {};
     }
     bool is_first2 = true;
@@ -5446,13 +4936,11 @@ bool yaoosl::parsing::instance::m_expequality_lessthenequal_expcompare_114(bool 
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expequality_lessthenequal_expcompare_114", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expequality_lessthenequal_expcompare_114", depth);
         return false;
     }
     if (lr_can_exp_compare(depth + 1))
@@ -5462,18 +4950,15 @@ bool yaoosl::parsing::instance::m_expequality_lessthenequal_expcompare_114(bool 
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expequality_lessthenequal_expcompare_114", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expequality_lessthenequal_expcompare_114", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_expequality_lessthenequal_expcompare_114", depth);
         return true;
     }
     resetable1.reset();
@@ -5494,7 +4979,6 @@ bool yaoosl::parsing::instance::m_expequality_lessthenequal_expcompare_114(bool 
     {
         actual->eq2 = '=';
     }
-    trace("Returning true on m_expequality_lessthenequal_expcompare_114", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_expequality_lessthen_expcompare_115(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth)
@@ -5512,13 +4996,11 @@ bool yaoosl::parsing::instance::m_expequality_lessthen_expcompare_115(bool is_ca
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expequality_lessthen_expcompare_115", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expequality_lessthen_expcompare_115", depth);
         return false;
     }
     if (lr_can_exp_compare(depth + 1))
@@ -5528,18 +5010,15 @@ bool yaoosl::parsing::instance::m_expequality_lessthen_expcompare_115(bool is_ca
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expequality_lessthen_expcompare_115", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expequality_lessthen_expcompare_115", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_expequality_lessthen_expcompare_115", depth);
         return true;
     }
     resetable1.reset();
@@ -5556,7 +5035,6 @@ bool yaoosl::parsing::instance::m_expequality_lessthen_expcompare_115(bool is_ca
     {
         actual->op1 = '<';
     }
-    trace("Returning true on m_expequality_lessthen_expcompare_115", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_expequality_greaterthenequal_expcompare_116(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth)
@@ -5574,13 +5052,11 @@ bool yaoosl::parsing::instance::m_expequality_greaterthenequal_expcompare_116(bo
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expequality_greaterthenequal_expcompare_116", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expequality_greaterthenequal_expcompare_116", depth);
         return false;
     }
     if (lr_can_exp_compare(depth + 1))
@@ -5590,18 +5066,15 @@ bool yaoosl::parsing::instance::m_expequality_greaterthenequal_expcompare_116(bo
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expequality_greaterthenequal_expcompare_116", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expequality_greaterthenequal_expcompare_116", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_expequality_greaterthenequal_expcompare_116", depth);
         return true;
     }
     resetable1.reset();
@@ -5622,7 +5095,6 @@ bool yaoosl::parsing::instance::m_expequality_greaterthenequal_expcompare_116(bo
     {
         actual->op2 = '=';
     }
-    trace("Returning true on m_expequality_greaterthenequal_expcompare_116", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_expequality_greaterthen_expcompare_117(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth)
@@ -5640,13 +5112,11 @@ bool yaoosl::parsing::instance::m_expequality_greaterthen_expcompare_117(bool is
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expequality_greaterthen_expcompare_117", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expequality_greaterthen_expcompare_117", depth);
         return false;
     }
     if (lr_can_exp_compare(depth + 1))
@@ -5656,18 +5126,15 @@ bool yaoosl::parsing::instance::m_expequality_greaterthen_expcompare_117(bool is
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expequality_greaterthen_expcompare_117", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expequality_greaterthen_expcompare_117", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_expequality_greaterthen_expcompare_117", depth);
         return true;
     }
     resetable1.reset();
@@ -5684,7 +5151,6 @@ bool yaoosl::parsing::instance::m_expequality_greaterthen_expcompare_117(bool is
     {
         actual->op1 = '>';
     }
-    trace("Returning true on m_expequality_greaterthen_expcompare_117", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_expcompare_118(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth)
@@ -5697,25 +5163,21 @@ bool yaoosl::parsing::instance::m_expcompare_118(bool is_can, std::shared_ptr<ya
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expcompare_118", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expcompare_118", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_expcompare_118", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = lr_match_exp_compare(depth + 1);
     actual->left = val2;
     skip();
-    trace("Returning true on m_expcompare_118", depth);
     return true;
 }
 bool yaoosl::parsing::instance::lr_can_exp_equality(size_t depth)
@@ -5725,7 +5187,6 @@ bool yaoosl::parsing::instance::lr_can_exp_equality(size_t depth)
     exp_equality_state state;
     if (!m_expcompare_118(true, fake, state, depth + 1))
     {
-        trace("Returning false on exp-equality", depth);
         return false;
     }
     while (true)
@@ -5746,7 +5207,6 @@ bool yaoosl::parsing::instance::lr_can_exp_equality(size_t depth)
         }
         else
         {
-            trace("Returning true on exp-equality", depth);
             return true;
         }
     }
@@ -5759,7 +5219,6 @@ std::shared_ptr<yaoosl::parsing::instance::exp_equality> yaoosl::parsing::instan
     if (!m_expcompare_118(false, actual, state, depth + 1))
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning EmptyClosure on exp-equality", depth);
         return {};
     }
     bool is_first2 = true;
@@ -5838,13 +5297,11 @@ bool yaoosl::parsing::instance::m_expand_and_expequality_119(bool is_can, std::s
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expand_and_expequality_119", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expand_and_expequality_119", depth);
         return false;
     }
     if (lr_can_exp_equality(depth + 1))
@@ -5854,18 +5311,15 @@ bool yaoosl::parsing::instance::m_expand_and_expequality_119(bool is_can, std::s
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expand_and_expequality_119", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expand_and_expequality_119", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_expand_and_expequality_119", depth);
         return true;
     }
     resetable1.reset();
@@ -5878,7 +5332,6 @@ bool yaoosl::parsing::instance::m_expand_and_expequality_119(bool is_can, std::s
     auto val6 = lr_match_exp_equality(depth + 1);
     actual->right = val6;
     skip();
-    trace("Returning true on m_expand_and_expequality_119", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_expequality_120(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_and>& actual, yaoosl::parsing::instance::exp_and_state& state, size_t depth)
@@ -5891,25 +5344,21 @@ bool yaoosl::parsing::instance::m_expequality_120(bool is_can, std::shared_ptr<y
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expequality_120", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expequality_120", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_expequality_120", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = lr_match_exp_equality(depth + 1);
     actual->left = val2;
     skip();
-    trace("Returning true on m_expequality_120", depth);
     return true;
 }
 bool yaoosl::parsing::instance::lr_can_exp_and(size_t depth)
@@ -5919,7 +5368,6 @@ bool yaoosl::parsing::instance::lr_can_exp_and(size_t depth)
     exp_and_state state;
     if (!m_expequality_120(true, fake, state, depth + 1))
     {
-        trace("Returning false on exp-and", depth);
         return false;
     }
     while (true)
@@ -5931,7 +5379,6 @@ bool yaoosl::parsing::instance::lr_can_exp_and(size_t depth)
         }
         else
         {
-            trace("Returning true on exp-and", depth);
             return true;
         }
     }
@@ -5944,7 +5391,6 @@ std::shared_ptr<yaoosl::parsing::instance::exp_and> yaoosl::parsing::instance::l
     if (!m_expequality_120(false, actual, state, depth + 1))
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning EmptyClosure on exp-and", depth);
         return {};
     }
     bool is_first2 = true;
@@ -5987,13 +5433,11 @@ bool yaoosl::parsing::instance::m_expor_or_expequality_121(bool is_can, std::sha
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expor_or_expequality_121", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expor_or_expequality_121", depth);
         return false;
     }
     if (lr_can_exp_equality(depth + 1))
@@ -6003,18 +5447,15 @@ bool yaoosl::parsing::instance::m_expor_or_expequality_121(bool is_can, std::sha
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expor_or_expequality_121", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expor_or_expequality_121", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_expor_or_expequality_121", depth);
         return true;
     }
     resetable1.reset();
@@ -6027,7 +5468,6 @@ bool yaoosl::parsing::instance::m_expor_or_expequality_121(bool is_can, std::sha
     auto val6 = lr_match_exp_equality(depth + 1);
     actual->right = val6;
     skip();
-    trace("Returning true on m_expor_or_expequality_121", depth);
     return true;
 }
 bool yaoosl::parsing::instance::m_expequality_122(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_or>& actual, yaoosl::parsing::instance::exp_or_state& state, size_t depth)
@@ -6040,25 +5480,21 @@ bool yaoosl::parsing::instance::m_expequality_122(bool is_can, std::shared_ptr<y
     else if (is_can)
     {
         resetable1.reset();
-        trace("Returning false on m_expequality_122", depth);
         return false;
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning false on m_expequality_122", depth);
         return false;
     }
     if (is_can)
     {
-        trace("Returning true on m_expequality_122", depth);
         return true;
     }
     resetable1.reset();
     auto val2 = lr_match_exp_equality(depth + 1);
     actual->left = val2;
     skip();
-    trace("Returning true on m_expequality_122", depth);
     return true;
 }
 bool yaoosl::parsing::instance::lr_can_exp_or(size_t depth)
@@ -6068,7 +5504,6 @@ bool yaoosl::parsing::instance::lr_can_exp_or(size_t depth)
     exp_or_state state;
     if (!m_expequality_122(true, fake, state, depth + 1))
     {
-        trace("Returning false on exp-or", depth);
         return false;
     }
     while (true)
@@ -6080,7 +5515,6 @@ bool yaoosl::parsing::instance::lr_can_exp_or(size_t depth)
         }
         else
         {
-            trace("Returning true on exp-or", depth);
             return true;
         }
     }
@@ -6093,7 +5527,6 @@ std::shared_ptr<yaoosl::parsing::instance::exp_or> yaoosl::parsing::instance::lr
     if (!m_expequality_122(false, actual, state, depth + 1))
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        trace("Returning EmptyClosure on exp-or", depth);
         return {};
     }
     bool is_first2 = true;
@@ -6124,10 +5557,6 @@ std::shared_ptr<yaoosl::parsing::instance::exp_or> yaoosl::parsing::instance::lr
 void yaoosl::parsing::instance::report(std::string_view message, size_t depth)
 {
     std::cout << "[L" << m_line << "]" << "[C" << m_column << "] " << message << "\n";
-}
-void yaoosl::parsing::instance::trace(std::string_view message, size_t depth)
-{
-    std::cout << std::string(depth, ' ') << "[L" << m_line << "]" << "[C" << m_column << "] " << message << "\n";
 }
 yaoosl::parsing::instance::token yaoosl::parsing::instance::create_token(size_t length, tok type)
 {

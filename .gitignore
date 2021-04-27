@@ -329,3 +329,4 @@ ASALocalRun/
 .mfractor/
 /generator-test/out/build/x64-Debug
 /generator-test/out/build/x64-Debug (default)
+/generator-test/out/build/x64-Release

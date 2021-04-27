@@ -2,7 +2,7 @@
   "profiles": {
     "xcg": {
       "commandName": "Project",
-      "commandLineArgs": "-i ..\\..\\..\\..\\examples\\easyscript.xcg -o ..\\..\\..\\..\\generator-test\\generator-test -g cpp -s namespace:yaoosl::parsing create-string-tree-spaces:0 debug:true"
+      "commandLineArgs": "-i ..\\..\\..\\..\\examples\\easyscript.xcg -o ..\\..\\..\\..\\generator-test\\generator-test -g cpp -s namespace:yaoosl::parsing create-string-tree-spaces:0 debug:false"
     }
   }
 }

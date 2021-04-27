@@ -229,7 +229,6 @@ namespace yaoosl::parsing
         size_t m_column;
         size_t m_offset;
         virtual void report(std::string_view message, size_t depth);
-        virtual void trace(std::string_view message, size_t depth);
     public:
         instance(std::string_view contents, std::string file) : m_contents(contents), m_file(file), m_line(1), m_column(1), m_offset(0)
         {
