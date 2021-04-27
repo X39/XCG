@@ -306,7 +306,7 @@ namespace XCG
             generator.RegisterRules(validator);
 
             if (!validator.Validate(parser, (rule, hint) => Colored(rule.Severity,
-                () => Console.WriteLine($"[{rule.Realm}{rule.Code:0000}][{SeverityString(rule.Severity)}][{hint.File}][L{hint.Line}]: {hint.Message}"))))
+                () => Console.WriteLine($"[{rule.Realm}{rule.Code:000}][{SeverityString(rule.Severity)}][{hint.File}][L{hint.Line}]: {hint.Message}"))))
             {
                 return -1;
             }
