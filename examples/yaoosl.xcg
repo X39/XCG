@@ -1,0 +1,391 @@
+/* comment */
+token integer
+    require plus { 0-9 }
+
+token scalar
+    require once { integer }
+    require once .
+    require once { integer }
+    
+token slash: "/"
+    require once /
+    
+token star: "*"
+    require once *
+    
+token plus: "+"
+    require once +
+    
+token minus: "-"
+    require once -
+    
+token underscore: "_"
+    require once _
+
+token true
+    require once true
+
+token false
+    require once false
+
+token boolean
+    require once { true, false }
+
+token ident
+    require once { a-z, A-Z, underscore, minus }
+    require [0, *) { a-z, A-Z, 0-9, underscore, minus }
+    backtrack not once -
+
+token string
+    require once "
+    require not [0, *) "
+    require once "
+
+/*"*/
+
+production call
+    match @[method]ident "("
+    if match expression
+        match @[args]expression
+        while not match ")"
+            alternatives
+                match "," @[args]expression
+                match ","
+                error
+    match ")"
+
+
+
+production template-usage-item
+	match @[key]ident
+
+production template-usage
+	match "<"
+	match @[items]template-usage-item
+	while match ","
+        alternatives
+            match "," @[items]template-usage-item
+            error
+	match ">"
+
+production template-definition-item
+	match @[key]ident
+	if match "="
+		match "=" @[value]exp-value
+
+production template-definition
+	match "<"
+	match @[items]template-definition-item
+	while match ","
+        alternatives
+            match "," @[items]template-definition-item
+            error
+	match ">"
+
+production exp-chain-start
+    match @[part]ident
+    match @[part]call
+
+production exp-chain-indexer
+    match "["
+    match "]"
+
+production exp-chain-access
+    match "." @ident
+
+production exp-chain-call
+    match "." @call
+    
+left-recursive exp-chain
+    match @[left]exp-chain @[right]exp-chain-call
+    match @[left]exp-chain @[right]exp-chain-access
+    match @[left]exp-chain @[right]exp-chain-indexer
+    match @[left]exp-chain-start
+    
+left-recursive ident-navigation
+    match @[left]ident-navigation "." @[right]ident
+    match @[left]ident
+    
+left-recursive type-navigation
+    match @[left]type-navigation "." @[right]ident @[template]template-usage
+    match @[left]type-navigation "." @[right]ident
+    match @[left]ident
+
+production typeof-s
+    match "typeof" "(" @[value]type-navigation ")"
+
+production nameof-s
+    match "nameof" "(" @[value]exp-or ")"
+    
+production exp-value
+    alternatives
+        match @[value]typeof-s
+        match @[value]nameof-s
+        match @[value]scalar
+        match @[value]boolean
+        match @[value]string
+        match @[value]integer
+
+production exp-nullar
+    alternatives
+        match "(" @[value]statement ")"
+        match @[value]exp-chain
+        match @[value]call
+        match @[value]exp-value
+
+left-recursive exp-arithmetic-2
+	match @[left]exp-arithmetic-2 "/" @[right]exp-nullar
+		set capture op '/'
+	match @[left]exp-arithmetic-2 "*" @[right]exp-nullar
+		set capture op '*'
+	match @[left]exp-nullar
+
+left-recursive exp-arithmetic-1
+	match @[left]exp-arithmetic-1 "+" @[right]exp-arithmetic-2
+		set capture op '+'
+	match @[left]exp-arithmetic-1 "-" @[right]exp-arithmetic-2
+		set capture op '-'
+	match @[left]exp-arithmetic-2
+    
+left-recursive exp-compare
+	match @[left]exp-compare "<=" @[right]exp-arithmetic-1
+		set capture op1 '<'
+		set capture eq2 '='
+	match @[left]exp-compare "<" @[right]exp-arithmetic-1
+		set capture op1 '<'
+	match @[left]exp-compare ">=" @[right]exp-arithmetic-1
+		set capture op1 '>'
+		set capture op2 '='
+	match @[left]exp-compare ">" @[right]exp-arithmetic-1
+		set capture op1 '>'
+	match @[left]exp-arithmetic-1
+    
+left-recursive exp-equality
+	match @[left]exp-equality "<=" @[right]exp-compare
+		set capture op1 '<'
+		set capture eq2 '='
+	match @[left]exp-equality "<" @[right]exp-compare
+		set capture op1 '<'
+	match @[left]exp-equality ">=" @[right]exp-compare
+		set capture op1 '>'
+		set capture op2 '='
+	match @[left]exp-equality ">" @[right]exp-compare
+		set capture op1 '>'
+	match @[left]exp-compare
+    
+left-recursive exp-and
+	match @[left]exp-and "and" @[right]exp-equality
+	match @[left]exp-equality
+    
+left-recursive exp-or
+	match @[left]exp-or "or" @[right]exp-equality
+	match @[left]exp-equality
+    
+production exp-assignment
+    match @[name]ident "=" @[value]expression
+    
+left-recursive expression
+    match @[assign-to]expression "=" @[value]expression
+    match @[value]exp-or
+
+production return-statement
+    match "return" @[value]exp-or
+    
+production statement
+    alternatives
+        match @[expression]return-statement ";"
+        match @[expression]expression ";"
+        match ";"
+
+production function-arg
+    match @[name]ident
+    
+production scope
+    match "{"
+    while not match "}"
+        alternatives
+            match @[body]control-structure
+            match @[body]statement
+            error
+    match "}"
+    
+production scope-getset
+    match "{"
+    alternatives
+        match "get"
+            match "{"
+            while not match "}"
+                alternatives
+                    match @[get-body]control-structure
+                    match @[get-body]statement
+                    error
+            match "}"
+        match "set"
+            match "{"
+            while not match "}"
+                alternatives
+                    match @[set-body]control-structure
+                    match @[set-body]statement
+                    error
+            match "}"
+    match "}"
+
+production function
+    match "func" @[name]ident "("
+    if match function-arg
+        match @[args]function-arg
+        while not match ")"
+            match "," @[args]function-arg
+    match ")" @[body]scope
+    
+production control-structure-body
+    alternatives
+        match @[body]scope
+        match @[body]control-structure
+        match @[body]statement
+
+production while-loop
+    match "while" "(" @[condition]expression ")" @[body]control-structure-body
+
+production if-else
+    match "if" "(" @[condition]expression ")" @[if-body]control-structure-body
+    if match "else"
+        match "else" @[else-body]control-structure-body
+
+message switch-default-already-set
+    with Multiple default cases found
+    level error
+
+production switch-case
+    match "case" @[value]exp-value ":" @[body]control-structure-body
+
+production switch
+    set local has-default false
+    match "switch" "(" @[value]expression ")"
+    while not match "}"
+        alternatives
+            match @[part]switch-case
+            match "default" ":" @[default-body]control-structure-body
+                if get has-default
+                    print switch-default-already-set
+                else
+                    set local has-default true
+            error
+    match "}"
+
+production control-structure
+    alternatives
+        match @[content]function
+        match @[content]while-loop
+        match @[content]if-else
+        match @[content]scope
+
+production encapsulation
+	alternatives
+		match "public"
+		match "local"
+		match "derived"
+		match "private"
+
+production namespace-s
+    match "namespace" @[name]ident-navigation
+    match "{"
+    while not match "}"
+        alternatives
+            match @[contents]namespace-s
+            match @[contents]conversion
+            match @[contents]class
+            match @[contents]method
+            error
+    match "}"
+    
+production class
+    match @[scope]encapsulation "class" @[name]ident
+    match "{"
+    while not match "}"
+        alternatives
+            match @[contents]conversion
+            match @[contents]class
+            match @[contents]constructor
+            match @[contents]destructor
+            match @[contents]copystructor
+            match @[contents]method
+            match @[contents]property
+            match @[contents]indexer
+            error
+    match "}"
+
+production method-arglist-item
+    match @[type]type @[name]ident
+    if match "="
+        match "=" @[value]exp-value
+
+production method-arglist
+    match "("
+    if match method-arg
+        match @[args]method-arglist-item
+        while not match ")"
+            alternatives
+                match "," @[args]method-arglist-item
+                error
+        if match ","
+            match ","
+    match ")"
+    
+production method-arglist-non-empty
+    match "("
+    match @[args]method-arglist-item
+    while not match ")"
+        alternatives
+            match "," @[args]method-arglist-item
+            error
+    if match ","
+        match ","
+    match ")"
+
+production method-ident
+    match @[name]ident
+    if match template-definition
+        match @[template]template-definition
+    
+production method
+    match @[scope]encapsulation
+    if match "unbound"
+        match "unbound"
+        set capture is-static true
+    match @[return-type]type @[ident]method-ident @[arglist]method-arglist @[body]scope
+
+production constructor
+    match @[scope]encapsulation @[return-type]type @[ident]method-ident @[arglist]method-arglist @[body]scope
+
+production destructor
+    match @[scope]encapsulation @[return-type]type "~" @[ident]method-ident @[arglist]method-arglist @[body]scope
+
+production copystructor
+    match @[scope]encapsulation @[return-type]type "+" @[ident]method-ident @[arglist]method-arglist
+    alternatives
+        match @[body]scope
+        match "=" "delete"
+
+production conversion
+    match @[scope]encapsulation "conversion" @[target-type]type "(" @[source-type]type @[name]ident ")" @[body]scope
+
+production indexer
+    match @[scope]encapsulation @[target-type]type
+    if match template-definition
+        match @[template]template-definition
+    match "[" @[arglist]method-arglist-non-empty "]" @[body]scope-getset
+
+production property
+    alternatives
+        match @[scope]encapsulation @[target-type]type @[name]ident ";"
+        match @[scope]encapsulation @[target-type]type @[name]ident @[body]scope-getset
+
+production main
+    while not eof
+        alternatives
+            match @[contents]namespace-s
+            match @[contents]conversion
+            match @[contents]class
+            match @[contents]method
+            error
