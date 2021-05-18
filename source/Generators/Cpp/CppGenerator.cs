@@ -217,7 +217,7 @@ namespace XCG.Generators.Cpp
                     Parsing.Production production => production.ToParts(this.Options),
                     Parsing.Token token => token.ToParts(this.Options),
                     _ => throw new NotImplementedException(),
-                }));
+                }).Distinct());
 
             instanceClass.PublicParts.Add(new MethodDefinition(mainProduction.ToCppTypeName(this.Options, true).ToCppSharedPtrType(), "parse")
             {

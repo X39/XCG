@@ -35,7 +35,7 @@ namespace XCG.Generators.Cpp
             {
                 writer.Write(whitespace);
                 writer.WriteLine("private:");
-                foreach (var generatorPart in this.PrivateParts.WhereIs<ClassDefinition>().OrderBy((q) => q is IHasName hasName ? hasName.Name : String.Empty))
+                foreach (var generatorPart in this.PrivateParts.WhereIs<ClassDefinition>())
                 {
                     writer.Write(subWhitespace);
                     writer.Write("class ");
@@ -48,7 +48,7 @@ namespace XCG.Generators.Cpp
             {
                 writer.Write(whitespace);
                 writer.WriteLine("protected:");
-                foreach (var generatorPart in this.ProtectedParts.WhereIs<ClassDefinition>().OrderBy((q) => q is IHasName hasName ? hasName.Name : String.Empty))
+                foreach (var generatorPart in this.ProtectedParts.WhereIs<ClassDefinition>())
                 {
                     writer.Write(subWhitespace);
                     writer.Write("class ");
@@ -61,7 +61,7 @@ namespace XCG.Generators.Cpp
             {
                 writer.Write(whitespace);
                 writer.WriteLine("public:");
-                foreach (var generatorPart in this.PublicParts.WhereIs<ClassDefinition>().OrderBy((q) => q is IHasName hasName ? hasName.Name : String.Empty))
+                foreach (var generatorPart in this.PublicParts.WhereIs<ClassDefinition>())
                 {
                     writer.Write(subWhitespace);
                     writer.Write("class ");
@@ -74,7 +74,7 @@ namespace XCG.Generators.Cpp
             {
                 writer.Write(whitespace);
                 writer.WriteLine("private:");
-                foreach (var generatorPart in this.PrivateParts.OrderBy((q) => q is IHasName hasName ? hasName.Name : String.Empty))
+                foreach (var generatorPart in this.PrivateParts)
                 {
                     generatorPart.BaseName = null;
                     generatorPart.WriteHeader(options, writer, subWhitespace);
@@ -85,7 +85,7 @@ namespace XCG.Generators.Cpp
             {
                 writer.Write(whitespace);
                 writer.WriteLine("protected:");
-                foreach (var generatorPart in this.ProtectedParts.OrderBy((q) => q is IHasName hasName ? hasName.Name : String.Empty))
+                foreach (var generatorPart in this.ProtectedParts)
                 {
                     generatorPart.BaseName = null;
                     generatorPart.WriteHeader(options, writer, subWhitespace);
@@ -96,7 +96,7 @@ namespace XCG.Generators.Cpp
             {
                 writer.Write(whitespace);
                 writer.WriteLine("public:");
-                foreach (var generatorPart in this.PublicParts.OrderBy((q) => q is IHasName hasName ? hasName.Name : String.Empty))
+                foreach (var generatorPart in this.PublicParts)
                 {
                     generatorPart.BaseName = null;
                     generatorPart.WriteHeader(options, writer, subWhitespace);
@@ -109,19 +109,19 @@ namespace XCG.Generators.Cpp
 
         public void WriteImplementation(CppOptions options, StreamWriter writer, string whitespace)
         {
-            foreach (var generatorPart in this.PrivateParts.OrderBy((q) => q is IHasName hasName ? hasName.Name : String.Empty))
+            foreach (var generatorPart in this.PrivateParts)
             {
                 generatorPart.BaseName = this.FullName;
                 generatorPart.WriteImplementation(options, writer, whitespace);
             }
 
-            foreach (var generatorPart in this.ProtectedParts.OrderBy((q) => q is IHasName hasName ? hasName.Name : String.Empty))
+            foreach (var generatorPart in this.ProtectedParts)
             {
                 generatorPart.BaseName = this.FullName;
                 generatorPart.WriteImplementation(options, writer, whitespace);
             }
 
-            foreach (var generatorPart in this.PublicParts.OrderBy((q) => q is IHasName hasName ? hasName.Name : String.Empty))
+            foreach (var generatorPart in this.PublicParts)
             {
                 generatorPart.BaseName = this.FullName;
                 generatorPart.WriteImplementation(options, writer, whitespace);
