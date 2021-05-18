@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace XCG.Generators.Cpp
 {
-    internal class EnumDefinition : ICppPart
+    internal class EnumDefinition : ICppPart, IHasName
     {
         public string Name { get; }
         public string? BaseName { get; set; }

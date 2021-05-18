@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace XCG.Generators.Cpp
 {
-    internal class CaptureDefinition : ICppPart
+    internal class CaptureDefinition : ICppPart, IHasName
     {
         public string? BaseName { get; set; }
         public List<TypeImpl> Types { get; set; }

@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace XCG.Generators.Cpp
 {
-    internal class FieldDefinition : ICppPart
+    internal class FieldDefinition : ICppPart, IHasName
     {
         public string? BaseName { get; set; }
         public ArgImpl Type { get; set; }
+        public string Name => this.Type.Name;
 
         public FieldDefinition(ArgImpl typeImpl)
         {

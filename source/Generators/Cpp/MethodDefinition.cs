@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace XCG.Generators.Cpp
 {
-    internal class MethodDefinition : CppContainerBase
+    internal class MethodDefinition : CppContainerBase, IHasName
     {
         public EType ReturnType { get; }
 

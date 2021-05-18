@@ -5,7 +5,7 @@ using System.IO;
 
 namespace XCG.Generators.Cpp
 {
-    internal class NamespaceDefinition : ICppPart, IList<ICppPart>
+    internal class NamespaceDefinition : ICppPart, IList<ICppPart>, IHasName
     {
         public string? BaseName { get; set; }
         public string Name { get; }
