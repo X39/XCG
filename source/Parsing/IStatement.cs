@@ -4,6 +4,6 @@ namespace XCG.Parsing
 {
     public interface IStatement
     {
-        List<IStatement> Statements { get; }
+        IEnumerable<IStatement> Statements { get; }
     }
 }

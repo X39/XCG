@@ -1,0 +1,98 @@
+namespace Yaoosl
+{
+    class MyClass
+    {
+        // Properties of MyClass (usually called "field", YAOOSL will call them "property")
+        private i8  thisVeryClassOnly_Byte;
+        derived i16 derivedOnly_Short;              // Usually known as protected
+        local   i32 thisAndLowerNamespaces_Integer; // Kinda new? At least don't remember of a language with that concept.
+        public  i64 everywhereAvailable_Long;
+        
+        // Properties involving getters and setters
+        public i8 GetSetProperty
+        {
+            get { return 0; }
+            set { }
+        }
+        
+        // Normal constructor
+        public MyClass() { }
+        
+        // Copy-Constructor, called when copying MyClass from A to B (eg. on returning a value type)
+        public +MyClass(MyClass myClass) { }
+        
+        // Destructor, called once MyClass leaves the scope as value
+        public ~MyClass() { }
+        
+        
+        
+        // Normal method
+        public void NormalMethod() { }
+        
+        // Normal method without a class reference existing - unbound usually is called "static"
+        public unbound void NormalMethod() { }
+        
+        // Template method, not yet fully thought through ... possible that this will change in the future
+        public T TemplateMethod<T>() { }
+        
+        // Indexer-method, used for eg. myClass[123]
+        public i8 [i32 index]
+        {
+            get { return 0; }
+            set { }
+        }
+        
+        // Indexer-method also shall support more then a single index
+        public i8 [i32 index, i32 otherIndex]
+        {
+            get { return 0; }
+            set { }
+        }
+        
+        // Operator overloading is supported. Not yet settled on full syntax.
+        public operator + i8 (MyClass other) { return 0; }
+        
+        // Bound conversion method, called whenever something might convert things from A to B
+        public conversion i8() { return 0; }
+    }
+        
+    // Unbound conversion method, same as bound pretty much
+    public unbound conversion i8(MyClass myClass) { return myClass; }
+    
+    // Extension method that can be used to extend functionality of existing types
+    public unbound void ExtensionMethod(MyClass this) { }
+}
+
+// Main method - Entry of any program.
+public unbound i32 Main(i32 argc, string[] argv)
+{
+    // Forward declaring myClass variable.
+    MyClass myClass;
+    
+    // Illformed program as myClass was not assigned yet
+    myClass.NormalMethod();
+    
+    // Calls constructor of MyClass and places it in myClass.
+    myClass = MyClass();
+    
+    // Calls copy constructor of MyClass
+    MyClass copy = myClass;
+    
+    // Calls conversion operator
+    i8 converted = myClass;
+}
+
+
+/*
+    Editorial Notes:
+        Not yet settled on the `string` thing tho ... might also do char*?
+        But that would involve supporting pointers which is what i would like to avoid ...
+        However, pointer support is mandatory due to possible need of interfacing with C....... meh
+        Feel free to leave feedback on this.
+        
+        Biggest issue with pointers (and references) is that it would involve dangerzone stuff that
+        C/C++ is known for which is what i want to get rid of here too.
+        
+        Also plan on supporting user-defined literals, but not yet sure on how to make the method prototype
+        for that work nicely with all possible literal types
+*/

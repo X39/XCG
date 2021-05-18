@@ -1,9 +1,14 @@
-﻿namespace XCG.Parsing
+﻿using System;
+using System.Collections.Generic;
+
+namespace XCG.Parsing
 {
-    public class Word : IPart
+    public class Word : IStatement
     {
         public string Text { get; set; }
         public Diagnostic Diagnostics { get; internal set; }
+
+        IEnumerable<IStatement> IStatement.Statements => Array.Empty<IStatement>();
 
         public Word(string text)
         {

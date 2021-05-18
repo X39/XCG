@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace XCG.Parsing
 {
     internal class EOF : IStatement
     {
-        public List<IStatement> Statements => new List<IStatement>();
+        IEnumerable<IStatement> IStatement.Statements => Array.Empty<IStatement>();
     }
 }

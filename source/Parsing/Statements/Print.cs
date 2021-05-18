@@ -8,8 +8,8 @@ namespace XCG.Parsing.Statements
 {
     public class Print : IStatement
     {
-        public List<IStatement> Statements { get; set; } = new List<IStatement>();
-        public Reference Reference { get; internal set; }
+        public Reference? Reference { get; internal set; }
         public Diagnostic Diagnostics { get; internal set; }
+        IEnumerable<IStatement> IStatement.Statements => Array.Empty<IStatement>();
     }
 }

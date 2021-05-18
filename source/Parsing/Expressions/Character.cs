@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace XCG.Parsing.Expressions
 {
     public class Character : IStatement
     {
         public char Value { get; }
-
-        public List<IStatement> Statements { get; } = new List<IStatement>();
+        IEnumerable<IStatement> IStatement.Statements => Array.Empty<IStatement>();
         public Diagnostic Diagnostics { get; internal set; }
 
         public Character(char v)

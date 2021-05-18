@@ -29,7 +29,7 @@ namespace XCG.Generators.Cpp.Extensive
                 new FullBody { $@"resetable {resetable}(*this);" }
             };
 
-            foreach (var statement in token.Statements)
+            foreach (var statement in token.Children)
             {
                 if (statement is Parsing.TokenStatements.Require require)
                 {

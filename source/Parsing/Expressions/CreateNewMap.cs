@@ -8,7 +8,7 @@ namespace XCG.Parsing.Expressions
 {
     public class CreateNewMap : IStatement, ICreateNew
     {
-        public List<IStatement> Statements { get; } = new List<IStatement>();
+        IEnumerable<IStatement> IStatement.Statements => Array.Empty<IStatement>();
         public Diagnostic Diagnostics { get; internal set; }
     }
 }

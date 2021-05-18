@@ -29,9 +29,9 @@ namespace XCG.Generators.Cpp.Extensive
 
 
 
-            var references = match.Parts.Cast<Parsing.Reference>().Skip(skip).ToArray();
+            var references = match.Matches.Cast<Parsing.Reference>().Skip(skip).ToArray();
 
-            var matchName = String.Join("_", match.Parts.WhereIs<Parsing.Reference>().Select((q) => q.Refered switch
+            var matchName = String.Join("_", match.Matches.WhereIs<Parsing.Reference>().Select((q) => q.Refered switch
             {
                 Parsing.Token token => token.Identifier,
                 Parsing.Production production => production.Identifier,
@@ -114,7 +114,7 @@ namespace XCG.Generators.Cpp.Extensive
                 string? valueVariable = toUnique("val");
                 if (reference.IsCaptured)
                 {
-                    var captureDefinition = cppOptions.CaptureDefinitionsMap.GetValueOrDefault(reference) ?? throw new FatalException();
+                    var captureDefinition = cppOptions.ClassCaptureDefinitionsMap.GetValueOrDefault(reference) ?? throw new FatalException();
                     string? call = reference.Refered switch
                     {
                         // Match the different possible refered things into proper conditions
@@ -161,7 +161,7 @@ namespace XCG.Generators.Cpp.Extensive
             }
 
             // Handle any following statement too
-            methodDefinition.AddRange(match.Statements.Handle(cppOptions, false, toUnique));
+            methodDefinition.AddRange(match.Children.Handle(cppOptions, false, toUnique));
 
             methodDefinition.Add(new DebugPart { $@"trace(""Returning true on {methodDefinition.Name}"", {Constants.depthVariable});" });
             methodDefinition.Add(new ReturnPart(EValueConstant.True));

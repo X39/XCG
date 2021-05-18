@@ -65,7 +65,7 @@ namespace XCG.Generators.Cpp.Extensive
             {
                 methodDefinition.Add(new IfPart(IfPart.EIfScope.Else, $@"!{Constants.isCanVariable}")
                 {
-                    $@"report(""Failed to match one of the following: {{ {String.Join(", ", matches.SelectMany((q) => q.Parts.OfType<Parsing.Reference>()).Select((q) => q.Text))} }}"", {Constants.depthVariable});",
+                    $@"report(""Failed to match one of the following: {{ {String.Join(", ", matches.SelectMany((q) => q.Matches.OfType<Parsing.Reference>()).Select((q) => q.Text))} }}"", {Constants.depthVariable});",
                 });
             }
             methodDefinition.Add($@"{resetable}.reset();");

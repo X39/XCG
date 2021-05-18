@@ -18,7 +18,36 @@ namespace XCG.Generators.Cpp.Extensive
         }
         public static string ToCppName(this string str)
         {
-            return String.Concat(str.Replace('-', '_').Replace('@', '_').ToLower());
+            var name = String.Concat(str.Replace('-', '_').Replace('@', '_').ToLower());
+            switch (name)
+            {
+                default: return name;
+                case "class":
+                case "namespace":
+                case "switch":
+                case "if":
+                case "for":
+                case "else":
+                case "typename":
+                case "template":
+                case "return":
+                case "while":
+                case "do":
+                case "public":
+                case "static":
+                case "private":
+                case "protected":
+                case "struct":
+                case "virtual":
+                case "operator":
+                case "case":
+                case "default":
+                case "true":
+                case "false":
+                case "auto":
+                case "this":
+                    return String.Concat(name, '_');
+            }
         }
     }
 }

@@ -8,13 +8,12 @@ namespace XCG.Parsing.Expressions
 {
     public class Number : IStatement
     {
+        public double Value { get; }
+        IEnumerable<IStatement> IStatement.Statements => Array.Empty<IStatement>();
+        public Diagnostic Diagnostics { get; internal set; }
         public Number(double number)
         {
             this.Value = number;
         }
-
-        public List<IStatement> Statements { get; } = new List<IStatement>();
-        public double Value { get; }
-        public Diagnostic Diagnostics { get; internal set; }
     }
 }

@@ -51,16 +51,13 @@ namespace XCG
         {
             foreach (var it in statement.Statements)
             {
+                foreach (var found in it.FindChildren<T>())
+                {
+                    yield return found;
+                }
                 if (it is T t)
                 {
                     yield return t;
-                }
-                else
-                {
-                    foreach (var found in it.FindChildren<T>())
-                    {
-                        yield return found;
-                    }
                 }
             }
         }
@@ -78,16 +75,13 @@ namespace XCG
             {
                 foreach (var it in l.Statements)
                 {
+                    foreach (var found in recurse(it))
+                    {
+                        yield return (found.Item1, found.Item2.Append(l).ToArray());
+                    }
                     if (it is T t)
                     {
                         yield return (t, new Parsing.IStatement[] { l });
-                    }
-                    else
-                    {
-                        foreach (var found in recurse(it))
-                        {
-                            yield return (found.Item1, found.Item2.Append(l).ToArray());
-                        }
                     }
                 }
             }

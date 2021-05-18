@@ -41,7 +41,7 @@ namespace XCG.Generators.Cpp.Extensive
                 new VariableDefinition(new TypeImpl {  TypeString = production.ToCppStateTypeName(cppOptions, false) }, Constants.stateInstanceVariable),
             };
             bool isFirst = true;
-            foreach (var statement in production.Statements)
+            foreach (var statement in production.Children)
             {
                 switch (statement)
                 {
@@ -78,7 +78,7 @@ namespace XCG.Generators.Cpp.Extensive
                         });
                         break;
                     case Parsing.Statements.Set:
-                        break;
+                        continue;
                     default:
                         throw new NotImplementedException();
                 }
@@ -97,7 +97,7 @@ namespace XCG.Generators.Cpp.Extensive
                 new VariableDefinition(new TypeImpl {  TypeString = production.ToCppStateTypeName(cppOptions, false) }, Constants.stateInstanceVariable),
             };
             isFirst = true;
-            foreach (var statement in production.Statements)
+            foreach (var statement in production.Children)
             {
                 resetable = toUnique("resetable");
                 matchMethodDefinition.Add($@"resetable {resetable}(*this);");
@@ -148,7 +148,7 @@ namespace XCG.Generators.Cpp.Extensive
                         });
                         break;
                     case Parsing.Statements.Set:
-                        break;
+                        continue;
                     default:
                         throw new NotImplementedException();
                 }

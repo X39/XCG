@@ -44,6 +44,7 @@ namespace XCG.Generators.Cpp.Extensive
                     case Parsing.Statements.Set set:
                     case Parsing.Statements.Get get:
                     case Parsing.EOF:
+                    case Parsing.Reference:
                         break;
                     default:
                         throw new NotImplementedException();
@@ -64,7 +65,7 @@ namespace XCG.Generators.Cpp.Extensive
                 .Where((q) => q.Item1.ActiveScope == Parsing.EActiveScope.capture)
                 .ToArray();
             var captureContainingReferenceTuples = statement.FindChildrenWithParents<Parsing.Statements.Match>()
-                .SelectMany((q) => q.Item1.Parts.Where((q) => q is Parsing.Reference).Cast<Parsing.Reference>().Select((part) => (Reference: part, Parents: q.Item2)))
+                .SelectMany((q) => q.Item1.Matches.Where((q) => q is Parsing.Reference).Cast<Parsing.Reference>().Select((part) => (Reference: part, Parents: q.Item2)))
                 .Where((q) => q.Reference.IsCaptured)
                 .ToArray();
             var captureDefinitions = new Dictionary<string, CaptureDefinition>();
@@ -78,7 +79,7 @@ namespace XCG.Generators.Cpp.Extensive
                 }
                 var typeImpl = new TypeImpl
                 {
-                    Type = captureModifyingSet.Statements.First() switch
+                    Type = captureModifyingSet.Children.First() switch
                     {
                         Parsing.Expressions.CreateNewBoolean => EType.OptionalBoolean,
                         Parsing.Expressions.Bool => EType.OptionalBoolean,
@@ -97,7 +98,7 @@ namespace XCG.Generators.Cpp.Extensive
                 {
                     captureDefinition.IsSingleHit = false;
                 }
-                cppOptions.CaptureDefinitionsMap.Add(captureModifyingSet, captureDefinition);
+                cppOptions.ClassCaptureDefinitionsMap.Add(captureModifyingSet, captureDefinition);
             }
             foreach ((var captureContainingReference, var parents)  in captureContainingReferenceTuples)
             {
@@ -122,7 +123,7 @@ namespace XCG.Generators.Cpp.Extensive
                 {
                     captureDefinition.IsSingleHit = false;
                 }
-                cppOptions.CaptureDefinitionsMap.Add(captureContainingReference, captureDefinition);
+                cppOptions.ClassCaptureDefinitionsMap.Add(captureContainingReference, captureDefinition);
             }
 
             return new ClassDefinition(statement switch
@@ -142,6 +143,12 @@ namespace XCG.Generators.Cpp.Extensive
                 .Where((q) => q.ActiveScope == Parsing.EActiveScope.local)
                 .ToArray();
             var captureDefinitions = new Dictionary<string, CaptureDefinition>();
+            string stateClassName = statement switch
+            {
+                Parsing.Production production => production.ToCppStateTypeName(cppOptions, false),
+                Parsing.LeftRecursive leftRecursion => leftRecursion.ToCppStateTypeName(cppOptions, false),
+                _ => throw new FatalException()
+            };
             foreach (var captureModifyingSet in captureModifyingSets)
             {
                 string? captureName = captureModifyingSet.Property.ToCppName();
@@ -155,19 +162,18 @@ namespace XCG.Generators.Cpp.Extensive
                 {
                     captureDefinition.Types.Add(typeImpl);
                 }
+                if (!cppOptions.StateCaptureDefinitionsMap.ContainsKey((stateClassName, captureModifyingSet.Property)))
+                {
+                    cppOptions.StateCaptureDefinitionsMap.Add((stateClassName, captureModifyingSet.Property), captureDefinition);
+                }
             }
 
-            return new ClassDefinition(statement switch
-            {
-                Parsing.Production production => production.ToCppStateTypeName(cppOptions, false),
-                Parsing.LeftRecursive leftRecursion => leftRecursion.ToCppStateTypeName(cppOptions, false),
-                _ => throw new FatalException()
-            })
+            return new ClassDefinition(stateClassName)
             {
                 PublicParts = new List<ICppPart>(captureDefinitions.Values)
             };
         }
-        public static IEnumerable<ICppPart> GetEvaluationResult(this Parsing.IStatement statement, CppOptions cppOptions, string variable, bool createVariable)
+        public static IEnumerable<ICppPart> GetEvaluationResult(this Parsing.IStatement statement, CppOptions cppOptions, string stateTypeName, string variable, bool createVariable)
         {
             switch (statement)
             {
@@ -194,7 +200,15 @@ namespace XCG.Generators.Cpp.Extensive
                     }
                     break;
                 case Parsing.Statements.Get get:
-                    throw new NotImplementedException();
+                    if (createVariable)
+                    {
+                        yield return new VariableDefinition(EType.Boolean, variable, get.GetEvaluatedValue(cppOptions, stateTypeName));
+                    }
+                    else
+                    {
+                        yield return new FullBody { $@"{variable} = {get.GetEvaluatedValue(cppOptions, stateTypeName)};" };
+                    }
+                    break;
             }
         }
         public static IEnumerable<ICppPart> Handle(this IEnumerable<Parsing.IStatement> statements, CppOptions cppOptions, bool isCan, Func<string, string> toUnique)
@@ -216,7 +230,7 @@ namespace XCG.Generators.Cpp.Extensive
                         };
                         yield return new IfPart(IfPart.EIfScope.Else, null)
                         {
-                            $@"report(""Failed to match {{ {String.Join(", ", match.Parts.Select((q) => q.ToString()))} }}"", {Constants.depthVariable});",
+                            $@"report(""Failed to match {{ {String.Join(", ", match.Matches.Select((q) => q.ToString()))} }}"", {Constants.depthVariable});",
                             new DebugPart { $@"trace(""Returning false on {match}"", {Constants.depthVariable});" },
                             new ReturnPart(EValueConstant.False),
                         };
@@ -262,6 +276,12 @@ namespace XCG.Generators.Cpp.Extensive
                         break;
                     case Parsing.Statements.Set set:
                         foreach (var part in set.ToParts(cppOptions))
+                        {
+                            yield return part;
+                        }
+                        break;
+                    case Parsing.Statements.Print print:
+                        foreach (var part in print.ToParts(cppOptions))
                         {
                             yield return part;
                         }

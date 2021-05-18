@@ -199,7 +199,7 @@ namespace XCG.Generators.Cpp
             instanceClass.PrivateParts.AddRange(capturedSetters.Select((q) => new FieldDefinition(new ArgImpl
             {
                 Name = q.Key.Replace('-', '_').ToLower(),
-                Type = q.Statements.FirstOrDefault() switch
+                Type = q.Children.FirstOrDefault() switch
                 {
                     Parsing.Expressions.CreateNewBoolean => EType.Boolean,
                     Parsing.Expressions.CreateNewNumber => EType.Float,
@@ -304,8 +304,8 @@ namespace XCG.Generators.Cpp
                 .Concat(parser.Setters)
                 .Where((q) => q.ActiveScope == EActiveScope.capture))
                 {
-                    if (setter.Statements.Count != 1
-                    || !setter.Statements.All((q) => q switch
+                    if (setter.Children.Count != 1
+                    || !setter.Children.All((q) => q switch
                     {
                         Parsing.Expressions.CreateNewBoolean => true,
                         Parsing.Expressions.Bool => true,

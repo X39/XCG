@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace XCG.Parsing.Expressions
 {
     internal class CreateNewNumber : IStatement, ICreateNew
     {
-        public List<IStatement> Statements { get; } = new List<IStatement>();
+        IEnumerable<IStatement> IStatement.Statements => Array.Empty<IStatement>();
         public Diagnostic Diagnostics { get; set; }
     }
 }

@@ -39,7 +39,7 @@ namespace XCG.Generators.Cpp.Extensive
 
             var conditionVariable = toUnique("cond");
             var effectiveCondition = String.Concat(@while.Negated ? $"!{conditionVariable}" : conditionVariable, " && current() != '\\0'");
-            methodDefinition.AddRange(@while.Condition!.GetEvaluationResult(cppOptions, conditionVariable, true));
+            methodDefinition.AddRange(@while.Condition!.GetEvaluationResult(cppOptions, stateTypeName, conditionVariable, true));
             methodDefinition.Add($@"{resetable}.reset();");
             foreach (var isCan in Constants.TrueFalseArray)
             {
@@ -51,11 +51,11 @@ namespace XCG.Generators.Cpp.Extensive
                 isCanIf.Add(whilePart);
 
                 // Handle any following statement
-                whilePart.AddRange(@while.Statements.Handle(cppOptions, isCan, toUnique));
+                whilePart.AddRange(@while.Children.Handle(cppOptions, isCan, toUnique));
 
                 // and re-evaluate the while condition
                 whilePart.Add($@"resetable {resetable_condition}(*this);");
-                whilePart.AddRange(@while.Condition!.GetEvaluationResult(cppOptions, conditionVariable, false));
+                whilePart.AddRange(@while.Condition!.GetEvaluationResult(cppOptions, stateTypeName, conditionVariable, false));
                 whilePart.Add($@"{resetable_condition}.reset();");
 
                 // finally return true

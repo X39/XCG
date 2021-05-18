@@ -27,7 +27,7 @@ namespace XCG.Generators.Cpp.Extensive
             int ___localsCount = 0;
             string toUnique(string str) => String.Concat(str, (++___localsCount).ToString());
             // Output matches
-            var matches = leftRecursive.Statements.Cast<Parsing.Statements.Match>().ToArray();
+            var matches = leftRecursive.Children.Cast<Parsing.Statements.Match>().ToArray();
             var lastMatch = matches.Last();
             var cppTypeName = leftRecursive.ToCppTypeName(cppOptions, true);
             var cppStateTypeName = leftRecursive.ToCppStateTypeName(cppOptions, true);
@@ -120,7 +120,7 @@ namespace XCG.Generators.Cpp.Extensive
                     {
                         new VariableDefinition(EType.Auto, tmpActualVariable, Constants.classInstanceVariable),
                         $@"{Constants.classInstanceVariable} = {leftRecursive.ToCppTypeName(cppOptions, true).ToCppSharedPtrMake()};",
-                        $@"{Constants.classInstanceVariable}->{(lastMatch.Parts.First() as Parsing.Reference)?.CaptureName ?? throw new FatalException()} = {tmpActualVariable};",
+                        $@"{Constants.classInstanceVariable}->{(lastMatch.Matches.First() as Parsing.Reference)?.CaptureName ?? throw new FatalException()} = {tmpActualVariable};",
                     },
                     $"{isFirstVariable} = false;",
                     $"{cppOptions.FromCache(match).Name}(false, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable}, {Constants.depthVariable} + 1);",

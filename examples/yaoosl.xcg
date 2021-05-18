@@ -111,16 +111,16 @@ left-recursive type-navigation
     match @[left]type-navigation "." @[right]ident
     match @[left]ident
 
-production typeof-s
+production typeof
     match "typeof" "(" @[value]type-navigation ")"
 
-production nameof-s
+production nameof
     match "nameof" "(" @[value]exp-or ")"
     
 production exp-value
     alternatives
-        match @[value]typeof-s
-        match @[value]nameof-s
+        match @[value]typeof
+        match @[value]nameof
         match @[value]scalar
         match @[value]boolean
         match @[value]string
@@ -178,11 +178,8 @@ left-recursive exp-and
 	match @[left]exp-equality
     
 left-recursive exp-or
-	match @[left]exp-or "or" @[right]exp-equality
+	match @[left]exp-or "or" @[right]exp-and
 	match @[left]exp-equality
-    
-production exp-assignment
-    match @[name]ident "=" @[value]expression
     
 left-recursive expression
     match @[assign-to]expression "=" @[value]expression
@@ -278,6 +275,7 @@ production control-structure
         match @[content]function
         match @[content]while-loop
         match @[content]if-else
+        match @[content]switch
         match @[content]scope
 
 production encapsulation
@@ -287,12 +285,12 @@ production encapsulation
 		match "derived"
 		match "private"
 
-production namespace-s
+production namespace
     match "namespace" @[name]ident-navigation
     match "{"
     while not match "}"
         alternatives
-            match @[contents]namespace-s
+            match @[contents]namespace
             match @[contents]conversion
             match @[contents]class
             match @[contents]method
@@ -316,13 +314,13 @@ production class
     match "}"
 
 production method-arglist-item
-    match @[type]type @[name]ident
+    match @[type]type-navigation @[name]ident
     if match "="
         match "=" @[value]exp-value
 
 production method-arglist
     match "("
-    if match method-arg
+    if match method-arglist-item
         match @[args]method-arglist-item
         while not match ")"
             alternatives
@@ -349,42 +347,42 @@ production method-ident
         match @[template]template-definition
     
 production method
-    match @[scope]encapsulation
+    match @[encaps]encapsulation
     if match "unbound"
         match "unbound"
         set capture is-static true
-    match @[return-type]type @[ident]method-ident @[arglist]method-arglist @[body]scope
+    match @[return-type]type-navigation @[ident]method-ident @[arglist]method-arglist @[body]scope
 
 production constructor
-    match @[scope]encapsulation @[return-type]type @[ident]method-ident @[arglist]method-arglist @[body]scope
+    match @[encaps]encapsulation @[return-type]type-navigation @[ident]method-ident @[arglist]method-arglist @[body]scope
 
 production destructor
-    match @[scope]encapsulation @[return-type]type "~" @[ident]method-ident @[arglist]method-arglist @[body]scope
+    match @[encaps]encapsulation @[return-type]type-navigation "~" @[ident]method-ident @[arglist]method-arglist @[body]scope
 
 production copystructor
-    match @[scope]encapsulation @[return-type]type "+" @[ident]method-ident @[arglist]method-arglist
+    match @[encaps]encapsulation @[return-type]type-navigation "+" @[ident]method-ident @[arglist]method-arglist
     alternatives
         match @[body]scope
         match "=" "delete"
 
 production conversion
-    match @[scope]encapsulation "conversion" @[target-type]type "(" @[source-type]type @[name]ident ")" @[body]scope
+    match @[encaps]encapsulation "conversion" @[target-type]type-navigation "(" @[source-type]type-navigation @[name]ident ")" @[body]scope
 
 production indexer
-    match @[scope]encapsulation @[target-type]type
+    match @[encaps]encapsulation @[target-type]type-navigation
     if match template-definition
         match @[template]template-definition
     match "[" @[arglist]method-arglist-non-empty "]" @[body]scope-getset
 
 production property
     alternatives
-        match @[scope]encapsulation @[target-type]type @[name]ident ";"
-        match @[scope]encapsulation @[target-type]type @[name]ident @[body]scope-getset
+        match @[encaps]encapsulation @[target-type]type-navigation @[name]ident ";"
+        match @[encaps]encapsulation @[target-type]type-navigation @[name]ident @[body]scope-getset
 
 production main
     while not eof
         alternatives
-            match @[contents]namespace-s
+            match @[contents]namespace
             match @[contents]conversion
             match @[contents]class
             match @[contents]method

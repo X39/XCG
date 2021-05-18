@@ -39,7 +39,7 @@ namespace XCG.Generators.Cpp.Extensive
 
 
             var conditionVariable = toUnique("cond");
-            methodDefinition.AddRange(@if.Condition!.GetEvaluationResult(cppOptions, conditionVariable, true));
+            methodDefinition.AddRange(@if.Condition!.GetEvaluationResult(cppOptions, stateTypeName, conditionVariable, true));
             methodDefinition.Add($@"{resetable}.reset();");
 
 
@@ -52,7 +52,7 @@ namespace XCG.Generators.Cpp.Extensive
                 var ifPart = new IfPart(IfPart.EIfScope.If, @if.Negated ? $"!{conditionVariable}" : conditionVariable);
                 isCanIf.Add(ifPart);
                 // Handle any if statements
-                ifPart.AddRange(@if.Statements.Handle(cppOptions, isCan, toUnique));
+                ifPart.AddRange(@if.Children.Handle(cppOptions, isCan, toUnique));
                 ifPart.Add(new DebugPart { $@"trace(""Returning true on {methodDefinition.Name}"", {Constants.depthVariable});" });
                 ifPart.Add(new ReturnPart(EValueConstant.True));
 

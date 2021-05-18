@@ -38,7 +38,8 @@ namespace XCG.Generators.Cpp
         [CppOption("debug")]
         public bool Debug { get; set; } = false;
 
-        internal Dictionary<object, CaptureDefinition> CaptureDefinitionsMap { get; } = new Dictionary<object, CaptureDefinition>();
+        internal Dictionary<object, CaptureDefinition> ClassCaptureDefinitionsMap { get; } = new Dictionary<object, CaptureDefinition>();
+        internal Dictionary<(string StateClassName, string Property), CaptureDefinition> StateCaptureDefinitionsMap { get; } = new Dictionary<(string StateClassName, string Property), CaptureDefinition>();
         public string RootClassName => String.Concat(this.NamespaceName ?? String.Empty, this.NamespaceName is null ? String.Empty : "::", this.ClassName, "::");
         /// <summary>
         /// An internal counter, allowing to create variables

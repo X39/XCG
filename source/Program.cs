@@ -154,50 +154,61 @@ namespace XCG
                 }
                 object? possibleActual;
 
-                possibleActual = parser.Tokens.FirstOrDefault((q) => q.Alias == reference.Text);
-                if (possibleActual is not null) { reference.Refered = possibleActual; continue; }
-
-                possibleActual = parser.Tokens.FirstOrDefault((q) => q.Identifier == reference.Text);
-                if (possibleActual is not null) { reference.Refered = possibleActual; continue; }
-
-                possibleActual = parser.Productions.FirstOrDefault((q) => q.Identifier == reference.Text);
-                if (possibleActual is not null) { reference.Refered = possibleActual; continue; }
-
-                possibleActual = parser.LeftRecursives.FirstOrDefault((q) => q.Identifier == reference.Text);
-                if (possibleActual is not null) { reference.Refered = possibleActual; continue; }
-
-                string identifier;
-                if (reference.Text.All((c) => ToStringRepresentation(c) != null))
+                if (reference.IsAlias)
                 {
-                    identifier = string.Concat("@", String.Join("-", reference.Text.Select(ToStringRepresentation)));
-                }
-                else if(reference.Text.All((c) => char.IsLetterOrDigit(c) || c == '-'))
-                {
-                    identifier = String.Concat("@", reference.Text.ToLower());
+                    possibleActual = parser.Tokens.FirstOrDefault((q) => q.Alias == reference.Text);
+                    if (possibleActual is not null) { reference.Refered = possibleActual; continue; }
                 }
                 else
                 {
-                    identifier = $"@auto-{generatedReferences}";
+                    possibleActual = parser.Tokens.FirstOrDefault((q) => q.Identifier == reference.Text);
+                    if (possibleActual is not null) { reference.Refered = possibleActual; continue; }
+
+                    possibleActual = parser.Productions.FirstOrDefault((q) => q.Identifier == reference.Text);
+                    if (possibleActual is not null) { reference.Refered = possibleActual; continue; }
+
+                    possibleActual = parser.LeftRecursives.FirstOrDefault((q) => q.Identifier == reference.Text);
+                    if (possibleActual is not null) { reference.Refered = possibleActual; continue; }
+
+                    possibleActual = parser.Messages.FirstOrDefault((q) => q.Identifier == reference.Text);
+                    if (possibleActual is not null) { reference.Refered = possibleActual; continue; }
                 }
-                var token = new Parsing.Token
+
+                if (reference.IsAlias)
                 {
-                    Alias = reference.Text,
-                    Identifier = identifier,
-                    Statements = new List<Parsing.ITokenStatement>
+                    string identifier;
+                    if (reference.Text.All((c) => ToStringRepresentation(c) != null))
                     {
-                        new Parsing.TokenStatements.Require
+                        identifier = string.Concat("@", String.Join("-", reference.Text.Select(ToStringRepresentation)));
+                    }
+                    else if (reference.Text.All((c) => char.IsLetterOrDigit(c) || c == '-'))
+                    {
+                        identifier = String.Concat("@", reference.Text.ToLower());
+                    }
+                    else
+                    {
+                        identifier = $"@auto-{generatedReferences}";
+                    }
+                    var token = new Parsing.Token
+                    {
+                        Alias = reference.Text,
+                        Identifier = identifier,
+                        Children = new List<Parsing.ITokenStatement>
                         {
-                            Negated = false,
-                            Range = new Parsing.Multiplicity(1, new Parsing.Diagnostic { Column = 0, File = "---auto-generated---", Line = 0, Offset = 0 }),
-                            Parts = new List<Parsing.IPart>
+                            new Parsing.TokenStatements.Require
                             {
-                                new Parsing.Word(reference.Text)
+                                Negated = false,
+                                Range = new Parsing.Multiplicity(1, new Parsing.Diagnostic { Column = 0, File = "---auto-generated---", Line = 0, Offset = 0 }),
+                                Parts = new List<Parsing.IStatement>
+                                {
+                                    new Parsing.Word(reference.Text)
+                                }
                             }
                         }
-                    }
-                };
-                reference.Refered = token;
-                parser.Tokens.Add(token);
+                    };
+                    reference.Refered = token;
+                    parser.Tokens.Add(token);
+                }
             }
             #endregion
             #region Create Generator
@@ -400,15 +411,25 @@ namespace XCG
                 }
                 return hints;
             });
+            // All references have refered
+            validator.Register("XCG", ESeverity.Error, (parser) =>
+            {
+                return parser.Productions.Concat<Parsing.IStatement>(parser.LeftRecursives)
+                .SelectMany((q) => q.FindChildren<Parsing.Reference>())
+                .Where((q) => q.Refered is null)
+                .Select((q) => new Validation.Hint
+                {
+                    File = q.Diagnostics.File,
+                    Line = q.Diagnostics.Line,
+                    Message = $@"Reference is not refering to anything existing."
+                });
+            });
             // Alias Collision
             validator.Register("XCG", ESeverity.Warning, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
                 var identifiers = parser.Tokens.Select((q) => q.Identifier)
                 .Concat(parser.Tokens.Select((q) => q.Alias).Where((q) => !String.IsNullOrWhiteSpace(q)))
-                .Concat(parser.Productions.Select((q) => q.Identifier))
-                .Concat(parser.LeftRecursives.Select((q) => q.Identifier))
-                .Concat(parser.Messages.Select((q) => q.Identifier))
                 .GroupBy((q) => q)
                 .Where((q) => q.Count() > 1)
                 .Select((q) => q.Key)
@@ -434,9 +455,9 @@ namespace XCG
                 var identifiers = parser.Tokens.Select((q) => q.Identifier).Concat(parser.Productions.Select((q) => q.Identifier)).Distinct().ToHashSet();
                 foreach (var token in parser.Tokens)
                 {
-                    foreach (var it in token.Statements)
+                    foreach (var it in token.Children)
                     {
-                        List<Parsing.IPart> parts;
+                        List<Parsing.IStatement> parts;
                         if (it is Parsing.TokenStatements.Require require)
                         {
                             parts = require.Parts;
@@ -470,15 +491,15 @@ namespace XCG
             {
                 var hints = new List<Validation.Hint>();
                 var recursiveMatches = (from q in parser.Productions
-                                        where q.Statements.Any()
-                                        select (q.Statements.First() switch
+                                        where q.Children.Any()
+                                        select (q.Children.First() switch
                                         {
                                             Parsing.Statements.Alternatives alternatives => alternatives.Matches
-                                            .Where((q2) => q2.Parts.First() is Parsing.Reference),
-                                            Parsing.Statements.Match match => match.Parts.First() is Parsing.Reference reference
+                                            .Where((q2) => q2.Matches.First() is Parsing.Reference),
+                                            Parsing.Statements.Match match => match.Matches.First() is Parsing.Reference reference
                                             && reference.Refered == q ? new[] { match } : Array.Empty<Parsing.Statements.Match>(),
                                             _ => Array.Empty<Parsing.Statements.Match>()
-                                        }).Where((match) => match.Parts.First() is Parsing.Reference reference && reference.Refered == q))
+                                        }).Where((match) => match.Matches.First() is Parsing.Reference reference && reference.Refered == q))
                                        .SelectMany((q) => q);
                 foreach (var match in recursiveMatches)
                 {
@@ -497,7 +518,7 @@ namespace XCG
                 var hints = new List<Validation.Hint>();
                 foreach (var leftRecursive in parser.LeftRecursives)
                 {
-                    if (leftRecursive.Statements.Count < 2)
+                    if (leftRecursive.Children.Count < 2)
                     {
                         hints.Add(new Validation.Hint
                         {
@@ -516,7 +537,7 @@ namespace XCG
                 var hints = new List<Validation.Hint>();
                 foreach (var leftRecursive in parser.LeftRecursives)
                 {
-                    if (leftRecursive.Statements.Count < 2)
+                    if (leftRecursive.Children.Count < 2)
                     {
                         hints.Add(new Validation.Hint
                         {
@@ -532,13 +553,13 @@ namespace XCG
             validator.Register("XCG", ESeverity.Error, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
-                foreach (var leftRecursive in parser.LeftRecursives.Where((q) => q.Statements.Count >= 2))
+                foreach (var leftRecursive in parser.LeftRecursives.Where((q) => q.Children.Count >= 2))
                 {
-                    var matches = leftRecursive.Statements.Where((q) => q is Parsing.Statements.Match).Cast<Parsing.Statements.Match>();
+                    var matches = leftRecursive.Children.Where((q) => q is Parsing.Statements.Match).Cast<Parsing.Statements.Match>();
                     var count = matches.Count();
                     foreach (var match in matches.Take(count - 1))
                     {
-                        if (match.Parts.First() is Parsing.Reference reference)
+                        if (match.Matches.First() is Parsing.Reference reference)
                         {
                             if (reference.Refered != leftRecursive)
                             {
@@ -562,10 +583,10 @@ namespace XCG
             validator.Register("XCG", ESeverity.Error, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
-                foreach (var leftRecursive in parser.LeftRecursives.Where((q) => q.Statements.Count >= 2))
+                foreach (var leftRecursive in parser.LeftRecursives.Where((q) => q.Children.Count >= 2))
                 {
-                    var match = leftRecursive.Statements.Where((q) => q is Parsing.Statements.Match).Cast<Parsing.Statements.Match>().Last();
-                    if (match.Parts.Last() is Parsing.Reference reference)
+                    var match = leftRecursive.Children.Where((q) => q is Parsing.Statements.Match).Cast<Parsing.Statements.Match>().Last();
+                    if (match.Matches.Last() is Parsing.Reference reference)
                     {
                         if (reference.Refered == leftRecursive)
                         {
@@ -588,10 +609,10 @@ namespace XCG
             validator.Register("XCG", ESeverity.Error, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
-                foreach (var leftRecursive in parser.LeftRecursives.Where((q) => q.Statements.Count >= 2))
+                foreach (var leftRecursive in parser.LeftRecursives.Where((q) => q.Children.Count >= 2))
                 {
-                    var match = leftRecursive.Statements.Where((q) => q is Parsing.Statements.Match).Cast<Parsing.Statements.Match>().Last();
-                    if (match.Parts.Count != 1)
+                    var match = leftRecursive.Children.Where((q) => q is Parsing.Statements.Match).Cast<Parsing.Statements.Match>().Last();
+                    if (match.Matches.Count != 1)
                     {
                         hints.Add(new Validation.Hint
                         {
@@ -608,7 +629,7 @@ namespace XCG
             validator.Register("XCG", ESeverity.Error, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
-                var requires = parser.Tokens.SelectMany((q) => q.Statements.WhereIs<Parsing.TokenStatements.Require>());
+                var requires = parser.Tokens.SelectMany((q) => q.Children.WhereIs<Parsing.TokenStatements.Require>());
                 foreach (var require in requires)
                 {
                     var references = require.Parts.WhereIs<Parsing.Reference>();
@@ -660,7 +681,7 @@ namespace XCG
                     
                     foreach ((var alternatives, var parents) in result)
                     {
-                        if (alternatives.CatchesErrors && parents.First() is Parsing.Statements.While @while && @while.Statements.Count != 1)
+                        if (alternatives.CatchesErrors && parents.First() is Parsing.Statements.While @while && @while.Children.Count != 1)
                         {
                             hints.Add(new Validation.Hint
                             {
@@ -676,17 +697,30 @@ namespace XCG
             // find unused productions
             validator.Register("XCG", ESeverity.Warning, (parser) =>
             {
+                var mainProduction = parser.Productions.FirstOrDefault((q) => q.Identifier == "main");
+                if (mainProduction is null) { return Array.Empty<Validation.Hint>(); }
+
                 var productionDictionary = parser.Productions.ToDictionary((q) => q, (q) => 0);
-                foreach (var match in parser.Productions.Concat<Parsing.IStatement>(parser.LeftRecursives).SelectMany((production) => production.FindChildren<Parsing.Statements.Match>()))
+                productionDictionary[mainProduction]++;
+                var visited = new HashSet<Parsing.IStatement>();
+                void Walk(Parsing.IStatement statement)
                 {
-                    foreach (var reference in match.Parts.OfType<Parsing.Reference>())
+                    if (visited.Contains(statement)) { return; }
+                    visited.Add(statement);
+                    var references = statement.FindChildren<Parsing.Reference>();
+                    foreach (var reference in references)
                     {
                         if (reference.Refered is Parsing.Production production)
                         {
                             productionDictionary[production]++;
                         }
+                        if (reference.Refered is Parsing.IStatement childStatement)
+                        {
+                            Walk(childStatement);
+                        }
                     }
                 }
+                Walk(mainProduction);
 
                 return productionDictionary.Where((kvp) => kvp.Value == 0).Where((kvp) => kvp.Key.Identifier.ToLower() != "main").Select((kvp) => new Validation.Hint
                 {
@@ -698,24 +732,60 @@ namespace XCG
             // find unused left-recursives
             validator.Register("XCG", ESeverity.Warning, (parser) =>
             {
-                var productionDictionary = parser.LeftRecursives.ToDictionary((q) => q, (q) => 0);
-                foreach (var match in parser.Productions.Concat<Parsing.IStatement>(parser.LeftRecursives).SelectMany((production) => production.FindChildren<Parsing.Statements.Match>()))
+                var mainProduction = parser.Productions.FirstOrDefault((q) => q.Identifier == "main");
+                if (mainProduction is null) { return Array.Empty<Validation.Hint>(); }
+
+                var leftRecursiveDictionary = parser.LeftRecursives.ToDictionary((q) => q, (q) => 0);
+                var visited = new HashSet<Parsing.IStatement>();
+                void Walk(Parsing.IStatement statement)
                 {
-                    foreach (var reference in match.Parts.OfType<Parsing.Reference>())
+                    if (visited.Contains(statement)) { return; }
+                    visited.Add(statement);
+                    var references = statement.FindChildren<Parsing.Reference>();
+                    foreach (var reference in references)
                     {
                         if (reference.Refered is Parsing.LeftRecursive leftRecursive)
                         {
-                            productionDictionary[leftRecursive]++;
+                            leftRecursiveDictionary[leftRecursive]++;
+                        }
+                        if (reference.Refered is Parsing.IStatement childStatement)
+                        {
+                            Walk(childStatement);
                         }
                     }
                 }
+                Walk(mainProduction);
 
-                return productionDictionary.Where((kvp) => kvp.Value == 0).Where((kvp) => kvp.Key.Identifier.ToLower() != "main").Select((kvp) => new Validation.Hint
+                return leftRecursiveDictionary.Where((kvp) => kvp.Value == 0).Where((kvp) => kvp.Key.Identifier.ToLower() != "main").Select((kvp) => new Validation.Hint
                 {
                     Line = kvp.Key.Diagnostics.Line,
                     File = kvp.Key.Diagnostics.File,
                     Message = $@"Left-Recursive {kvp.Key.Identifier} is unused."
                 });
+            });
+
+            // references with print instructions only ever have message as refered
+            validator.Register("XCG", ESeverity.Error, (parser) =>
+            {
+                var hints = new List<Validation.Hint>();
+                foreach (var production in parser.Productions)
+                {
+                    var result = production.FindChildren<Parsing.Statements.Print>();
+
+                    foreach (var print in result)
+                    {
+                        if (print.Reference.Refered is not Parsing.Message)
+                        {
+                            hints.Add(new Validation.Hint
+                            {
+                                Line = print.Diagnostics.Line,
+                                File = print.Diagnostics.File,
+                                Message = $@"The print instruction must always refer to a message."
+                            });
+                        }
+                    }
+                }
+                return hints;
             });
         }
     }

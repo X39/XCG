@@ -10,7 +10,7 @@ namespace XCG.Generators.Cpp.Extensive
         {
             return new TypeImpl
             {
-                Type = set.Statements.First() switch
+                Type = set.Children.First() switch
                 {
                     Parsing.Expressions.CreateNewBoolean => EType.OptionalBoolean,
                     Parsing.Expressions.Bool => EType.OptionalBoolean,
@@ -30,26 +30,26 @@ namespace XCG.Generators.Cpp.Extensive
             {
                 case Parsing.EActiveScope.capture:
                     {
-                        var first = set.Statements.First();
+                        var first = set.Children.First();
                         switch (first)
                         {
                             case Parsing.Expressions.Bool @bool:
-                                scope.Add(new FullBody { $"{Constants.classInstanceVariable}->{set.Property} = {@bool.Value};" });
+                                scope.Add(new FullBody { $"{Constants.classInstanceVariable}->{set.Property.ToCppName()} = {(@bool.Value ? "true" : "false")};" });
                                 break;
                             case Parsing.Expressions.CreateNewBoolean:
-                                scope.Add(new FullBody { $"{Constants.classInstanceVariable}->{set.Property} = false;" });
+                                scope.Add(new FullBody { $"{Constants.classInstanceVariable}->{set.Property.ToCppName()} = false;" });
                                 break;
                             case Parsing.Expressions.Character @char:
-                                scope.Add(new FullBody { $"{Constants.classInstanceVariable}->{set.Property} = '{@char.Value}';" });
+                                scope.Add(new FullBody { $"{Constants.classInstanceVariable}->{set.Property.ToCppName()} = '{@char.Value}';" });
                                 break;
                             case Parsing.Expressions.CreateNewCharacter:
-                                scope.Add(new FullBody { $"{Constants.classInstanceVariable}->{set.Property} = '\0';" });
+                                scope.Add(new FullBody { $"{Constants.classInstanceVariable}->{set.Property.ToCppName()} = '\0';" });
                                 break;
                             case Parsing.Expressions.Number number:
-                                scope.Add(new FullBody { $"{Constants.classInstanceVariable}->{set.Property} = {number.Value};" });
+                                scope.Add(new FullBody { $"{Constants.classInstanceVariable}->{set.Property.ToCppName()} = {number.Value};" });
                                 break;
                             case Parsing.Expressions.CreateNewNumber:
-                                scope.Add(new FullBody { $"{Constants.classInstanceVariable}->{set.Property} = 0;" });
+                                scope.Add(new FullBody { $"{Constants.classInstanceVariable}->{set.Property.ToCppName()} = 0;" });
                                 break;
                             default:
                                 throw new FatalException();
@@ -58,26 +58,26 @@ namespace XCG.Generators.Cpp.Extensive
                     break;
                 case Parsing.EActiveScope.global:
                     {
-                        var first = set.Statements.First();
+                        var first = set.Children.First();
                         switch (first)
                         {
                             case Parsing.Expressions.Bool @bool:
-                                scope.Add(new FullBody { $"this->{set.Property} = {@bool.Value};" });
+                                scope.Add(new FullBody { $"this->{set.Property.ToCppName()} = {(@bool.Value ? "true" : "false")};" });
                                 break;
                             case Parsing.Expressions.CreateNewBoolean:
-                                scope.Add(new FullBody { $"this->{set.Property} = false;" });
+                                scope.Add(new FullBody { $"this->{set.Property.ToCppName()} = false;" });
                                 break;
                             case Parsing.Expressions.Character @char:
-                                scope.Add(new FullBody { $"this->{set.Property} = '{@char.Value}';" });
+                                scope.Add(new FullBody { $"this->{set.Property.ToCppName()} = '{@char.Value}';" });
                                 break;
                             case Parsing.Expressions.CreateNewCharacter:
-                                scope.Add(new FullBody { $"this->{set.Property} = '\0';" });
+                                scope.Add(new FullBody { $"this->{set.Property.ToCppName()} = '\0';" });
                                 break;
                             case Parsing.Expressions.Number number:
-                                scope.Add(new FullBody { $"this->{set.Property} = {number.Value};" });
+                                scope.Add(new FullBody { $"this->{set.Property.ToCppName()} = {number.Value};" });
                                 break;
                             case Parsing.Expressions.CreateNewNumber:
-                                scope.Add(new FullBody { $"this->{set.Property} = 0;" });
+                                scope.Add(new FullBody { $"this->{set.Property.ToCppName()} = 0;" });
                                 break;
                             default:
                                 throw new FatalException();
@@ -87,26 +87,26 @@ namespace XCG.Generators.Cpp.Extensive
                 case Parsing.EActiveScope.auto:
                 case Parsing.EActiveScope.local:
                     {
-                        var first = set.Statements.First();
+                        var first = set.Children.First();
                         switch (first)
                         {
                             case Parsing.Expressions.Bool @bool:
-                                scope.Add(new FullBody { $"{Constants.stateInstanceVariable}->{set.Property} = {@bool.Value};" });
+                                scope.Add(new FullBody { $"{Constants.stateInstanceVariable}.{set.Property.ToCppName()} = {(@bool.Value ? "true" : "false")};" });
                                 break;
                             case Parsing.Expressions.CreateNewBoolean:
-                                scope.Add(new FullBody { $"{Constants.stateInstanceVariable}->{set.Property} = false;" });
+                                scope.Add(new FullBody { $"{Constants.stateInstanceVariable}.{set.Property.ToCppName()} = false;" });
                                 break;
                             case Parsing.Expressions.Character @char:
-                                scope.Add(new FullBody { $"{Constants.stateInstanceVariable}->{set.Property} = '{@char.Value}';" });
+                                scope.Add(new FullBody { $"{Constants.stateInstanceVariable}.{set.Property.ToCppName()} = '{@char.Value}';" });
                                 break;
                             case Parsing.Expressions.CreateNewCharacter:
-                                scope.Add(new FullBody { $"{Constants.stateInstanceVariable}->{set.Property} = '\0';" });
+                                scope.Add(new FullBody { $"{Constants.stateInstanceVariable}.{set.Property.ToCppName()} = '\0';" });
                                 break;
                             case Parsing.Expressions.Number number:
-                                scope.Add(new FullBody { $"{Constants.stateInstanceVariable}->{set.Property} = {number.Value};" });
+                                scope.Add(new FullBody { $"{Constants.stateInstanceVariable}.{set.Property.ToCppName()} = {number.Value};" });
                                 break;
                             case Parsing.Expressions.CreateNewNumber:
-                                scope.Add(new FullBody { $"{Constants.stateInstanceVariable}->{set.Property} = 0;" });
+                                scope.Add(new FullBody { $"{Constants.stateInstanceVariable}.{set.Property.ToCppName()} = 0;" });
                                 break;
                             default:
                                 throw new FatalException();

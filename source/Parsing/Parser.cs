@@ -540,7 +540,7 @@ namespace XCG.Parsing
                 var subStatement = this.ParseStatement(newWsLevel);
                 if (subStatement != null)
                 {
-                    production.Statements.Add(subStatement);
+                    production.Children.Add(subStatement);
                 }
                 if (this.PeekChar(0) != '\n')
                 {
@@ -577,7 +577,7 @@ namespace XCG.Parsing
                 var match = this.ParseMatch(newWsLevel);
                 if (match != null)
                 {
-                    leftRecursive.Statements.Add(match);
+                    leftRecursive.Children.Add(match);
                 }
             }
 
@@ -723,7 +723,7 @@ namespace XCG.Parsing
                     var indexValue = this.ParseValueExpression();
                     if (indexValue is not null)
                     {
-                        statement.Statements.Add(indexValue);
+                        statement.Children.Add(indexValue);
                     }
                 }
                 else if (this.TryMatch("push"))
@@ -745,7 +745,7 @@ namespace XCG.Parsing
             var value = this.ParseValueExpression();
             if (value is not null)
             {
-                statement.Statements.Add(value);
+                statement.Children.Add(value);
             }
             return statement;
         }
@@ -1215,7 +1215,7 @@ namespace XCG.Parsing
                     var value = this.ParseValueExpression();
                     if (value is not null)
                     {
-                        statement.Statements.Add(value);
+                        statement.Children.Add(value);
                     }
                 }
                 else if (this.TryMatch("pop"))
@@ -1279,7 +1279,7 @@ namespace XCG.Parsing
                 var part = this.ParseMatchPart(allowCaptures);
                 if (part != null)
                 {
-                    statement.Parts.Add(part);
+                    statement.Matches.Add(part);
                 }
                 this.Skip();
             }
@@ -1292,7 +1292,7 @@ namespace XCG.Parsing
                     var subStatement = this.ParseStatement(newWsLevel);
                     if (subStatement != null)
                     {
-                        statement.Statements.Add(subStatement);
+                        statement.Children.Add(subStatement);
                     }
                     if (this.PeekChar(0) != '\n')
                     {
@@ -1438,7 +1438,7 @@ namespace XCG.Parsing
                 var subStatement = this.ParseStatement(newWsLevel);
                 if (subStatement != null)
                 {
-                    statement.Statements.Add(subStatement);
+                    statement.Children.Add(subStatement);
                 }
                 if (this.PeekChar(0) != '\n')
                 {
@@ -1507,7 +1507,7 @@ namespace XCG.Parsing
                 var subStatement = this.ParseStatement(newWsLevel);
                 if (subStatement != null)
                 {
-                    statement.Statements.Add(subStatement);
+                    statement.Children.Add(subStatement);
                 }
                 if (this.PeekChar(0) != '\n')
                 {
@@ -1572,7 +1572,7 @@ namespace XCG.Parsing
                 var res = this.ParseToken_Statement(newWsLevel);
                 if (res != null)
                 {
-                    token.Statements.Add(res);
+                    token.Children.Add(res);
                 }
             }
 
@@ -1702,14 +1702,14 @@ namespace XCG.Parsing
         /// <summary>
         /// Parses the body used by <see cref="TokenStatements.Require"/> and <see cref="TokenStatements.Backtrack"/>.
         /// </summary>
-        /// <param name="parts">Parts list to add parts to</param>
+        /// <param name="statements">Parts list to add parts to</param>
         /// <param name="allowAnyPlaceholder">Wether the any character placeholder <code>*</code> is allowed or not.</param>
         /// <param name="allowEmptyClosure">If true, empty <code>{ }</code> are accepted as valid.</param>
         /// <param name="allowReference">If true, allows <see cref="Reference"/>s to be created.</param>
         /// <returns>Wether a hard validation error occured (true) or not (false)</returns>
-        private bool ParseRequireBody(List<IPart> parts, bool allowAnyPlaceholder, bool allowEmptyClosure, bool allowReference)
+        private bool ParseRequireBody(List<IStatement> statements, bool allowAnyPlaceholder, bool allowEmptyClosure, bool allowReference)
         {
-            int partsStartCount = parts.Count;
+            int partsStartCount = statements.Count;
             if (this.PeekChar() == '{' &&
                 // No need to check for index since index is always valid due to peekchar == '{'
                 this.contents.IndexOf('\n', this.index) > this.contents.IndexOf('}', this.index))
@@ -1739,7 +1739,7 @@ namespace XCG.Parsing
                     { // Any character
                         if (allowAnyPlaceholder)
                         {
-                            parts.Add(new AnyCharacter { Diagnostics = this.GetDiagnostic() });
+                            statements.Add(new AnyCharacter { Diagnostics = this.GetDiagnostic() });
                         }
                         else
                         {
@@ -1751,7 +1751,7 @@ namespace XCG.Parsing
                         char a = this.NextChar();
                         this.NextChar();
                         char b = this.NextChar();
-                        parts.Add(new CharacterRange(a, b, this.GetDiagnostic()));
+                        statements.Add(new CharacterRange(a, b, this.GetDiagnostic()));
                     }
                     else
                     { // Token Reference
@@ -1803,7 +1803,7 @@ namespace XCG.Parsing
                         }
                         var reference = new Reference(referenceContents) { Diagnostics = this.GetDiagnostic() };
                         this.References.Add(reference);
-                        parts.Add(reference);
+                        statements.Add(reference);
                     }
                     this.Skip();
                     handleComma();
@@ -1816,7 +1816,7 @@ namespace XCG.Parsing
                 {
                     this.NextChar();
                 }
-                if (!allowEmptyClosure && parts.Count == partsStartCount)
+                if (!allowEmptyClosure && statements.Count == partsStartCount)
                 {
                     this.parseNotes.Add(this.err("Empty Closure"));
                     return false;
@@ -1830,7 +1830,7 @@ namespace XCG.Parsing
                 string? requireContents = this.contents.Substring(currentIndex, indexOfNewLine - currentIndex);
                 this.column += requireContents.Length;
                 this.index += requireContents.Length;
-                parts.Add(new Word(requireContents.Trim()) { Diagnostics = this.GetDiagnostic() });
+                statements.Add(new Word(requireContents.Trim()) { Diagnostics = this.GetDiagnostic() });
             }
             return true;
         }

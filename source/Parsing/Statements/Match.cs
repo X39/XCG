@@ -8,8 +8,9 @@ namespace XCG.Parsing.Statements
 {
     public class Match : IStatement
     {
-        public List<IMatchPart> Parts { get; set; } = new List<IMatchPart>();
-        public List<IStatement> Statements { get; set; } = new List<IStatement>();
+        public List<IMatchPart> Matches { get; set; } = new List<IMatchPart>();
+        public List<IStatement> Children { get; set; } = new List<IStatement>();
+        IEnumerable<IStatement> IStatement.Statements => Matches.Concat(Children);
         public Diagnostic Diagnostics { get; internal set; }
     }
 }

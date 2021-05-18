@@ -1,6 +1,6 @@
 ﻿namespace XCG.Parsing
 {
-    public interface IMatchPart : IPart
+    public interface IMatchPart : IStatement
     {
         bool IsOptional { get; set; }
         bool IsCaptured { get; set; }
