@@ -73,6 +73,7 @@ namespace XCG
                 '§' => "paragraph",
                 '=' => "equal",
                 ':' => "colon",
+                ';' => "semicolon",
                 '#' => "hash",
                 '°' => "degree",
                 '<' => "less-then",
