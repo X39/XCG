@@ -90,8 +90,9 @@ production template-definition
 	match ">"
 
 production exp-chain-start
-    match @[part]ident
-    match @[part]call
+    alternatives
+        match @[part]call
+        match @[part]ident
 
 production exp-chain-indexer
     match "["
@@ -117,12 +118,27 @@ left-recursive type-navigation
     match @[left]type-navigation "." @[right]ident @[template]template-usage
     match @[left]type-navigation "." @[right]ident
     match @[left]ident
+    
+production type-match
+    alternatives
+        match @[base]type-navigation "[" @[array-size]exp-value "]"
+            set capture is-array true
+        match @[base]type-navigation "[" "]"
+            set capture is-array true
+        match @[base]type-navigation
 
 production typeof
-    match "typeof" "(" @[value]type-navigation ")"
+    match "typeof" "(" @[value]type-match ")"
 
 production nameof
     match "nameof" "(" @[value]exp-or ")"
+    
+production string-literal
+    alternatives
+        match @[prefix]ident @[value]string @[postfix]ident
+        match @[value]string @[postfix]ident
+        match @[prefix]ident @[value]string
+        match @[value]string
     
 production exp-value
     alternatives
@@ -130,22 +146,55 @@ production exp-value
         match @[value]nameof
         match @[value]scalar
         match @[value]boolean
-        match @[value]string
+        match @[value]string-literal
         match @[value]integer
 
 production exp-nullar
     alternatives
         match "(" @[value]statement ")"
+        match @[value]declaration
         match @[value]exp-chain
-        match @[value]call
         match @[value]exp-value
 
+production exp-unary
+    alternatives
+        match "!" @[value]exp-unary
+            set capture op '!'
+        match "~" @[value]exp-unary
+            set capture op '~'
+        match "-" @[value]exp-unary
+            set capture op '-'
+        match "+" @[value]exp-unary
+            set capture op '+'
+        match @[value]exp-nullar
+
+left-recursive exp-binary-3
+	match @[left]exp-binary-3 "<<" @[right]exp-unary
+		set capture is-double-left true
+	match @[left]exp-binary-3 ">>" @[right]exp-unary
+		set capture is-double-left true
+	match @[left]exp-binary-3 "<<<" @[right]exp-unary
+		set capture is-tripple-left true
+	match @[left]exp-binary-3 ">>>" @[right]exp-unary
+		set capture is-tripple-right true
+	match @[left]exp-unary
+
+left-recursive exp-binary-2
+	match @[left]exp-binary-2 "&" @[right]exp-binary-3
+		set capture op '&'
+	match @[left]exp-binary-3
+
+left-recursive exp-binary-1
+	match @[left]exp-binary-1 "|" @[right]exp-binary-2
+		set capture op '|'
+	match @[left]exp-binary-2
+
 left-recursive exp-arithmetic-2
-	match @[left]exp-arithmetic-2 "/" @[right]exp-nullar
+	match @[left]exp-arithmetic-2 "/" @[right]exp-binary-1
 		set capture op '/'
-	match @[left]exp-arithmetic-2 "*" @[right]exp-nullar
+	match @[left]exp-arithmetic-2 "*" @[right]exp-binary-1
 		set capture op '*'
-	match @[left]exp-nullar
+	match @[left]exp-binary-1
 
 left-recursive exp-arithmetic-1
 	match @[left]exp-arithmetic-1 "+" @[right]exp-arithmetic-2
@@ -157,7 +206,7 @@ left-recursive exp-arithmetic-1
 left-recursive exp-compare
 	match @[left]exp-compare "<=" @[right]exp-arithmetic-1
 		set capture op1 '<'
-		set capture eq2 '='
+		set capture op2 '='
 	match @[left]exp-compare "<" @[right]exp-arithmetic-1
 		set capture op1 '<'
 	match @[left]exp-compare ">=" @[right]exp-arithmetic-1
@@ -170,7 +219,7 @@ left-recursive exp-compare
 left-recursive exp-equality
 	match @[left]exp-equality "<=" @[right]exp-compare
 		set capture op1 '<'
-		set capture eq2 '='
+		set capture op2 '='
 	match @[left]exp-equality "<" @[right]exp-compare
 		set capture op1 '<'
 	match @[left]exp-equality ">=" @[right]exp-compare
@@ -181,19 +230,23 @@ left-recursive exp-equality
 	match @[left]exp-compare
     
 left-recursive exp-and
-	match @[left]exp-and "and" @[right]exp-equality
+	match @[left]exp-and "&&" @[right]exp-equality
 	match @[left]exp-equality
     
 left-recursive exp-or
-	match @[left]exp-or "or" @[right]exp-and
+	match @[left]exp-or "||" @[right]exp-and
 	match @[left]exp-equality
     
 left-recursive expression
+    match @[assign-to]expression "=" @[value]expression
     match @[assign-to]expression "=" @[value]expression
     match @[value]exp-or
 
 production return-statement
     match "return" @[value]exp-or
+
+production declaration
+    match @[type]type-match @[name]ident
     
 production statement
     alternatives
@@ -297,44 +350,49 @@ production class
     match "{"
     while not match "}"
         alternatives
+            match @[contents]indexer
+            match @[contents]operator-binary-overload
+            match @[contents]operator-unary-overload
             match @[contents]conversion
             match @[contents]class
             match @[contents]constructor
             match @[contents]destructor
             match @[contents]copystructor
-            match @[contents]method
             match @[contents]property
-            match @[contents]indexer
+            match @[contents]method
             error
     match "}"
 
-production method-arglist-item
-    match @[type]type-navigation @[name]ident
+production method-arglist-item-with-default
+    match @[type]type-match @[name]ident
     if match "="
         match "=" @[value]exp-value
 
+production method-arglist-item
+    match @[type]type-match @[name]ident
+
 production method-arglist
     match "("
-    if match method-arglist-item
-        match @[args]method-arglist-item
+    if match method-arglist-item-with-default
+        match @[args]method-arglist-item-with-default
         while not match ")"
             alternatives
-                match "," @[args]method-arglist-item
+                match "," @[args]method-arglist-item-with-default
                 error
         if match ","
             match ","
     match ")"
     
-production method-arglist-non-empty
-    match "("
+production method-arglist-indexer
+    match "["
     match @[args]method-arglist-item
-    while not match ")"
+    while not match "]"
         alternatives
             match "," @[args]method-arglist-item
             error
     if match ","
         match ","
-    match ")"
+    match "]"
 
 production method-ident
     match @[name]ident
@@ -346,33 +404,71 @@ production method
     if match "unbound"
         match "unbound"
         set capture is-static true
-    match @[return-type]type-navigation @[ident]method-ident @[arglist]method-arglist @[body]scope
+    match @[return-type]type-match @[ident]method-ident @[arglist]method-arglist @[body]scope
 
 production constructor
-    match @[encaps]encapsulation @[return-type]type-navigation @[ident]method-ident @[arglist]method-arglist @[body]scope
+    match @[encaps]encapsulation @[ident]method-ident @[arglist]method-arglist @[body]scope
 
 production destructor
-    match @[encaps]encapsulation @[return-type]type-navigation "~" @[ident]method-ident @[arglist]method-arglist @[body]scope
+    match @[encaps]encapsulation "~" @[ident]method-ident @[arglist]method-arglist @[body]scope
 
 production copystructor
-    match @[encaps]encapsulation @[return-type]type-navigation "+" @[ident]method-ident @[arglist]method-arglist
+    match @[encaps]encapsulation "+" @[ident]method-ident @[arglist]method-arglist
     alternatives
         match @[body]scope
         match "=" "delete"
 
 production conversion
-    match @[encaps]encapsulation "conversion" @[target-type]type-navigation "(" @[source-type]type-navigation @[name]ident ")" @[body]scope
+    match @[encaps]encapsulation "unbound" "conversion" @[target-type]type-match
+    match "(" @[source-type]type-match @[name]ident ")"
+    match @[body]scope
 
 production indexer
-    match @[encaps]encapsulation @[target-type]type-navigation
+    match @[encaps]encapsulation @[target-type]type-match
     if match template-definition
         match @[template]template-definition
-    match "[" @[arglist]method-arglist-non-empty "]" @[body]scope-getset
+    match @[arglist]method-arglist-indexer @[body]scope-getset
+    
+production operator-binary-overload
+    match @[encaps]encapsulation "unbound" @[target-type]type-match  "operator"
+    if match template-definition
+        match @[template]template-definition
+    match "(" @[left]method-arglist-item ")"
+    alternatives
+        match @[operator]"+"
+        match @[operator]"-"
+        match @[operator]"*"
+        match @[operator]"/"
+        match @[operator]"<<<"
+        match @[operator]"<<"
+        match @[operator]"<="
+        match @[operator]"<"
+        match @[operator]">>>"
+        match @[operator]">>"
+        match @[operator]">="
+        match @[operator]">"
+        match @[operator]"||"
+        match @[operator]"|"
+        match @[operator]"&&"
+        match @[operator]"&"
+    match "(" @[right]method-arglist-item ")"
+    match @[body]scope
+production operator-unary-overload
+    match @[encaps]encapsulation "unbound" @[target-type]type-match  "operator"
+    if match template-definition
+        match @[template]template-definition
+    alternatives
+        match @[operator]"+"
+        match @[operator]"-"
+        match @[operator]"!"
+        match @[operator]"~"
+    match "(" @[right]method-arglist-item ")"
+    match @[body]scope
 
 production property
     alternatives
-        match @[encaps]encapsulation @[target-type]type-navigation @[name]ident ";"
-        match @[encaps]encapsulation @[target-type]type-navigation @[name]ident @[body]scope-getset
+        match @[encaps]encapsulation @[target-type]type-match @[name]ident ";"
+        match @[encaps]encapsulation @[target-type]type-match @[name]ident @[body]scope-getset
 
 production main
     while not eof

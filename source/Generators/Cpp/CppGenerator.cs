@@ -206,6 +206,7 @@ namespace XCG.Generators.Cpp
 
             instanceClass.PublicParts.Add(new MethodDefinition(mainProduction.ToCppTypeName(this.Options, true).ToCppSharedPtrType(), "parse")
             {
+                $@"skip();",
                 $@"return {mainProduction.ToCppMatchMethodName(this.Options)}(0);"
             });
             instanceClass.PublicParts.AddRange(parser.Productions

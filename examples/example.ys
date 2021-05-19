@@ -1,3 +1,22 @@
+// Main method - Entry of any program.
+public unbound i32 Main(i32 argc, string[] argv)
+{
+    // Forward declaring myClass variable.
+    MyClass myClass;
+    
+    // Illformed program as myClass was not assigned yet
+    myClass.NormalMethod();
+    
+    // Calls constructor of MyClass and places it in myClass.
+    myClass = MyClass();
+    
+    // Calls copy constructor of MyClass
+    MyClass copy = myClass;
+    
+    // Calls conversion operator
+    i8 converted = myClass;
+}
+
 namespace Yaoosl
 {
     public class MyClass
@@ -49,37 +68,21 @@ namespace Yaoosl
             set { }
         }
         
-        // Operator overloading is supported. Not yet settled on full syntax.
-        public operator + i8 (MyClass other) { return 0; }
+        // Operator overloading of binary operators is supported.
+        public unbound i8 operator (i8 left) + (i8 right) { return 0; }
         
-        // Bound conversion method, called whenever something might convert things from A to B
-        public conversion i8() { return 0; }
+        // Operator of unary operators is supported.
+        public unbound i8 operator + (i8 right) { return 0; }
+        
+        // Conversion method, called whenever something might convert things from A to B
+        public unbound conversion i8 (MyClass myClass) { return myClass; }
     }
         
-    // Unbound conversion method, same as bound pretty much
-    public unbound conversion i8(MyClass myClass) { return myClass; }
+    // Also declarable anywhere else
+    public unbound conversion i16 (MyClass myClass) { return myClass; }
     
     // Extension method that can be used to extend functionality of existing types
     public unbound void ExtensionMethod(MyClass this) { }
-}
-
-// Main method - Entry of any program.
-public unbound i32 Main(i32 argc, string[] argv)
-{
-    // Forward declaring myClass variable.
-    MyClass myClass;
-    
-    // Illformed program as myClass was not assigned yet
-    myClass.NormalMethod();
-    
-    // Calls constructor of MyClass and places it in myClass.
-    myClass = MyClass();
-    
-    // Calls copy constructor of MyClass
-    MyClass copy = myClass;
-    
-    // Calls conversion operator
-    i8 converted = myClass;
 }
 
 
