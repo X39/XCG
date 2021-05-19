@@ -1,6 +1,6 @@
 namespace Yaoosl
 {
-    class MyClass
+    public class MyClass
     {
         // Properties of MyClass (usually called "field", YAOOSL will call them "property")
         private i8  thisVeryClassOnly_Byte;

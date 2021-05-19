@@ -39,7 +39,7 @@ namespace XCG.Generators.Cpp.Extensive
 
 
             var conditionVariable = toUnique("cond");
-            methodDefinition.AddRange(@if.Condition!.GetEvaluationResult(cppOptions, stateTypeName, conditionVariable, true));
+            methodDefinition.AddRange(@if.Condition!.GetEvaluationResult(cppOptions, stateTypeName, conditionVariable, true, toUnique));
             methodDefinition.Add($@"{resetable}.reset();");
 
 

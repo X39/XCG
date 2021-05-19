@@ -43,6 +43,13 @@ token string
 
 /*"*/
 
+comment
+    start //
+    end EOL
+comment
+    start /*
+    end */
+
 production call
     match @[method]ident "("
     if match expression
@@ -209,22 +216,10 @@ production scope
 production scope-getset
     match "{"
     alternatives
-        match "get"
-            match "{"
-            while not match "}"
-                alternatives
-                    match @[get-body]control-structure
-                    match @[get-body]statement
-                    error
-            match "}"
-        match "set"
-            match "{"
-            while not match "}"
-                alternatives
-                    match @[set-body]control-structure
-                    match @[set-body]statement
-                    error
-            match "}"
+        match "get" @[get]scope "set" @[set]scope
+        match "set" @[set]scope "get" @[get]scope
+        match "get" @[get]scope
+        match "set" @[set]scope
     match "}"
 
 production function

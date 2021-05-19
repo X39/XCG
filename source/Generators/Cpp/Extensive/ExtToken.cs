@@ -45,7 +45,7 @@ namespace XCG.Generators.Cpp.Extensive
                             if (word.Text.Length > 1)
                             {
                                 var wordHolderVariable = toUnique("str");
-                                localLoop.Add(new VariableDefinition(new TypeImpl { Type = EType.Char, PointerCount = 1, IsConst = true }, wordHolderVariable, $@"""{word.Text.Replace("\"", "\\\"")}"""));
+                                localLoop.Add(new VariableDefinition(new TypeImpl { Type = EType.Char, PointerCount = 1, IsConst = true }, wordHolderVariable, $@"""{String.Concat(word.Text.Select((c) => c.Escape()))}"""));
                                 localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"m_contents.length() - m_offset >= {word.Text.Length} && {(require.Negated ? "!" : String.Empty)}std::equal(m_contents.begin() + m_offset, m_contents.begin() + m_offset + {word.Text.Length}, {wordHolderVariable}, {wordHolderVariable} + {word.Text.Length})")
                                 {
                                     $@"{countVariable}++;",
@@ -58,7 +58,7 @@ namespace XCG.Generators.Cpp.Extensive
                             }
                             else
                             {
-                                localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"current() {(require.Negated ? "!" : "=")}= '{word.Text.First()}'")
+                                localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"current() {(require.Negated ? "!" : "=")}= '{word.Text.First().Escape()}'")
                                 {
                                     $@"{countVariable}++;",
                                     $@"next();",

@@ -23,6 +23,7 @@ namespace XCG.Parsing
         public List<Message> Messages { get; private set; } = new List<Message>();
         public List<Production> Productions { get; private set; } = new List<Production>();
         public List<LeftRecursive> LeftRecursives { get; private set; } = new List<LeftRecursive>();
+        public List<Comment> Comments { get; private set; } = new List<Comment>();
 
 
         private string formatted(string msg)
@@ -582,6 +583,56 @@ namespace XCG.Parsing
             }
 
             return leftRecursive;
+        }
+        private Comment? ParseComment(int wsLevel)
+        {
+            if (!this.SkipWhiteSpaceLevel(wsLevel) || !this.TryMatch("comment"))
+            {
+                this.parseNotes.Add(this.err("Failed to read comment"));
+                return null;
+            }
+            var comment = new Comment { Diagnostics = this.GetDiagnostic() };
+            this.Skip();
+
+            this.SkipLine();
+            int newWsLevel;
+            while ((newWsLevel = this.CountWhiteSpaces()) > wsLevel)
+            {
+                if (this.TryMatchNoCapture("", skipWS: true))
+                {
+                    this.SkipLine();
+                    continue;
+                }
+                else if (this.TryMatchNoCapture("start", skipWS: true))
+                {
+                    Skip();
+                    TryMatch("start");
+                    comment.Start = ReadToEndOfLine().Trim();
+                    SkipLine();
+                    continue;
+                }
+                else if (this.TryMatchNoCapture("end", skipWS: true))
+                {
+                    Skip();
+                    TryMatch("end");
+                    comment.End = ReadToEndOfLine().Trim();
+                    SkipLine();
+                    continue;
+                }
+                else
+                {
+                    this.Skip();
+                    if (this.TryMatchNoCapture("", skipWS: true))
+                    {
+                        return null;
+                    }
+                    string? readTilEndOfLine = this.ReadToEndOfLine();
+                    this.parseNotes.Add(this.err($"Unknown instruction `{readTilEndOfLine}`"));
+                    return null;
+                }
+            }
+
+            return comment;
         }
         private Statements.Alternatives? ParseAlternatives(int wsLevel)
         {
@@ -1276,7 +1327,7 @@ namespace XCG.Parsing
             this.Skip();
             while (this.PeekChar() != '\n' && !this.EOF())
             {
-                var part = this.ParseMatchPart(allowCaptures);
+                var part = this.ParseReference(allowCaptures);
                 if (part != null)
                 {
                     statement.Matches.Add(part);
@@ -1308,7 +1359,7 @@ namespace XCG.Parsing
             return this.PeekChar() == '\0';
         }
 
-        private IMatchPart? ParseMatchPart(bool allowCaptures = true)
+        private Reference? ParseReference(bool allowCaptures = true, bool allowOptional = true)
         {
             this.Skip();
             char c;
@@ -1318,6 +1369,10 @@ namespace XCG.Parsing
             string? captureName = null;
             if (this.PeekChar() == '?')
             {
+                if (!allowOptional)
+                {
+                    this.parseNotes.Add(this.err("Optional closure is not allowed here"));
+                }
                 this.NextChar();
                 isOptional = true;
             }
@@ -1408,7 +1463,11 @@ namespace XCG.Parsing
             }
             else if (this.TryMatch("eof"))
             {
-                part = new EOF();
+                part = new EndOfFile();
+            }
+            else if (this.TryMatch("eol"))
+            {
+                part = new EndOfLine();
             }
             else
             {
@@ -1964,6 +2023,14 @@ namespace XCG.Parsing
                         if (leftRecursive != null)
                         {
                             this.LeftRecursives.Add(leftRecursive);
+                        }
+                    }
+                    else if (this.TryMatchNoCapture("comment", skipWS: true))
+                    {
+                        var comment = this.ParseComment(0);
+                        if (comment != null)
+                        {
+                            this.Comments.Add(comment);
                         }
                     }
                     else

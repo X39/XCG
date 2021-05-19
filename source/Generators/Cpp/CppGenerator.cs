@@ -131,21 +131,6 @@ namespace XCG.Generators.Cpp
                         }
                     },
                     new FullBody(EUsage.Header) { $@"friend class resetable;" },
-                    new MethodDefinition(EType.Void, "skip")
-                    {
-                        new WhilePart("m_contents.length() > m_offset")
-                        {
-                            new VariableDefinition(EType.Char, "c", "m_contents[m_offset]"),
-                            @"switch (c)",
-                            @"{",
-                            @"    case '\r':",
-                            @"    case '\t':",
-                            @"    case ' ': m_column++; m_offset++; break;",
-                            @"    case '\n': m_line++; m_column = 1; m_offset++; break;",
-                            @"    default: return;",
-                            @"}",
-                        }
-                    },
                     new MethodDefinition(EType.Boolean, "next")
                     {
                         new IfPart(IfPart.EIfScope.If, "m_contents.length() > m_offset")
@@ -230,7 +215,7 @@ namespace XCG.Generators.Cpp
                 .Select((g) => new CaptureDefinition(g.Key, g.Select((q) => q.ToTypeImpl(this.Options)))));
 
             instanceClass.PublicParts.AddRange(captureClasses.Select((q) => q.CreatePrintTreeMethodDefinition(this.Options)));
-
+            instanceClass.PrivateParts.Add(GetSkipMethod(parser, this.Options));
             System.IO.Directory.CreateDirectory(output);
             using (var writer = new System.IO.StreamWriter(System.IO.Path.Combine(output, this.Options.HeaderFileName)))
             {
@@ -273,6 +258,106 @@ namespace XCG.Generators.Cpp
                     ns.WriteImplementation(this.Options, writer, String.Empty);
                 }
             }
+        }
+
+        private static MethodDefinition GetSkipMethod(Parser parser, CppOptions cppOptions)
+        {
+            int ___localsCount = 0;
+            string toUnique(string str) => String.Concat(str, (++___localsCount).ToString());
+
+            var scopePart = new ScopePart();
+            var method = new MethodDefinition(EType.Void, "skip")
+            {
+                new WhilePart("m_contents.length() > m_offset")
+                {
+                    new VariableDefinition(EType.Char, "c", "m_contents[m_offset]"),
+                    @"switch (c)",
+                    new ScopePart
+                    {
+                        @"case '\r':",
+                        @"case '\t':",
+                        @"case ' ': m_column++; m_offset++; break;",
+                        @"case '\n': m_line++; m_column = 1; m_offset++; break;",
+                        @"default:",
+                        scopePart,
+                    }
+                }
+            };
+            var wasMatchedVariable = toUnique("wasMatched");
+            scopePart.Add(new VariableDefinition(EType.Boolean, wasMatchedVariable, "false"));
+            foreach (var comment in parser.Comments)
+            {
+                var start = comment.Start!.ToLower() switch
+                {
+                    "eof" => "\0",
+                    "eol" => "\n",
+                    _ => comment.Start!
+                };
+                var end = comment.End!.ToLower() switch
+                {
+                    "eof" => "\0",
+                    "eol" => "\n",
+                    _ => comment.End!
+                };
+                var indexVariable = toUnique("i");
+                var ifPart = new IfPart(
+                    IfPart.EIfScope.If,
+                    String.Concat(
+                        $@"m_contents.length() > m_offset + {start.Length} && ",
+                        String.Join(" && ", start.Select((c, i) => $@"m_contents[m_offset + {i}] == '{c.Escape()}'"))
+                        ))
+                {
+                    $@"{wasMatchedVariable} = true;",
+                    $@"for (size_t {indexVariable} = 0; {indexVariable} < {start.Length}; {indexVariable}++)",
+                    new ScopePart
+                    {
+                        @"switch (m_contents[m_offset])",
+                        new ScopePart
+                        {
+                            @"case '\r':",
+                            @"case '\t':",
+                            @"case ' ': m_column++; m_offset++; break;",
+                            @"case '\n': m_line++; m_column = 1; m_offset++; break;",
+                            @"default: m_column++; m_offset++; break;"
+                        }
+                    },
+                    new WhilePart(String.Concat(
+                        $@"m_contents.length() > m_offset + {start.Length} && !(",
+                        String.Join(" && ", end.Select((c, i) => $@"m_contents[m_offset + {i}] == '{c.Escape()}'")),
+                        ")"
+                        ))
+                    {
+                        @"switch (m_contents[m_offset])",
+                        new ScopePart
+                        {
+                            @"case '\r':",
+                            @"case '\t':",
+                            @"case ' ': m_column++; m_offset++; break;",
+                            @"case '\n': m_line++; m_column = 1; m_offset++; break;",
+                            @"default: m_column++; m_offset++; break;"
+                        }
+                    },
+                    $@"for (size_t {indexVariable} = 0; {indexVariable} < {end.Length}; {indexVariable}++)",
+                    new ScopePart
+                    {
+                        @"switch (m_contents[m_offset])",
+                        new ScopePart
+                        {
+                            @"case '\r':",
+                            @"case '\t':",
+                            @"case ' ': m_column++; m_offset++; break;",
+                            @"case '\n': m_line++; m_column = 1; m_offset++; break;",
+                            @"default: m_column++; m_offset++; break;"
+                        }
+                    },
+                };
+                scopePart.Add(ifPart);
+            }
+            scopePart.Add(new IfPart(IfPart.EIfScope.If, String.Concat('!', wasMatchedVariable))
+            {
+                $@"return;",
+            });
+            return method;
         }
 
         public void RegisterRules(Validator validator)

@@ -43,7 +43,8 @@ namespace XCG.Generators.Cpp.Extensive
                     case Parsing.Statements.Print print:
                     case Parsing.Statements.Set set:
                     case Parsing.Statements.Get get:
-                    case Parsing.EOF:
+                    case Parsing.EndOfFile:
+                    case Parsing.EndOfLine:
                     case Parsing.Reference:
                         break;
                     default:
@@ -173,12 +174,51 @@ namespace XCG.Generators.Cpp.Extensive
                 PublicParts = new List<ICppPart>(captureDefinitions.Values)
             };
         }
-        public static IEnumerable<ICppPart> GetEvaluationResult(this Parsing.IStatement statement, CppOptions cppOptions, string stateTypeName, string variable, bool createVariable)
+        public static IEnumerable<ICppPart> GetEvaluationResult(this Parsing.IStatement statement, CppOptions cppOptions, string stateTypeName, string variable, bool createVariable, Func<string, string> toUnique)
         {
             switch (statement)
             {
                 default:
                     throw new NotImplementedException();
+                case Parsing.Token token:
+                    if (createVariable)
+                    {
+                        var lengthVariable = toUnique("l");
+                        var indexVariable = toUnique("i");
+                        yield return new VariableDefinition(EType.Boolean, variable, "false");
+                        yield return new FullBody { $@"auto {lengthVariable} = {token.GetMethodName()}(0);" };
+                        yield return new IfPart(IfPart.EIfScope.If, $@"{lengthVariable}.has_value()")
+                        {
+                            $@"for (auto {indexVariable} = {lengthVariable}.value(); {indexVariable} != 0; {indexVariable}--)",
+                            new ScopePart
+                            {
+                                "next();"
+                            },
+                            $@"skip();",
+                            $@"{variable} = true;",
+                        };
+                    }
+                    else
+                    {
+                        var lengthVariable = toUnique("l");
+                        var indexVariable = toUnique("i");
+                        yield return new FullBody { $@"auto {lengthVariable} = {token.GetMethodName()}(0);" };
+                        yield return new IfPart(IfPart.EIfScope.If, $@"{lengthVariable}.has_value()")
+                        {
+                            $@"for (auto {indexVariable} = {lengthVariable}.value(); {indexVariable} != 0; {indexVariable}--)",
+                            new ScopePart
+                            {
+                                "next();"
+                            },
+                            $@"skip();",
+                            $@"{variable} = true;",
+                        };
+                        yield return new IfPart(IfPart.EIfScope.Else, null)
+                        {
+                            $@"{variable} = false;",
+                        };
+                    }
+                    break;
                 case Parsing.Statements.Match match:
                     if (createVariable)
                     {
@@ -189,7 +229,7 @@ namespace XCG.Generators.Cpp.Extensive
                         yield return new FullBody { $@"{variable} = {cppOptions.FromCache(match).Name}(true, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable}, {Constants.depthVariable} + 1);" };
                     }
                     break;
-                case Parsing.EOF:
+                case Parsing.EndOfFile:
                     if (createVariable)
                     {
                         yield return new VariableDefinition(EType.Boolean, variable, $@"current() == '\0'");
@@ -197,6 +237,16 @@ namespace XCG.Generators.Cpp.Extensive
                     else
                     {
                         yield return new FullBody { $@"{variable} = current() == '\0';" };
+                    }
+                    break;
+                case Parsing.EndOfLine:
+                    if (createVariable)
+                    {
+                        yield return new VariableDefinition(EType.Boolean, variable, $@"current() == '\n'");
+                    }
+                    else
+                    {
+                        yield return new FullBody { $@"{variable} = current() == '\n';" };
                     }
                     break;
                 case Parsing.Statements.Get get:

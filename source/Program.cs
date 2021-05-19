@@ -145,6 +145,38 @@ namespace XCG
             #endregion
             #region Fixup References
             int generatedReferences = 0;
+            var endOfLineToken = new Parsing.Token
+            {
+                Identifier = "@eol",
+                Children = new List<Parsing.ITokenStatement>
+                {
+                    new Parsing.TokenStatements.Require
+                    {
+                        Negated = false,
+                        Range = new Parsing.Multiplicity(1, new Parsing.Diagnostic { Column = 0, File = "---auto-generated---", Line = 0, Offset = 0 }),
+                        Parts = new List<Parsing.IStatement>
+                        {
+                            new Parsing.Word("\n")
+                        }
+                    }
+                }
+            };
+            var endOfFileToken = new Parsing.Token
+            {
+                Identifier = "@eof",
+                Children = new List<Parsing.ITokenStatement>
+                {
+                    new Parsing.TokenStatements.Require
+                    {
+                        Negated = false,
+                        Range = new Parsing.Multiplicity(1, new Parsing.Diagnostic { Column = 0, File = "---auto-generated---", Line = 0, Offset = 0 }),
+                        Parts = new List<Parsing.IStatement>
+                        {
+                            new Parsing.Word("\0")
+                        }
+                    }
+                }
+            };
             foreach (var reference in parser.References)
             {
                 generatedReferences++;
@@ -152,7 +184,7 @@ namespace XCG
                 {
                     reference.CaptureName =  $"capture{generatedReferences}";
                 }
-                object? possibleActual;
+                Parsing.IStatement? possibleActual;
 
                 if (reference.IsAlias)
                 {
@@ -161,6 +193,25 @@ namespace XCG
                 }
                 else
                 {
+                    if (reference.Text.Equals("eol", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        reference.Refered = endOfLineToken;
+                        if (!parser.Tokens.Contains(endOfLineToken))
+                        {
+                            parser.Tokens.Add(endOfLineToken);
+                        }
+                        continue;
+                    }
+                    if (reference.Text.Equals("eof", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        reference.Refered = endOfFileToken;
+                        if (!parser.Tokens.Contains(endOfFileToken))
+                        {
+                            parser.Tokens.Add(endOfFileToken);
+                        }
+                        continue;
+                    }
+
                     possibleActual = parser.Tokens.FirstOrDefault((q) => q.Identifier == reference.Text);
                     if (possibleActual is not null) { reference.Refered = possibleActual; continue; }
 
@@ -786,6 +837,26 @@ namespace XCG
                     }
                 }
                 return hints;
+            });
+            // ensure all comments have start
+            validator.Register("XCG", ESeverity.Error, (parser) =>
+            {
+                return parser.Comments.Where((comment) => comment.Start is null).Select((comment) => new Validation.Hint
+                {
+                    Line = comment.Diagnostics.Line,
+                    File = comment.Diagnostics.File,
+                    Message = $@"Comment is lacking start."
+                });
+            });
+            // ensure all comments have end
+            validator.Register("XCG", ESeverity.Error, (parser) =>
+            {
+                return parser.Comments.Where((comment) => comment.End is null).Select((comment) => new Validation.Hint
+                {
+                    Line = comment.Diagnostics.Line,
+                    File = comment.Diagnostics.File,
+                    Message = $@"Comment is lacking end."
+                });
             });
         }
     }

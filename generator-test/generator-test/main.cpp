@@ -16,7 +16,7 @@ using namespace std::string_view_literals;
 
 int main()
 {
-    auto file = read_file_from_disk(WSFIX("examples/test.easyscript"));
+    auto file = read_file_from_disk(WSFIX("examples/example.ys"));
     if (file.has_value())
     {
         yaoosl::parsing::instance i(*file, "NA");
