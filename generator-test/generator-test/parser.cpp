@@ -4342,7 +4342,7 @@ bool yaoosl::parsing::instance::m_typeof_112(bool is_can, std::shared_ptr<yaoosl
     }
     resetable1.reset();
     auto val2 = p_match_typeof(depth + 1);
-    actual->value = val2;
+    actual->type = val2;
     skip();
     return true;
 }
@@ -4369,7 +4369,7 @@ bool yaoosl::parsing::instance::m_nameof_113(bool is_can, std::shared_ptr<yaoosl
     }
     resetable1.reset();
     auto val2 = p_match_nameof(depth + 1);
-    actual->value = val2;
+    actual->name = val2;
     skip();
     return true;
 }
@@ -4401,7 +4401,7 @@ bool yaoosl::parsing::instance::m_scalar_114(bool is_can, std::shared_ptr<yaoosl
     }
     resetable1.reset();
     auto val4 = create_token(token_scalar(depth + 1).value(), tok::SCALAR);
-    actual->value = val4;
+    actual->float_ = val4;
     skip();
     return true;
 }
@@ -4433,7 +4433,7 @@ bool yaoosl::parsing::instance::m_boolean_115(bool is_can, std::shared_ptr<yaoos
     }
     resetable1.reset();
     auto val4 = create_token(token_boolean(depth + 1).value(), tok::BOOLEAN);
-    actual->value = val4;
+    actual->bool_ = val4;
     skip();
     return true;
 }
@@ -4460,7 +4460,7 @@ bool yaoosl::parsing::instance::m_stringliteral_116(bool is_can, std::shared_ptr
     }
     resetable1.reset();
     auto val2 = p_match_string_literal(depth + 1);
-    actual->value = val2;
+    actual->string = val2;
     skip();
     return true;
 }
@@ -4492,7 +4492,7 @@ bool yaoosl::parsing::instance::m_integer_117(bool is_can, std::shared_ptr<yaoos
     }
     resetable1.reset();
     auto val4 = create_token(token_integer(depth + 1).value(), tok::INTEGER);
-    actual->value = val4;
+    actual->int_ = val4;
     skip();
     return true;
 }
@@ -4895,19 +4895,12 @@ bool yaoosl::parsing::instance::m_exclamation_expunary_124(bool is_can, std::sha
         return true;
     }
     resetable1.reset();
-    auto l5 = token__exclamation(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
+    auto val4 = create_token(token__exclamation(depth + 1).value(), tok::_EXCLAMATION);
+    actual->operator_ = val4;
     skip();
-    auto val6 = p_match_exp_unary(depth + 1);
-    actual->value = val6;
+    auto val5 = p_match_exp_unary(depth + 1);
+    actual->value = val5;
     skip();
-    if (!is_can)
-    {
-        actual->op = '!';
-    }
     return true;
 }
 bool yaoosl::parsing::instance::m_tilde_expunary_125(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth)
@@ -4951,19 +4944,12 @@ bool yaoosl::parsing::instance::m_tilde_expunary_125(bool is_can, std::shared_pt
         return true;
     }
     resetable1.reset();
-    auto l5 = token__tilde(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
+    auto val4 = create_token(token__tilde(depth + 1).value(), tok::_TILDE);
+    actual->operator_ = val4;
     skip();
-    auto val6 = p_match_exp_unary(depth + 1);
-    actual->value = val6;
+    auto val5 = p_match_exp_unary(depth + 1);
+    actual->value = val5;
     skip();
-    if (!is_can)
-    {
-        actual->op = '~';
-    }
     return true;
 }
 bool yaoosl::parsing::instance::m_minus_expunary_126(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth)
@@ -5007,19 +4993,12 @@ bool yaoosl::parsing::instance::m_minus_expunary_126(bool is_can, std::shared_pt
         return true;
     }
     resetable1.reset();
-    auto l5 = token_minus(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
+    auto val4 = create_token(token_minus(depth + 1).value(), tok::MINUS);
+    actual->operator_ = val4;
     skip();
-    auto val6 = p_match_exp_unary(depth + 1);
-    actual->value = val6;
+    auto val5 = p_match_exp_unary(depth + 1);
+    actual->value = val5;
     skip();
-    if (!is_can)
-    {
-        actual->op = '-';
-    }
     return true;
 }
 bool yaoosl::parsing::instance::m_plus_expunary_127(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth)
@@ -5063,19 +5042,12 @@ bool yaoosl::parsing::instance::m_plus_expunary_127(bool is_can, std::shared_ptr
         return true;
     }
     resetable1.reset();
-    auto l5 = token_plus(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
+    auto val4 = create_token(token_plus(depth + 1).value(), tok::PLUS);
+    actual->operator_ = val4;
     skip();
-    auto val6 = p_match_exp_unary(depth + 1);
-    actual->value = val6;
+    auto val5 = p_match_exp_unary(depth + 1);
+    actual->value = val5;
     skip();
-    if (!is_can)
-    {
-        actual->op = '+';
-    }
     return true;
 }
 bool yaoosl::parsing::instance::m_expnullar_128(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth)
@@ -8289,11 +8261,8 @@ bool yaoosl::parsing::instance::m_public_189(bool is_can, std::shared_ptr<yaoosl
         return true;
     }
     resetable1.reset();
-    auto l5 = token__public(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
+    auto val4 = create_token(token__public(depth + 1).value(), tok::_PUBLIC);
+    actual->tok = val4;
     skip();
     return true;
 }
@@ -8324,11 +8293,8 @@ bool yaoosl::parsing::instance::m_local_190(bool is_can, std::shared_ptr<yaoosl:
         return true;
     }
     resetable1.reset();
-    auto l5 = token__local(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
+    auto val4 = create_token(token__local(depth + 1).value(), tok::_LOCAL);
+    actual->tok = val4;
     skip();
     return true;
 }
@@ -8359,11 +8325,8 @@ bool yaoosl::parsing::instance::m_derived_191(bool is_can, std::shared_ptr<yaoos
         return true;
     }
     resetable1.reset();
-    auto l5 = token__derived(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
+    auto val4 = create_token(token__derived(depth + 1).value(), tok::_DERIVED);
+    actual->tok = val4;
     skip();
     return true;
 }
@@ -8394,11 +8357,8 @@ bool yaoosl::parsing::instance::m_private_192(bool is_can, std::shared_ptr<yaoos
         return true;
     }
     resetable1.reset();
-    auto l5 = token__private(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
+    auto val4 = create_token(token__private(depth + 1).value(), tok::_PRIVATE);
+    actual->tok = val4;
     skip();
     return true;
 }
@@ -8634,7 +8594,7 @@ bool yaoosl::parsing::instance::m_namespace_197(bool is_can, std::shared_ptr<yao
     }
     resetable1.reset();
     auto val2 = p_match_namespace_(depth + 1);
-    actual->contents.push_back(val2);
+    actual->namespaces.push_back(val2);
     skip();
     return true;
 }
@@ -8661,7 +8621,7 @@ bool yaoosl::parsing::instance::m_conversion_198(bool is_can, std::shared_ptr<ya
     }
     resetable1.reset();
     auto val2 = p_match_conversion(depth + 1);
-    actual->contents.push_back(val2);
+    actual->conversions.push_back(val2);
     skip();
     return true;
 }
@@ -8688,7 +8648,7 @@ bool yaoosl::parsing::instance::m_class_199(bool is_can, std::shared_ptr<yaoosl:
     }
     resetable1.reset();
     auto val2 = p_match_class_(depth + 1);
-    actual->contents.push_back(val2);
+    actual->classes.push_back(val2);
     skip();
     return true;
 }
@@ -8715,7 +8675,7 @@ bool yaoosl::parsing::instance::m_method_200(bool is_can, std::shared_ptr<yaoosl
     }
     resetable1.reset();
     auto val2 = p_match_method(depth + 1);
-    actual->contents.push_back(val2);
+    actual->methods.push_back(val2);
     skip();
     return true;
 }
@@ -9100,7 +9060,7 @@ bool yaoosl::parsing::instance::m_indexer_208(bool is_can, std::shared_ptr<yaoos
     }
     resetable1.reset();
     auto val2 = p_match_indexer(depth + 1);
-    actual->contents.push_back(val2);
+    actual->indexers.push_back(val2);
     skip();
     return true;
 }
@@ -9127,7 +9087,7 @@ bool yaoosl::parsing::instance::m_operatorbinaryoverload_209(bool is_can, std::s
     }
     resetable1.reset();
     auto val2 = p_match_operator_binary_overload(depth + 1);
-    actual->contents.push_back(val2);
+    actual->operators_binary.push_back(val2);
     skip();
     return true;
 }
@@ -9154,7 +9114,7 @@ bool yaoosl::parsing::instance::m_operatorunaryoverload_210(bool is_can, std::sh
     }
     resetable1.reset();
     auto val2 = p_match_operator_unary_overload(depth + 1);
-    actual->contents.push_back(val2);
+    actual->operators_unary.push_back(val2);
     skip();
     return true;
 }
@@ -9181,7 +9141,7 @@ bool yaoosl::parsing::instance::m_conversion_211(bool is_can, std::shared_ptr<ya
     }
     resetable1.reset();
     auto val2 = p_match_conversion(depth + 1);
-    actual->contents.push_back(val2);
+    actual->conversions.push_back(val2);
     skip();
     return true;
 }
@@ -9208,7 +9168,7 @@ bool yaoosl::parsing::instance::m_class_212(bool is_can, std::shared_ptr<yaoosl:
     }
     resetable1.reset();
     auto val2 = p_match_class_(depth + 1);
-    actual->contents.push_back(val2);
+    actual->classes.push_back(val2);
     skip();
     return true;
 }
@@ -9235,7 +9195,7 @@ bool yaoosl::parsing::instance::m_constructor_213(bool is_can, std::shared_ptr<y
     }
     resetable1.reset();
     auto val2 = p_match_constructor(depth + 1);
-    actual->contents.push_back(val2);
+    actual->constructors.push_back(val2);
     skip();
     return true;
 }
@@ -9262,7 +9222,7 @@ bool yaoosl::parsing::instance::m_destructor_214(bool is_can, std::shared_ptr<ya
     }
     resetable1.reset();
     auto val2 = p_match_destructor(depth + 1);
-    actual->contents.push_back(val2);
+    actual->destructors.push_back(val2);
     skip();
     return true;
 }
@@ -9289,7 +9249,7 @@ bool yaoosl::parsing::instance::m_copystructor_215(bool is_can, std::shared_ptr<
     }
     resetable1.reset();
     auto val2 = p_match_copystructor(depth + 1);
-    actual->contents.push_back(val2);
+    actual->copystructors.push_back(val2);
     skip();
     return true;
 }
@@ -9316,7 +9276,7 @@ bool yaoosl::parsing::instance::m_property_216(bool is_can, std::shared_ptr<yaoo
     }
     resetable1.reset();
     auto val2 = p_match_property(depth + 1);
-    actual->contents.push_back(val2);
+    actual->properties.push_back(val2);
     skip();
     return true;
 }
@@ -9343,7 +9303,7 @@ bool yaoosl::parsing::instance::m_method_217(bool is_can, std::shared_ptr<yaoosl
     }
     resetable1.reset();
     auto val2 = p_match_method(depth + 1);
-    actual->contents.push_back(val2);
+    actual->methods.push_back(val2);
     skip();
     return true;
 }
@@ -14427,7 +14387,7 @@ bool yaoosl::parsing::instance::m_namespace_321(bool is_can, std::shared_ptr<yao
     }
     resetable1.reset();
     auto val2 = p_match_namespace_(depth + 1);
-    actual->contents.push_back(val2);
+    actual->namespaces.push_back(val2);
     skip();
     return true;
 }
@@ -14454,7 +14414,7 @@ bool yaoosl::parsing::instance::m_conversion_322(bool is_can, std::shared_ptr<ya
     }
     resetable1.reset();
     auto val2 = p_match_conversion(depth + 1);
-    actual->contents.push_back(val2);
+    actual->conversions.push_back(val2);
     skip();
     return true;
 }
@@ -14481,7 +14441,7 @@ bool yaoosl::parsing::instance::m_class_323(bool is_can, std::shared_ptr<yaoosl:
     }
     resetable1.reset();
     auto val2 = p_match_class_(depth + 1);
-    actual->contents.push_back(val2);
+    actual->classes.push_back(val2);
     skip();
     return true;
 }
@@ -14508,7 +14468,7 @@ bool yaoosl::parsing::instance::m_method_324(bool is_can, std::shared_ptr<yaoosl
     }
     resetable1.reset();
     auto val2 = p_match_method(depth + 1);
-    actual->contents.push_back(val2);
+    actual->methods.push_back(val2);
     skip();
     return true;
 }
@@ -15263,19 +15223,12 @@ bool yaoosl::parsing::instance::m_expbinary3_lessthenlessthen_expunary_337(bool 
         return true;
     }
     resetable1.reset();
-    auto l5 = token__less_then_less_then(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
+    auto val4 = create_token(token__less_then_less_then(depth + 1).value(), tok::_LESS_THEN_LESS_THEN);
+    actual->operator_ = val4;
     skip();
-    auto val6 = p_match_exp_unary(depth + 1);
-    actual->right = val6;
+    auto val5 = p_match_exp_unary(depth + 1);
+    actual->right = val5;
     skip();
-    if (!is_can)
-    {
-        actual->is_double_left = true;
-    }
     return true;
 }
 bool yaoosl::parsing::instance::m_expbinary3_greaterthengreaterthen_expunary_338(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_3>& actual, yaoosl::parsing::instance::exp_binary_3_state& state, size_t depth)
@@ -15319,19 +15272,12 @@ bool yaoosl::parsing::instance::m_expbinary3_greaterthengreaterthen_expunary_338
         return true;
     }
     resetable1.reset();
-    auto l5 = token__greater_then_greater_then(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
+    auto val4 = create_token(token__greater_then_greater_then(depth + 1).value(), tok::_GREATER_THEN_GREATER_THEN);
+    actual->operator_ = val4;
     skip();
-    auto val6 = p_match_exp_unary(depth + 1);
-    actual->right = val6;
+    auto val5 = p_match_exp_unary(depth + 1);
+    actual->right = val5;
     skip();
-    if (!is_can)
-    {
-        actual->is_double_left = true;
-    }
     return true;
 }
 bool yaoosl::parsing::instance::m_expbinary3_lessthenlessthenlessthen_expunary_339(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_3>& actual, yaoosl::parsing::instance::exp_binary_3_state& state, size_t depth)
@@ -15375,19 +15321,12 @@ bool yaoosl::parsing::instance::m_expbinary3_lessthenlessthenlessthen_expunary_3
         return true;
     }
     resetable1.reset();
-    auto l5 = token__less_then_less_then_less_then(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
+    auto val4 = create_token(token__less_then_less_then_less_then(depth + 1).value(), tok::_LESS_THEN_LESS_THEN_LESS_THEN);
+    actual->operator_ = val4;
     skip();
-    auto val6 = p_match_exp_unary(depth + 1);
-    actual->right = val6;
+    auto val5 = p_match_exp_unary(depth + 1);
+    actual->right = val5;
     skip();
-    if (!is_can)
-    {
-        actual->is_tripple_left = true;
-    }
     return true;
 }
 bool yaoosl::parsing::instance::m_expbinary3_greaterthengreaterthengreaterthen_expunary_340(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_3>& actual, yaoosl::parsing::instance::exp_binary_3_state& state, size_t depth)
@@ -15431,19 +15370,12 @@ bool yaoosl::parsing::instance::m_expbinary3_greaterthengreaterthengreaterthen_e
         return true;
     }
     resetable1.reset();
-    auto l5 = token__greater_then_greater_then_greater_then(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
+    auto val4 = create_token(token__greater_then_greater_then_greater_then(depth + 1).value(), tok::_GREATER_THEN_GREATER_THEN_GREATER_THEN);
+    actual->operator_ = val4;
     skip();
-    auto val6 = p_match_exp_unary(depth + 1);
-    actual->right = val6;
+    auto val5 = p_match_exp_unary(depth + 1);
+    actual->right = val5;
     skip();
-    if (!is_can)
-    {
-        actual->is_tripple_right = true;
-    }
     return true;
 }
 bool yaoosl::parsing::instance::m_expunary_341(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_3>& actual, yaoosl::parsing::instance::exp_binary_3_state& state, size_t depth)
@@ -15616,19 +15548,12 @@ bool yaoosl::parsing::instance::m_expbinary2_ampersand_expbinary3_342(bool is_ca
         return true;
     }
     resetable1.reset();
-    auto l5 = token__ampersand(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
+    auto val4 = create_token(token__ampersand(depth + 1).value(), tok::_AMPERSAND);
+    actual->operator_ = val4;
     skip();
-    auto val6 = lr_match_exp_binary_3(depth + 1);
-    actual->right = val6;
+    auto val5 = lr_match_exp_binary_3(depth + 1);
+    actual->right = val5;
     skip();
-    if (!is_can)
-    {
-        actual->op = '&';
-    }
     return true;
 }
 bool yaoosl::parsing::instance::m_expbinary3_343(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_2>& actual, yaoosl::parsing::instance::exp_binary_2_state& state, size_t depth)
@@ -15756,19 +15681,12 @@ bool yaoosl::parsing::instance::m_expbinary1_verticalbar_expbinary2_344(bool is_
         return true;
     }
     resetable1.reset();
-    auto l5 = token__vertical_bar(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
+    auto val4 = create_token(token__vertical_bar(depth + 1).value(), tok::_VERTICAL_BAR);
+    actual->operator_ = val4;
     skip();
-    auto val6 = lr_match_exp_binary_2(depth + 1);
-    actual->right = val6;
+    auto val5 = lr_match_exp_binary_2(depth + 1);
+    actual->right = val5;
     skip();
-    if (!is_can)
-    {
-        actual->op = '|';
-    }
     return true;
 }
 bool yaoosl::parsing::instance::m_expbinary2_345(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_1>& actual, yaoosl::parsing::instance::exp_binary_1_state& state, size_t depth)
@@ -15896,19 +15814,12 @@ bool yaoosl::parsing::instance::m_exparithmetic2_slash_expbinary1_346(bool is_ca
         return true;
     }
     resetable1.reset();
-    auto l5 = token_slash(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
+    auto val4 = create_token(token_slash(depth + 1).value(), tok::SLASH);
+    actual->operator_ = val4;
     skip();
-    auto val6 = lr_match_exp_binary_1(depth + 1);
-    actual->right = val6;
+    auto val5 = lr_match_exp_binary_1(depth + 1);
+    actual->right = val5;
     skip();
-    if (!is_can)
-    {
-        actual->op = '/';
-    }
     return true;
 }
 bool yaoosl::parsing::instance::m_exparithmetic2_star_expbinary1_347(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2>& actual, yaoosl::parsing::instance::exp_arithmetic_2_state& state, size_t depth)
@@ -15952,19 +15863,12 @@ bool yaoosl::parsing::instance::m_exparithmetic2_star_expbinary1_347(bool is_can
         return true;
     }
     resetable1.reset();
-    auto l5 = token_star(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
+    auto val4 = create_token(token_star(depth + 1).value(), tok::STAR);
+    actual->operator_ = val4;
     skip();
-    auto val6 = lr_match_exp_binary_1(depth + 1);
-    actual->right = val6;
+    auto val5 = lr_match_exp_binary_1(depth + 1);
+    actual->right = val5;
     skip();
-    if (!is_can)
-    {
-        actual->op = '*';
-    }
     return true;
 }
 bool yaoosl::parsing::instance::m_expbinary1_348(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2>& actual, yaoosl::parsing::instance::exp_arithmetic_2_state& state, size_t depth)
@@ -16107,19 +16011,12 @@ bool yaoosl::parsing::instance::m_exparithmetic1_plus_exparithmetic2_349(bool is
         return true;
     }
     resetable1.reset();
-    auto l5 = token_plus(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
+    auto val4 = create_token(token_plus(depth + 1).value(), tok::PLUS);
+    actual->operator_ = val4;
     skip();
-    auto val6 = lr_match_exp_arithmetic_2(depth + 1);
-    actual->right = val6;
+    auto val5 = lr_match_exp_arithmetic_2(depth + 1);
+    actual->right = val5;
     skip();
-    if (!is_can)
-    {
-        actual->op = '+';
-    }
     return true;
 }
 bool yaoosl::parsing::instance::m_exparithmetic1_minus_exparithmetic2_350(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1>& actual, yaoosl::parsing::instance::exp_arithmetic_1_state& state, size_t depth)
@@ -16163,19 +16060,12 @@ bool yaoosl::parsing::instance::m_exparithmetic1_minus_exparithmetic2_350(bool i
         return true;
     }
     resetable1.reset();
-    auto l5 = token_minus(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
+    auto val4 = create_token(token_minus(depth + 1).value(), tok::MINUS);
+    actual->operator_ = val4;
     skip();
-    auto val6 = lr_match_exp_arithmetic_2(depth + 1);
-    actual->right = val6;
+    auto val5 = lr_match_exp_arithmetic_2(depth + 1);
+    actual->right = val5;
     skip();
-    if (!is_can)
-    {
-        actual->op = '-';
-    }
     return true;
 }
 bool yaoosl::parsing::instance::m_exparithmetic2_351(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1>& actual, yaoosl::parsing::instance::exp_arithmetic_1_state& state, size_t depth)
@@ -16318,23 +16208,12 @@ bool yaoosl::parsing::instance::m_expcompare_lessthenequal_exparithmetic1_352(bo
         return true;
     }
     resetable1.reset();
-    auto l5 = token__less_then_equal(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
+    auto val4 = create_token(token__less_then_equal(depth + 1).value(), tok::_LESS_THEN_EQUAL);
+    actual->operator_ = val4;
     skip();
-    auto val6 = lr_match_exp_arithmetic_1(depth + 1);
-    actual->right = val6;
+    auto val5 = lr_match_exp_arithmetic_1(depth + 1);
+    actual->right = val5;
     skip();
-    if (!is_can)
-    {
-        actual->op1 = '<';
-    }
-    if (!is_can)
-    {
-        actual->op2 = '=';
-    }
     return true;
 }
 bool yaoosl::parsing::instance::m_expcompare_lessthen_exparithmetic1_353(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth)
@@ -16378,19 +16257,12 @@ bool yaoosl::parsing::instance::m_expcompare_lessthen_exparithmetic1_353(bool is
         return true;
     }
     resetable1.reset();
-    auto l5 = token__less_then(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
+    auto val4 = create_token(token__less_then(depth + 1).value(), tok::_LESS_THEN);
+    actual->operator_ = val4;
     skip();
-    auto val6 = lr_match_exp_arithmetic_1(depth + 1);
-    actual->right = val6;
+    auto val5 = lr_match_exp_arithmetic_1(depth + 1);
+    actual->right = val5;
     skip();
-    if (!is_can)
-    {
-        actual->op1 = '<';
-    }
     return true;
 }
 bool yaoosl::parsing::instance::m_expcompare_greaterthenequal_exparithmetic1_354(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth)
@@ -16434,23 +16306,12 @@ bool yaoosl::parsing::instance::m_expcompare_greaterthenequal_exparithmetic1_354
         return true;
     }
     resetable1.reset();
-    auto l5 = token__greater_then_equal(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
+    auto val4 = create_token(token__greater_then_equal(depth + 1).value(), tok::_GREATER_THEN_EQUAL);
+    actual->operator_ = val4;
     skip();
-    auto val6 = lr_match_exp_arithmetic_1(depth + 1);
-    actual->right = val6;
+    auto val5 = lr_match_exp_arithmetic_1(depth + 1);
+    actual->right = val5;
     skip();
-    if (!is_can)
-    {
-        actual->op1 = '>';
-    }
-    if (!is_can)
-    {
-        actual->op2 = '=';
-    }
     return true;
 }
 bool yaoosl::parsing::instance::m_expcompare_greaterthen_exparithmetic1_355(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth)
@@ -16494,19 +16355,12 @@ bool yaoosl::parsing::instance::m_expcompare_greaterthen_exparithmetic1_355(bool
         return true;
     }
     resetable1.reset();
-    auto l5 = token__greater_then(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
+    auto val4 = create_token(token__greater_then(depth + 1).value(), tok::_GREATER_THEN);
+    actual->operator_ = val4;
     skip();
-    auto val6 = lr_match_exp_arithmetic_1(depth + 1);
-    actual->right = val6;
+    auto val5 = lr_match_exp_arithmetic_1(depth + 1);
+    actual->right = val5;
     skip();
-    if (!is_can)
-    {
-        actual->op1 = '>';
-    }
     return true;
 }
 bool yaoosl::parsing::instance::m_exparithmetic1_356(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth)
@@ -16679,23 +16533,12 @@ bool yaoosl::parsing::instance::m_expequality_lessthenequal_expcompare_357(bool 
         return true;
     }
     resetable1.reset();
-    auto l5 = token__less_then_equal(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
+    auto val4 = create_token(token__less_then_equal(depth + 1).value(), tok::_LESS_THEN_EQUAL);
+    actual->operator_ = val4;
     skip();
-    auto val6 = lr_match_exp_compare(depth + 1);
-    actual->right = val6;
+    auto val5 = lr_match_exp_compare(depth + 1);
+    actual->right = val5;
     skip();
-    if (!is_can)
-    {
-        actual->op1 = '<';
-    }
-    if (!is_can)
-    {
-        actual->op2 = '=';
-    }
     return true;
 }
 bool yaoosl::parsing::instance::m_expequality_lessthen_expcompare_358(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth)
@@ -16739,19 +16582,12 @@ bool yaoosl::parsing::instance::m_expequality_lessthen_expcompare_358(bool is_ca
         return true;
     }
     resetable1.reset();
-    auto l5 = token__less_then(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
+    auto val4 = create_token(token__less_then(depth + 1).value(), tok::_LESS_THEN);
+    actual->operator_ = val4;
     skip();
-    auto val6 = lr_match_exp_compare(depth + 1);
-    actual->right = val6;
+    auto val5 = lr_match_exp_compare(depth + 1);
+    actual->right = val5;
     skip();
-    if (!is_can)
-    {
-        actual->op1 = '<';
-    }
     return true;
 }
 bool yaoosl::parsing::instance::m_expequality_greaterthenequal_expcompare_359(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth)
@@ -16795,23 +16631,12 @@ bool yaoosl::parsing::instance::m_expequality_greaterthenequal_expcompare_359(bo
         return true;
     }
     resetable1.reset();
-    auto l5 = token__greater_then_equal(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
+    auto val4 = create_token(token__greater_then_equal(depth + 1).value(), tok::_GREATER_THEN_EQUAL);
+    actual->operator_ = val4;
     skip();
-    auto val6 = lr_match_exp_compare(depth + 1);
-    actual->right = val6;
+    auto val5 = lr_match_exp_compare(depth + 1);
+    actual->right = val5;
     skip();
-    if (!is_can)
-    {
-        actual->op1 = '>';
-    }
-    if (!is_can)
-    {
-        actual->op2 = '=';
-    }
     return true;
 }
 bool yaoosl::parsing::instance::m_expequality_greaterthen_expcompare_360(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth)
@@ -16855,19 +16680,12 @@ bool yaoosl::parsing::instance::m_expequality_greaterthen_expcompare_360(bool is
         return true;
     }
     resetable1.reset();
-    auto l5 = token__greater_then(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
+    auto val4 = create_token(token__greater_then(depth + 1).value(), tok::_GREATER_THEN);
+    actual->operator_ = val4;
     skip();
-    auto val6 = lr_match_exp_compare(depth + 1);
-    actual->right = val6;
+    auto val5 = lr_match_exp_compare(depth + 1);
+    actual->right = val5;
     skip();
-    if (!is_can)
-    {
-        actual->op1 = '>';
-    }
     return true;
 }
 bool yaoosl::parsing::instance::m_expcompare_361(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth)
@@ -17804,48 +17622,39 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
 {
     std::vector<std::string> output;
     output.push_back("exp_value:");
-    switch (node->value.index())
+    if (node->type)
     {
-        case 0:
-        if (std::get<std::shared_ptr<typeof>>(node->value))
+        auto lines = create_string_tree(node->type, contents);
+        bool first = true;
+        for (auto line : lines)
         {
-            auto lines = create_string_tree(std::get<std::shared_ptr<typeof>>(node->value), contents);
-            bool first = true;
-            for (auto line : lines)
-            {
-                output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [value]" "\u001b[0m" : line));
-                first = false;
-            }
+            output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [type]" "\u001b[0m" : line));
+            first = false;
         }
-        break;
-        case 1:
-        if (std::get<std::shared_ptr<nameof>>(node->value))
-        {
-            auto lines = create_string_tree(std::get<std::shared_ptr<nameof>>(node->value), contents);
-            bool first = true;
-            for (auto line : lines)
-            {
-                output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [value]" "\u001b[0m" : line));
-                first = false;
-            }
-        }
-        break;
-        case 2:
-        output.push_back(std::string("  ") + "token (L" + std::to_string(std::get<token>(node->value).line) + "; C" + std::to_string(std::get<token>(node->value).column) + "; O" + std::to_string(std::get<token>(node->value).offset) + ") `" + std::string(contents.substr(std::get<token>(node->value).offset, std::get<token>(node->value).length).begin(), contents.substr(std::get<token>(node->value).offset, std::get<token>(node->value).length).end()) + "`");
-        break;
-        case 3:
-        if (std::get<std::shared_ptr<string_literal>>(node->value))
-        {
-            auto lines = create_string_tree(std::get<std::shared_ptr<string_literal>>(node->value), contents);
-            bool first = true;
-            for (auto line : lines)
-            {
-                output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [value]" "\u001b[0m" : line));
-                first = false;
-            }
-        }
-        break;
     }
+    if (node->name)
+    {
+        auto lines = create_string_tree(node->name, contents);
+        bool first = true;
+        for (auto line : lines)
+        {
+            output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [name]" "\u001b[0m" : line));
+            first = false;
+        }
+    }
+    output.push_back(std::string("  ") + "token (L" + std::to_string(node->float_.line) + "; C" + std::to_string(node->float_.column) + "; O" + std::to_string(node->float_.offset) + ") `" + std::string(contents.substr(node->float_.offset, node->float_.length).begin(), contents.substr(node->float_.offset, node->float_.length).end()) + "`");
+    output.push_back(std::string("  ") + "token (L" + std::to_string(node->bool_.line) + "; C" + std::to_string(node->bool_.column) + "; O" + std::to_string(node->bool_.offset) + ") `" + std::string(contents.substr(node->bool_.offset, node->bool_.length).begin(), contents.substr(node->bool_.offset, node->bool_.length).end()) + "`");
+    if (node->string)
+    {
+        auto lines = create_string_tree(node->string, contents);
+        bool first = true;
+        for (auto line : lines)
+        {
+            output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [string]" "\u001b[0m" : line));
+            first = false;
+        }
+    }
+    output.push_back(std::string("  ") + "token (L" + std::to_string(node->int_.line) + "; C" + std::to_string(node->int_.column) + "; O" + std::to_string(node->int_.offset) + ") `" + std::string(contents.substr(node->int_.offset, node->int_.length).begin(), contents.substr(node->int_.offset, node->int_.length).end()) + "`");
     return output;
 }
 std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shared_ptr<exp_nullar> node, std::string_view contents)
@@ -17909,10 +17718,7 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
 {
     std::vector<std::string> output;
     output.push_back("exp_unary:");
-    if (node->op.has_value())
-    {
-        output.push_back(std::string("  ") + "`" + node->op.value() + "`");
-    }
+    output.push_back(std::string("  ") + "token (L" + std::to_string(node->operator_.line) + "; C" + std::to_string(node->operator_.column) + "; O" + std::to_string(node->operator_.offset) + ") `" + std::string(contents.substr(node->operator_.offset, node->operator_.length).begin(), contents.substr(node->operator_.offset, node->operator_.length).end()) + "`");
     switch (node->value.index())
     {
         case 0:
@@ -18355,6 +18161,7 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
 {
     std::vector<std::string> output;
     output.push_back("encapsulation:");
+    output.push_back(std::string("  ") + "token (L" + std::to_string(node->tok.line) + "; C" + std::to_string(node->tok.column) + "; O" + std::to_string(node->tok.offset) + ") `" + std::string(contents.substr(node->tok.offset, node->tok.length).begin(), contents.substr(node->tok.offset, node->tok.length).end()) + "`");
     return output;
 }
 std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shared_ptr<namespace_> node, std::string_view contents)
@@ -18371,58 +18178,56 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
             first = false;
         }
     }
-    for (auto element : node->contents)
+    for (auto element : node->namespaces)
     {
-        switch (element.index())
+        if (element)
         {
-            case 0:
-            if (std::get<std::shared_ptr<namespace_>>(element))
+            auto lines = create_string_tree(element, contents);
+            bool first = true;
+            for (auto line : lines)
             {
-                auto lines = create_string_tree(std::get<std::shared_ptr<namespace_>>(element), contents);
-                bool first = true;
-                for (auto line : lines)
-                {
-                    output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [contents]" "\u001b[0m" : line));
-                    first = false;
-                }
+                output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [namespaces]" "\u001b[0m" : line));
+                first = false;
             }
-            break;
-            case 1:
-            if (std::get<std::shared_ptr<conversion>>(element))
+        }
+    }
+    for (auto element : node->conversions)
+    {
+        if (element)
+        {
+            auto lines = create_string_tree(element, contents);
+            bool first = true;
+            for (auto line : lines)
             {
-                auto lines = create_string_tree(std::get<std::shared_ptr<conversion>>(element), contents);
-                bool first = true;
-                for (auto line : lines)
-                {
-                    output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [contents]" "\u001b[0m" : line));
-                    first = false;
-                }
+                output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [conversions]" "\u001b[0m" : line));
+                first = false;
             }
-            break;
-            case 2:
-            if (std::get<std::shared_ptr<class_>>(element))
+        }
+    }
+    for (auto element : node->classes)
+    {
+        if (element)
+        {
+            auto lines = create_string_tree(element, contents);
+            bool first = true;
+            for (auto line : lines)
             {
-                auto lines = create_string_tree(std::get<std::shared_ptr<class_>>(element), contents);
-                bool first = true;
-                for (auto line : lines)
-                {
-                    output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [contents]" "\u001b[0m" : line));
-                    first = false;
-                }
+                output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [classes]" "\u001b[0m" : line));
+                first = false;
             }
-            break;
-            case 3:
-            if (std::get<std::shared_ptr<method>>(element))
+        }
+    }
+    for (auto element : node->methods)
+    {
+        if (element)
+        {
+            auto lines = create_string_tree(element, contents);
+            bool first = true;
+            for (auto line : lines)
             {
-                auto lines = create_string_tree(std::get<std::shared_ptr<method>>(element), contents);
-                bool first = true;
-                for (auto line : lines)
-                {
-                    output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [contents]" "\u001b[0m" : line));
-                    first = false;
-                }
+                output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [methods]" "\u001b[0m" : line));
+                first = false;
             }
-            break;
         }
     }
     return output;
@@ -18442,130 +18247,134 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
         }
     }
     output.push_back(std::string("  ") + "token (L" + std::to_string(node->name.line) + "; C" + std::to_string(node->name.column) + "; O" + std::to_string(node->name.offset) + ") `" + std::string(contents.substr(node->name.offset, node->name.length).begin(), contents.substr(node->name.offset, node->name.length).end()) + "`");
-    for (auto element : node->contents)
+    for (auto element : node->indexers)
     {
-        switch (element.index())
+        if (element)
         {
-            case 0:
-            if (std::get<std::shared_ptr<indexer>>(element))
+            auto lines = create_string_tree(element, contents);
+            bool first = true;
+            for (auto line : lines)
             {
-                auto lines = create_string_tree(std::get<std::shared_ptr<indexer>>(element), contents);
-                bool first = true;
-                for (auto line : lines)
-                {
-                    output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [contents]" "\u001b[0m" : line));
-                    first = false;
-                }
+                output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [indexers]" "\u001b[0m" : line));
+                first = false;
             }
-            break;
-            case 1:
-            if (std::get<std::shared_ptr<operator_binary_overload>>(element))
+        }
+    }
+    for (auto element : node->operators_binary)
+    {
+        if (element)
+        {
+            auto lines = create_string_tree(element, contents);
+            bool first = true;
+            for (auto line : lines)
             {
-                auto lines = create_string_tree(std::get<std::shared_ptr<operator_binary_overload>>(element), contents);
-                bool first = true;
-                for (auto line : lines)
-                {
-                    output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [contents]" "\u001b[0m" : line));
-                    first = false;
-                }
+                output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [operators_binary]" "\u001b[0m" : line));
+                first = false;
             }
-            break;
-            case 2:
-            if (std::get<std::shared_ptr<operator_unary_overload>>(element))
+        }
+    }
+    for (auto element : node->operators_unary)
+    {
+        if (element)
+        {
+            auto lines = create_string_tree(element, contents);
+            bool first = true;
+            for (auto line : lines)
             {
-                auto lines = create_string_tree(std::get<std::shared_ptr<operator_unary_overload>>(element), contents);
-                bool first = true;
-                for (auto line : lines)
-                {
-                    output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [contents]" "\u001b[0m" : line));
-                    first = false;
-                }
+                output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [operators_unary]" "\u001b[0m" : line));
+                first = false;
             }
-            break;
-            case 3:
-            if (std::get<std::shared_ptr<conversion>>(element))
+        }
+    }
+    for (auto element : node->conversions)
+    {
+        if (element)
+        {
+            auto lines = create_string_tree(element, contents);
+            bool first = true;
+            for (auto line : lines)
             {
-                auto lines = create_string_tree(std::get<std::shared_ptr<conversion>>(element), contents);
-                bool first = true;
-                for (auto line : lines)
-                {
-                    output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [contents]" "\u001b[0m" : line));
-                    first = false;
-                }
+                output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [conversions]" "\u001b[0m" : line));
+                first = false;
             }
-            break;
-            case 4:
-            if (std::get<std::shared_ptr<class_>>(element))
+        }
+    }
+    for (auto element : node->classes)
+    {
+        if (element)
+        {
+            auto lines = create_string_tree(element, contents);
+            bool first = true;
+            for (auto line : lines)
             {
-                auto lines = create_string_tree(std::get<std::shared_ptr<class_>>(element), contents);
-                bool first = true;
-                for (auto line : lines)
-                {
-                    output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [contents]" "\u001b[0m" : line));
-                    first = false;
-                }
+                output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [classes]" "\u001b[0m" : line));
+                first = false;
             }
-            break;
-            case 5:
-            if (std::get<std::shared_ptr<constructor>>(element))
+        }
+    }
+    for (auto element : node->constructors)
+    {
+        if (element)
+        {
+            auto lines = create_string_tree(element, contents);
+            bool first = true;
+            for (auto line : lines)
             {
-                auto lines = create_string_tree(std::get<std::shared_ptr<constructor>>(element), contents);
-                bool first = true;
-                for (auto line : lines)
-                {
-                    output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [contents]" "\u001b[0m" : line));
-                    first = false;
-                }
+                output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [constructors]" "\u001b[0m" : line));
+                first = false;
             }
-            break;
-            case 6:
-            if (std::get<std::shared_ptr<destructor>>(element))
+        }
+    }
+    for (auto element : node->destructors)
+    {
+        if (element)
+        {
+            auto lines = create_string_tree(element, contents);
+            bool first = true;
+            for (auto line : lines)
             {
-                auto lines = create_string_tree(std::get<std::shared_ptr<destructor>>(element), contents);
-                bool first = true;
-                for (auto line : lines)
-                {
-                    output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [contents]" "\u001b[0m" : line));
-                    first = false;
-                }
+                output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [destructors]" "\u001b[0m" : line));
+                first = false;
             }
-            break;
-            case 7:
-            if (std::get<std::shared_ptr<copystructor>>(element))
+        }
+    }
+    for (auto element : node->copystructors)
+    {
+        if (element)
+        {
+            auto lines = create_string_tree(element, contents);
+            bool first = true;
+            for (auto line : lines)
             {
-                auto lines = create_string_tree(std::get<std::shared_ptr<copystructor>>(element), contents);
-                bool first = true;
-                for (auto line : lines)
-                {
-                    output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [contents]" "\u001b[0m" : line));
-                    first = false;
-                }
+                output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [copystructors]" "\u001b[0m" : line));
+                first = false;
             }
-            break;
-            case 8:
-            if (std::get<std::shared_ptr<property>>(element))
+        }
+    }
+    for (auto element : node->properties)
+    {
+        if (element)
+        {
+            auto lines = create_string_tree(element, contents);
+            bool first = true;
+            for (auto line : lines)
             {
-                auto lines = create_string_tree(std::get<std::shared_ptr<property>>(element), contents);
-                bool first = true;
-                for (auto line : lines)
-                {
-                    output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [contents]" "\u001b[0m" : line));
-                    first = false;
-                }
+                output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [properties]" "\u001b[0m" : line));
+                first = false;
             }
-            break;
-            case 9:
-            if (std::get<std::shared_ptr<method>>(element))
+        }
+    }
+    for (auto element : node->methods)
+    {
+        if (element)
+        {
+            auto lines = create_string_tree(element, contents);
+            bool first = true;
+            for (auto line : lines)
             {
-                auto lines = create_string_tree(std::get<std::shared_ptr<method>>(element), contents);
-                bool first = true;
-                for (auto line : lines)
-                {
-                    output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [contents]" "\u001b[0m" : line));
-                    first = false;
-                }
+                output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [methods]" "\u001b[0m" : line));
+                first = false;
             }
-            break;
         }
     }
     return output;
@@ -19135,58 +18944,56 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
 {
     std::vector<std::string> output;
     output.push_back("main:");
-    for (auto element : node->contents)
+    for (auto element : node->namespaces)
     {
-        switch (element.index())
+        if (element)
         {
-            case 0:
-            if (std::get<std::shared_ptr<namespace_>>(element))
+            auto lines = create_string_tree(element, contents);
+            bool first = true;
+            for (auto line : lines)
             {
-                auto lines = create_string_tree(std::get<std::shared_ptr<namespace_>>(element), contents);
-                bool first = true;
-                for (auto line : lines)
-                {
-                    output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [contents]" "\u001b[0m" : line));
-                    first = false;
-                }
+                output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [namespaces]" "\u001b[0m" : line));
+                first = false;
             }
-            break;
-            case 1:
-            if (std::get<std::shared_ptr<conversion>>(element))
+        }
+    }
+    for (auto element : node->conversions)
+    {
+        if (element)
+        {
+            auto lines = create_string_tree(element, contents);
+            bool first = true;
+            for (auto line : lines)
             {
-                auto lines = create_string_tree(std::get<std::shared_ptr<conversion>>(element), contents);
-                bool first = true;
-                for (auto line : lines)
-                {
-                    output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [contents]" "\u001b[0m" : line));
-                    first = false;
-                }
+                output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [conversions]" "\u001b[0m" : line));
+                first = false;
             }
-            break;
-            case 2:
-            if (std::get<std::shared_ptr<class_>>(element))
+        }
+    }
+    for (auto element : node->classes)
+    {
+        if (element)
+        {
+            auto lines = create_string_tree(element, contents);
+            bool first = true;
+            for (auto line : lines)
             {
-                auto lines = create_string_tree(std::get<std::shared_ptr<class_>>(element), contents);
-                bool first = true;
-                for (auto line : lines)
-                {
-                    output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [contents]" "\u001b[0m" : line));
-                    first = false;
-                }
+                output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [classes]" "\u001b[0m" : line));
+                first = false;
             }
-            break;
-            case 3:
-            if (std::get<std::shared_ptr<method>>(element))
+        }
+    }
+    for (auto element : node->methods)
+    {
+        if (element)
+        {
+            auto lines = create_string_tree(element, contents);
+            bool first = true;
+            for (auto line : lines)
             {
-                auto lines = create_string_tree(std::get<std::shared_ptr<method>>(element), contents);
-                bool first = true;
-                for (auto line : lines)
-                {
-                    output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [contents]" "\u001b[0m" : line));
-                    first = false;
-                }
+                output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [methods]" "\u001b[0m" : line));
+                first = false;
             }
-            break;
         }
     }
     return output;
@@ -19327,18 +19134,6 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
 {
     std::vector<std::string> output;
     output.push_back("exp_binary_3:");
-    if (node->is_double_left.has_value())
-    {
-        output.push_back(std::string("  ") + std::to_string(node->is_double_left.value()));
-    }
-    if (node->is_tripple_left.has_value())
-    {
-        output.push_back(std::string("  ") + std::to_string(node->is_tripple_left.value()));
-    }
-    if (node->is_tripple_right.has_value())
-    {
-        output.push_back(std::string("  ") + std::to_string(node->is_tripple_right.value()));
-    }
     switch (node->left.index())
     {
         case 0:
@@ -19366,6 +19161,7 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
         }
         break;
     }
+    output.push_back(std::string("  ") + "token (L" + std::to_string(node->operator_.line) + "; C" + std::to_string(node->operator_.column) + "; O" + std::to_string(node->operator_.offset) + ") `" + std::string(contents.substr(node->operator_.offset, node->operator_.length).begin(), contents.substr(node->operator_.offset, node->operator_.length).end()) + "`");
     if (node->right)
     {
         auto lines = create_string_tree(node->right, contents);
@@ -19382,10 +19178,6 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
 {
     std::vector<std::string> output;
     output.push_back("exp_binary_2:");
-    if (node->op.has_value())
-    {
-        output.push_back(std::string("  ") + "`" + node->op.value() + "`");
-    }
     switch (node->left.index())
     {
         case 0:
@@ -19413,6 +19205,7 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
         }
         break;
     }
+    output.push_back(std::string("  ") + "token (L" + std::to_string(node->operator_.line) + "; C" + std::to_string(node->operator_.column) + "; O" + std::to_string(node->operator_.offset) + ") `" + std::string(contents.substr(node->operator_.offset, node->operator_.length).begin(), contents.substr(node->operator_.offset, node->operator_.length).end()) + "`");
     if (node->right)
     {
         auto lines = create_string_tree(node->right, contents);
@@ -19429,10 +19222,6 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
 {
     std::vector<std::string> output;
     output.push_back("exp_binary_1:");
-    if (node->op.has_value())
-    {
-        output.push_back(std::string("  ") + "`" + node->op.value() + "`");
-    }
     switch (node->left.index())
     {
         case 0:
@@ -19460,6 +19249,7 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
         }
         break;
     }
+    output.push_back(std::string("  ") + "token (L" + std::to_string(node->operator_.line) + "; C" + std::to_string(node->operator_.column) + "; O" + std::to_string(node->operator_.offset) + ") `" + std::string(contents.substr(node->operator_.offset, node->operator_.length).begin(), contents.substr(node->operator_.offset, node->operator_.length).end()) + "`");
     if (node->right)
     {
         auto lines = create_string_tree(node->right, contents);
@@ -19476,10 +19266,6 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
 {
     std::vector<std::string> output;
     output.push_back("exp_arithmetic_2:");
-    if (node->op.has_value())
-    {
-        output.push_back(std::string("  ") + "`" + node->op.value() + "`");
-    }
     switch (node->left.index())
     {
         case 0:
@@ -19507,6 +19293,7 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
         }
         break;
     }
+    output.push_back(std::string("  ") + "token (L" + std::to_string(node->operator_.line) + "; C" + std::to_string(node->operator_.column) + "; O" + std::to_string(node->operator_.offset) + ") `" + std::string(contents.substr(node->operator_.offset, node->operator_.length).begin(), contents.substr(node->operator_.offset, node->operator_.length).end()) + "`");
     if (node->right)
     {
         auto lines = create_string_tree(node->right, contents);
@@ -19523,10 +19310,6 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
 {
     std::vector<std::string> output;
     output.push_back("exp_arithmetic_1:");
-    if (node->op.has_value())
-    {
-        output.push_back(std::string("  ") + "`" + node->op.value() + "`");
-    }
     switch (node->left.index())
     {
         case 0:
@@ -19554,6 +19337,7 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
         }
         break;
     }
+    output.push_back(std::string("  ") + "token (L" + std::to_string(node->operator_.line) + "; C" + std::to_string(node->operator_.column) + "; O" + std::to_string(node->operator_.offset) + ") `" + std::string(contents.substr(node->operator_.offset, node->operator_.length).begin(), contents.substr(node->operator_.offset, node->operator_.length).end()) + "`");
     if (node->right)
     {
         auto lines = create_string_tree(node->right, contents);
@@ -19570,14 +19354,6 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
 {
     std::vector<std::string> output;
     output.push_back("exp_compare:");
-    if (node->op1.has_value())
-    {
-        output.push_back(std::string("  ") + "`" + node->op1.value() + "`");
-    }
-    if (node->op2.has_value())
-    {
-        output.push_back(std::string("  ") + "`" + node->op2.value() + "`");
-    }
     switch (node->left.index())
     {
         case 0:
@@ -19605,6 +19381,7 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
         }
         break;
     }
+    output.push_back(std::string("  ") + "token (L" + std::to_string(node->operator_.line) + "; C" + std::to_string(node->operator_.column) + "; O" + std::to_string(node->operator_.offset) + ") `" + std::string(contents.substr(node->operator_.offset, node->operator_.length).begin(), contents.substr(node->operator_.offset, node->operator_.length).end()) + "`");
     if (node->right)
     {
         auto lines = create_string_tree(node->right, contents);
@@ -19621,14 +19398,6 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
 {
     std::vector<std::string> output;
     output.push_back("exp_equality:");
-    if (node->op1.has_value())
-    {
-        output.push_back(std::string("  ") + "`" + node->op1.value() + "`");
-    }
-    if (node->op2.has_value())
-    {
-        output.push_back(std::string("  ") + "`" + node->op2.value() + "`");
-    }
     switch (node->left.index())
     {
         case 0:
@@ -19656,6 +19425,7 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
         }
         break;
     }
+    output.push_back(std::string("  ") + "token (L" + std::to_string(node->operator_.line) + "; C" + std::to_string(node->operator_.column) + "; O" + std::to_string(node->operator_.offset) + ") `" + std::string(contents.substr(node->operator_.offset, node->operator_.length).begin(), contents.substr(node->operator_.offset, node->operator_.length).end()) + "`");
     if (node->right)
     {
         auto lines = create_string_tree(node->right, contents);

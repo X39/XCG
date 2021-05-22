@@ -142,12 +142,12 @@ production string-literal
     
 production exp-value
     alternatives
-        match @[value]typeof
-        match @[value]nameof
-        match @[value]scalar
-        match @[value]boolean
-        match @[value]string-literal
-        match @[value]integer
+        match @[type]typeof
+        match @[name]nameof
+        match @[float]scalar
+        match @[bool]boolean
+        match @[string]string-literal
+        match @[int]integer
 
 production exp-nullar
     alternatives
@@ -158,75 +158,49 @@ production exp-nullar
 
 production exp-unary
     alternatives
-        match "!" @[value]exp-unary
-            set capture op '!'
-        match "~" @[value]exp-unary
-            set capture op '~'
-        match "-" @[value]exp-unary
-            set capture op '-'
-        match "+" @[value]exp-unary
-            set capture op '+'
+        match @[operator]"!" @[value]exp-unary
+        match @[operator]"~" @[value]exp-unary
+        match @[operator]"-" @[value]exp-unary
+        match @[operator]"+" @[value]exp-unary
         match @[value]exp-nullar
 
 left-recursive exp-binary-3
-	match @[left]exp-binary-3 "<<" @[right]exp-unary
-		set capture is-double-left true
-	match @[left]exp-binary-3 ">>" @[right]exp-unary
-		set capture is-double-left true
-	match @[left]exp-binary-3 "<<<" @[right]exp-unary
-		set capture is-tripple-left true
-	match @[left]exp-binary-3 ">>>" @[right]exp-unary
-		set capture is-tripple-right true
+	match @[left]exp-binary-3 @[operator]"<<" @[right]exp-unary
+	match @[left]exp-binary-3 @[operator]">>" @[right]exp-unary
+	match @[left]exp-binary-3 @[operator]"<<<" @[right]exp-unary
+	match @[left]exp-binary-3 @[operator]">>>" @[right]exp-unary
 	match @[left]exp-unary
 
 left-recursive exp-binary-2
-	match @[left]exp-binary-2 "&" @[right]exp-binary-3
-		set capture op '&'
+	match @[left]exp-binary-2 @[operator]"&" @[right]exp-binary-3
 	match @[left]exp-binary-3
 
 left-recursive exp-binary-1
-	match @[left]exp-binary-1 "|" @[right]exp-binary-2
-		set capture op '|'
+	match @[left]exp-binary-1 @[operator]"|" @[right]exp-binary-2
 	match @[left]exp-binary-2
 
 left-recursive exp-arithmetic-2
-	match @[left]exp-arithmetic-2 "/" @[right]exp-binary-1
-		set capture op '/'
-	match @[left]exp-arithmetic-2 "*" @[right]exp-binary-1
-		set capture op '*'
+	match @[left]exp-arithmetic-2 @[operator]"/" @[right]exp-binary-1
+	match @[left]exp-arithmetic-2 @[operator]"*" @[right]exp-binary-1
 	match @[left]exp-binary-1
 
 left-recursive exp-arithmetic-1
-	match @[left]exp-arithmetic-1 "+" @[right]exp-arithmetic-2
-		set capture op '+'
-	match @[left]exp-arithmetic-1 "-" @[right]exp-arithmetic-2
-		set capture op '-'
+	match @[left]exp-arithmetic-1 @[operator]"+" @[right]exp-arithmetic-2
+	match @[left]exp-arithmetic-1 @[operator]"-" @[right]exp-arithmetic-2
 	match @[left]exp-arithmetic-2
     
 left-recursive exp-compare
-	match @[left]exp-compare "<=" @[right]exp-arithmetic-1
-		set capture op1 '<'
-		set capture op2 '='
-	match @[left]exp-compare "<" @[right]exp-arithmetic-1
-		set capture op1 '<'
-	match @[left]exp-compare ">=" @[right]exp-arithmetic-1
-		set capture op1 '>'
-		set capture op2 '='
-	match @[left]exp-compare ">" @[right]exp-arithmetic-1
-		set capture op1 '>'
+	match @[left]exp-compare @[operator]"<=" @[right]exp-arithmetic-1
+	match @[left]exp-compare @[operator]"<" @[right]exp-arithmetic-1
+	match @[left]exp-compare @[operator]">=" @[right]exp-arithmetic-1
+	match @[left]exp-compare @[operator]">" @[right]exp-arithmetic-1
 	match @[left]exp-arithmetic-1
     
 left-recursive exp-equality
-	match @[left]exp-equality "<=" @[right]exp-compare
-		set capture op1 '<'
-		set capture op2 '='
-	match @[left]exp-equality "<" @[right]exp-compare
-		set capture op1 '<'
-	match @[left]exp-equality ">=" @[right]exp-compare
-		set capture op1 '>'
-		set capture op2 '='
-	match @[left]exp-equality ">" @[right]exp-compare
-		set capture op1 '>'
+	match @[left]exp-equality @[operator]"<=" @[right]exp-compare
+	match @[left]exp-equality @[operator]"<" @[right]exp-compare
+	match @[left]exp-equality @[operator]">=" @[right]exp-compare
+	match @[left]exp-equality @[operator]">" @[right]exp-compare
 	match @[left]exp-compare
     
 left-recursive exp-and
@@ -328,20 +302,20 @@ production control-structure
 
 production encapsulation
 	alternatives
-		match "public"
-		match "local"
-		match "derived"
-		match "private"
+		match @[tok]"public"
+		match @[tok]"local"
+		match @[tok]"derived"
+		match @[tok]"private"
 
 production namespace
     match "namespace" @[name]ident-navigation
     match "{"
     while not match "}"
         alternatives
-            match @[contents]namespace
-            match @[contents]conversion
-            match @[contents]class
-            match @[contents]method
+            match @[namespaces]namespace
+            match @[conversions]conversion
+            match @[classes]class
+            match @[methods]method
             error
     match "}"
     
@@ -350,16 +324,16 @@ production class
     match "{"
     while not match "}"
         alternatives
-            match @[contents]indexer
-            match @[contents]operator-binary-overload
-            match @[contents]operator-unary-overload
-            match @[contents]conversion
-            match @[contents]class
-            match @[contents]constructor
-            match @[contents]destructor
-            match @[contents]copystructor
-            match @[contents]property
-            match @[contents]method
+            match @[indexers]indexer
+            match @[operators-binary]operator-binary-overload
+            match @[operators-unary]operator-unary-overload
+            match @[conversions]conversion
+            match @[classes]class
+            match @[constructors]constructor
+            match @[destructors]destructor
+            match @[copystructors]copystructor
+            match @[properties]property
+            match @[methods]method
             error
     match "}"
 
@@ -453,6 +427,7 @@ production operator-binary-overload
         match @[operator]"&"
     match "(" @[right]method-arglist-item ")"
     match @[body]scope
+
 production operator-unary-overload
     match @[encaps]encapsulation "unbound" @[target-type]type-match  "operator"
     if match template-definition
@@ -473,8 +448,8 @@ production property
 production main
     while not eof
         alternatives
-            match @[contents]namespace
-            match @[contents]conversion
-            match @[contents]class
-            match @[contents]method
+            match @[namespaces]namespace
+            match @[conversions]conversion
+            match @[classes]class
+            match @[methods]method
             error

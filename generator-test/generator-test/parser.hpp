@@ -771,7 +771,12 @@ namespace yaoosl::parsing
         class exp_value
         {
         public:
-            std::variant<std::shared_ptr<typeof>, std::shared_ptr<nameof>, token, std::shared_ptr<string_literal>> value;
+            std::shared_ptr<typeof> type;
+            std::shared_ptr<nameof> name;
+            token float_;
+            token bool_;
+            std::shared_ptr<string_literal> string;
+            token int_;
         };
         class exp_nullar
         {
@@ -781,7 +786,7 @@ namespace yaoosl::parsing
         class exp_unary
         {
         public:
-            std::optional<char> op;
+            token operator_;
             std::variant<std::shared_ptr<exp_unary>, std::shared_ptr<exp_nullar>> value;
         };
         class return_statement
@@ -861,19 +866,33 @@ namespace yaoosl::parsing
         };
         class encapsulation
         {
+        public:
+            token tok;
         };
         class namespace_
         {
         public:
             std::shared_ptr<ident_navigation> name;
-            std::vector<std::variant<std::shared_ptr<namespace_>, std::shared_ptr<conversion>, std::shared_ptr<class_>, std::shared_ptr<method>>> contents;
+            std::vector<std::shared_ptr<namespace_>> namespaces;
+            std::vector<std::shared_ptr<conversion>> conversions;
+            std::vector<std::shared_ptr<class_>> classes;
+            std::vector<std::shared_ptr<method>> methods;
         };
         class class_
         {
         public:
             std::shared_ptr<encapsulation> scope;
             token name;
-            std::vector<std::variant<std::shared_ptr<indexer>, std::shared_ptr<operator_binary_overload>, std::shared_ptr<operator_unary_overload>, std::shared_ptr<conversion>, std::shared_ptr<class_>, std::shared_ptr<constructor>, std::shared_ptr<destructor>, std::shared_ptr<copystructor>, std::shared_ptr<property>, std::shared_ptr<method>>> contents;
+            std::vector<std::shared_ptr<indexer>> indexers;
+            std::vector<std::shared_ptr<operator_binary_overload>> operators_binary;
+            std::vector<std::shared_ptr<operator_unary_overload>> operators_unary;
+            std::vector<std::shared_ptr<conversion>> conversions;
+            std::vector<std::shared_ptr<class_>> classes;
+            std::vector<std::shared_ptr<constructor>> constructors;
+            std::vector<std::shared_ptr<destructor>> destructors;
+            std::vector<std::shared_ptr<copystructor>> copystructors;
+            std::vector<std::shared_ptr<property>> properties;
+            std::vector<std::shared_ptr<method>> methods;
         };
         class method_arglist_item_with_default
         {
@@ -988,7 +1007,10 @@ namespace yaoosl::parsing
         class main
         {
         public:
-            std::vector<std::variant<std::shared_ptr<namespace_>, std::shared_ptr<conversion>, std::shared_ptr<class_>, std::shared_ptr<method>>> contents;
+            std::vector<std::shared_ptr<namespace_>> namespaces;
+            std::vector<std::shared_ptr<conversion>> conversions;
+            std::vector<std::shared_ptr<class_>> classes;
+            std::vector<std::shared_ptr<method>> methods;
         };
         class exp_chain
         {
@@ -1012,54 +1034,50 @@ namespace yaoosl::parsing
         class exp_binary_3
         {
         public:
-            std::optional<bool> is_double_left;
-            std::optional<bool> is_tripple_left;
-            std::optional<bool> is_tripple_right;
             std::variant<std::shared_ptr<exp_binary_3>, std::shared_ptr<exp_unary>> left;
+            token operator_;
             std::shared_ptr<exp_unary> right;
         };
         class exp_binary_2
         {
         public:
-            std::optional<char> op;
             std::variant<std::shared_ptr<exp_binary_2>, std::shared_ptr<exp_binary_3>> left;
+            token operator_;
             std::shared_ptr<exp_binary_3> right;
         };
         class exp_binary_1
         {
         public:
-            std::optional<char> op;
             std::variant<std::shared_ptr<exp_binary_1>, std::shared_ptr<exp_binary_2>> left;
+            token operator_;
             std::shared_ptr<exp_binary_2> right;
         };
         class exp_arithmetic_2
         {
         public:
-            std::optional<char> op;
             std::variant<std::shared_ptr<exp_arithmetic_2>, std::shared_ptr<exp_binary_1>> left;
+            token operator_;
             std::shared_ptr<exp_binary_1> right;
         };
         class exp_arithmetic_1
         {
         public:
-            std::optional<char> op;
             std::variant<std::shared_ptr<exp_arithmetic_1>, std::shared_ptr<exp_arithmetic_2>> left;
+            token operator_;
             std::shared_ptr<exp_arithmetic_2> right;
         };
         class exp_compare
         {
         public:
-            std::optional<char> op1;
-            std::optional<char> op2;
             std::variant<std::shared_ptr<exp_compare>, std::shared_ptr<exp_arithmetic_1>> left;
+            token operator_;
             std::shared_ptr<exp_arithmetic_1> right;
         };
         class exp_equality
         {
         public:
-            std::optional<char> op1;
-            std::optional<char> op2;
             std::variant<std::shared_ptr<exp_equality>, std::shared_ptr<exp_compare>> left;
+            token operator_;
             std::shared_ptr<exp_compare> right;
         };
         class exp_and
