@@ -45,6 +45,13 @@ namespace XCG.Generators.Cpp.Extensive
                 case "true":
                 case "false":
                 case "auto":
+                case "int":
+                case "bool":
+                case "float":
+                case "double":
+                case "char":
+                case "short":
+                case "long":
                 case "this":
                     return String.Concat(name, '_');
             }
