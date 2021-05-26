@@ -25,9 +25,11 @@ namespace XCG.Generators.Cpp.Extensive
                 case "class":
                 case "namespace":
                 case "switch":
+                case "case":
+                case "default":
                 case "if":
-                case "for":
                 case "else":
+                case "for":
                 case "typename":
                 case "template":
                 case "return":
@@ -35,13 +37,12 @@ namespace XCG.Generators.Cpp.Extensive
                 case "do":
                 case "public":
                 case "static":
+                case "inline":
                 case "private":
                 case "protected":
                 case "struct":
                 case "virtual":
                 case "operator":
-                case "case":
-                case "default":
                 case "true":
                 case "false":
                 case "auto":
@@ -53,6 +54,7 @@ namespace XCG.Generators.Cpp.Extensive
                 case "short":
                 case "long":
                 case "this":
+                case "register":
                     return String.Concat(name, '_');
             }
         }
