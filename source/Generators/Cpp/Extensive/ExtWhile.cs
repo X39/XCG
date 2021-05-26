@@ -38,10 +38,8 @@ namespace XCG.Generators.Cpp.Extensive
             };
 
             var conditionVariable = toUnique("cond");
-            var wasSuccessInitialCondition = toUnique("cond_init");
             var effectiveCondition = String.Concat(@while.Negated ? $"!{conditionVariable}" : conditionVariable, " && current() != '\\0'");
-            methodDefinition.AddRange(@while.Condition!.GetEvaluationResult(cppOptions, stateTypeName, wasSuccessInitialCondition, true, toUnique));
-            methodDefinition.Add(new VariableDefinition(EType.Boolean, conditionVariable, wasSuccessInitialCondition));
+            methodDefinition.AddRange(@while.Condition!.GetEvaluationResult(cppOptions, stateTypeName, conditionVariable, true, toUnique));
             methodDefinition.Add($@"{resetable}.reset();");
             foreach (var isCan in Constants.TrueFalseArray)
             {
@@ -62,7 +60,7 @@ namespace XCG.Generators.Cpp.Extensive
 
                 // finally return true
                 isCanIf.Add(new DebugPart { $@"trace(""Returning true on {methodDefinition.Name}"", {Constants.depthVariable});" });
-                isCanIf.Add(new ReturnPart(wasSuccessInitialCondition));
+                isCanIf.Add(new ReturnPart(EValueConstant.True));
             }
             return methodDefinition;
         }
