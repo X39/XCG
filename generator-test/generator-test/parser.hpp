@@ -33,12 +33,12 @@ namespace yaoosl::parsing
         class return_statement;
         class declaration;
         class statement;
-        class function_arg;
         class scope;
         class scope_getset;
-        class function;
         class control_structure_body;
         class while_loop;
+        class if_body;
+        class else_body;
         class if_else;
         class switch_case;
         class switch_;
@@ -60,6 +60,12 @@ namespace yaoosl::parsing
         class operator_binary_overload;
         class operator_unary_overload;
         class property;
+        class attribute_arg_item_a;
+        class attribute_arg_item_b;
+        class attribute_args;
+        class attribute_item;
+        class attribute;
+        class attributes;
         class main;
         class exp_chain;
         class ident_navigation;
@@ -93,12 +99,12 @@ namespace yaoosl::parsing
         class return_statement_state;
         class declaration_state;
         class statement_state;
-        class function_arg_state;
         class scope_state;
         class scope_getset_state;
-        class function_state;
         class control_structure_body_state;
         class while_loop_state;
+        class if_body_state;
+        class else_body_state;
         class if_else_state;
         class switch_case_state;
         class switch__state;
@@ -120,6 +126,12 @@ namespace yaoosl::parsing
         class operator_binary_overload_state;
         class operator_unary_overload_state;
         class property_state;
+        class attribute_arg_item_a_state;
+        class attribute_arg_item_b_state;
+        class attribute_args_state;
+        class attribute_item_state;
+        class attribute_state;
+        class attributes_state;
         class main_state;
         class exp_chain_state;
         class ident_navigation_state;
@@ -191,7 +203,6 @@ namespace yaoosl::parsing
         std::optional<size_t> token__curly_bracked_close(size_t depth);
         std::optional<size_t> token__get(size_t depth);
         std::optional<size_t> token__set(size_t depth);
-        std::optional<size_t> token__func(size_t depth);
         std::optional<size_t> token__while(size_t depth);
         std::optional<size_t> token__if(size_t depth);
         std::optional<size_t> token__else(size_t depth);
@@ -209,408 +220,488 @@ namespace yaoosl::parsing
         std::optional<size_t> token__delete(size_t depth);
         std::optional<size_t> token__conversion(size_t depth);
         std::optional<size_t> token__operator(size_t depth);
-        bool m_ident_roundbrackedopen_60(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth);
+        bool m_ident_roundbrackedopen_59(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth);
+        bool m_expression_60(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth);
         bool m_expression_61(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth);
-        bool m_expression_62(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth);
-        bool m_roundbrackedclose_63(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth);
-        bool m_comma_expression_64(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth);
-        bool m_comma_65(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth);
-        bool alternatives66(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth);
-        bool while67_68(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth);
-        bool if69_70(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth);
-        bool m_roundbrackedclose_71(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth);
+        bool m_roundbrackedclose_62(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth);
+        bool m_comma_expression_63(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth);
+        bool m_comma_64(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth);
+        bool alternatives65(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth);
+        bool while66_67(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth);
+        bool if68_69(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth);
+        bool m_roundbrackedclose_70(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth);
         bool p_can_call(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::call> p_match_call(size_t depth);
-        bool m_ident_72(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage_item>& actual, yaoosl::parsing::instance::template_usage_item_state& state, size_t depth);
+        bool m_ident_71(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage_item>& actual, yaoosl::parsing::instance::template_usage_item_state& state, size_t depth);
         bool p_can_template_usage_item(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::template_usage_item> p_match_template_usage_item(size_t depth);
-        bool m_lessthen_73(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth);
-        bool m_templateusageitem_74(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth);
-        bool m_comma_75(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth);
-        bool m_comma_templateusageitem_76(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth);
-        bool alternatives77(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth);
-        bool while78_79(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth);
-        bool m_greaterthen_80(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth);
+        bool m_lessthen_72(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth);
+        bool m_templateusageitem_73(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth);
+        bool m_comma_74(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth);
+        bool m_comma_templateusageitem_75(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth);
+        bool alternatives76(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth);
+        bool while77_78(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth);
+        bool m_greaterthen_79(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth);
         bool p_can_template_usage(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::template_usage> p_match_template_usage(size_t depth);
-        bool m_ident_81(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition_item>& actual, yaoosl::parsing::instance::template_definition_item_state& state, size_t depth);
-        bool m_equal_82(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition_item>& actual, yaoosl::parsing::instance::template_definition_item_state& state, size_t depth);
-        bool m_equal_expvalue_83(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition_item>& actual, yaoosl::parsing::instance::template_definition_item_state& state, size_t depth);
-        bool if84_85(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition_item>& actual, yaoosl::parsing::instance::template_definition_item_state& state, size_t depth);
+        bool m_ident_80(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition_item>& actual, yaoosl::parsing::instance::template_definition_item_state& state, size_t depth);
+        bool m_equal_81(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition_item>& actual, yaoosl::parsing::instance::template_definition_item_state& state, size_t depth);
+        bool m_equal_expvalue_82(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition_item>& actual, yaoosl::parsing::instance::template_definition_item_state& state, size_t depth);
+        bool if83_84(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition_item>& actual, yaoosl::parsing::instance::template_definition_item_state& state, size_t depth);
         bool p_can_template_definition_item(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::template_definition_item> p_match_template_definition_item(size_t depth);
-        bool m_lessthen_86(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth);
-        bool m_templatedefinitionitem_87(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth);
-        bool m_comma_88(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth);
-        bool m_comma_templatedefinitionitem_89(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth);
-        bool alternatives90(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth);
-        bool while91_92(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth);
-        bool m_greaterthen_93(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth);
+        bool m_lessthen_85(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth);
+        bool m_templatedefinitionitem_86(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth);
+        bool m_comma_87(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth);
+        bool m_comma_templatedefinitionitem_88(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth);
+        bool alternatives89(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth);
+        bool while90_91(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth);
+        bool m_greaterthen_92(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth);
         bool p_can_template_definition(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::template_definition> p_match_template_definition(size_t depth);
-        bool m_call_94(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_start>& actual, yaoosl::parsing::instance::exp_chain_start_state& state, size_t depth);
-        bool m_ident_95(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_start>& actual, yaoosl::parsing::instance::exp_chain_start_state& state, size_t depth);
-        bool alternatives96(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_start>& actual, yaoosl::parsing::instance::exp_chain_start_state& state, size_t depth);
+        bool m_call_93(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_start>& actual, yaoosl::parsing::instance::exp_chain_start_state& state, size_t depth);
+        bool m_ident_94(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_start>& actual, yaoosl::parsing::instance::exp_chain_start_state& state, size_t depth);
+        bool alternatives95(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_start>& actual, yaoosl::parsing::instance::exp_chain_start_state& state, size_t depth);
         bool p_can_exp_chain_start(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::exp_chain_start> p_match_exp_chain_start(size_t depth);
-        bool m_squarebrackedopen_97(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_indexer>& actual, yaoosl::parsing::instance::exp_chain_indexer_state& state, size_t depth);
-        bool m_squarebrackedclose_98(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_indexer>& actual, yaoosl::parsing::instance::exp_chain_indexer_state& state, size_t depth);
+        bool m_squarebrackedopen_96(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_indexer>& actual, yaoosl::parsing::instance::exp_chain_indexer_state& state, size_t depth);
+        bool m_squarebrackedclose_97(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_indexer>& actual, yaoosl::parsing::instance::exp_chain_indexer_state& state, size_t depth);
         bool p_can_exp_chain_indexer(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::exp_chain_indexer> p_match_exp_chain_indexer(size_t depth);
-        bool m_dot_ident_99(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_access>& actual, yaoosl::parsing::instance::exp_chain_access_state& state, size_t depth);
+        bool m_dot_ident_98(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_access>& actual, yaoosl::parsing::instance::exp_chain_access_state& state, size_t depth);
         bool p_can_exp_chain_access(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::exp_chain_access> p_match_exp_chain_access(size_t depth);
-        bool m_dot_call_100(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_call>& actual, yaoosl::parsing::instance::exp_chain_call_state& state, size_t depth);
+        bool m_dot_call_99(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_call>& actual, yaoosl::parsing::instance::exp_chain_call_state& state, size_t depth);
         bool p_can_exp_chain_call(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::exp_chain_call> p_match_exp_chain_call(size_t depth);
-        bool m_typenavigation_squarebrackedopen_expvalue_squarebrackedclose_101(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_match>& actual, yaoosl::parsing::instance::type_match_state& state, size_t depth);
-        bool m_typenavigation_squarebrackedopen_squarebrackedclose_102(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_match>& actual, yaoosl::parsing::instance::type_match_state& state, size_t depth);
-        bool m_typenavigation_103(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_match>& actual, yaoosl::parsing::instance::type_match_state& state, size_t depth);
-        bool alternatives104(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_match>& actual, yaoosl::parsing::instance::type_match_state& state, size_t depth);
+        bool m_typenavigation_squarebrackedopen_expvalue_squarebrackedclose_100(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_match>& actual, yaoosl::parsing::instance::type_match_state& state, size_t depth);
+        bool m_typenavigation_squarebrackedopen_squarebrackedclose_101(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_match>& actual, yaoosl::parsing::instance::type_match_state& state, size_t depth);
+        bool m_typenavigation_102(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_match>& actual, yaoosl::parsing::instance::type_match_state& state, size_t depth);
+        bool alternatives103(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_match>& actual, yaoosl::parsing::instance::type_match_state& state, size_t depth);
         bool p_can_type_match(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::type_match> p_match_type_match(size_t depth);
-        bool m_typeof_roundbrackedopen_typematch_roundbrackedclose_105(bool is_can, std::shared_ptr<yaoosl::parsing::instance::typeof>& actual, yaoosl::parsing::instance::typeof_state& state, size_t depth);
+        bool m_typeof_roundbrackedopen_typematch_roundbrackedclose_104(bool is_can, std::shared_ptr<yaoosl::parsing::instance::typeof>& actual, yaoosl::parsing::instance::typeof_state& state, size_t depth);
         bool p_can_typeof(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::typeof> p_match_typeof(size_t depth);
-        bool m_nameof_roundbrackedopen_expor_roundbrackedclose_106(bool is_can, std::shared_ptr<yaoosl::parsing::instance::nameof>& actual, yaoosl::parsing::instance::nameof_state& state, size_t depth);
+        bool m_nameof_roundbrackedopen_expor_roundbrackedclose_105(bool is_can, std::shared_ptr<yaoosl::parsing::instance::nameof>& actual, yaoosl::parsing::instance::nameof_state& state, size_t depth);
         bool p_can_nameof(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::nameof> p_match_nameof(size_t depth);
-        bool m_ident_string_ident_107(bool is_can, std::shared_ptr<yaoosl::parsing::instance::string_literal>& actual, yaoosl::parsing::instance::string_literal_state& state, size_t depth);
-        bool m_string_ident_108(bool is_can, std::shared_ptr<yaoosl::parsing::instance::string_literal>& actual, yaoosl::parsing::instance::string_literal_state& state, size_t depth);
-        bool m_ident_string_109(bool is_can, std::shared_ptr<yaoosl::parsing::instance::string_literal>& actual, yaoosl::parsing::instance::string_literal_state& state, size_t depth);
-        bool m_string_110(bool is_can, std::shared_ptr<yaoosl::parsing::instance::string_literal>& actual, yaoosl::parsing::instance::string_literal_state& state, size_t depth);
-        bool alternatives111(bool is_can, std::shared_ptr<yaoosl::parsing::instance::string_literal>& actual, yaoosl::parsing::instance::string_literal_state& state, size_t depth);
+        bool m_ident_string_ident_106(bool is_can, std::shared_ptr<yaoosl::parsing::instance::string_literal>& actual, yaoosl::parsing::instance::string_literal_state& state, size_t depth);
+        bool m_string_ident_107(bool is_can, std::shared_ptr<yaoosl::parsing::instance::string_literal>& actual, yaoosl::parsing::instance::string_literal_state& state, size_t depth);
+        bool m_ident_string_108(bool is_can, std::shared_ptr<yaoosl::parsing::instance::string_literal>& actual, yaoosl::parsing::instance::string_literal_state& state, size_t depth);
+        bool m_string_109(bool is_can, std::shared_ptr<yaoosl::parsing::instance::string_literal>& actual, yaoosl::parsing::instance::string_literal_state& state, size_t depth);
+        bool alternatives110(bool is_can, std::shared_ptr<yaoosl::parsing::instance::string_literal>& actual, yaoosl::parsing::instance::string_literal_state& state, size_t depth);
         bool p_can_string_literal(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::string_literal> p_match_string_literal(size_t depth);
-        bool m_typeof_112(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth);
-        bool m_nameof_113(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth);
-        bool m_scalar_114(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth);
-        bool m_boolean_115(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth);
-        bool m_stringliteral_116(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth);
-        bool m_integer_117(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth);
-        bool alternatives118(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth);
+        bool m_typeof_111(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth);
+        bool m_nameof_112(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth);
+        bool m_scalar_113(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth);
+        bool m_boolean_114(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth);
+        bool m_stringliteral_115(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth);
+        bool m_integer_116(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth);
+        bool alternatives117(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth);
         bool p_can_exp_value(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::exp_value> p_match_exp_value(size_t depth);
-        bool m_roundbrackedopen_statement_roundbrackedclose_119(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state, size_t depth);
-        bool m_declaration_120(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state, size_t depth);
-        bool m_expchain_121(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state, size_t depth);
-        bool m_expvalue_122(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state, size_t depth);
-        bool alternatives123(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state, size_t depth);
+        bool m_roundbrackedopen_statement_roundbrackedclose_118(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state, size_t depth);
+        bool m_declaration_119(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state, size_t depth);
+        bool m_expchain_120(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state, size_t depth);
+        bool m_expvalue_121(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state, size_t depth);
+        bool alternatives122(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state, size_t depth);
         bool p_can_exp_nullar(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::exp_nullar> p_match_exp_nullar(size_t depth);
-        bool m_exclamation_expunary_124(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth);
-        bool m_tilde_expunary_125(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth);
-        bool m_minus_expunary_126(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth);
-        bool m_plus_expunary_127(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth);
-        bool m_expnullar_128(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth);
-        bool alternatives129(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth);
+        bool m_exclamation_expunary_123(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth);
+        bool m_tilde_expunary_124(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth);
+        bool m_minus_expunary_125(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth);
+        bool m_plus_expunary_126(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth);
+        bool m_expnullar_127(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth);
+        bool alternatives128(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth);
         bool p_can_exp_unary(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::exp_unary> p_match_exp_unary(size_t depth);
-        bool m_return_expor_130(bool is_can, std::shared_ptr<yaoosl::parsing::instance::return_statement>& actual, yaoosl::parsing::instance::return_statement_state& state, size_t depth);
+        bool m_return_expor_129(bool is_can, std::shared_ptr<yaoosl::parsing::instance::return_statement>& actual, yaoosl::parsing::instance::return_statement_state& state, size_t depth);
         bool p_can_return_statement(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::return_statement> p_match_return_statement(size_t depth);
-        bool m_typematch_ident_131(bool is_can, std::shared_ptr<yaoosl::parsing::instance::declaration>& actual, yaoosl::parsing::instance::declaration_state& state, size_t depth);
+        bool m_typematch_ident_130(bool is_can, std::shared_ptr<yaoosl::parsing::instance::declaration>& actual, yaoosl::parsing::instance::declaration_state& state, size_t depth);
         bool p_can_declaration(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::declaration> p_match_declaration(size_t depth);
-        bool m_returnstatement_semicolon_132(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement>& actual, yaoosl::parsing::instance::statement_state& state, size_t depth);
-        bool m_expression_semicolon_133(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement>& actual, yaoosl::parsing::instance::statement_state& state, size_t depth);
-        bool m_semicolon_134(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement>& actual, yaoosl::parsing::instance::statement_state& state, size_t depth);
-        bool alternatives135(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement>& actual, yaoosl::parsing::instance::statement_state& state, size_t depth);
+        bool m_returnstatement_semicolon_131(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement>& actual, yaoosl::parsing::instance::statement_state& state, size_t depth);
+        bool m_expression_semicolon_132(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement>& actual, yaoosl::parsing::instance::statement_state& state, size_t depth);
+        bool m_semicolon_133(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement>& actual, yaoosl::parsing::instance::statement_state& state, size_t depth);
+        bool alternatives134(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement>& actual, yaoosl::parsing::instance::statement_state& state, size_t depth);
         bool p_can_statement(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::statement> p_match_statement(size_t depth);
-        bool m_ident_136(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function_arg>& actual, yaoosl::parsing::instance::function_arg_state& state, size_t depth);
-        bool p_can_function_arg(size_t depth);
-        std::shared_ptr<yaoosl::parsing::instance::function_arg> p_match_function_arg(size_t depth);
-        bool m_curlybrackedopen_137(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth);
-        bool m_curlybrackedclose_138(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth);
-        bool m_controlstructure_139(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth);
-        bool m_statement_140(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth);
-        bool alternatives141(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth);
-        bool while142_143(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth);
-        bool m_curlybrackedclose_144(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth);
+        bool m_curlybrackedopen_135(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth);
+        bool m_curlybrackedclose_136(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth);
+        bool m_controlstructure_137(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth);
+        bool m_statement_138(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth);
+        bool alternatives139(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth);
+        bool while140_141(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth);
+        bool m_curlybrackedclose_142(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth);
         bool p_can_scope(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::scope> p_match_scope(size_t depth);
-        bool m_curlybrackedopen_145(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth);
-        bool m_get_scope_set_scope_146(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth);
-        bool m_set_scope_get_scope_147(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth);
-        bool m_get_scope_148(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth);
-        bool m_set_scope_149(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth);
-        bool alternatives150(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth);
-        bool m_curlybrackedclose_151(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth);
+        bool m_curlybrackedopen_143(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth);
+        bool m_get_scope_set_scope_144(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth);
+        bool m_set_scope_get_scope_145(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth);
+        bool m_get_scope_146(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth);
+        bool m_set_scope_147(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth);
+        bool alternatives148(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth);
+        bool m_curlybrackedclose_149(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth);
         bool p_can_scope_getset(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::scope_getset> p_match_scope_getset(size_t depth);
-        bool m_func_ident_roundbrackedopen_152(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state, size_t depth);
-        bool m_functionarg_153(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state, size_t depth);
-        bool m_functionarg_154(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state, size_t depth);
-        bool m_roundbrackedclose_155(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state, size_t depth);
-        bool m_comma_functionarg_156(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state, size_t depth);
-        bool while157_158(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state, size_t depth);
-        bool if159_160(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state, size_t depth);
-        bool m_roundbrackedclose_scope_161(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state, size_t depth);
-        bool p_can_function(size_t depth);
-        std::shared_ptr<yaoosl::parsing::instance::function> p_match_function(size_t depth);
-        bool m_scope_162(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure_body>& actual, yaoosl::parsing::instance::control_structure_body_state& state, size_t depth);
-        bool m_controlstructure_163(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure_body>& actual, yaoosl::parsing::instance::control_structure_body_state& state, size_t depth);
-        bool m_statement_164(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure_body>& actual, yaoosl::parsing::instance::control_structure_body_state& state, size_t depth);
-        bool alternatives165(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure_body>& actual, yaoosl::parsing::instance::control_structure_body_state& state, size_t depth);
+        bool m_scope_150(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure_body>& actual, yaoosl::parsing::instance::control_structure_body_state& state, size_t depth);
+        bool m_controlstructure_151(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure_body>& actual, yaoosl::parsing::instance::control_structure_body_state& state, size_t depth);
+        bool m_statement_152(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure_body>& actual, yaoosl::parsing::instance::control_structure_body_state& state, size_t depth);
+        bool alternatives153(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure_body>& actual, yaoosl::parsing::instance::control_structure_body_state& state, size_t depth);
         bool p_can_control_structure_body(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::control_structure_body> p_match_control_structure_body(size_t depth);
-        bool m_while_roundbrackedopen_expression_roundbrackedclose_controlstructurebody_166(bool is_can, std::shared_ptr<yaoosl::parsing::instance::while_loop>& actual, yaoosl::parsing::instance::while_loop_state& state, size_t depth);
+        bool m_while_roundbrackedopen_expression_roundbrackedclose_controlstructurebody_154(bool is_can, std::shared_ptr<yaoosl::parsing::instance::while_loop>& actual, yaoosl::parsing::instance::while_loop_state& state, size_t depth);
         bool p_can_while_loop(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::while_loop> p_match_while_loop(size_t depth);
-        bool m_if_roundbrackedopen_expression_roundbrackedclose_controlstructurebody_167(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth);
-        bool m_else_168(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth);
-        bool m_else_controlstructurebody_169(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth);
-        bool if170_171(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth);
+        bool m_if_roundbrackedopen_expression_roundbrackedclose_controlstructurebody_155(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_body>& actual, yaoosl::parsing::instance::if_body_state& state, size_t depth);
+        bool p_can_if_body(size_t depth);
+        std::shared_ptr<yaoosl::parsing::instance::if_body> p_match_if_body(size_t depth);
+        bool m_else_controlstructurebody_156(bool is_can, std::shared_ptr<yaoosl::parsing::instance::else_body>& actual, yaoosl::parsing::instance::else_body_state& state, size_t depth);
+        bool p_can_else_body(size_t depth);
+        std::shared_ptr<yaoosl::parsing::instance::else_body> p_match_else_body(size_t depth);
+        bool m_ifbody_157(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth);
+        bool m_elsebody_158(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth);
+        bool m_elsebody_159(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth);
+        bool if160_161(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth);
         bool p_can_if_else(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::if_else> p_match_if_else(size_t depth);
-        bool m_case_expvalue_colon_controlstructurebody_172(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_case>& actual, yaoosl::parsing::instance::switch_case_state& state, size_t depth);
+        bool m_case_expvalue_colon_controlstructurebody_162(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_case>& actual, yaoosl::parsing::instance::switch_case_state& state, size_t depth);
         bool p_can_switch_case(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::switch_case> p_match_switch_case(size_t depth);
-        bool m_switch_roundbrackedopen_expression_roundbrackedclose_173(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth);
-        bool m_curlybrackedclose_174(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth);
-        bool m_switchcase_175(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth);
-        bool if176_177(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth);
-        bool m_default_colon_controlstructurebody_178(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth);
-        bool alternatives179(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth);
-        bool while180_181(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth);
-        bool m_curlybrackedclose_182(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth);
+        bool m_switch_roundbrackedopen_expression_roundbrackedclose_163(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth);
+        bool m_curlybrackedclose_164(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth);
+        bool m_switchcase_165(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth);
+        bool if166_167(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth);
+        bool m_default_colon_controlstructurebody_168(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth);
+        bool alternatives169(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth);
+        bool while170_171(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth);
+        bool m_curlybrackedclose_172(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth);
         bool p_can_switch_(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::switch_> p_match_switch_(size_t depth);
-        bool m_function_183(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state, size_t depth);
-        bool m_whileloop_184(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state, size_t depth);
-        bool m_ifelse_185(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state, size_t depth);
-        bool m_switch_186(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state, size_t depth);
-        bool m_scope_187(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state, size_t depth);
-        bool alternatives188(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state, size_t depth);
+        bool m_whileloop_173(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state, size_t depth);
+        bool m_ifelse_174(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state, size_t depth);
+        bool m_switch_175(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state, size_t depth);
+        bool m_scope_176(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state, size_t depth);
+        bool alternatives177(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state, size_t depth);
         bool p_can_control_structure(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::control_structure> p_match_control_structure(size_t depth);
-        bool m_public_189(bool is_can, std::shared_ptr<yaoosl::parsing::instance::encapsulation>& actual, yaoosl::parsing::instance::encapsulation_state& state, size_t depth);
-        bool m_local_190(bool is_can, std::shared_ptr<yaoosl::parsing::instance::encapsulation>& actual, yaoosl::parsing::instance::encapsulation_state& state, size_t depth);
-        bool m_derived_191(bool is_can, std::shared_ptr<yaoosl::parsing::instance::encapsulation>& actual, yaoosl::parsing::instance::encapsulation_state& state, size_t depth);
-        bool m_private_192(bool is_can, std::shared_ptr<yaoosl::parsing::instance::encapsulation>& actual, yaoosl::parsing::instance::encapsulation_state& state, size_t depth);
-        bool alternatives193(bool is_can, std::shared_ptr<yaoosl::parsing::instance::encapsulation>& actual, yaoosl::parsing::instance::encapsulation_state& state, size_t depth);
+        bool m_public_178(bool is_can, std::shared_ptr<yaoosl::parsing::instance::encapsulation>& actual, yaoosl::parsing::instance::encapsulation_state& state, size_t depth);
+        bool m_local_179(bool is_can, std::shared_ptr<yaoosl::parsing::instance::encapsulation>& actual, yaoosl::parsing::instance::encapsulation_state& state, size_t depth);
+        bool m_derived_180(bool is_can, std::shared_ptr<yaoosl::parsing::instance::encapsulation>& actual, yaoosl::parsing::instance::encapsulation_state& state, size_t depth);
+        bool m_private_181(bool is_can, std::shared_ptr<yaoosl::parsing::instance::encapsulation>& actual, yaoosl::parsing::instance::encapsulation_state& state, size_t depth);
+        bool alternatives182(bool is_can, std::shared_ptr<yaoosl::parsing::instance::encapsulation>& actual, yaoosl::parsing::instance::encapsulation_state& state, size_t depth);
         bool p_can_encapsulation(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::encapsulation> p_match_encapsulation(size_t depth);
-        bool m_namespace_identnavigation_194(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth);
-        bool m_curlybrackedopen_195(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth);
-        bool m_curlybrackedclose_196(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth);
-        bool m_namespace_197(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth);
-        bool m_conversion_198(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth);
-        bool m_class_199(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth);
-        bool m_method_200(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth);
-        bool alternatives201(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth);
-        bool while202_203(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth);
-        bool m_curlybrackedclose_204(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth);
+        bool m_attributes_183(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth);
+        bool m_namespace_identnavigation_184(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth);
+        bool m_curlybrackedopen_185(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth);
+        bool m_curlybrackedclose_186(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth);
+        bool m_namespace_187(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth);
+        bool m_conversion_188(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth);
+        bool m_class_189(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth);
+        bool m_method_190(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth);
+        bool alternatives191(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth);
+        bool while192_193(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth);
+        bool m_curlybrackedclose_194(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth);
+        bool m_attributes_195(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth);
+        bool if196_197(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth);
         bool p_can_namespace_(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::namespace_> p_match_namespace_(size_t depth);
-        bool m_encapsulation_class_ident_205(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
-        bool m_curlybrackedopen_206(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
-        bool m_curlybrackedclose_207(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
-        bool m_indexer_208(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
-        bool m_operatorbinaryoverload_209(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
-        bool m_operatorunaryoverload_210(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
-        bool m_conversion_211(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
-        bool m_class_212(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
-        bool m_constructor_213(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
-        bool m_destructor_214(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
-        bool m_copystructor_215(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
-        bool m_property_216(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
-        bool m_method_217(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
-        bool alternatives218(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
-        bool while219_220(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
-        bool m_curlybrackedclose_221(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
+        bool m_attributes_198(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
+        bool m_encapsulation_class_ident_199(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
+        bool m_curlybrackedopen_200(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
+        bool m_curlybrackedclose_201(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
+        bool m_indexer_202(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
+        bool m_operatorbinaryoverload_203(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
+        bool m_operatorunaryoverload_204(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
+        bool m_conversion_205(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
+        bool m_class_206(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
+        bool m_constructor_207(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
+        bool m_destructor_208(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
+        bool m_copystructor_209(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
+        bool m_property_210(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
+        bool m_method_211(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
+        bool alternatives212(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
+        bool while213_214(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
+        bool m_curlybrackedclose_215(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
+        bool m_attributes_216(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
+        bool if217_218(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth);
         bool p_can_class_(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::class_> p_match_class_(size_t depth);
-        bool m_typematch_ident_222(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default>& actual, yaoosl::parsing::instance::method_arglist_item_with_default_state& state, size_t depth);
-        bool m_equal_223(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default>& actual, yaoosl::parsing::instance::method_arglist_item_with_default_state& state, size_t depth);
-        bool m_equal_expvalue_224(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default>& actual, yaoosl::parsing::instance::method_arglist_item_with_default_state& state, size_t depth);
-        bool if225_226(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default>& actual, yaoosl::parsing::instance::method_arglist_item_with_default_state& state, size_t depth);
+        bool m_attributes_219(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default>& actual, yaoosl::parsing::instance::method_arglist_item_with_default_state& state, size_t depth);
+        bool m_typematch_ident_220(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default>& actual, yaoosl::parsing::instance::method_arglist_item_with_default_state& state, size_t depth);
+        bool m_equal_221(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default>& actual, yaoosl::parsing::instance::method_arglist_item_with_default_state& state, size_t depth);
+        bool m_equal_expvalue_222(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default>& actual, yaoosl::parsing::instance::method_arglist_item_with_default_state& state, size_t depth);
+        bool if223_224(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default>& actual, yaoosl::parsing::instance::method_arglist_item_with_default_state& state, size_t depth);
+        bool m_attributes_225(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default>& actual, yaoosl::parsing::instance::method_arglist_item_with_default_state& state, size_t depth);
+        bool if226_227(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default>& actual, yaoosl::parsing::instance::method_arglist_item_with_default_state& state, size_t depth);
         bool p_can_method_arglist_item_with_default(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default> p_match_method_arglist_item_with_default(size_t depth);
-        bool m_typematch_ident_227(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item>& actual, yaoosl::parsing::instance::method_arglist_item_state& state, size_t depth);
+        bool m_attributes_228(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item>& actual, yaoosl::parsing::instance::method_arglist_item_state& state, size_t depth);
+        bool m_typematch_ident_229(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item>& actual, yaoosl::parsing::instance::method_arglist_item_state& state, size_t depth);
+        bool m_attributes_230(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item>& actual, yaoosl::parsing::instance::method_arglist_item_state& state, size_t depth);
+        bool if231_232(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item>& actual, yaoosl::parsing::instance::method_arglist_item_state& state, size_t depth);
         bool p_can_method_arglist_item(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::method_arglist_item> p_match_method_arglist_item(size_t depth);
-        bool m_roundbrackedopen_228(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth);
-        bool m_methodarglistitemwithdefault_229(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth);
-        bool m_methodarglistitemwithdefault_230(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth);
-        bool m_roundbrackedclose_231(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth);
-        bool m_comma_methodarglistitemwithdefault_232(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth);
-        bool alternatives233(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth);
-        bool while234_235(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth);
-        bool m_comma_236(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth);
-        bool m_comma_237(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth);
-        bool if238_239(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth);
-        bool if240_241(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth);
-        bool m_roundbrackedclose_242(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth);
+        bool m_roundbrackedopen_233(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth);
+        bool m_methodarglistitemwithdefault_234(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth);
+        bool m_methodarglistitemwithdefault_235(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth);
+        bool m_roundbrackedclose_236(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth);
+        bool m_comma_methodarglistitemwithdefault_237(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth);
+        bool alternatives238(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth);
+        bool while239_240(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth);
+        bool m_comma_241(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth);
+        bool m_comma_242(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth);
+        bool if243_244(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth);
+        bool if245_246(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth);
+        bool m_roundbrackedclose_247(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth);
         bool p_can_method_arglist(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::method_arglist> p_match_method_arglist(size_t depth);
-        bool m_squarebrackedopen_243(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth);
-        bool m_methodarglistitem_244(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth);
-        bool m_squarebrackedclose_245(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth);
-        bool m_comma_methodarglistitem_246(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth);
-        bool alternatives247(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth);
-        bool while248_249(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth);
-        bool m_comma_250(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth);
-        bool m_comma_251(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth);
-        bool if252_253(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth);
-        bool m_squarebrackedclose_254(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth);
+        bool m_squarebrackedopen_248(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth);
+        bool m_methodarglistitem_249(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth);
+        bool m_squarebrackedclose_250(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth);
+        bool m_comma_methodarglistitem_251(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth);
+        bool alternatives252(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth);
+        bool while253_254(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth);
+        bool m_comma_255(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth);
+        bool m_comma_256(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth);
+        bool if257_258(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth);
+        bool m_squarebrackedclose_259(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth);
         bool p_can_method_arglist_indexer(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer> p_match_method_arglist_indexer(size_t depth);
-        bool m_ident_255(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_ident>& actual, yaoosl::parsing::instance::method_ident_state& state, size_t depth);
-        bool m_templatedefinition_256(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_ident>& actual, yaoosl::parsing::instance::method_ident_state& state, size_t depth);
-        bool m_templatedefinition_257(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_ident>& actual, yaoosl::parsing::instance::method_ident_state& state, size_t depth);
-        bool if258_259(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_ident>& actual, yaoosl::parsing::instance::method_ident_state& state, size_t depth);
+        bool m_ident_260(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_ident>& actual, yaoosl::parsing::instance::method_ident_state& state, size_t depth);
+        bool m_templatedefinition_261(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_ident>& actual, yaoosl::parsing::instance::method_ident_state& state, size_t depth);
+        bool m_templatedefinition_262(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_ident>& actual, yaoosl::parsing::instance::method_ident_state& state, size_t depth);
+        bool if263_264(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_ident>& actual, yaoosl::parsing::instance::method_ident_state& state, size_t depth);
         bool p_can_method_ident(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::method_ident> p_match_method_ident(size_t depth);
-        bool m_encapsulation_260(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method>& actual, yaoosl::parsing::instance::method_state& state, size_t depth);
-        bool m_unbound_261(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method>& actual, yaoosl::parsing::instance::method_state& state, size_t depth);
-        bool m_unbound_262(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method>& actual, yaoosl::parsing::instance::method_state& state, size_t depth);
-        bool if263_264(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method>& actual, yaoosl::parsing::instance::method_state& state, size_t depth);
-        bool m_typematch_methodident_methodarglist_scope_265(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method>& actual, yaoosl::parsing::instance::method_state& state, size_t depth);
+        bool m_attributes_265(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method>& actual, yaoosl::parsing::instance::method_state& state, size_t depth);
+        bool m_encapsulation_266(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method>& actual, yaoosl::parsing::instance::method_state& state, size_t depth);
+        bool m_unbound_267(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method>& actual, yaoosl::parsing::instance::method_state& state, size_t depth);
+        bool m_unbound_268(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method>& actual, yaoosl::parsing::instance::method_state& state, size_t depth);
+        bool if269_270(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method>& actual, yaoosl::parsing::instance::method_state& state, size_t depth);
+        bool m_typematch_methodident_methodarglist_scope_271(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method>& actual, yaoosl::parsing::instance::method_state& state, size_t depth);
+        bool m_attributes_272(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method>& actual, yaoosl::parsing::instance::method_state& state, size_t depth);
+        bool if273_274(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method>& actual, yaoosl::parsing::instance::method_state& state, size_t depth);
         bool p_can_method(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::method> p_match_method(size_t depth);
-        bool m_encapsulation_methodident_methodarglist_scope_266(bool is_can, std::shared_ptr<yaoosl::parsing::instance::constructor>& actual, yaoosl::parsing::instance::constructor_state& state, size_t depth);
+        bool m_attributes_275(bool is_can, std::shared_ptr<yaoosl::parsing::instance::constructor>& actual, yaoosl::parsing::instance::constructor_state& state, size_t depth);
+        bool m_encapsulation_methodident_methodarglist_scope_276(bool is_can, std::shared_ptr<yaoosl::parsing::instance::constructor>& actual, yaoosl::parsing::instance::constructor_state& state, size_t depth);
+        bool m_attributes_277(bool is_can, std::shared_ptr<yaoosl::parsing::instance::constructor>& actual, yaoosl::parsing::instance::constructor_state& state, size_t depth);
+        bool if278_279(bool is_can, std::shared_ptr<yaoosl::parsing::instance::constructor>& actual, yaoosl::parsing::instance::constructor_state& state, size_t depth);
         bool p_can_constructor(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::constructor> p_match_constructor(size_t depth);
-        bool m_encapsulation_tilde_methodident_methodarglist_scope_267(bool is_can, std::shared_ptr<yaoosl::parsing::instance::destructor>& actual, yaoosl::parsing::instance::destructor_state& state, size_t depth);
+        bool m_attributes_280(bool is_can, std::shared_ptr<yaoosl::parsing::instance::destructor>& actual, yaoosl::parsing::instance::destructor_state& state, size_t depth);
+        bool m_encapsulation_tilde_methodident_methodarglist_scope_281(bool is_can, std::shared_ptr<yaoosl::parsing::instance::destructor>& actual, yaoosl::parsing::instance::destructor_state& state, size_t depth);
+        bool m_attributes_282(bool is_can, std::shared_ptr<yaoosl::parsing::instance::destructor>& actual, yaoosl::parsing::instance::destructor_state& state, size_t depth);
+        bool if283_284(bool is_can, std::shared_ptr<yaoosl::parsing::instance::destructor>& actual, yaoosl::parsing::instance::destructor_state& state, size_t depth);
         bool p_can_destructor(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::destructor> p_match_destructor(size_t depth);
-        bool m_encapsulation_plus_methodident_methodarglist_268(bool is_can, std::shared_ptr<yaoosl::parsing::instance::copystructor>& actual, yaoosl::parsing::instance::copystructor_state& state, size_t depth);
-        bool m_scope_269(bool is_can, std::shared_ptr<yaoosl::parsing::instance::copystructor>& actual, yaoosl::parsing::instance::copystructor_state& state, size_t depth);
-        bool m_equal_delete_270(bool is_can, std::shared_ptr<yaoosl::parsing::instance::copystructor>& actual, yaoosl::parsing::instance::copystructor_state& state, size_t depth);
-        bool alternatives271(bool is_can, std::shared_ptr<yaoosl::parsing::instance::copystructor>& actual, yaoosl::parsing::instance::copystructor_state& state, size_t depth);
+        bool m_attributes_285(bool is_can, std::shared_ptr<yaoosl::parsing::instance::copystructor>& actual, yaoosl::parsing::instance::copystructor_state& state, size_t depth);
+        bool m_encapsulation_plus_methodident_methodarglist_286(bool is_can, std::shared_ptr<yaoosl::parsing::instance::copystructor>& actual, yaoosl::parsing::instance::copystructor_state& state, size_t depth);
+        bool m_scope_287(bool is_can, std::shared_ptr<yaoosl::parsing::instance::copystructor>& actual, yaoosl::parsing::instance::copystructor_state& state, size_t depth);
+        bool m_equal_delete_288(bool is_can, std::shared_ptr<yaoosl::parsing::instance::copystructor>& actual, yaoosl::parsing::instance::copystructor_state& state, size_t depth);
+        bool alternatives289(bool is_can, std::shared_ptr<yaoosl::parsing::instance::copystructor>& actual, yaoosl::parsing::instance::copystructor_state& state, size_t depth);
+        bool m_attributes_290(bool is_can, std::shared_ptr<yaoosl::parsing::instance::copystructor>& actual, yaoosl::parsing::instance::copystructor_state& state, size_t depth);
+        bool if291_292(bool is_can, std::shared_ptr<yaoosl::parsing::instance::copystructor>& actual, yaoosl::parsing::instance::copystructor_state& state, size_t depth);
         bool p_can_copystructor(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::copystructor> p_match_copystructor(size_t depth);
-        bool m_encapsulation_unbound_conversion_typematch_272(bool is_can, std::shared_ptr<yaoosl::parsing::instance::conversion>& actual, yaoosl::parsing::instance::conversion_state& state, size_t depth);
-        bool m_roundbrackedopen_typematch_ident_roundbrackedclose_273(bool is_can, std::shared_ptr<yaoosl::parsing::instance::conversion>& actual, yaoosl::parsing::instance::conversion_state& state, size_t depth);
-        bool m_scope_274(bool is_can, std::shared_ptr<yaoosl::parsing::instance::conversion>& actual, yaoosl::parsing::instance::conversion_state& state, size_t depth);
+        bool m_attributes_293(bool is_can, std::shared_ptr<yaoosl::parsing::instance::conversion>& actual, yaoosl::parsing::instance::conversion_state& state, size_t depth);
+        bool m_encapsulation_unbound_conversion_typematch_294(bool is_can, std::shared_ptr<yaoosl::parsing::instance::conversion>& actual, yaoosl::parsing::instance::conversion_state& state, size_t depth);
+        bool m_roundbrackedopen_typematch_ident_roundbrackedclose_295(bool is_can, std::shared_ptr<yaoosl::parsing::instance::conversion>& actual, yaoosl::parsing::instance::conversion_state& state, size_t depth);
+        bool m_scope_296(bool is_can, std::shared_ptr<yaoosl::parsing::instance::conversion>& actual, yaoosl::parsing::instance::conversion_state& state, size_t depth);
+        bool m_attributes_297(bool is_can, std::shared_ptr<yaoosl::parsing::instance::conversion>& actual, yaoosl::parsing::instance::conversion_state& state, size_t depth);
+        bool if298_299(bool is_can, std::shared_ptr<yaoosl::parsing::instance::conversion>& actual, yaoosl::parsing::instance::conversion_state& state, size_t depth);
         bool p_can_conversion(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::conversion> p_match_conversion(size_t depth);
-        bool m_encapsulation_typematch_275(bool is_can, std::shared_ptr<yaoosl::parsing::instance::indexer>& actual, yaoosl::parsing::instance::indexer_state& state, size_t depth);
-        bool m_templatedefinition_276(bool is_can, std::shared_ptr<yaoosl::parsing::instance::indexer>& actual, yaoosl::parsing::instance::indexer_state& state, size_t depth);
-        bool m_templatedefinition_277(bool is_can, std::shared_ptr<yaoosl::parsing::instance::indexer>& actual, yaoosl::parsing::instance::indexer_state& state, size_t depth);
-        bool if278_279(bool is_can, std::shared_ptr<yaoosl::parsing::instance::indexer>& actual, yaoosl::parsing::instance::indexer_state& state, size_t depth);
-        bool m_methodarglistindexer_scopegetset_280(bool is_can, std::shared_ptr<yaoosl::parsing::instance::indexer>& actual, yaoosl::parsing::instance::indexer_state& state, size_t depth);
+        bool m_attributes_300(bool is_can, std::shared_ptr<yaoosl::parsing::instance::indexer>& actual, yaoosl::parsing::instance::indexer_state& state, size_t depth);
+        bool m_encapsulation_typematch_301(bool is_can, std::shared_ptr<yaoosl::parsing::instance::indexer>& actual, yaoosl::parsing::instance::indexer_state& state, size_t depth);
+        bool m_templatedefinition_302(bool is_can, std::shared_ptr<yaoosl::parsing::instance::indexer>& actual, yaoosl::parsing::instance::indexer_state& state, size_t depth);
+        bool m_templatedefinition_303(bool is_can, std::shared_ptr<yaoosl::parsing::instance::indexer>& actual, yaoosl::parsing::instance::indexer_state& state, size_t depth);
+        bool if304_305(bool is_can, std::shared_ptr<yaoosl::parsing::instance::indexer>& actual, yaoosl::parsing::instance::indexer_state& state, size_t depth);
+        bool m_methodarglistindexer_scopegetset_306(bool is_can, std::shared_ptr<yaoosl::parsing::instance::indexer>& actual, yaoosl::parsing::instance::indexer_state& state, size_t depth);
+        bool m_attributes_307(bool is_can, std::shared_ptr<yaoosl::parsing::instance::indexer>& actual, yaoosl::parsing::instance::indexer_state& state, size_t depth);
+        bool if308_309(bool is_can, std::shared_ptr<yaoosl::parsing::instance::indexer>& actual, yaoosl::parsing::instance::indexer_state& state, size_t depth);
         bool p_can_indexer(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::indexer> p_match_indexer(size_t depth);
-        bool m_encapsulation_unbound_typematch_operator_281(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
-        bool m_templatedefinition_282(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
-        bool m_templatedefinition_283(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
-        bool if284_285(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
-        bool m_roundbrackedopen_methodarglistitem_roundbrackedclose_286(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
-        bool m_plus_287(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
-        bool m_minus_288(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
-        bool m_star_289(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
-        bool m_slash_290(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
-        bool m_lessthenlessthenlessthen_291(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
-        bool m_lessthenlessthen_292(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
-        bool m_lessthenequal_293(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
-        bool m_lessthen_294(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
-        bool m_greaterthengreaterthengreaterthen_295(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
-        bool m_greaterthengreaterthen_296(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
-        bool m_greaterthenequal_297(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
-        bool m_greaterthen_298(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
-        bool m_verticalbarverticalbar_299(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
-        bool m_verticalbar_300(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
-        bool m_ampersandampersand_301(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
-        bool m_ampersand_302(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
-        bool alternatives303(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
-        bool m_roundbrackedopen_methodarglistitem_roundbrackedclose_304(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
-        bool m_scope_305(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool m_attributes_310(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool m_encapsulation_unbound_typematch_operator_311(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool m_templatedefinition_312(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool m_templatedefinition_313(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool if314_315(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool m_roundbrackedopen_methodarglistitem_roundbrackedclose_316(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool m_plus_317(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool m_minus_318(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool m_star_319(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool m_slash_320(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool m_lessthenlessthenlessthen_321(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool m_lessthenlessthen_322(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool m_lessthenequal_323(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool m_lessthen_324(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool m_greaterthengreaterthengreaterthen_325(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool m_greaterthengreaterthen_326(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool m_greaterthenequal_327(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool m_greaterthen_328(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool m_verticalbarverticalbar_329(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool m_verticalbar_330(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool m_ampersandampersand_331(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool m_ampersand_332(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool alternatives333(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool m_roundbrackedopen_methodarglistitem_roundbrackedclose_334(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool m_scope_335(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool m_attributes_336(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
+        bool if337_338(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth);
         bool p_can_operator_binary_overload(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload> p_match_operator_binary_overload(size_t depth);
-        bool m_encapsulation_unbound_typematch_operator_306(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth);
-        bool m_templatedefinition_307(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth);
-        bool m_templatedefinition_308(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth);
-        bool if309_310(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth);
-        bool m_plus_311(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth);
-        bool m_minus_312(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth);
-        bool m_exclamation_313(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth);
-        bool m_tilde_314(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth);
-        bool alternatives315(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth);
-        bool m_roundbrackedopen_methodarglistitem_roundbrackedclose_316(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth);
-        bool m_scope_317(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth);
+        bool m_attributes_339(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth);
+        bool m_encapsulation_unbound_typematch_operator_340(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth);
+        bool m_templatedefinition_341(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth);
+        bool m_templatedefinition_342(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth);
+        bool if343_344(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth);
+        bool m_plus_345(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth);
+        bool m_minus_346(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth);
+        bool m_exclamation_347(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth);
+        bool m_tilde_348(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth);
+        bool alternatives349(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth);
+        bool m_roundbrackedopen_methodarglistitem_roundbrackedclose_350(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth);
+        bool m_scope_351(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth);
+        bool m_attributes_352(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth);
+        bool if353_354(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth);
         bool p_can_operator_unary_overload(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload> p_match_operator_unary_overload(size_t depth);
-        bool m_encapsulation_typematch_ident_semicolon_318(bool is_can, std::shared_ptr<yaoosl::parsing::instance::property>& actual, yaoosl::parsing::instance::property_state& state, size_t depth);
-        bool m_encapsulation_typematch_ident_scopegetset_319(bool is_can, std::shared_ptr<yaoosl::parsing::instance::property>& actual, yaoosl::parsing::instance::property_state& state, size_t depth);
-        bool alternatives320(bool is_can, std::shared_ptr<yaoosl::parsing::instance::property>& actual, yaoosl::parsing::instance::property_state& state, size_t depth);
+        bool m_attributes_355(bool is_can, std::shared_ptr<yaoosl::parsing::instance::property>& actual, yaoosl::parsing::instance::property_state& state, size_t depth);
+        bool m_encapsulation_typematch_ident_semicolon_356(bool is_can, std::shared_ptr<yaoosl::parsing::instance::property>& actual, yaoosl::parsing::instance::property_state& state, size_t depth);
+        bool m_encapsulation_typematch_ident_scopegetset_357(bool is_can, std::shared_ptr<yaoosl::parsing::instance::property>& actual, yaoosl::parsing::instance::property_state& state, size_t depth);
+        bool alternatives358(bool is_can, std::shared_ptr<yaoosl::parsing::instance::property>& actual, yaoosl::parsing::instance::property_state& state, size_t depth);
+        bool m_attributes_359(bool is_can, std::shared_ptr<yaoosl::parsing::instance::property>& actual, yaoosl::parsing::instance::property_state& state, size_t depth);
+        bool if360_361(bool is_can, std::shared_ptr<yaoosl::parsing::instance::property>& actual, yaoosl::parsing::instance::property_state& state, size_t depth);
         bool p_can_property(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::property> p_match_property(size_t depth);
-        bool m_namespace_321(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth);
-        bool m_conversion_322(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth);
-        bool m_class_323(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth);
-        bool m_method_324(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth);
-        bool alternatives325(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth);
-        bool while326_327(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth);
+        bool m_expor_362(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_arg_item_a>& actual, yaoosl::parsing::instance::attribute_arg_item_a_state& state, size_t depth);
+        bool p_can_attribute_arg_item_a(size_t depth);
+        std::shared_ptr<yaoosl::parsing::instance::attribute_arg_item_a> p_match_attribute_arg_item_a(size_t depth);
+        bool m_ident_colon_expor_363(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_arg_item_b>& actual, yaoosl::parsing::instance::attribute_arg_item_b_state& state, size_t depth);
+        bool p_can_attribute_arg_item_b(size_t depth);
+        std::shared_ptr<yaoosl::parsing::instance::attribute_arg_item_b> p_match_attribute_arg_item_b(size_t depth);
+        bool m_attributeargitema_364(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth);
+        bool m_attributeargitema_365(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth);
+        bool m_attributeargitema_366(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth);
+        bool m_comma_attributeargitema_367(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth);
+        bool while368_369(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth);
+        bool m_comma_370(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth);
+        bool m_comma_371(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth);
+        bool if372_373(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth);
+        bool if374_375(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth);
+        bool m_attributeargitemb_376(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth);
+        bool m_attributeargitemb_377(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth);
+        bool m_attributeargitemb_378(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth);
+        bool m_comma_attributeargitemb_379(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth);
+        bool while380_381(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth);
+        bool m_comma_382(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth);
+        bool m_comma_383(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth);
+        bool if384_385(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth);
+        bool if386_387(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth);
+        bool p_can_attribute_args(size_t depth);
+        std::shared_ptr<yaoosl::parsing::instance::attribute_args> p_match_attribute_args(size_t depth);
+        bool m_typematch_388(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_item>& actual, yaoosl::parsing::instance::attribute_item_state& state, size_t depth);
+        bool m_typematch_roundbrackedopen_roundbrackedclose_389(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_item>& actual, yaoosl::parsing::instance::attribute_item_state& state, size_t depth);
+        bool m_typematch_roundbrackedopen_attributeargs_roundbrackedclose_390(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_item>& actual, yaoosl::parsing::instance::attribute_item_state& state, size_t depth);
+        bool alternatives391(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_item>& actual, yaoosl::parsing::instance::attribute_item_state& state, size_t depth);
+        bool p_can_attribute_item(size_t depth);
+        std::shared_ptr<yaoosl::parsing::instance::attribute_item> p_match_attribute_item(size_t depth);
+        bool m_squarebrackedopen_392(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute>& actual, yaoosl::parsing::instance::attribute_state& state, size_t depth);
+        bool m_attributeitem_393(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute>& actual, yaoosl::parsing::instance::attribute_state& state, size_t depth);
+        bool m_attributeitem_394(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute>& actual, yaoosl::parsing::instance::attribute_state& state, size_t depth);
+        bool m_attributeitem_395(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute>& actual, yaoosl::parsing::instance::attribute_state& state, size_t depth);
+        bool m_comma_attributeitem_396(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute>& actual, yaoosl::parsing::instance::attribute_state& state, size_t depth);
+        bool while397_398(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute>& actual, yaoosl::parsing::instance::attribute_state& state, size_t depth);
+        bool m_comma_399(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute>& actual, yaoosl::parsing::instance::attribute_state& state, size_t depth);
+        bool m_comma_400(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute>& actual, yaoosl::parsing::instance::attribute_state& state, size_t depth);
+        bool if401_402(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute>& actual, yaoosl::parsing::instance::attribute_state& state, size_t depth);
+        bool if403_404(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute>& actual, yaoosl::parsing::instance::attribute_state& state, size_t depth);
+        bool m_squarebrackedclose_405(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute>& actual, yaoosl::parsing::instance::attribute_state& state, size_t depth);
+        bool p_can_attribute(size_t depth);
+        std::shared_ptr<yaoosl::parsing::instance::attribute> p_match_attribute(size_t depth);
+        bool m_attribute_406(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attributes>& actual, yaoosl::parsing::instance::attributes_state& state, size_t depth);
+        bool m_attribute_407(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attributes>& actual, yaoosl::parsing::instance::attributes_state& state, size_t depth);
+        bool while408_409(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attributes>& actual, yaoosl::parsing::instance::attributes_state& state, size_t depth);
+        bool p_can_attributes(size_t depth);
+        std::shared_ptr<yaoosl::parsing::instance::attributes> p_match_attributes(size_t depth);
+        bool m_namespace_410(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth);
+        bool m_conversion_411(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth);
+        bool m_class_412(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth);
+        bool m_method_413(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth);
+        bool alternatives414(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth);
+        bool while415_416(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth);
         bool p_can_main(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::main> p_match_main(size_t depth);
-        bool m_expchain_expchaincall_328(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain>& actual, yaoosl::parsing::instance::exp_chain_state& state, size_t depth);
-        bool m_expchain_expchainaccess_329(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain>& actual, yaoosl::parsing::instance::exp_chain_state& state, size_t depth);
-        bool m_expchain_expchainindexer_330(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain>& actual, yaoosl::parsing::instance::exp_chain_state& state, size_t depth);
-        bool m_expchainstart_331(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain>& actual, yaoosl::parsing::instance::exp_chain_state& state, size_t depth);
+        bool m_expchain_expchaincall_417(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain>& actual, yaoosl::parsing::instance::exp_chain_state& state, size_t depth);
+        bool m_expchain_expchainaccess_418(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain>& actual, yaoosl::parsing::instance::exp_chain_state& state, size_t depth);
+        bool m_expchain_expchainindexer_419(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain>& actual, yaoosl::parsing::instance::exp_chain_state& state, size_t depth);
+        bool m_expchainstart_420(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain>& actual, yaoosl::parsing::instance::exp_chain_state& state, size_t depth);
         bool lr_can_exp_chain(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::exp_chain> lr_match_exp_chain(size_t depth);
-        bool m_identnavigation_dot_ident_332(bool is_can, std::shared_ptr<yaoosl::parsing::instance::ident_navigation>& actual, yaoosl::parsing::instance::ident_navigation_state& state, size_t depth);
-        bool m_ident_333(bool is_can, std::shared_ptr<yaoosl::parsing::instance::ident_navigation>& actual, yaoosl::parsing::instance::ident_navigation_state& state, size_t depth);
+        bool m_identnavigation_dot_ident_421(bool is_can, std::shared_ptr<yaoosl::parsing::instance::ident_navigation>& actual, yaoosl::parsing::instance::ident_navigation_state& state, size_t depth);
+        bool m_ident_422(bool is_can, std::shared_ptr<yaoosl::parsing::instance::ident_navigation>& actual, yaoosl::parsing::instance::ident_navigation_state& state, size_t depth);
         bool lr_can_ident_navigation(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::ident_navigation> lr_match_ident_navigation(size_t depth);
-        bool m_typenavigation_dot_ident_templateusage_334(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_navigation>& actual, yaoosl::parsing::instance::type_navigation_state& state, size_t depth);
-        bool m_typenavigation_dot_ident_335(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_navigation>& actual, yaoosl::parsing::instance::type_navigation_state& state, size_t depth);
-        bool m_ident_336(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_navigation>& actual, yaoosl::parsing::instance::type_navigation_state& state, size_t depth);
+        bool m_typenavigation_dot_ident_templateusage_423(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_navigation>& actual, yaoosl::parsing::instance::type_navigation_state& state, size_t depth);
+        bool m_typenavigation_dot_ident_424(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_navigation>& actual, yaoosl::parsing::instance::type_navigation_state& state, size_t depth);
+        bool m_ident_425(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_navigation>& actual, yaoosl::parsing::instance::type_navigation_state& state, size_t depth);
         bool lr_can_type_navigation(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::type_navigation> lr_match_type_navigation(size_t depth);
-        bool m_expbinary3_lessthenlessthen_expunary_337(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_3>& actual, yaoosl::parsing::instance::exp_binary_3_state& state, size_t depth);
-        bool m_expbinary3_greaterthengreaterthen_expunary_338(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_3>& actual, yaoosl::parsing::instance::exp_binary_3_state& state, size_t depth);
-        bool m_expbinary3_lessthenlessthenlessthen_expunary_339(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_3>& actual, yaoosl::parsing::instance::exp_binary_3_state& state, size_t depth);
-        bool m_expbinary3_greaterthengreaterthengreaterthen_expunary_340(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_3>& actual, yaoosl::parsing::instance::exp_binary_3_state& state, size_t depth);
-        bool m_expunary_341(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_3>& actual, yaoosl::parsing::instance::exp_binary_3_state& state, size_t depth);
+        bool m_expbinary3_lessthenlessthen_expunary_426(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_3>& actual, yaoosl::parsing::instance::exp_binary_3_state& state, size_t depth);
+        bool m_expbinary3_greaterthengreaterthen_expunary_427(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_3>& actual, yaoosl::parsing::instance::exp_binary_3_state& state, size_t depth);
+        bool m_expbinary3_lessthenlessthenlessthen_expunary_428(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_3>& actual, yaoosl::parsing::instance::exp_binary_3_state& state, size_t depth);
+        bool m_expbinary3_greaterthengreaterthengreaterthen_expunary_429(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_3>& actual, yaoosl::parsing::instance::exp_binary_3_state& state, size_t depth);
+        bool m_expunary_430(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_3>& actual, yaoosl::parsing::instance::exp_binary_3_state& state, size_t depth);
         bool lr_can_exp_binary_3(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::exp_binary_3> lr_match_exp_binary_3(size_t depth);
-        bool m_expbinary2_ampersand_expbinary3_342(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_2>& actual, yaoosl::parsing::instance::exp_binary_2_state& state, size_t depth);
-        bool m_expbinary3_343(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_2>& actual, yaoosl::parsing::instance::exp_binary_2_state& state, size_t depth);
+        bool m_expbinary2_ampersand_expbinary3_431(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_2>& actual, yaoosl::parsing::instance::exp_binary_2_state& state, size_t depth);
+        bool m_expbinary3_432(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_2>& actual, yaoosl::parsing::instance::exp_binary_2_state& state, size_t depth);
         bool lr_can_exp_binary_2(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::exp_binary_2> lr_match_exp_binary_2(size_t depth);
-        bool m_expbinary1_verticalbar_expbinary2_344(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_1>& actual, yaoosl::parsing::instance::exp_binary_1_state& state, size_t depth);
-        bool m_expbinary2_345(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_1>& actual, yaoosl::parsing::instance::exp_binary_1_state& state, size_t depth);
+        bool m_expbinary1_verticalbar_expbinary2_433(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_1>& actual, yaoosl::parsing::instance::exp_binary_1_state& state, size_t depth);
+        bool m_expbinary2_434(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_1>& actual, yaoosl::parsing::instance::exp_binary_1_state& state, size_t depth);
         bool lr_can_exp_binary_1(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::exp_binary_1> lr_match_exp_binary_1(size_t depth);
-        bool m_exparithmetic2_slash_expbinary1_346(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2>& actual, yaoosl::parsing::instance::exp_arithmetic_2_state& state, size_t depth);
-        bool m_exparithmetic2_star_expbinary1_347(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2>& actual, yaoosl::parsing::instance::exp_arithmetic_2_state& state, size_t depth);
-        bool m_expbinary1_348(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2>& actual, yaoosl::parsing::instance::exp_arithmetic_2_state& state, size_t depth);
+        bool m_exparithmetic2_slash_expbinary1_435(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2>& actual, yaoosl::parsing::instance::exp_arithmetic_2_state& state, size_t depth);
+        bool m_exparithmetic2_star_expbinary1_436(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2>& actual, yaoosl::parsing::instance::exp_arithmetic_2_state& state, size_t depth);
+        bool m_expbinary1_437(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2>& actual, yaoosl::parsing::instance::exp_arithmetic_2_state& state, size_t depth);
         bool lr_can_exp_arithmetic_2(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2> lr_match_exp_arithmetic_2(size_t depth);
-        bool m_exparithmetic1_plus_exparithmetic2_349(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1>& actual, yaoosl::parsing::instance::exp_arithmetic_1_state& state, size_t depth);
-        bool m_exparithmetic1_minus_exparithmetic2_350(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1>& actual, yaoosl::parsing::instance::exp_arithmetic_1_state& state, size_t depth);
-        bool m_exparithmetic2_351(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1>& actual, yaoosl::parsing::instance::exp_arithmetic_1_state& state, size_t depth);
+        bool m_exparithmetic1_plus_exparithmetic2_438(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1>& actual, yaoosl::parsing::instance::exp_arithmetic_1_state& state, size_t depth);
+        bool m_exparithmetic1_minus_exparithmetic2_439(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1>& actual, yaoosl::parsing::instance::exp_arithmetic_1_state& state, size_t depth);
+        bool m_exparithmetic2_440(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1>& actual, yaoosl::parsing::instance::exp_arithmetic_1_state& state, size_t depth);
         bool lr_can_exp_arithmetic_1(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1> lr_match_exp_arithmetic_1(size_t depth);
-        bool m_expcompare_lessthenequal_exparithmetic1_352(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth);
-        bool m_expcompare_lessthen_exparithmetic1_353(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth);
-        bool m_expcompare_greaterthenequal_exparithmetic1_354(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth);
-        bool m_expcompare_greaterthen_exparithmetic1_355(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth);
-        bool m_exparithmetic1_356(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth);
+        bool m_expcompare_lessthenequal_exparithmetic1_441(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth);
+        bool m_expcompare_lessthen_exparithmetic1_442(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth);
+        bool m_expcompare_greaterthenequal_exparithmetic1_443(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth);
+        bool m_expcompare_greaterthen_exparithmetic1_444(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth);
+        bool m_exparithmetic1_445(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth);
         bool lr_can_exp_compare(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::exp_compare> lr_match_exp_compare(size_t depth);
-        bool m_expequality_lessthenequal_expcompare_357(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth);
-        bool m_expequality_lessthen_expcompare_358(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth);
-        bool m_expequality_greaterthenequal_expcompare_359(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth);
-        bool m_expequality_greaterthen_expcompare_360(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth);
-        bool m_expcompare_361(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth);
+        bool m_expequality_lessthenequal_expcompare_446(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth);
+        bool m_expequality_lessthen_expcompare_447(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth);
+        bool m_expequality_greaterthenequal_expcompare_448(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth);
+        bool m_expequality_greaterthen_expcompare_449(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth);
+        bool m_expcompare_450(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth);
         bool lr_can_exp_equality(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::exp_equality> lr_match_exp_equality(size_t depth);
-        bool m_expand_ampersandampersand_expequality_362(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_and>& actual, yaoosl::parsing::instance::exp_and_state& state, size_t depth);
-        bool m_expequality_363(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_and>& actual, yaoosl::parsing::instance::exp_and_state& state, size_t depth);
+        bool m_expand_ampersandampersand_expequality_451(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_and>& actual, yaoosl::parsing::instance::exp_and_state& state, size_t depth);
+        bool m_expequality_452(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_and>& actual, yaoosl::parsing::instance::exp_and_state& state, size_t depth);
         bool lr_can_exp_and(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::exp_and> lr_match_exp_and(size_t depth);
-        bool m_expor_verticalbarverticalbar_expand_364(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_or>& actual, yaoosl::parsing::instance::exp_or_state& state, size_t depth);
-        bool m_expequality_365(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_or>& actual, yaoosl::parsing::instance::exp_or_state& state, size_t depth);
+        bool m_expor_verticalbarverticalbar_expand_453(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_or>& actual, yaoosl::parsing::instance::exp_or_state& state, size_t depth);
+        bool m_expequality_454(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_or>& actual, yaoosl::parsing::instance::exp_or_state& state, size_t depth);
         bool lr_can_exp_or(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::exp_or> lr_match_exp_or(size_t depth);
-        bool m_expression_equal_expression_366(bool is_can, std::shared_ptr<yaoosl::parsing::instance::expression>& actual, yaoosl::parsing::instance::expression_state& state, size_t depth);
-        bool m_expression_equal_expression_367(bool is_can, std::shared_ptr<yaoosl::parsing::instance::expression>& actual, yaoosl::parsing::instance::expression_state& state, size_t depth);
-        bool m_expor_368(bool is_can, std::shared_ptr<yaoosl::parsing::instance::expression>& actual, yaoosl::parsing::instance::expression_state& state, size_t depth);
+        bool m_expression_equal_expression_455(bool is_can, std::shared_ptr<yaoosl::parsing::instance::expression>& actual, yaoosl::parsing::instance::expression_state& state, size_t depth);
+        bool m_expor_456(bool is_can, std::shared_ptr<yaoosl::parsing::instance::expression>& actual, yaoosl::parsing::instance::expression_state& state, size_t depth);
         bool lr_can_expression(size_t depth);
         std::shared_ptr<yaoosl::parsing::instance::expression> lr_match_expression(size_t depth);
         void skip();
@@ -668,7 +759,6 @@ namespace yaoosl::parsing
             _CURLY_BRACKED_CLOSE,
             _GET,
             _SET,
-            _FUNC,
             _WHILE,
             _IF,
             _ELSE,
@@ -805,11 +895,6 @@ namespace yaoosl::parsing
         public:
             std::variant<std::shared_ptr<return_statement>, std::shared_ptr<expression>> expression;
         };
-        class function_arg
-        {
-        public:
-            token name;
-        };
         class scope
         {
         public:
@@ -820,13 +905,6 @@ namespace yaoosl::parsing
         public:
             std::shared_ptr<scope> get;
             std::shared_ptr<scope> set;
-        };
-        class function
-        {
-        public:
-            token name;
-            std::vector<std::shared_ptr<function_arg>> args;
-            std::shared_ptr<scope> body;
         };
         class control_structure_body
         {
@@ -839,12 +917,22 @@ namespace yaoosl::parsing
             std::shared_ptr<expression> condition;
             std::shared_ptr<control_structure_body> body;
         };
-        class if_else
+        class if_body
         {
         public:
             std::shared_ptr<expression> condition;
-            std::shared_ptr<control_structure_body> if_body;
+            std::shared_ptr<control_structure_body> body;
+        };
+        class else_body
+        {
+        public:
             std::shared_ptr<control_structure_body> else_body;
+        };
+        class if_else
+        {
+        public:
+            std::shared_ptr<if_body> if_;
+            std::shared_ptr<else_body> else_;
         };
         class switch_case
         {
@@ -862,7 +950,7 @@ namespace yaoosl::parsing
         class control_structure
         {
         public:
-            std::variant<std::shared_ptr<function>, std::shared_ptr<while_loop>, std::shared_ptr<if_else>, std::shared_ptr<switch_>, std::shared_ptr<scope>> content;
+            std::variant<std::shared_ptr<while_loop>, std::shared_ptr<if_else>, std::shared_ptr<switch_>, std::shared_ptr<scope>> content;
         };
         class encapsulation
         {
@@ -877,6 +965,7 @@ namespace yaoosl::parsing
             std::vector<std::shared_ptr<conversion>> conversions;
             std::vector<std::shared_ptr<class_>> classes;
             std::vector<std::shared_ptr<method>> methods;
+            std::shared_ptr<attributes> att;
         };
         class class_
         {
@@ -893,6 +982,7 @@ namespace yaoosl::parsing
             std::vector<std::shared_ptr<copystructor>> copystructors;
             std::vector<std::shared_ptr<property>> properties;
             std::vector<std::shared_ptr<method>> methods;
+            std::shared_ptr<attributes> att;
         };
         class method_arglist_item_with_default
         {
@@ -900,12 +990,14 @@ namespace yaoosl::parsing
             std::shared_ptr<type_match> type;
             token name;
             std::shared_ptr<exp_value> value;
+            std::shared_ptr<attributes> att;
         };
         class method_arglist_item
         {
         public:
             std::shared_ptr<type_match> type;
             token name;
+            std::shared_ptr<attributes> att;
         };
         class method_arglist
         {
@@ -932,6 +1024,7 @@ namespace yaoosl::parsing
             std::shared_ptr<method_ident> ident;
             std::shared_ptr<method_arglist> arglist;
             std::shared_ptr<scope> body;
+            std::shared_ptr<attributes> att;
         };
         class constructor
         {
@@ -940,6 +1033,7 @@ namespace yaoosl::parsing
             std::shared_ptr<method_ident> ident;
             std::shared_ptr<method_arglist> arglist;
             std::shared_ptr<scope> body;
+            std::shared_ptr<attributes> att;
         };
         class destructor
         {
@@ -948,6 +1042,7 @@ namespace yaoosl::parsing
             std::shared_ptr<method_ident> ident;
             std::shared_ptr<method_arglist> arglist;
             std::shared_ptr<scope> body;
+            std::shared_ptr<attributes> att;
         };
         class copystructor
         {
@@ -956,6 +1051,7 @@ namespace yaoosl::parsing
             std::shared_ptr<method_ident> ident;
             std::shared_ptr<method_arglist> arglist;
             std::shared_ptr<scope> body;
+            std::shared_ptr<attributes> att;
         };
         class conversion
         {
@@ -965,6 +1061,7 @@ namespace yaoosl::parsing
             std::shared_ptr<type_match> source_type;
             token name;
             std::shared_ptr<scope> body;
+            std::shared_ptr<attributes> att;
         };
         class indexer
         {
@@ -974,6 +1071,7 @@ namespace yaoosl::parsing
             std::shared_ptr<template_definition> template_;
             std::shared_ptr<method_arglist_indexer> arglist;
             std::shared_ptr<scope_getset> body;
+            std::shared_ptr<attributes> att;
         };
         class operator_binary_overload
         {
@@ -985,6 +1083,7 @@ namespace yaoosl::parsing
             token operator_;
             std::shared_ptr<method_arglist_item> right;
             std::shared_ptr<scope> body;
+            std::shared_ptr<attributes> att;
         };
         class operator_unary_overload
         {
@@ -995,6 +1094,7 @@ namespace yaoosl::parsing
             token operator_;
             std::shared_ptr<method_arglist_item> right;
             std::shared_ptr<scope> body;
+            std::shared_ptr<attributes> att;
         };
         class property
         {
@@ -1003,6 +1103,39 @@ namespace yaoosl::parsing
             std::shared_ptr<type_match> target_type;
             token name;
             std::shared_ptr<scope_getset> body;
+            std::shared_ptr<attributes> att;
+        };
+        class attribute_arg_item_a
+        {
+        public:
+            std::shared_ptr<exp_or> value;
+        };
+        class attribute_arg_item_b
+        {
+        public:
+            token name;
+            std::shared_ptr<exp_or> value;
+        };
+        class attribute_args
+        {
+        public:
+            std::vector<std::variant<std::shared_ptr<attribute_arg_item_a>, std::shared_ptr<attribute_arg_item_b>>> args;
+        };
+        class attribute_item
+        {
+        public:
+            std::shared_ptr<type_match> target_type;
+            std::shared_ptr<attribute_args> args;
+        };
+        class attribute
+        {
+        public:
+            std::vector<std::shared_ptr<attribute_item>> items;
+        };
+        class attributes
+        {
+        public:
+            std::vector<std::shared_ptr<attribute>> items;
         };
         class main
         {
@@ -1155,22 +1288,22 @@ namespace yaoosl::parsing
         class statement_state
         {
         };
-        class function_arg_state
-        {
-        };
         class scope_state
         {
         };
         class scope_getset_state
         {
         };
-        class function_state
-        {
-        };
         class control_structure_body_state
         {
         };
         class while_loop_state
+        {
+        };
+        class if_body_state
+        {
+        };
+        class else_body_state
         {
         };
         class if_else_state
@@ -1238,6 +1371,24 @@ namespace yaoosl::parsing
         class property_state
         {
         };
+        class attribute_arg_item_a_state
+        {
+        };
+        class attribute_arg_item_b_state
+        {
+        };
+        class attribute_args_state
+        {
+        };
+        class attribute_item_state
+        {
+        };
+        class attribute_state
+        {
+        };
+        class attributes_state
+        {
+        };
         class main_state
         {
         };
@@ -1300,12 +1451,12 @@ namespace yaoosl::parsing
         std::vector<std::string> create_string_tree(std::shared_ptr<return_statement> node, std::string_view contents);
         std::vector<std::string> create_string_tree(std::shared_ptr<declaration> node, std::string_view contents);
         std::vector<std::string> create_string_tree(std::shared_ptr<statement> node, std::string_view contents);
-        std::vector<std::string> create_string_tree(std::shared_ptr<function_arg> node, std::string_view contents);
         std::vector<std::string> create_string_tree(std::shared_ptr<scope> node, std::string_view contents);
         std::vector<std::string> create_string_tree(std::shared_ptr<scope_getset> node, std::string_view contents);
-        std::vector<std::string> create_string_tree(std::shared_ptr<function> node, std::string_view contents);
         std::vector<std::string> create_string_tree(std::shared_ptr<control_structure_body> node, std::string_view contents);
         std::vector<std::string> create_string_tree(std::shared_ptr<while_loop> node, std::string_view contents);
+        std::vector<std::string> create_string_tree(std::shared_ptr<if_body> node, std::string_view contents);
+        std::vector<std::string> create_string_tree(std::shared_ptr<else_body> node, std::string_view contents);
         std::vector<std::string> create_string_tree(std::shared_ptr<if_else> node, std::string_view contents);
         std::vector<std::string> create_string_tree(std::shared_ptr<switch_case> node, std::string_view contents);
         std::vector<std::string> create_string_tree(std::shared_ptr<switch_> node, std::string_view contents);
@@ -1327,6 +1478,12 @@ namespace yaoosl::parsing
         std::vector<std::string> create_string_tree(std::shared_ptr<operator_binary_overload> node, std::string_view contents);
         std::vector<std::string> create_string_tree(std::shared_ptr<operator_unary_overload> node, std::string_view contents);
         std::vector<std::string> create_string_tree(std::shared_ptr<property> node, std::string_view contents);
+        std::vector<std::string> create_string_tree(std::shared_ptr<attribute_arg_item_a> node, std::string_view contents);
+        std::vector<std::string> create_string_tree(std::shared_ptr<attribute_arg_item_b> node, std::string_view contents);
+        std::vector<std::string> create_string_tree(std::shared_ptr<attribute_args> node, std::string_view contents);
+        std::vector<std::string> create_string_tree(std::shared_ptr<attribute_item> node, std::string_view contents);
+        std::vector<std::string> create_string_tree(std::shared_ptr<attribute> node, std::string_view contents);
+        std::vector<std::string> create_string_tree(std::shared_ptr<attributes> node, std::string_view contents);
         std::vector<std::string> create_string_tree(std::shared_ptr<main> node, std::string_view contents);
         std::vector<std::string> create_string_tree(std::shared_ptr<exp_chain> node, std::string_view contents);
         std::vector<std::string> create_string_tree(std::shared_ptr<ident_navigation> node, std::string_view contents);

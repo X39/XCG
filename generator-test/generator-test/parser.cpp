@@ -1216,33 +1216,6 @@ std::optional<size_t> yaoosl::parsing::instance::token__set(size_t depth)
     resetable1.reset();
     return resultVariable41;
 }
-std::optional<size_t> yaoosl::parsing::instance::token__func(size_t depth)
-{
-    resetable resetable1(*this);
-    size_t count2 = 0;
-    while (current() != '\0' && count2 < 1)
-    {
-        const char* str3 = "func";
-        if (m_contents.length() - m_offset >= 4 && std::equal(m_contents.begin() + m_offset, m_contents.begin() + m_offset + 4, str3, str3 + 4))
-        {
-            count2++;
-            for (size_t i = 0; i < 4; i++)
-            {
-                next();
-            }
-            continue;
-        }
-        break;
-    }
-    if (count2 < 1)
-    {
-        resetable1.reset();
-        return {};
-    }
-    auto resultVariable42 = m_offset - resetable1.m_offset;
-    resetable1.reset();
-    return resultVariable42;
-}
 std::optional<size_t> yaoosl::parsing::instance::token__while(size_t depth)
 {
     resetable resetable1(*this);
@@ -1266,9 +1239,9 @@ std::optional<size_t> yaoosl::parsing::instance::token__while(size_t depth)
         resetable1.reset();
         return {};
     }
-    auto resultVariable43 = m_offset - resetable1.m_offset;
+    auto resultVariable42 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    return resultVariable43;
+    return resultVariable42;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__if(size_t depth)
 {
@@ -1293,9 +1266,9 @@ std::optional<size_t> yaoosl::parsing::instance::token__if(size_t depth)
         resetable1.reset();
         return {};
     }
-    auto resultVariable44 = m_offset - resetable1.m_offset;
+    auto resultVariable43 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    return resultVariable44;
+    return resultVariable43;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__else(size_t depth)
 {
@@ -1320,9 +1293,9 @@ std::optional<size_t> yaoosl::parsing::instance::token__else(size_t depth)
         resetable1.reset();
         return {};
     }
-    auto resultVariable45 = m_offset - resetable1.m_offset;
+    auto resultVariable44 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    return resultVariable45;
+    return resultVariable44;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__case(size_t depth)
 {
@@ -1347,9 +1320,9 @@ std::optional<size_t> yaoosl::parsing::instance::token__case(size_t depth)
         resetable1.reset();
         return {};
     }
-    auto resultVariable46 = m_offset - resetable1.m_offset;
+    auto resultVariable45 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    return resultVariable46;
+    return resultVariable45;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__colon(size_t depth)
 {
@@ -1370,9 +1343,9 @@ std::optional<size_t> yaoosl::parsing::instance::token__colon(size_t depth)
         resetable1.reset();
         return {};
     }
-    auto resultVariable47 = m_offset - resetable1.m_offset;
+    auto resultVariable46 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    return resultVariable47;
+    return resultVariable46;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__switch(size_t depth)
 {
@@ -1397,9 +1370,9 @@ std::optional<size_t> yaoosl::parsing::instance::token__switch(size_t depth)
         resetable1.reset();
         return {};
     }
-    auto resultVariable48 = m_offset - resetable1.m_offset;
+    auto resultVariable47 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    return resultVariable48;
+    return resultVariable47;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__default(size_t depth)
 {
@@ -1424,9 +1397,9 @@ std::optional<size_t> yaoosl::parsing::instance::token__default(size_t depth)
         resetable1.reset();
         return {};
     }
-    auto resultVariable49 = m_offset - resetable1.m_offset;
+    auto resultVariable48 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    return resultVariable49;
+    return resultVariable48;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__public(size_t depth)
 {
@@ -1451,9 +1424,9 @@ std::optional<size_t> yaoosl::parsing::instance::token__public(size_t depth)
         resetable1.reset();
         return {};
     }
-    auto resultVariable50 = m_offset - resetable1.m_offset;
+    auto resultVariable49 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    return resultVariable50;
+    return resultVariable49;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__local(size_t depth)
 {
@@ -1478,9 +1451,9 @@ std::optional<size_t> yaoosl::parsing::instance::token__local(size_t depth)
         resetable1.reset();
         return {};
     }
-    auto resultVariable51 = m_offset - resetable1.m_offset;
+    auto resultVariable50 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    return resultVariable51;
+    return resultVariable50;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__derived(size_t depth)
 {
@@ -1505,9 +1478,9 @@ std::optional<size_t> yaoosl::parsing::instance::token__derived(size_t depth)
         resetable1.reset();
         return {};
     }
-    auto resultVariable52 = m_offset - resetable1.m_offset;
+    auto resultVariable51 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    return resultVariable52;
+    return resultVariable51;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__private(size_t depth)
 {
@@ -1532,9 +1505,9 @@ std::optional<size_t> yaoosl::parsing::instance::token__private(size_t depth)
         resetable1.reset();
         return {};
     }
-    auto resultVariable53 = m_offset - resetable1.m_offset;
+    auto resultVariable52 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    return resultVariable53;
+    return resultVariable52;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__namespace(size_t depth)
 {
@@ -1559,9 +1532,9 @@ std::optional<size_t> yaoosl::parsing::instance::token__namespace(size_t depth)
         resetable1.reset();
         return {};
     }
-    auto resultVariable54 = m_offset - resetable1.m_offset;
+    auto resultVariable53 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    return resultVariable54;
+    return resultVariable53;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__class(size_t depth)
 {
@@ -1586,9 +1559,9 @@ std::optional<size_t> yaoosl::parsing::instance::token__class(size_t depth)
         resetable1.reset();
         return {};
     }
-    auto resultVariable55 = m_offset - resetable1.m_offset;
+    auto resultVariable54 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    return resultVariable55;
+    return resultVariable54;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__unbound(size_t depth)
 {
@@ -1613,9 +1586,9 @@ std::optional<size_t> yaoosl::parsing::instance::token__unbound(size_t depth)
         resetable1.reset();
         return {};
     }
-    auto resultVariable56 = m_offset - resetable1.m_offset;
+    auto resultVariable55 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    return resultVariable56;
+    return resultVariable55;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__delete(size_t depth)
 {
@@ -1640,9 +1613,9 @@ std::optional<size_t> yaoosl::parsing::instance::token__delete(size_t depth)
         resetable1.reset();
         return {};
     }
-    auto resultVariable57 = m_offset - resetable1.m_offset;
+    auto resultVariable56 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    return resultVariable57;
+    return resultVariable56;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__conversion(size_t depth)
 {
@@ -1667,9 +1640,9 @@ std::optional<size_t> yaoosl::parsing::instance::token__conversion(size_t depth)
         resetable1.reset();
         return {};
     }
-    auto resultVariable58 = m_offset - resetable1.m_offset;
+    auto resultVariable57 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    return resultVariable58;
+    return resultVariable57;
 }
 std::optional<size_t> yaoosl::parsing::instance::token__operator(size_t depth)
 {
@@ -1694,11 +1667,11 @@ std::optional<size_t> yaoosl::parsing::instance::token__operator(size_t depth)
         resetable1.reset();
         return {};
     }
-    auto resultVariable59 = m_offset - resetable1.m_offset;
+    auto resultVariable58 = m_offset - resetable1.m_offset;
     resetable1.reset();
-    return resultVariable59;
+    return resultVariable58;
 }
-bool yaoosl::parsing::instance::m_ident_roundbrackedopen_60(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_ident_roundbrackedopen_59(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token_ident(depth + 1);
@@ -1755,7 +1728,7 @@ bool yaoosl::parsing::instance::m_ident_roundbrackedopen_60(bool is_can, std::sh
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expression_61(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expression_60(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (lr_can_expression(depth + 1))
@@ -1781,7 +1754,7 @@ bool yaoosl::parsing::instance::m_expression_61(bool is_can, std::shared_ptr<yao
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expression_62(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expression_61(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (lr_can_expression(depth + 1))
@@ -1808,7 +1781,7 @@ bool yaoosl::parsing::instance::m_expression_62(bool is_can, std::shared_ptr<yao
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_roundbrackedclose_63(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_roundbrackedclose_62(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__round_bracked_close(depth + 1);
@@ -1843,7 +1816,7 @@ bool yaoosl::parsing::instance::m_roundbrackedclose_63(bool is_can, std::shared_
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_comma_expression_64(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_comma_expression_63(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__comma(depth + 1);
@@ -1895,7 +1868,7 @@ bool yaoosl::parsing::instance::m_comma_expression_64(bool is_can, std::shared_p
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_comma_65(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_comma_64(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__comma(depth + 1);
@@ -1930,10 +1903,10 @@ bool yaoosl::parsing::instance::m_comma_65(bool is_can, std::shared_ptr<yaoosl::
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives66(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
+bool yaoosl::parsing::instance::alternatives65(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    if (m_comma_expression_64(true, actual, state, depth + 1))
+    if (m_comma_expression_63(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -1942,11 +1915,11 @@ bool yaoosl::parsing::instance::alternatives66(bool is_can, std::shared_ptr<yaoo
         else
         {
             resetable1.reset();
-            m_comma_expression_64(false, actual, state, depth + 1);
+            m_comma_expression_63(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_comma_65(true, actual, state, depth + 1))
+    else if (m_comma_64(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -1955,7 +1928,7 @@ bool yaoosl::parsing::instance::alternatives66(bool is_can, std::shared_ptr<yaoo
         else
         {
             resetable1.reset();
-            m_comma_65(false, actual, state, depth + 1);
+            m_comma_64(false, actual, state, depth + 1);
             return true;
         }
     }
@@ -1966,21 +1939,21 @@ bool yaoosl::parsing::instance::alternatives66(bool is_can, std::shared_ptr<yaoo
     resetable1.reset();
     return false;
 }
-bool yaoosl::parsing::instance::while67_68(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
+bool yaoosl::parsing::instance::while66_67(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    bool cond3 = m_roundbrackedclose_63(true, actual, state, depth + 1);
+    bool cond3 = m_roundbrackedclose_62(true, actual, state, depth + 1);
     resetable1.reset();
     if (is_can)
     {
         while (!cond3 && current() != '\0')
         {
-            while (!alternatives66(true, actual, state, depth + 1) && current() != '\0')
+            while (!alternatives65(true, actual, state, depth + 1) && current() != '\0')
             {
                 next();
             }
             resetable resetable2(*this);
-            cond3 = m_roundbrackedclose_63(true, actual, state, depth + 1);
+            cond3 = m_roundbrackedclose_62(true, actual, state, depth + 1);
             resetable2.reset();
         }
         return true;
@@ -1989,12 +1962,12 @@ bool yaoosl::parsing::instance::while67_68(bool is_can, std::shared_ptr<yaoosl::
     {
         while (!cond3 && current() != '\0')
         {
-            if (!alternatives66(false, actual, state, depth + 1))
+            if (!alternatives65(false, actual, state, depth + 1))
             {
                 while (current() != '\0')
                 {
                     resetable resetable4(*this);
-                    if (alternatives66(true, actual, state, depth + 1))
+                    if (alternatives65(true, actual, state, depth + 1))
                     {
                         resetable4.reset();
                         break;
@@ -2003,22 +1976,22 @@ bool yaoosl::parsing::instance::while67_68(bool is_can, std::shared_ptr<yaoosl::
                 }
             }
             resetable resetable2(*this);
-            cond3 = m_roundbrackedclose_63(true, actual, state, depth + 1);
+            cond3 = m_roundbrackedclose_62(true, actual, state, depth + 1);
             resetable2.reset();
         }
         return true;
     }
 }
-bool yaoosl::parsing::instance::if69_70(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
+bool yaoosl::parsing::instance::if68_69(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    bool cond2 = m_expression_61(true, actual, state, depth + 1);
+    bool cond2 = m_expression_60(true, actual, state, depth + 1);
     resetable1.reset();
     if (is_can)
     {
         if (cond2)
         {
-            if (m_expression_62(true, actual, state, depth + 1))
+            if (m_expression_61(true, actual, state, depth + 1))
             {
                 skip();
             }
@@ -2031,7 +2004,7 @@ bool yaoosl::parsing::instance::if69_70(bool is_can, std::shared_ptr<yaoosl::par
                 report("Failed to match { $ref: expression (XCG.Parsing.LeftRecursive) }", depth);
                 return false;
             }
-            while67_68(true, actual, state, depth + 1);
+            while66_67(true, actual, state, depth + 1);
             return true;
         }
         return true;
@@ -2040,7 +2013,7 @@ bool yaoosl::parsing::instance::if69_70(bool is_can, std::shared_ptr<yaoosl::par
     {
         if (cond2)
         {
-            if (m_expression_62(false, actual, state, depth + 1))
+            if (m_expression_61(false, actual, state, depth + 1))
             {
                 skip();
             }
@@ -2053,13 +2026,13 @@ bool yaoosl::parsing::instance::if69_70(bool is_can, std::shared_ptr<yaoosl::par
                 report("Failed to match { $ref: expression (XCG.Parsing.LeftRecursive) }", depth);
                 return false;
             }
-            while67_68(false, actual, state, depth + 1);
+            while66_67(false, actual, state, depth + 1);
             return true;
         }
         return true;
     }
 }
-bool yaoosl::parsing::instance::m_roundbrackedclose_71(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_roundbrackedclose_70(bool is_can, std::shared_ptr<yaoosl::parsing::instance::call>& actual, yaoosl::parsing::instance::call_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__round_bracked_close(depth + 1);
@@ -2099,17 +2072,17 @@ bool yaoosl::parsing::instance::p_can_call(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::call> fake;
     call_state state;
-    if (!m_ident_roundbrackedopen_60(true, fake, state, depth + 1))
+    if (!m_ident_roundbrackedopen_59(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
     }
-    else if (!if69_70(true, fake, state, depth + 1))
+    else if (!if68_69(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
     }
-    else if (!m_roundbrackedclose_71(true, fake, state, depth + 1))
+    else if (!m_roundbrackedclose_70(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -2122,30 +2095,30 @@ std::shared_ptr<yaoosl::parsing::instance::call> yaoosl::parsing::instance::p_ma
     std::shared_ptr<yaoosl::parsing::instance::call> fake;
     call_state state;
     resetable resetable2(*this);
-    if (m_ident_roundbrackedopen_60(true, fake, state, depth + 1))
+    if (m_ident_roundbrackedopen_59(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_ident_roundbrackedopen_60(false, actual, state, depth + 1);
+        m_ident_roundbrackedopen_59(false, actual, state, depth + 1);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
     }
     resetable resetable3(*this);
-    if (if69_70(true, fake, state, depth + 1))
+    if (if68_69(true, fake, state, depth + 1))
     {
         resetable3.reset();
-        if69_70(false, actual, state, depth + 1);
+        if68_69(false, actual, state, depth + 1);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
     }
     resetable resetable4(*this);
-    if (m_roundbrackedclose_71(true, fake, state, depth + 1))
+    if (m_roundbrackedclose_70(true, fake, state, depth + 1))
     {
         resetable4.reset();
-        m_roundbrackedclose_71(false, actual, state, depth + 1);
+        m_roundbrackedclose_70(false, actual, state, depth + 1);
     }
     else
     {
@@ -2153,7 +2126,7 @@ std::shared_ptr<yaoosl::parsing::instance::call> yaoosl::parsing::instance::p_ma
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_ident_72(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage_item>& actual, yaoosl::parsing::instance::template_usage_item_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_ident_71(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage_item>& actual, yaoosl::parsing::instance::template_usage_item_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token_ident(depth + 1);
@@ -2190,7 +2163,7 @@ bool yaoosl::parsing::instance::p_can_template_usage_item(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::template_usage_item> fake;
     template_usage_item_state state;
-    if (!m_ident_72(true, fake, state, depth + 1))
+    if (!m_ident_71(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -2203,10 +2176,10 @@ std::shared_ptr<yaoosl::parsing::instance::template_usage_item> yaoosl::parsing:
     std::shared_ptr<yaoosl::parsing::instance::template_usage_item> fake;
     template_usage_item_state state;
     resetable resetable2(*this);
-    if (m_ident_72(true, fake, state, depth + 1))
+    if (m_ident_71(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_ident_72(false, actual, state, depth + 1);
+        m_ident_71(false, actual, state, depth + 1);
     }
     else
     {
@@ -2214,7 +2187,7 @@ std::shared_ptr<yaoosl::parsing::instance::template_usage_item> yaoosl::parsing:
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_lessthen_73(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_lessthen_72(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__less_then(depth + 1);
@@ -2249,7 +2222,7 @@ bool yaoosl::parsing::instance::m_lessthen_73(bool is_can, std::shared_ptr<yaoos
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_templateusageitem_74(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_templateusageitem_73(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_template_usage_item(depth + 1))
@@ -2276,7 +2249,7 @@ bool yaoosl::parsing::instance::m_templateusageitem_74(bool is_can, std::shared_
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_comma_75(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_comma_74(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__comma(depth + 1);
@@ -2311,7 +2284,7 @@ bool yaoosl::parsing::instance::m_comma_75(bool is_can, std::shared_ptr<yaoosl::
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_comma_templateusageitem_76(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_comma_templateusageitem_75(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__comma(depth + 1);
@@ -2363,10 +2336,10 @@ bool yaoosl::parsing::instance::m_comma_templateusageitem_76(bool is_can, std::s
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives77(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth)
+bool yaoosl::parsing::instance::alternatives76(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    if (m_comma_templateusageitem_76(true, actual, state, depth + 1))
+    if (m_comma_templateusageitem_75(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -2375,7 +2348,7 @@ bool yaoosl::parsing::instance::alternatives77(bool is_can, std::shared_ptr<yaoo
         else
         {
             resetable1.reset();
-            m_comma_templateusageitem_76(false, actual, state, depth + 1);
+            m_comma_templateusageitem_75(false, actual, state, depth + 1);
             return true;
         }
     }
@@ -2386,21 +2359,21 @@ bool yaoosl::parsing::instance::alternatives77(bool is_can, std::shared_ptr<yaoo
     resetable1.reset();
     return false;
 }
-bool yaoosl::parsing::instance::while78_79(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth)
+bool yaoosl::parsing::instance::while77_78(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    bool cond3 = m_comma_75(true, actual, state, depth + 1);
+    bool cond3 = m_comma_74(true, actual, state, depth + 1);
     resetable1.reset();
     if (is_can)
     {
         while (cond3 && current() != '\0')
         {
-            while (!alternatives77(true, actual, state, depth + 1) && current() != '\0')
+            while (!alternatives76(true, actual, state, depth + 1) && current() != '\0')
             {
                 next();
             }
             resetable resetable2(*this);
-            cond3 = m_comma_75(true, actual, state, depth + 1);
+            cond3 = m_comma_74(true, actual, state, depth + 1);
             resetable2.reset();
         }
         return true;
@@ -2409,12 +2382,12 @@ bool yaoosl::parsing::instance::while78_79(bool is_can, std::shared_ptr<yaoosl::
     {
         while (cond3 && current() != '\0')
         {
-            if (!alternatives77(false, actual, state, depth + 1))
+            if (!alternatives76(false, actual, state, depth + 1))
             {
                 while (current() != '\0')
                 {
                     resetable resetable4(*this);
-                    if (alternatives77(true, actual, state, depth + 1))
+                    if (alternatives76(true, actual, state, depth + 1))
                     {
                         resetable4.reset();
                         break;
@@ -2423,13 +2396,13 @@ bool yaoosl::parsing::instance::while78_79(bool is_can, std::shared_ptr<yaoosl::
                 }
             }
             resetable resetable2(*this);
-            cond3 = m_comma_75(true, actual, state, depth + 1);
+            cond3 = m_comma_74(true, actual, state, depth + 1);
             resetable2.reset();
         }
         return true;
     }
 }
-bool yaoosl::parsing::instance::m_greaterthen_80(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_greaterthen_79(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_usage>& actual, yaoosl::parsing::instance::template_usage_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__greater_then(depth + 1);
@@ -2469,22 +2442,22 @@ bool yaoosl::parsing::instance::p_can_template_usage(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::template_usage> fake;
     template_usage_state state;
-    if (!m_lessthen_73(true, fake, state, depth + 1))
+    if (!m_lessthen_72(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
     }
-    else if (!m_templateusageitem_74(true, fake, state, depth + 1))
+    else if (!m_templateusageitem_73(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
     }
-    else if (!while78_79(true, fake, state, depth + 1))
+    else if (!while77_78(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
     }
-    else if (!m_greaterthen_80(true, fake, state, depth + 1))
+    else if (!m_greaterthen_79(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -2497,40 +2470,40 @@ std::shared_ptr<yaoosl::parsing::instance::template_usage> yaoosl::parsing::inst
     std::shared_ptr<yaoosl::parsing::instance::template_usage> fake;
     template_usage_state state;
     resetable resetable2(*this);
-    if (m_lessthen_73(true, fake, state, depth + 1))
+    if (m_lessthen_72(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_lessthen_73(false, actual, state, depth + 1);
+        m_lessthen_72(false, actual, state, depth + 1);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
     }
     resetable resetable3(*this);
-    if (m_templateusageitem_74(true, fake, state, depth + 1))
+    if (m_templateusageitem_73(true, fake, state, depth + 1))
     {
         resetable3.reset();
-        m_templateusageitem_74(false, actual, state, depth + 1);
+        m_templateusageitem_73(false, actual, state, depth + 1);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
     }
     resetable resetable4(*this);
-    if (while78_79(true, fake, state, depth + 1))
+    if (while77_78(true, fake, state, depth + 1))
     {
         resetable4.reset();
-        while78_79(false, actual, state, depth + 1);
+        while77_78(false, actual, state, depth + 1);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
     }
     resetable resetable5(*this);
-    if (m_greaterthen_80(true, fake, state, depth + 1))
+    if (m_greaterthen_79(true, fake, state, depth + 1))
     {
         resetable5.reset();
-        m_greaterthen_80(false, actual, state, depth + 1);
+        m_greaterthen_79(false, actual, state, depth + 1);
     }
     else
     {
@@ -2538,7 +2511,7 @@ std::shared_ptr<yaoosl::parsing::instance::template_usage> yaoosl::parsing::inst
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_ident_81(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition_item>& actual, yaoosl::parsing::instance::template_definition_item_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_ident_80(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition_item>& actual, yaoosl::parsing::instance::template_definition_item_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token_ident(depth + 1);
@@ -2570,7 +2543,7 @@ bool yaoosl::parsing::instance::m_ident_81(bool is_can, std::shared_ptr<yaoosl::
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_equal_82(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition_item>& actual, yaoosl::parsing::instance::template_definition_item_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_equal_81(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition_item>& actual, yaoosl::parsing::instance::template_definition_item_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__equal(depth + 1);
@@ -2605,7 +2578,7 @@ bool yaoosl::parsing::instance::m_equal_82(bool is_can, std::shared_ptr<yaoosl::
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_equal_expvalue_83(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition_item>& actual, yaoosl::parsing::instance::template_definition_item_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_equal_expvalue_82(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition_item>& actual, yaoosl::parsing::instance::template_definition_item_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__equal(depth + 1);
@@ -2657,16 +2630,16 @@ bool yaoosl::parsing::instance::m_equal_expvalue_83(bool is_can, std::shared_ptr
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::if84_85(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition_item>& actual, yaoosl::parsing::instance::template_definition_item_state& state, size_t depth)
+bool yaoosl::parsing::instance::if83_84(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition_item>& actual, yaoosl::parsing::instance::template_definition_item_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    bool cond2 = m_equal_82(true, actual, state, depth + 1);
+    bool cond2 = m_equal_81(true, actual, state, depth + 1);
     resetable1.reset();
     if (is_can)
     {
         if (cond2)
         {
-            if (m_equal_expvalue_83(true, actual, state, depth + 1))
+            if (m_equal_expvalue_82(true, actual, state, depth + 1))
             {
                 skip();
             }
@@ -2687,7 +2660,7 @@ bool yaoosl::parsing::instance::if84_85(bool is_can, std::shared_ptr<yaoosl::par
     {
         if (cond2)
         {
-            if (m_equal_expvalue_83(false, actual, state, depth + 1))
+            if (m_equal_expvalue_82(false, actual, state, depth + 1))
             {
                 skip();
             }
@@ -2710,12 +2683,12 @@ bool yaoosl::parsing::instance::p_can_template_definition_item(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::template_definition_item> fake;
     template_definition_item_state state;
-    if (!m_ident_81(true, fake, state, depth + 1))
+    if (!m_ident_80(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
     }
-    else if (!if84_85(true, fake, state, depth + 1))
+    else if (!if83_84(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -2728,20 +2701,20 @@ std::shared_ptr<yaoosl::parsing::instance::template_definition_item> yaoosl::par
     std::shared_ptr<yaoosl::parsing::instance::template_definition_item> fake;
     template_definition_item_state state;
     resetable resetable2(*this);
-    if (m_ident_81(true, fake, state, depth + 1))
+    if (m_ident_80(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_ident_81(false, actual, state, depth + 1);
+        m_ident_80(false, actual, state, depth + 1);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
     }
     resetable resetable3(*this);
-    if (if84_85(true, fake, state, depth + 1))
+    if (if83_84(true, fake, state, depth + 1))
     {
         resetable3.reset();
-        if84_85(false, actual, state, depth + 1);
+        if83_84(false, actual, state, depth + 1);
     }
     else
     {
@@ -2749,7 +2722,7 @@ std::shared_ptr<yaoosl::parsing::instance::template_definition_item> yaoosl::par
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_lessthen_86(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_lessthen_85(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__less_then(depth + 1);
@@ -2784,7 +2757,7 @@ bool yaoosl::parsing::instance::m_lessthen_86(bool is_can, std::shared_ptr<yaoos
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_templatedefinitionitem_87(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_templatedefinitionitem_86(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_template_definition_item(depth + 1))
@@ -2811,7 +2784,7 @@ bool yaoosl::parsing::instance::m_templatedefinitionitem_87(bool is_can, std::sh
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_comma_88(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_comma_87(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__comma(depth + 1);
@@ -2846,7 +2819,7 @@ bool yaoosl::parsing::instance::m_comma_88(bool is_can, std::shared_ptr<yaoosl::
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_comma_templatedefinitionitem_89(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_comma_templatedefinitionitem_88(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__comma(depth + 1);
@@ -2898,10 +2871,10 @@ bool yaoosl::parsing::instance::m_comma_templatedefinitionitem_89(bool is_can, s
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives90(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth)
+bool yaoosl::parsing::instance::alternatives89(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    if (m_comma_templatedefinitionitem_89(true, actual, state, depth + 1))
+    if (m_comma_templatedefinitionitem_88(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -2910,7 +2883,7 @@ bool yaoosl::parsing::instance::alternatives90(bool is_can, std::shared_ptr<yaoo
         else
         {
             resetable1.reset();
-            m_comma_templatedefinitionitem_89(false, actual, state, depth + 1);
+            m_comma_templatedefinitionitem_88(false, actual, state, depth + 1);
             return true;
         }
     }
@@ -2921,21 +2894,21 @@ bool yaoosl::parsing::instance::alternatives90(bool is_can, std::shared_ptr<yaoo
     resetable1.reset();
     return false;
 }
-bool yaoosl::parsing::instance::while91_92(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth)
+bool yaoosl::parsing::instance::while90_91(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    bool cond3 = m_comma_88(true, actual, state, depth + 1);
+    bool cond3 = m_comma_87(true, actual, state, depth + 1);
     resetable1.reset();
     if (is_can)
     {
         while (cond3 && current() != '\0')
         {
-            while (!alternatives90(true, actual, state, depth + 1) && current() != '\0')
+            while (!alternatives89(true, actual, state, depth + 1) && current() != '\0')
             {
                 next();
             }
             resetable resetable2(*this);
-            cond3 = m_comma_88(true, actual, state, depth + 1);
+            cond3 = m_comma_87(true, actual, state, depth + 1);
             resetable2.reset();
         }
         return true;
@@ -2944,12 +2917,12 @@ bool yaoosl::parsing::instance::while91_92(bool is_can, std::shared_ptr<yaoosl::
     {
         while (cond3 && current() != '\0')
         {
-            if (!alternatives90(false, actual, state, depth + 1))
+            if (!alternatives89(false, actual, state, depth + 1))
             {
                 while (current() != '\0')
                 {
                     resetable resetable4(*this);
-                    if (alternatives90(true, actual, state, depth + 1))
+                    if (alternatives89(true, actual, state, depth + 1))
                     {
                         resetable4.reset();
                         break;
@@ -2958,13 +2931,13 @@ bool yaoosl::parsing::instance::while91_92(bool is_can, std::shared_ptr<yaoosl::
                 }
             }
             resetable resetable2(*this);
-            cond3 = m_comma_88(true, actual, state, depth + 1);
+            cond3 = m_comma_87(true, actual, state, depth + 1);
             resetable2.reset();
         }
         return true;
     }
 }
-bool yaoosl::parsing::instance::m_greaterthen_93(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_greaterthen_92(bool is_can, std::shared_ptr<yaoosl::parsing::instance::template_definition>& actual, yaoosl::parsing::instance::template_definition_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__greater_then(depth + 1);
@@ -3004,22 +2977,22 @@ bool yaoosl::parsing::instance::p_can_template_definition(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::template_definition> fake;
     template_definition_state state;
-    if (!m_lessthen_86(true, fake, state, depth + 1))
+    if (!m_lessthen_85(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
     }
-    else if (!m_templatedefinitionitem_87(true, fake, state, depth + 1))
+    else if (!m_templatedefinitionitem_86(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
     }
-    else if (!while91_92(true, fake, state, depth + 1))
+    else if (!while90_91(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
     }
-    else if (!m_greaterthen_93(true, fake, state, depth + 1))
+    else if (!m_greaterthen_92(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -3032,40 +3005,40 @@ std::shared_ptr<yaoosl::parsing::instance::template_definition> yaoosl::parsing:
     std::shared_ptr<yaoosl::parsing::instance::template_definition> fake;
     template_definition_state state;
     resetable resetable2(*this);
-    if (m_lessthen_86(true, fake, state, depth + 1))
+    if (m_lessthen_85(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_lessthen_86(false, actual, state, depth + 1);
+        m_lessthen_85(false, actual, state, depth + 1);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
     }
     resetable resetable3(*this);
-    if (m_templatedefinitionitem_87(true, fake, state, depth + 1))
+    if (m_templatedefinitionitem_86(true, fake, state, depth + 1))
     {
         resetable3.reset();
-        m_templatedefinitionitem_87(false, actual, state, depth + 1);
+        m_templatedefinitionitem_86(false, actual, state, depth + 1);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
     }
     resetable resetable4(*this);
-    if (while91_92(true, fake, state, depth + 1))
+    if (while90_91(true, fake, state, depth + 1))
     {
         resetable4.reset();
-        while91_92(false, actual, state, depth + 1);
+        while90_91(false, actual, state, depth + 1);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
     }
     resetable resetable5(*this);
-    if (m_greaterthen_93(true, fake, state, depth + 1))
+    if (m_greaterthen_92(true, fake, state, depth + 1))
     {
         resetable5.reset();
-        m_greaterthen_93(false, actual, state, depth + 1);
+        m_greaterthen_92(false, actual, state, depth + 1);
     }
     else
     {
@@ -3073,7 +3046,7 @@ std::shared_ptr<yaoosl::parsing::instance::template_definition> yaoosl::parsing:
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_call_94(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_start>& actual, yaoosl::parsing::instance::exp_chain_start_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_call_93(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_start>& actual, yaoosl::parsing::instance::exp_chain_start_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_call(depth + 1))
@@ -3100,7 +3073,7 @@ bool yaoosl::parsing::instance::m_call_94(bool is_can, std::shared_ptr<yaoosl::p
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_ident_95(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_start>& actual, yaoosl::parsing::instance::exp_chain_start_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_ident_94(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_start>& actual, yaoosl::parsing::instance::exp_chain_start_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token_ident(depth + 1);
@@ -3132,10 +3105,10 @@ bool yaoosl::parsing::instance::m_ident_95(bool is_can, std::shared_ptr<yaoosl::
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives96(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_start>& actual, yaoosl::parsing::instance::exp_chain_start_state& state, size_t depth)
+bool yaoosl::parsing::instance::alternatives95(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_start>& actual, yaoosl::parsing::instance::exp_chain_start_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    if (m_call_94(true, actual, state, depth + 1))
+    if (m_call_93(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -3144,11 +3117,11 @@ bool yaoosl::parsing::instance::alternatives96(bool is_can, std::shared_ptr<yaoo
         else
         {
             resetable1.reset();
-            m_call_94(false, actual, state, depth + 1);
+            m_call_93(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_ident_95(true, actual, state, depth + 1))
+    else if (m_ident_94(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -3157,7 +3130,7 @@ bool yaoosl::parsing::instance::alternatives96(bool is_can, std::shared_ptr<yaoo
         else
         {
             resetable1.reset();
-            m_ident_95(false, actual, state, depth + 1);
+            m_ident_94(false, actual, state, depth + 1);
             return true;
         }
     }
@@ -3169,7 +3142,7 @@ bool yaoosl::parsing::instance::p_can_exp_chain_start(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::exp_chain_start> fake;
     exp_chain_start_state state;
-    if (!alternatives96(true, fake, state, depth + 1))
+    if (!alternatives95(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -3182,10 +3155,10 @@ std::shared_ptr<yaoosl::parsing::instance::exp_chain_start> yaoosl::parsing::ins
     std::shared_ptr<yaoosl::parsing::instance::exp_chain_start> fake;
     exp_chain_start_state state;
     resetable resetable2(*this);
-    if (alternatives96(true, fake, state, depth + 1))
+    if (alternatives95(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        alternatives96(false, actual, state, depth + 1);
+        alternatives95(false, actual, state, depth + 1);
     }
     else
     {
@@ -3193,7 +3166,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_chain_start> yaoosl::parsing::ins
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_squarebrackedopen_97(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_indexer>& actual, yaoosl::parsing::instance::exp_chain_indexer_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_squarebrackedopen_96(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_indexer>& actual, yaoosl::parsing::instance::exp_chain_indexer_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__square_bracked_open(depth + 1);
@@ -3228,7 +3201,7 @@ bool yaoosl::parsing::instance::m_squarebrackedopen_97(bool is_can, std::shared_
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_squarebrackedclose_98(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_indexer>& actual, yaoosl::parsing::instance::exp_chain_indexer_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_squarebrackedclose_97(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_indexer>& actual, yaoosl::parsing::instance::exp_chain_indexer_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__square_bracked_close(depth + 1);
@@ -3268,12 +3241,12 @@ bool yaoosl::parsing::instance::p_can_exp_chain_indexer(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::exp_chain_indexer> fake;
     exp_chain_indexer_state state;
-    if (!m_squarebrackedopen_97(true, fake, state, depth + 1))
+    if (!m_squarebrackedopen_96(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
     }
-    else if (!m_squarebrackedclose_98(true, fake, state, depth + 1))
+    else if (!m_squarebrackedclose_97(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -3286,20 +3259,20 @@ std::shared_ptr<yaoosl::parsing::instance::exp_chain_indexer> yaoosl::parsing::i
     std::shared_ptr<yaoosl::parsing::instance::exp_chain_indexer> fake;
     exp_chain_indexer_state state;
     resetable resetable2(*this);
-    if (m_squarebrackedopen_97(true, fake, state, depth + 1))
+    if (m_squarebrackedopen_96(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_squarebrackedopen_97(false, actual, state, depth + 1);
+        m_squarebrackedopen_96(false, actual, state, depth + 1);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
     }
     resetable resetable3(*this);
-    if (m_squarebrackedclose_98(true, fake, state, depth + 1))
+    if (m_squarebrackedclose_97(true, fake, state, depth + 1))
     {
         resetable3.reset();
-        m_squarebrackedclose_98(false, actual, state, depth + 1);
+        m_squarebrackedclose_97(false, actual, state, depth + 1);
     }
     else
     {
@@ -3307,7 +3280,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_chain_indexer> yaoosl::parsing::i
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_dot_ident_99(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_access>& actual, yaoosl::parsing::instance::exp_chain_access_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_dot_ident_98(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_access>& actual, yaoosl::parsing::instance::exp_chain_access_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__dot(depth + 1);
@@ -3369,7 +3342,7 @@ bool yaoosl::parsing::instance::p_can_exp_chain_access(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::exp_chain_access> fake;
     exp_chain_access_state state;
-    if (!m_dot_ident_99(true, fake, state, depth + 1))
+    if (!m_dot_ident_98(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -3382,10 +3355,10 @@ std::shared_ptr<yaoosl::parsing::instance::exp_chain_access> yaoosl::parsing::in
     std::shared_ptr<yaoosl::parsing::instance::exp_chain_access> fake;
     exp_chain_access_state state;
     resetable resetable2(*this);
-    if (m_dot_ident_99(true, fake, state, depth + 1))
+    if (m_dot_ident_98(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_dot_ident_99(false, actual, state, depth + 1);
+        m_dot_ident_98(false, actual, state, depth + 1);
     }
     else
     {
@@ -3393,7 +3366,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_chain_access> yaoosl::parsing::in
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_dot_call_100(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_call>& actual, yaoosl::parsing::instance::exp_chain_call_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_dot_call_99(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain_call>& actual, yaoosl::parsing::instance::exp_chain_call_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__dot(depth + 1);
@@ -3450,7 +3423,7 @@ bool yaoosl::parsing::instance::p_can_exp_chain_call(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::exp_chain_call> fake;
     exp_chain_call_state state;
-    if (!m_dot_call_100(true, fake, state, depth + 1))
+    if (!m_dot_call_99(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -3463,10 +3436,10 @@ std::shared_ptr<yaoosl::parsing::instance::exp_chain_call> yaoosl::parsing::inst
     std::shared_ptr<yaoosl::parsing::instance::exp_chain_call> fake;
     exp_chain_call_state state;
     resetable resetable2(*this);
-    if (m_dot_call_100(true, fake, state, depth + 1))
+    if (m_dot_call_99(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_dot_call_100(false, actual, state, depth + 1);
+        m_dot_call_99(false, actual, state, depth + 1);
     }
     else
     {
@@ -3474,7 +3447,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_chain_call> yaoosl::parsing::inst
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_typenavigation_squarebrackedopen_expvalue_squarebrackedclose_101(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_match>& actual, yaoosl::parsing::instance::type_match_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_typenavigation_squarebrackedopen_expvalue_squarebrackedclose_100(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_match>& actual, yaoosl::parsing::instance::type_match_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (lr_can_type_navigation(depth + 1))
@@ -3572,7 +3545,7 @@ bool yaoosl::parsing::instance::m_typenavigation_squarebrackedopen_expvalue_squa
     }
     return true;
 }
-bool yaoosl::parsing::instance::m_typenavigation_squarebrackedopen_squarebrackedclose_102(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_match>& actual, yaoosl::parsing::instance::type_match_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_typenavigation_squarebrackedopen_squarebrackedclose_101(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_match>& actual, yaoosl::parsing::instance::type_match_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (lr_can_type_navigation(depth + 1))
@@ -3653,7 +3626,7 @@ bool yaoosl::parsing::instance::m_typenavigation_squarebrackedopen_squarebracked
     }
     return true;
 }
-bool yaoosl::parsing::instance::m_typenavigation_103(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_match>& actual, yaoosl::parsing::instance::type_match_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_typenavigation_102(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_match>& actual, yaoosl::parsing::instance::type_match_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (lr_can_type_navigation(depth + 1))
@@ -3680,10 +3653,10 @@ bool yaoosl::parsing::instance::m_typenavigation_103(bool is_can, std::shared_pt
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives104(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_match>& actual, yaoosl::parsing::instance::type_match_state& state, size_t depth)
+bool yaoosl::parsing::instance::alternatives103(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_match>& actual, yaoosl::parsing::instance::type_match_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    if (m_typenavigation_squarebrackedopen_expvalue_squarebrackedclose_101(true, actual, state, depth + 1))
+    if (m_typenavigation_squarebrackedopen_expvalue_squarebrackedclose_100(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -3692,11 +3665,11 @@ bool yaoosl::parsing::instance::alternatives104(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_typenavigation_squarebrackedopen_expvalue_squarebrackedclose_101(false, actual, state, depth + 1);
+            m_typenavigation_squarebrackedopen_expvalue_squarebrackedclose_100(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_typenavigation_squarebrackedopen_squarebrackedclose_102(true, actual, state, depth + 1))
+    else if (m_typenavigation_squarebrackedopen_squarebrackedclose_101(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -3705,11 +3678,11 @@ bool yaoosl::parsing::instance::alternatives104(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_typenavigation_squarebrackedopen_squarebrackedclose_102(false, actual, state, depth + 1);
+            m_typenavigation_squarebrackedopen_squarebrackedclose_101(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_typenavigation_103(true, actual, state, depth + 1))
+    else if (m_typenavigation_102(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -3718,7 +3691,7 @@ bool yaoosl::parsing::instance::alternatives104(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_typenavigation_103(false, actual, state, depth + 1);
+            m_typenavigation_102(false, actual, state, depth + 1);
             return true;
         }
     }
@@ -3730,7 +3703,7 @@ bool yaoosl::parsing::instance::p_can_type_match(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::type_match> fake;
     type_match_state state;
-    if (!alternatives104(true, fake, state, depth + 1))
+    if (!alternatives103(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -3743,10 +3716,10 @@ std::shared_ptr<yaoosl::parsing::instance::type_match> yaoosl::parsing::instance
     std::shared_ptr<yaoosl::parsing::instance::type_match> fake;
     type_match_state state;
     resetable resetable2(*this);
-    if (alternatives104(true, fake, state, depth + 1))
+    if (alternatives103(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        alternatives104(false, actual, state, depth + 1);
+        alternatives103(false, actual, state, depth + 1);
     }
     else
     {
@@ -3754,7 +3727,7 @@ std::shared_ptr<yaoosl::parsing::instance::type_match> yaoosl::parsing::instance
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_typeof_roundbrackedopen_typematch_roundbrackedclose_105(bool is_can, std::shared_ptr<yaoosl::parsing::instance::typeof>& actual, yaoosl::parsing::instance::typeof_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_typeof_roundbrackedopen_typematch_roundbrackedclose_104(bool is_can, std::shared_ptr<yaoosl::parsing::instance::typeof>& actual, yaoosl::parsing::instance::typeof_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__typeof(depth + 1);
@@ -3861,7 +3834,7 @@ bool yaoosl::parsing::instance::p_can_typeof(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::typeof> fake;
     typeof_state state;
-    if (!m_typeof_roundbrackedopen_typematch_roundbrackedclose_105(true, fake, state, depth + 1))
+    if (!m_typeof_roundbrackedopen_typematch_roundbrackedclose_104(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -3874,10 +3847,10 @@ std::shared_ptr<yaoosl::parsing::instance::typeof> yaoosl::parsing::instance::p_
     std::shared_ptr<yaoosl::parsing::instance::typeof> fake;
     typeof_state state;
     resetable resetable2(*this);
-    if (m_typeof_roundbrackedopen_typematch_roundbrackedclose_105(true, fake, state, depth + 1))
+    if (m_typeof_roundbrackedopen_typematch_roundbrackedclose_104(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_typeof_roundbrackedopen_typematch_roundbrackedclose_105(false, actual, state, depth + 1);
+        m_typeof_roundbrackedopen_typematch_roundbrackedclose_104(false, actual, state, depth + 1);
     }
     else
     {
@@ -3885,7 +3858,7 @@ std::shared_ptr<yaoosl::parsing::instance::typeof> yaoosl::parsing::instance::p_
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_nameof_roundbrackedopen_expor_roundbrackedclose_106(bool is_can, std::shared_ptr<yaoosl::parsing::instance::nameof>& actual, yaoosl::parsing::instance::nameof_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_nameof_roundbrackedopen_expor_roundbrackedclose_105(bool is_can, std::shared_ptr<yaoosl::parsing::instance::nameof>& actual, yaoosl::parsing::instance::nameof_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__nameof(depth + 1);
@@ -3992,7 +3965,7 @@ bool yaoosl::parsing::instance::p_can_nameof(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::nameof> fake;
     nameof_state state;
-    if (!m_nameof_roundbrackedopen_expor_roundbrackedclose_106(true, fake, state, depth + 1))
+    if (!m_nameof_roundbrackedopen_expor_roundbrackedclose_105(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -4005,10 +3978,10 @@ std::shared_ptr<yaoosl::parsing::instance::nameof> yaoosl::parsing::instance::p_
     std::shared_ptr<yaoosl::parsing::instance::nameof> fake;
     nameof_state state;
     resetable resetable2(*this);
-    if (m_nameof_roundbrackedopen_expor_roundbrackedclose_106(true, fake, state, depth + 1))
+    if (m_nameof_roundbrackedopen_expor_roundbrackedclose_105(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_nameof_roundbrackedopen_expor_roundbrackedclose_106(false, actual, state, depth + 1);
+        m_nameof_roundbrackedopen_expor_roundbrackedclose_105(false, actual, state, depth + 1);
     }
     else
     {
@@ -4016,7 +3989,7 @@ std::shared_ptr<yaoosl::parsing::instance::nameof> yaoosl::parsing::instance::p_
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_ident_string_ident_107(bool is_can, std::shared_ptr<yaoosl::parsing::instance::string_literal>& actual, yaoosl::parsing::instance::string_literal_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_ident_string_ident_106(bool is_can, std::shared_ptr<yaoosl::parsing::instance::string_literal>& actual, yaoosl::parsing::instance::string_literal_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token_ident(depth + 1);
@@ -4092,7 +4065,7 @@ bool yaoosl::parsing::instance::m_ident_string_ident_107(bool is_can, std::share
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_string_ident_108(bool is_can, std::shared_ptr<yaoosl::parsing::instance::string_literal>& actual, yaoosl::parsing::instance::string_literal_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_string_ident_107(bool is_can, std::shared_ptr<yaoosl::parsing::instance::string_literal>& actual, yaoosl::parsing::instance::string_literal_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token_string(depth + 1);
@@ -4146,7 +4119,7 @@ bool yaoosl::parsing::instance::m_string_ident_108(bool is_can, std::shared_ptr<
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_ident_string_109(bool is_can, std::shared_ptr<yaoosl::parsing::instance::string_literal>& actual, yaoosl::parsing::instance::string_literal_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_ident_string_108(bool is_can, std::shared_ptr<yaoosl::parsing::instance::string_literal>& actual, yaoosl::parsing::instance::string_literal_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token_ident(depth + 1);
@@ -4200,7 +4173,7 @@ bool yaoosl::parsing::instance::m_ident_string_109(bool is_can, std::shared_ptr<
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_string_110(bool is_can, std::shared_ptr<yaoosl::parsing::instance::string_literal>& actual, yaoosl::parsing::instance::string_literal_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_string_109(bool is_can, std::shared_ptr<yaoosl::parsing::instance::string_literal>& actual, yaoosl::parsing::instance::string_literal_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token_string(depth + 1);
@@ -4232,10 +4205,10 @@ bool yaoosl::parsing::instance::m_string_110(bool is_can, std::shared_ptr<yaoosl
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives111(bool is_can, std::shared_ptr<yaoosl::parsing::instance::string_literal>& actual, yaoosl::parsing::instance::string_literal_state& state, size_t depth)
+bool yaoosl::parsing::instance::alternatives110(bool is_can, std::shared_ptr<yaoosl::parsing::instance::string_literal>& actual, yaoosl::parsing::instance::string_literal_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    if (m_ident_string_ident_107(true, actual, state, depth + 1))
+    if (m_ident_string_ident_106(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -4244,11 +4217,11 @@ bool yaoosl::parsing::instance::alternatives111(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_ident_string_ident_107(false, actual, state, depth + 1);
+            m_ident_string_ident_106(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_string_ident_108(true, actual, state, depth + 1))
+    else if (m_string_ident_107(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -4257,11 +4230,11 @@ bool yaoosl::parsing::instance::alternatives111(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_string_ident_108(false, actual, state, depth + 1);
+            m_string_ident_107(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_ident_string_109(true, actual, state, depth + 1))
+    else if (m_ident_string_108(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -4270,11 +4243,11 @@ bool yaoosl::parsing::instance::alternatives111(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_ident_string_109(false, actual, state, depth + 1);
+            m_ident_string_108(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_string_110(true, actual, state, depth + 1))
+    else if (m_string_109(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -4283,7 +4256,7 @@ bool yaoosl::parsing::instance::alternatives111(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_string_110(false, actual, state, depth + 1);
+            m_string_109(false, actual, state, depth + 1);
             return true;
         }
     }
@@ -4295,7 +4268,7 @@ bool yaoosl::parsing::instance::p_can_string_literal(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::string_literal> fake;
     string_literal_state state;
-    if (!alternatives111(true, fake, state, depth + 1))
+    if (!alternatives110(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -4308,10 +4281,10 @@ std::shared_ptr<yaoosl::parsing::instance::string_literal> yaoosl::parsing::inst
     std::shared_ptr<yaoosl::parsing::instance::string_literal> fake;
     string_literal_state state;
     resetable resetable2(*this);
-    if (alternatives111(true, fake, state, depth + 1))
+    if (alternatives110(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        alternatives111(false, actual, state, depth + 1);
+        alternatives110(false, actual, state, depth + 1);
     }
     else
     {
@@ -4319,7 +4292,7 @@ std::shared_ptr<yaoosl::parsing::instance::string_literal> yaoosl::parsing::inst
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_typeof_112(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_typeof_111(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_typeof(depth + 1))
@@ -4346,7 +4319,7 @@ bool yaoosl::parsing::instance::m_typeof_112(bool is_can, std::shared_ptr<yaoosl
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_nameof_113(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_nameof_112(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_nameof(depth + 1))
@@ -4373,7 +4346,7 @@ bool yaoosl::parsing::instance::m_nameof_113(bool is_can, std::shared_ptr<yaoosl
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_scalar_114(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_scalar_113(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token_scalar(depth + 1);
@@ -4405,7 +4378,7 @@ bool yaoosl::parsing::instance::m_scalar_114(bool is_can, std::shared_ptr<yaoosl
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_boolean_115(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_boolean_114(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token_boolean(depth + 1);
@@ -4437,7 +4410,7 @@ bool yaoosl::parsing::instance::m_boolean_115(bool is_can, std::shared_ptr<yaoos
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_stringliteral_116(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_stringliteral_115(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_string_literal(depth + 1))
@@ -4464,7 +4437,7 @@ bool yaoosl::parsing::instance::m_stringliteral_116(bool is_can, std::shared_ptr
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_integer_117(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_integer_116(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token_integer(depth + 1);
@@ -4496,10 +4469,10 @@ bool yaoosl::parsing::instance::m_integer_117(bool is_can, std::shared_ptr<yaoos
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives118(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth)
+bool yaoosl::parsing::instance::alternatives117(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_value>& actual, yaoosl::parsing::instance::exp_value_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    if (m_typeof_112(true, actual, state, depth + 1))
+    if (m_typeof_111(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -4508,11 +4481,11 @@ bool yaoosl::parsing::instance::alternatives118(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_typeof_112(false, actual, state, depth + 1);
+            m_typeof_111(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_nameof_113(true, actual, state, depth + 1))
+    else if (m_nameof_112(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -4521,11 +4494,11 @@ bool yaoosl::parsing::instance::alternatives118(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_nameof_113(false, actual, state, depth + 1);
+            m_nameof_112(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_scalar_114(true, actual, state, depth + 1))
+    else if (m_scalar_113(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -4534,11 +4507,11 @@ bool yaoosl::parsing::instance::alternatives118(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_scalar_114(false, actual, state, depth + 1);
+            m_scalar_113(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_boolean_115(true, actual, state, depth + 1))
+    else if (m_boolean_114(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -4547,11 +4520,11 @@ bool yaoosl::parsing::instance::alternatives118(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_boolean_115(false, actual, state, depth + 1);
+            m_boolean_114(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_stringliteral_116(true, actual, state, depth + 1))
+    else if (m_stringliteral_115(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -4560,11 +4533,11 @@ bool yaoosl::parsing::instance::alternatives118(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_stringliteral_116(false, actual, state, depth + 1);
+            m_stringliteral_115(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_integer_117(true, actual, state, depth + 1))
+    else if (m_integer_116(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -4573,7 +4546,7 @@ bool yaoosl::parsing::instance::alternatives118(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_integer_117(false, actual, state, depth + 1);
+            m_integer_116(false, actual, state, depth + 1);
             return true;
         }
     }
@@ -4585,7 +4558,7 @@ bool yaoosl::parsing::instance::p_can_exp_value(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::exp_value> fake;
     exp_value_state state;
-    if (!alternatives118(true, fake, state, depth + 1))
+    if (!alternatives117(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -4598,10 +4571,10 @@ std::shared_ptr<yaoosl::parsing::instance::exp_value> yaoosl::parsing::instance:
     std::shared_ptr<yaoosl::parsing::instance::exp_value> fake;
     exp_value_state state;
     resetable resetable2(*this);
-    if (alternatives118(true, fake, state, depth + 1))
+    if (alternatives117(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        alternatives118(false, actual, state, depth + 1);
+        alternatives117(false, actual, state, depth + 1);
     }
     else
     {
@@ -4609,7 +4582,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_value> yaoosl::parsing::instance:
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_roundbrackedopen_statement_roundbrackedclose_119(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_roundbrackedopen_statement_roundbrackedclose_118(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__round_bracked_open(depth + 1);
@@ -4686,7 +4659,7 @@ bool yaoosl::parsing::instance::m_roundbrackedopen_statement_roundbrackedclose_1
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_declaration_120(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_declaration_119(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_declaration(depth + 1))
@@ -4713,7 +4686,7 @@ bool yaoosl::parsing::instance::m_declaration_120(bool is_can, std::shared_ptr<y
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expchain_121(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expchain_120(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (lr_can_exp_chain(depth + 1))
@@ -4740,7 +4713,7 @@ bool yaoosl::parsing::instance::m_expchain_121(bool is_can, std::shared_ptr<yaoo
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expvalue_122(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expvalue_121(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_exp_value(depth + 1))
@@ -4767,10 +4740,10 @@ bool yaoosl::parsing::instance::m_expvalue_122(bool is_can, std::shared_ptr<yaoo
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives123(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state, size_t depth)
+bool yaoosl::parsing::instance::alternatives122(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_nullar>& actual, yaoosl::parsing::instance::exp_nullar_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    if (m_roundbrackedopen_statement_roundbrackedclose_119(true, actual, state, depth + 1))
+    if (m_roundbrackedopen_statement_roundbrackedclose_118(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -4779,11 +4752,11 @@ bool yaoosl::parsing::instance::alternatives123(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_roundbrackedopen_statement_roundbrackedclose_119(false, actual, state, depth + 1);
+            m_roundbrackedopen_statement_roundbrackedclose_118(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_declaration_120(true, actual, state, depth + 1))
+    else if (m_declaration_119(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -4792,11 +4765,11 @@ bool yaoosl::parsing::instance::alternatives123(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_declaration_120(false, actual, state, depth + 1);
+            m_declaration_119(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_expchain_121(true, actual, state, depth + 1))
+    else if (m_expchain_120(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -4805,11 +4778,11 @@ bool yaoosl::parsing::instance::alternatives123(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_expchain_121(false, actual, state, depth + 1);
+            m_expchain_120(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_expvalue_122(true, actual, state, depth + 1))
+    else if (m_expvalue_121(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -4818,7 +4791,7 @@ bool yaoosl::parsing::instance::alternatives123(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_expvalue_122(false, actual, state, depth + 1);
+            m_expvalue_121(false, actual, state, depth + 1);
             return true;
         }
     }
@@ -4830,7 +4803,7 @@ bool yaoosl::parsing::instance::p_can_exp_nullar(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::exp_nullar> fake;
     exp_nullar_state state;
-    if (!alternatives123(true, fake, state, depth + 1))
+    if (!alternatives122(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -4843,10 +4816,10 @@ std::shared_ptr<yaoosl::parsing::instance::exp_nullar> yaoosl::parsing::instance
     std::shared_ptr<yaoosl::parsing::instance::exp_nullar> fake;
     exp_nullar_state state;
     resetable resetable2(*this);
-    if (alternatives123(true, fake, state, depth + 1))
+    if (alternatives122(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        alternatives123(false, actual, state, depth + 1);
+        alternatives122(false, actual, state, depth + 1);
     }
     else
     {
@@ -4854,7 +4827,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_nullar> yaoosl::parsing::instance
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_exclamation_expunary_124(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_exclamation_expunary_123(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__exclamation(depth + 1);
@@ -4903,7 +4876,7 @@ bool yaoosl::parsing::instance::m_exclamation_expunary_124(bool is_can, std::sha
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_tilde_expunary_125(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_tilde_expunary_124(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__tilde(depth + 1);
@@ -4952,7 +4925,7 @@ bool yaoosl::parsing::instance::m_tilde_expunary_125(bool is_can, std::shared_pt
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_minus_expunary_126(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_minus_expunary_125(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token_minus(depth + 1);
@@ -5001,7 +4974,7 @@ bool yaoosl::parsing::instance::m_minus_expunary_126(bool is_can, std::shared_pt
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_plus_expunary_127(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_plus_expunary_126(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token_plus(depth + 1);
@@ -5050,7 +5023,7 @@ bool yaoosl::parsing::instance::m_plus_expunary_127(bool is_can, std::shared_ptr
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expnullar_128(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expnullar_127(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_exp_nullar(depth + 1))
@@ -5077,10 +5050,10 @@ bool yaoosl::parsing::instance::m_expnullar_128(bool is_can, std::shared_ptr<yao
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives129(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth)
+bool yaoosl::parsing::instance::alternatives128(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_unary>& actual, yaoosl::parsing::instance::exp_unary_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    if (m_exclamation_expunary_124(true, actual, state, depth + 1))
+    if (m_exclamation_expunary_123(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -5089,11 +5062,11 @@ bool yaoosl::parsing::instance::alternatives129(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_exclamation_expunary_124(false, actual, state, depth + 1);
+            m_exclamation_expunary_123(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_tilde_expunary_125(true, actual, state, depth + 1))
+    else if (m_tilde_expunary_124(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -5102,11 +5075,11 @@ bool yaoosl::parsing::instance::alternatives129(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_tilde_expunary_125(false, actual, state, depth + 1);
+            m_tilde_expunary_124(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_minus_expunary_126(true, actual, state, depth + 1))
+    else if (m_minus_expunary_125(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -5115,11 +5088,11 @@ bool yaoosl::parsing::instance::alternatives129(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_minus_expunary_126(false, actual, state, depth + 1);
+            m_minus_expunary_125(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_plus_expunary_127(true, actual, state, depth + 1))
+    else if (m_plus_expunary_126(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -5128,11 +5101,11 @@ bool yaoosl::parsing::instance::alternatives129(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_plus_expunary_127(false, actual, state, depth + 1);
+            m_plus_expunary_126(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_expnullar_128(true, actual, state, depth + 1))
+    else if (m_expnullar_127(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -5141,7 +5114,7 @@ bool yaoosl::parsing::instance::alternatives129(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_expnullar_128(false, actual, state, depth + 1);
+            m_expnullar_127(false, actual, state, depth + 1);
             return true;
         }
     }
@@ -5153,7 +5126,7 @@ bool yaoosl::parsing::instance::p_can_exp_unary(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::exp_unary> fake;
     exp_unary_state state;
-    if (!alternatives129(true, fake, state, depth + 1))
+    if (!alternatives128(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -5166,10 +5139,10 @@ std::shared_ptr<yaoosl::parsing::instance::exp_unary> yaoosl::parsing::instance:
     std::shared_ptr<yaoosl::parsing::instance::exp_unary> fake;
     exp_unary_state state;
     resetable resetable2(*this);
-    if (alternatives129(true, fake, state, depth + 1))
+    if (alternatives128(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        alternatives129(false, actual, state, depth + 1);
+        alternatives128(false, actual, state, depth + 1);
     }
     else
     {
@@ -5177,7 +5150,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_unary> yaoosl::parsing::instance:
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_return_expor_130(bool is_can, std::shared_ptr<yaoosl::parsing::instance::return_statement>& actual, yaoosl::parsing::instance::return_statement_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_return_expor_129(bool is_can, std::shared_ptr<yaoosl::parsing::instance::return_statement>& actual, yaoosl::parsing::instance::return_statement_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__return(depth + 1);
@@ -5234,7 +5207,7 @@ bool yaoosl::parsing::instance::p_can_return_statement(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::return_statement> fake;
     return_statement_state state;
-    if (!m_return_expor_130(true, fake, state, depth + 1))
+    if (!m_return_expor_129(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -5247,10 +5220,10 @@ std::shared_ptr<yaoosl::parsing::instance::return_statement> yaoosl::parsing::in
     std::shared_ptr<yaoosl::parsing::instance::return_statement> fake;
     return_statement_state state;
     resetable resetable2(*this);
-    if (m_return_expor_130(true, fake, state, depth + 1))
+    if (m_return_expor_129(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_return_expor_130(false, actual, state, depth + 1);
+        m_return_expor_129(false, actual, state, depth + 1);
     }
     else
     {
@@ -5258,7 +5231,7 @@ std::shared_ptr<yaoosl::parsing::instance::return_statement> yaoosl::parsing::in
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_typematch_ident_131(bool is_can, std::shared_ptr<yaoosl::parsing::instance::declaration>& actual, yaoosl::parsing::instance::declaration_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_typematch_ident_130(bool is_can, std::shared_ptr<yaoosl::parsing::instance::declaration>& actual, yaoosl::parsing::instance::declaration_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_type_match(depth + 1))
@@ -5312,7 +5285,7 @@ bool yaoosl::parsing::instance::p_can_declaration(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::declaration> fake;
     declaration_state state;
-    if (!m_typematch_ident_131(true, fake, state, depth + 1))
+    if (!m_typematch_ident_130(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -5325,10 +5298,10 @@ std::shared_ptr<yaoosl::parsing::instance::declaration> yaoosl::parsing::instanc
     std::shared_ptr<yaoosl::parsing::instance::declaration> fake;
     declaration_state state;
     resetable resetable2(*this);
-    if (m_typematch_ident_131(true, fake, state, depth + 1))
+    if (m_typematch_ident_130(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_typematch_ident_131(false, actual, state, depth + 1);
+        m_typematch_ident_130(false, actual, state, depth + 1);
     }
     else
     {
@@ -5336,7 +5309,7 @@ std::shared_ptr<yaoosl::parsing::instance::declaration> yaoosl::parsing::instanc
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_returnstatement_semicolon_132(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement>& actual, yaoosl::parsing::instance::statement_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_returnstatement_semicolon_131(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement>& actual, yaoosl::parsing::instance::statement_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_return_statement(depth + 1))
@@ -5388,7 +5361,7 @@ bool yaoosl::parsing::instance::m_returnstatement_semicolon_132(bool is_can, std
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expression_semicolon_133(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement>& actual, yaoosl::parsing::instance::statement_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expression_semicolon_132(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement>& actual, yaoosl::parsing::instance::statement_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (lr_can_expression(depth + 1))
@@ -5440,7 +5413,7 @@ bool yaoosl::parsing::instance::m_expression_semicolon_133(bool is_can, std::sha
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_semicolon_134(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement>& actual, yaoosl::parsing::instance::statement_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_semicolon_133(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement>& actual, yaoosl::parsing::instance::statement_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__semicolon(depth + 1);
@@ -5475,10 +5448,10 @@ bool yaoosl::parsing::instance::m_semicolon_134(bool is_can, std::shared_ptr<yao
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives135(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement>& actual, yaoosl::parsing::instance::statement_state& state, size_t depth)
+bool yaoosl::parsing::instance::alternatives134(bool is_can, std::shared_ptr<yaoosl::parsing::instance::statement>& actual, yaoosl::parsing::instance::statement_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    if (m_returnstatement_semicolon_132(true, actual, state, depth + 1))
+    if (m_returnstatement_semicolon_131(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -5487,11 +5460,11 @@ bool yaoosl::parsing::instance::alternatives135(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_returnstatement_semicolon_132(false, actual, state, depth + 1);
+            m_returnstatement_semicolon_131(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_expression_semicolon_133(true, actual, state, depth + 1))
+    else if (m_expression_semicolon_132(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -5500,11 +5473,11 @@ bool yaoosl::parsing::instance::alternatives135(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_expression_semicolon_133(false, actual, state, depth + 1);
+            m_expression_semicolon_132(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_semicolon_134(true, actual, state, depth + 1))
+    else if (m_semicolon_133(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -5513,7 +5486,7 @@ bool yaoosl::parsing::instance::alternatives135(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_semicolon_134(false, actual, state, depth + 1);
+            m_semicolon_133(false, actual, state, depth + 1);
             return true;
         }
     }
@@ -5525,7 +5498,7 @@ bool yaoosl::parsing::instance::p_can_statement(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::statement> fake;
     statement_state state;
-    if (!alternatives135(true, fake, state, depth + 1))
+    if (!alternatives134(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -5538,10 +5511,10 @@ std::shared_ptr<yaoosl::parsing::instance::statement> yaoosl::parsing::instance:
     std::shared_ptr<yaoosl::parsing::instance::statement> fake;
     statement_state state;
     resetable resetable2(*this);
-    if (alternatives135(true, fake, state, depth + 1))
+    if (alternatives134(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        alternatives135(false, actual, state, depth + 1);
+        alternatives134(false, actual, state, depth + 1);
     }
     else
     {
@@ -5549,68 +5522,7 @@ std::shared_ptr<yaoosl::parsing::instance::statement> yaoosl::parsing::instance:
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_ident_136(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function_arg>& actual, yaoosl::parsing::instance::function_arg_state& state, size_t depth)
-{
-    resetable resetable1(*this);
-    auto l2 = token_ident(depth + 1);
-    if (l2.has_value())
-    {
-        for (auto i3 = l2.value(); i3 != 0; i3--)
-        {
-            next();
-        }
-        skip();
-    }
-    else if (is_can)
-    {
-        resetable1.reset();
-        return false;
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-        return false;
-    }
-    if (is_can)
-    {
-        return true;
-    }
-    resetable1.reset();
-    auto val4 = create_token(token_ident(depth + 1).value(), tok::IDENT);
-    actual->name = val4;
-    skip();
-    return true;
-}
-bool yaoosl::parsing::instance::p_can_function_arg(size_t depth)
-{
-    resetable resetable1(*this);
-    std::shared_ptr<yaoosl::parsing::instance::function_arg> fake;
-    function_arg_state state;
-    if (!m_ident_136(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    return true;
-}
-std::shared_ptr<yaoosl::parsing::instance::function_arg> yaoosl::parsing::instance::p_match_function_arg(size_t depth)
-{
-    auto actual = std::make_shared<yaoosl::parsing::instance::function_arg>();
-    std::shared_ptr<yaoosl::parsing::instance::function_arg> fake;
-    function_arg_state state;
-    resetable resetable2(*this);
-    if (m_ident_136(true, fake, state, depth + 1))
-    {
-        resetable2.reset();
-        m_ident_136(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    return actual;
-}
-bool yaoosl::parsing::instance::m_curlybrackedopen_137(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_curlybrackedopen_135(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__curly_bracked_open(depth + 1);
@@ -5645,7 +5557,7 @@ bool yaoosl::parsing::instance::m_curlybrackedopen_137(bool is_can, std::shared_
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_curlybrackedclose_138(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_curlybrackedclose_136(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__curly_bracked_close(depth + 1);
@@ -5680,7 +5592,7 @@ bool yaoosl::parsing::instance::m_curlybrackedclose_138(bool is_can, std::shared
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_controlstructure_139(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_controlstructure_137(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_control_structure(depth + 1))
@@ -5707,7 +5619,7 @@ bool yaoosl::parsing::instance::m_controlstructure_139(bool is_can, std::shared_
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_statement_140(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_statement_138(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_statement(depth + 1))
@@ -5734,10 +5646,10 @@ bool yaoosl::parsing::instance::m_statement_140(bool is_can, std::shared_ptr<yao
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives141(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth)
+bool yaoosl::parsing::instance::alternatives139(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    if (m_controlstructure_139(true, actual, state, depth + 1))
+    if (m_controlstructure_137(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -5746,11 +5658,11 @@ bool yaoosl::parsing::instance::alternatives141(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_controlstructure_139(false, actual, state, depth + 1);
+            m_controlstructure_137(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_statement_140(true, actual, state, depth + 1))
+    else if (m_statement_138(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -5759,7 +5671,7 @@ bool yaoosl::parsing::instance::alternatives141(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_statement_140(false, actual, state, depth + 1);
+            m_statement_138(false, actual, state, depth + 1);
             return true;
         }
     }
@@ -5770,21 +5682,21 @@ bool yaoosl::parsing::instance::alternatives141(bool is_can, std::shared_ptr<yao
     resetable1.reset();
     return false;
 }
-bool yaoosl::parsing::instance::while142_143(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth)
+bool yaoosl::parsing::instance::while140_141(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    bool cond3 = m_curlybrackedclose_138(true, actual, state, depth + 1);
+    bool cond3 = m_curlybrackedclose_136(true, actual, state, depth + 1);
     resetable1.reset();
     if (is_can)
     {
         while (!cond3 && current() != '\0')
         {
-            while (!alternatives141(true, actual, state, depth + 1) && current() != '\0')
+            while (!alternatives139(true, actual, state, depth + 1) && current() != '\0')
             {
                 next();
             }
             resetable resetable2(*this);
-            cond3 = m_curlybrackedclose_138(true, actual, state, depth + 1);
+            cond3 = m_curlybrackedclose_136(true, actual, state, depth + 1);
             resetable2.reset();
         }
         return true;
@@ -5793,12 +5705,12 @@ bool yaoosl::parsing::instance::while142_143(bool is_can, std::shared_ptr<yaoosl
     {
         while (!cond3 && current() != '\0')
         {
-            if (!alternatives141(false, actual, state, depth + 1))
+            if (!alternatives139(false, actual, state, depth + 1))
             {
                 while (current() != '\0')
                 {
                     resetable resetable4(*this);
-                    if (alternatives141(true, actual, state, depth + 1))
+                    if (alternatives139(true, actual, state, depth + 1))
                     {
                         resetable4.reset();
                         break;
@@ -5807,13 +5719,13 @@ bool yaoosl::parsing::instance::while142_143(bool is_can, std::shared_ptr<yaoosl
                 }
             }
             resetable resetable2(*this);
-            cond3 = m_curlybrackedclose_138(true, actual, state, depth + 1);
+            cond3 = m_curlybrackedclose_136(true, actual, state, depth + 1);
             resetable2.reset();
         }
         return true;
     }
 }
-bool yaoosl::parsing::instance::m_curlybrackedclose_144(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_curlybrackedclose_142(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope>& actual, yaoosl::parsing::instance::scope_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__curly_bracked_close(depth + 1);
@@ -5853,17 +5765,17 @@ bool yaoosl::parsing::instance::p_can_scope(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::scope> fake;
     scope_state state;
-    if (!m_curlybrackedopen_137(true, fake, state, depth + 1))
+    if (!m_curlybrackedopen_135(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
     }
-    else if (!while142_143(true, fake, state, depth + 1))
+    else if (!while140_141(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
     }
-    else if (!m_curlybrackedclose_144(true, fake, state, depth + 1))
+    else if (!m_curlybrackedclose_142(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -5876,30 +5788,30 @@ std::shared_ptr<yaoosl::parsing::instance::scope> yaoosl::parsing::instance::p_m
     std::shared_ptr<yaoosl::parsing::instance::scope> fake;
     scope_state state;
     resetable resetable2(*this);
-    if (m_curlybrackedopen_137(true, fake, state, depth + 1))
+    if (m_curlybrackedopen_135(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_curlybrackedopen_137(false, actual, state, depth + 1);
+        m_curlybrackedopen_135(false, actual, state, depth + 1);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
     }
     resetable resetable3(*this);
-    if (while142_143(true, fake, state, depth + 1))
+    if (while140_141(true, fake, state, depth + 1))
     {
         resetable3.reset();
-        while142_143(false, actual, state, depth + 1);
+        while140_141(false, actual, state, depth + 1);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
     }
     resetable resetable4(*this);
-    if (m_curlybrackedclose_144(true, fake, state, depth + 1))
+    if (m_curlybrackedclose_142(true, fake, state, depth + 1))
     {
         resetable4.reset();
-        m_curlybrackedclose_144(false, actual, state, depth + 1);
+        m_curlybrackedclose_142(false, actual, state, depth + 1);
     }
     else
     {
@@ -5907,7 +5819,7 @@ std::shared_ptr<yaoosl::parsing::instance::scope> yaoosl::parsing::instance::p_m
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_curlybrackedopen_145(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_curlybrackedopen_143(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__curly_bracked_open(depth + 1);
@@ -5942,7 +5854,7 @@ bool yaoosl::parsing::instance::m_curlybrackedopen_145(bool is_can, std::shared_
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_get_scope_set_scope_146(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_get_scope_set_scope_144(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__get(depth + 1);
@@ -6036,7 +5948,7 @@ bool yaoosl::parsing::instance::m_get_scope_set_scope_146(bool is_can, std::shar
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_set_scope_get_scope_147(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_set_scope_get_scope_145(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__set(depth + 1);
@@ -6130,7 +6042,7 @@ bool yaoosl::parsing::instance::m_set_scope_get_scope_147(bool is_can, std::shar
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_get_scope_148(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_get_scope_146(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__get(depth + 1);
@@ -6182,7 +6094,7 @@ bool yaoosl::parsing::instance::m_get_scope_148(bool is_can, std::shared_ptr<yao
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_set_scope_149(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_set_scope_147(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__set(depth + 1);
@@ -6234,10 +6146,10 @@ bool yaoosl::parsing::instance::m_set_scope_149(bool is_can, std::shared_ptr<yao
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives150(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth)
+bool yaoosl::parsing::instance::alternatives148(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    if (m_get_scope_set_scope_146(true, actual, state, depth + 1))
+    if (m_get_scope_set_scope_144(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -6246,11 +6158,11 @@ bool yaoosl::parsing::instance::alternatives150(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_get_scope_set_scope_146(false, actual, state, depth + 1);
+            m_get_scope_set_scope_144(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_set_scope_get_scope_147(true, actual, state, depth + 1))
+    else if (m_set_scope_get_scope_145(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -6259,11 +6171,11 @@ bool yaoosl::parsing::instance::alternatives150(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_set_scope_get_scope_147(false, actual, state, depth + 1);
+            m_set_scope_get_scope_145(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_get_scope_148(true, actual, state, depth + 1))
+    else if (m_get_scope_146(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -6272,11 +6184,11 @@ bool yaoosl::parsing::instance::alternatives150(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_get_scope_148(false, actual, state, depth + 1);
+            m_get_scope_146(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_set_scope_149(true, actual, state, depth + 1))
+    else if (m_set_scope_147(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -6285,14 +6197,14 @@ bool yaoosl::parsing::instance::alternatives150(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_set_scope_149(false, actual, state, depth + 1);
+            m_set_scope_147(false, actual, state, depth + 1);
             return true;
         }
     }
     resetable1.reset();
     return false;
 }
-bool yaoosl::parsing::instance::m_curlybrackedclose_151(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_curlybrackedclose_149(bool is_can, std::shared_ptr<yaoosl::parsing::instance::scope_getset>& actual, yaoosl::parsing::instance::scope_getset_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__curly_bracked_close(depth + 1);
@@ -6332,17 +6244,17 @@ bool yaoosl::parsing::instance::p_can_scope_getset(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::scope_getset> fake;
     scope_getset_state state;
-    if (!m_curlybrackedopen_145(true, fake, state, depth + 1))
+    if (!m_curlybrackedopen_143(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
     }
-    else if (!alternatives150(true, fake, state, depth + 1))
+    else if (!alternatives148(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
     }
-    else if (!m_curlybrackedclose_151(true, fake, state, depth + 1))
+    else if (!m_curlybrackedclose_149(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -6355,30 +6267,30 @@ std::shared_ptr<yaoosl::parsing::instance::scope_getset> yaoosl::parsing::instan
     std::shared_ptr<yaoosl::parsing::instance::scope_getset> fake;
     scope_getset_state state;
     resetable resetable2(*this);
-    if (m_curlybrackedopen_145(true, fake, state, depth + 1))
+    if (m_curlybrackedopen_143(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_curlybrackedopen_145(false, actual, state, depth + 1);
+        m_curlybrackedopen_143(false, actual, state, depth + 1);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
     }
     resetable resetable3(*this);
-    if (alternatives150(true, fake, state, depth + 1))
+    if (alternatives148(true, fake, state, depth + 1))
     {
         resetable3.reset();
-        alternatives150(false, actual, state, depth + 1);
+        alternatives148(false, actual, state, depth + 1);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
     }
     resetable resetable4(*this);
-    if (m_curlybrackedclose_151(true, fake, state, depth + 1))
+    if (m_curlybrackedclose_149(true, fake, state, depth + 1))
     {
         resetable4.reset();
-        m_curlybrackedclose_151(false, actual, state, depth + 1);
+        m_curlybrackedclose_149(false, actual, state, depth + 1);
     }
     else
     {
@@ -6386,442 +6298,7 @@ std::shared_ptr<yaoosl::parsing::instance::scope_getset> yaoosl::parsing::instan
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_func_ident_roundbrackedopen_152(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state, size_t depth)
-{
-    resetable resetable1(*this);
-    auto l2 = token__func(depth + 1);
-    if (l2.has_value())
-    {
-        for (auto i3 = l2.value(); i3 != 0; i3--)
-        {
-            next();
-        }
-        skip();
-    }
-    else if (is_can)
-    {
-        resetable1.reset();
-        return false;
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-        return false;
-    }
-    auto l4 = token_ident(depth + 1);
-    if (l4.has_value())
-    {
-        for (auto i5 = l4.value(); i5 != 0; i5--)
-        {
-            next();
-        }
-        skip();
-    }
-    else if (is_can)
-    {
-        resetable1.reset();
-        return false;
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-        return false;
-    }
-    auto l6 = token__round_bracked_open(depth + 1);
-    if (l6.has_value())
-    {
-        for (auto i7 = l6.value(); i7 != 0; i7--)
-        {
-            next();
-        }
-        skip();
-    }
-    else if (is_can)
-    {
-        resetable1.reset();
-        return false;
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-        return false;
-    }
-    if (is_can)
-    {
-        return true;
-    }
-    resetable1.reset();
-    auto l9 = token__func(depth + 1).value();
-    for (;l9 != 0; l9--)
-    {
-        next();
-    }
-    skip();
-    auto val10 = create_token(token_ident(depth + 1).value(), tok::IDENT);
-    actual->name = val10;
-    skip();
-    auto l12 = token__round_bracked_open(depth + 1).value();
-    for (;l12 != 0; l12--)
-    {
-        next();
-    }
-    skip();
-    return true;
-}
-bool yaoosl::parsing::instance::m_functionarg_153(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state, size_t depth)
-{
-    resetable resetable1(*this);
-    if (p_can_function_arg(depth + 1))
-    {
-        skip();
-    }
-    else if (is_can)
-    {
-        resetable1.reset();
-        return false;
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-        return false;
-    }
-    if (is_can)
-    {
-        return true;
-    }
-    resetable1.reset();
-    p_match_function_arg(depth + 1);
-    skip();
-    return true;
-}
-bool yaoosl::parsing::instance::m_functionarg_154(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state, size_t depth)
-{
-    resetable resetable1(*this);
-    if (p_can_function_arg(depth + 1))
-    {
-        skip();
-    }
-    else if (is_can)
-    {
-        resetable1.reset();
-        return false;
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-        return false;
-    }
-    if (is_can)
-    {
-        return true;
-    }
-    resetable1.reset();
-    auto val2 = p_match_function_arg(depth + 1);
-    actual->args.push_back(val2);
-    skip();
-    return true;
-}
-bool yaoosl::parsing::instance::m_roundbrackedclose_155(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state, size_t depth)
-{
-    resetable resetable1(*this);
-    auto l2 = token__round_bracked_close(depth + 1);
-    if (l2.has_value())
-    {
-        for (auto i3 = l2.value(); i3 != 0; i3--)
-        {
-            next();
-        }
-        skip();
-    }
-    else if (is_can)
-    {
-        resetable1.reset();
-        return false;
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-        return false;
-    }
-    if (is_can)
-    {
-        return true;
-    }
-    resetable1.reset();
-    auto l5 = token__round_bracked_close(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
-    skip();
-    return true;
-}
-bool yaoosl::parsing::instance::m_comma_functionarg_156(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state, size_t depth)
-{
-    resetable resetable1(*this);
-    auto l2 = token__comma(depth + 1);
-    if (l2.has_value())
-    {
-        for (auto i3 = l2.value(); i3 != 0; i3--)
-        {
-            next();
-        }
-        skip();
-    }
-    else if (is_can)
-    {
-        resetable1.reset();
-        return false;
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-        return false;
-    }
-    if (p_can_function_arg(depth + 1))
-    {
-        skip();
-    }
-    else if (is_can)
-    {
-        resetable1.reset();
-        return false;
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-        return false;
-    }
-    if (is_can)
-    {
-        return true;
-    }
-    resetable1.reset();
-    auto l5 = token__comma(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
-    skip();
-    auto val6 = p_match_function_arg(depth + 1);
-    actual->args.push_back(val6);
-    skip();
-    return true;
-}
-bool yaoosl::parsing::instance::while157_158(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state, size_t depth)
-{
-    resetable resetable1(*this);
-    bool cond3 = m_roundbrackedclose_155(true, actual, state, depth + 1);
-    resetable1.reset();
-    if (is_can)
-    {
-        while (!cond3 && current() != '\0')
-        {
-            if (m_comma_functionarg_156(true, actual, state, depth + 1))
-            {
-                skip();
-            }
-            else if (is_can)
-            {
-                return false;
-            }
-            else
-            {
-                report("Failed to match { $ref: , ({ Token: , (,)}), $ref: function-arg (XCG.Parsing.Production) }", depth);
-                return false;
-            }
-            resetable resetable2(*this);
-            cond3 = m_roundbrackedclose_155(true, actual, state, depth + 1);
-            resetable2.reset();
-        }
-        return true;
-    }
-    else
-    {
-        while (!cond3 && current() != '\0')
-        {
-            if (m_comma_functionarg_156(false, actual, state, depth + 1))
-            {
-                skip();
-            }
-            else if (is_can)
-            {
-                return false;
-            }
-            else
-            {
-                report("Failed to match { $ref: , ({ Token: , (,)}), $ref: function-arg (XCG.Parsing.Production) }", depth);
-                return false;
-            }
-            resetable resetable2(*this);
-            cond3 = m_roundbrackedclose_155(true, actual, state, depth + 1);
-            resetable2.reset();
-        }
-        return true;
-    }
-}
-bool yaoosl::parsing::instance::if159_160(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state, size_t depth)
-{
-    resetable resetable1(*this);
-    bool cond2 = m_functionarg_153(true, actual, state, depth + 1);
-    resetable1.reset();
-    if (is_can)
-    {
-        if (cond2)
-        {
-            if (m_functionarg_154(true, actual, state, depth + 1))
-            {
-                skip();
-            }
-            else if (is_can)
-            {
-                return false;
-            }
-            else
-            {
-                report("Failed to match { $ref: function-arg (XCG.Parsing.Production) }", depth);
-                return false;
-            }
-            while157_158(true, actual, state, depth + 1);
-            return true;
-        }
-        return true;
-    }
-    else
-    {
-        if (cond2)
-        {
-            if (m_functionarg_154(false, actual, state, depth + 1))
-            {
-                skip();
-            }
-            else if (is_can)
-            {
-                return false;
-            }
-            else
-            {
-                report("Failed to match { $ref: function-arg (XCG.Parsing.Production) }", depth);
-                return false;
-            }
-            while157_158(false, actual, state, depth + 1);
-            return true;
-        }
-        return true;
-    }
-}
-bool yaoosl::parsing::instance::m_roundbrackedclose_scope_161(bool is_can, std::shared_ptr<yaoosl::parsing::instance::function>& actual, yaoosl::parsing::instance::function_state& state, size_t depth)
-{
-    resetable resetable1(*this);
-    auto l2 = token__round_bracked_close(depth + 1);
-    if (l2.has_value())
-    {
-        for (auto i3 = l2.value(); i3 != 0; i3--)
-        {
-            next();
-        }
-        skip();
-    }
-    else if (is_can)
-    {
-        resetable1.reset();
-        return false;
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-        return false;
-    }
-    if (p_can_scope(depth + 1))
-    {
-        skip();
-    }
-    else if (is_can)
-    {
-        resetable1.reset();
-        return false;
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-        return false;
-    }
-    if (is_can)
-    {
-        return true;
-    }
-    resetable1.reset();
-    auto l5 = token__round_bracked_close(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
-    skip();
-    auto val6 = p_match_scope(depth + 1);
-    actual->body = val6;
-    skip();
-    return true;
-}
-bool yaoosl::parsing::instance::p_can_function(size_t depth)
-{
-    resetable resetable1(*this);
-    std::shared_ptr<yaoosl::parsing::instance::function> fake;
-    function_state state;
-    if (!m_func_ident_roundbrackedopen_152(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    else if (!if159_160(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    else if (!m_roundbrackedclose_scope_161(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    return true;
-}
-std::shared_ptr<yaoosl::parsing::instance::function> yaoosl::parsing::instance::p_match_function(size_t depth)
-{
-    auto actual = std::make_shared<yaoosl::parsing::instance::function>();
-    std::shared_ptr<yaoosl::parsing::instance::function> fake;
-    function_state state;
-    resetable resetable2(*this);
-    if (m_func_ident_roundbrackedopen_152(true, fake, state, depth + 1))
-    {
-        resetable2.reset();
-        m_func_ident_roundbrackedopen_152(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    resetable resetable3(*this);
-    if (if159_160(true, fake, state, depth + 1))
-    {
-        resetable3.reset();
-        if159_160(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    resetable resetable4(*this);
-    if (m_roundbrackedclose_scope_161(true, fake, state, depth + 1))
-    {
-        resetable4.reset();
-        m_roundbrackedclose_scope_161(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    return actual;
-}
-bool yaoosl::parsing::instance::m_scope_162(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure_body>& actual, yaoosl::parsing::instance::control_structure_body_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_scope_150(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure_body>& actual, yaoosl::parsing::instance::control_structure_body_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_scope(depth + 1))
@@ -6848,7 +6325,7 @@ bool yaoosl::parsing::instance::m_scope_162(bool is_can, std::shared_ptr<yaoosl:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_controlstructure_163(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure_body>& actual, yaoosl::parsing::instance::control_structure_body_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_controlstructure_151(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure_body>& actual, yaoosl::parsing::instance::control_structure_body_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_control_structure(depth + 1))
@@ -6875,7 +6352,7 @@ bool yaoosl::parsing::instance::m_controlstructure_163(bool is_can, std::shared_
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_statement_164(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure_body>& actual, yaoosl::parsing::instance::control_structure_body_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_statement_152(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure_body>& actual, yaoosl::parsing::instance::control_structure_body_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_statement(depth + 1))
@@ -6902,10 +6379,10 @@ bool yaoosl::parsing::instance::m_statement_164(bool is_can, std::shared_ptr<yao
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives165(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure_body>& actual, yaoosl::parsing::instance::control_structure_body_state& state, size_t depth)
+bool yaoosl::parsing::instance::alternatives153(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure_body>& actual, yaoosl::parsing::instance::control_structure_body_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    if (m_scope_162(true, actual, state, depth + 1))
+    if (m_scope_150(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -6914,11 +6391,11 @@ bool yaoosl::parsing::instance::alternatives165(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_scope_162(false, actual, state, depth + 1);
+            m_scope_150(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_controlstructure_163(true, actual, state, depth + 1))
+    else if (m_controlstructure_151(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -6927,11 +6404,11 @@ bool yaoosl::parsing::instance::alternatives165(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_controlstructure_163(false, actual, state, depth + 1);
+            m_controlstructure_151(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_statement_164(true, actual, state, depth + 1))
+    else if (m_statement_152(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -6940,7 +6417,7 @@ bool yaoosl::parsing::instance::alternatives165(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_statement_164(false, actual, state, depth + 1);
+            m_statement_152(false, actual, state, depth + 1);
             return true;
         }
     }
@@ -6952,7 +6429,7 @@ bool yaoosl::parsing::instance::p_can_control_structure_body(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::control_structure_body> fake;
     control_structure_body_state state;
-    if (!alternatives165(true, fake, state, depth + 1))
+    if (!alternatives153(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -6965,10 +6442,10 @@ std::shared_ptr<yaoosl::parsing::instance::control_structure_body> yaoosl::parsi
     std::shared_ptr<yaoosl::parsing::instance::control_structure_body> fake;
     control_structure_body_state state;
     resetable resetable2(*this);
-    if (alternatives165(true, fake, state, depth + 1))
+    if (alternatives153(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        alternatives165(false, actual, state, depth + 1);
+        alternatives153(false, actual, state, depth + 1);
     }
     else
     {
@@ -6976,7 +6453,7 @@ std::shared_ptr<yaoosl::parsing::instance::control_structure_body> yaoosl::parsi
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_while_roundbrackedopen_expression_roundbrackedclose_controlstructurebody_166(bool is_can, std::shared_ptr<yaoosl::parsing::instance::while_loop>& actual, yaoosl::parsing::instance::while_loop_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_while_roundbrackedopen_expression_roundbrackedclose_controlstructurebody_154(bool is_can, std::shared_ptr<yaoosl::parsing::instance::while_loop>& actual, yaoosl::parsing::instance::while_loop_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__while(depth + 1);
@@ -7100,7 +6577,7 @@ bool yaoosl::parsing::instance::p_can_while_loop(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::while_loop> fake;
     while_loop_state state;
-    if (!m_while_roundbrackedopen_expression_roundbrackedclose_controlstructurebody_166(true, fake, state, depth + 1))
+    if (!m_while_roundbrackedopen_expression_roundbrackedclose_controlstructurebody_154(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -7113,10 +6590,10 @@ std::shared_ptr<yaoosl::parsing::instance::while_loop> yaoosl::parsing::instance
     std::shared_ptr<yaoosl::parsing::instance::while_loop> fake;
     while_loop_state state;
     resetable resetable2(*this);
-    if (m_while_roundbrackedopen_expression_roundbrackedclose_controlstructurebody_166(true, fake, state, depth + 1))
+    if (m_while_roundbrackedopen_expression_roundbrackedclose_controlstructurebody_154(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_while_roundbrackedopen_expression_roundbrackedclose_controlstructurebody_166(false, actual, state, depth + 1);
+        m_while_roundbrackedopen_expression_roundbrackedclose_controlstructurebody_154(false, actual, state, depth + 1);
     }
     else
     {
@@ -7124,7 +6601,7 @@ std::shared_ptr<yaoosl::parsing::instance::while_loop> yaoosl::parsing::instance
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_if_roundbrackedopen_expression_roundbrackedclose_controlstructurebody_167(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_if_roundbrackedopen_expression_roundbrackedclose_controlstructurebody_155(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_body>& actual, yaoosl::parsing::instance::if_body_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__if(depth + 1);
@@ -7239,46 +6716,40 @@ bool yaoosl::parsing::instance::m_if_roundbrackedopen_expression_roundbrackedclo
     }
     skip();
     auto val15 = p_match_control_structure_body(depth + 1);
-    actual->if_body = val15;
+    actual->body = val15;
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_else_168(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth)
+bool yaoosl::parsing::instance::p_can_if_body(size_t depth)
 {
     resetable resetable1(*this);
-    auto l2 = token__else(depth + 1);
-    if (l2.has_value())
-    {
-        for (auto i3 = l2.value(); i3 != 0; i3--)
-        {
-            next();
-        }
-        skip();
-    }
-    else if (is_can)
+    std::shared_ptr<yaoosl::parsing::instance::if_body> fake;
+    if_body_state state;
+    if (!m_if_roundbrackedopen_expression_roundbrackedclose_controlstructurebody_155(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
     }
+    return true;
+}
+std::shared_ptr<yaoosl::parsing::instance::if_body> yaoosl::parsing::instance::p_match_if_body(size_t depth)
+{
+    auto actual = std::make_shared<yaoosl::parsing::instance::if_body>();
+    std::shared_ptr<yaoosl::parsing::instance::if_body> fake;
+    if_body_state state;
+    resetable resetable2(*this);
+    if (m_if_roundbrackedopen_expression_roundbrackedclose_controlstructurebody_155(true, fake, state, depth + 1))
+    {
+        resetable2.reset();
+        m_if_roundbrackedopen_expression_roundbrackedclose_controlstructurebody_155(false, actual, state, depth + 1);
+    }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
-        return false;
     }
-    if (is_can)
-    {
-        return true;
-    }
-    resetable1.reset();
-    auto l5 = token__else(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
-    skip();
-    return true;
+    return actual;
 }
-bool yaoosl::parsing::instance::m_else_controlstructurebody_169(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_else_controlstructurebody_156(bool is_can, std::shared_ptr<yaoosl::parsing::instance::else_body>& actual, yaoosl::parsing::instance::else_body_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__else(depth + 1);
@@ -7330,16 +6801,125 @@ bool yaoosl::parsing::instance::m_else_controlstructurebody_169(bool is_can, std
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::if170_171(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth)
+bool yaoosl::parsing::instance::p_can_else_body(size_t depth)
 {
     resetable resetable1(*this);
-    bool cond2 = m_else_168(true, actual, state, depth + 1);
+    std::shared_ptr<yaoosl::parsing::instance::else_body> fake;
+    else_body_state state;
+    if (!m_else_controlstructurebody_156(true, fake, state, depth + 1))
+    {
+        resetable1.reset();
+        return false;
+    }
+    return true;
+}
+std::shared_ptr<yaoosl::parsing::instance::else_body> yaoosl::parsing::instance::p_match_else_body(size_t depth)
+{
+    auto actual = std::make_shared<yaoosl::parsing::instance::else_body>();
+    std::shared_ptr<yaoosl::parsing::instance::else_body> fake;
+    else_body_state state;
+    resetable resetable2(*this);
+    if (m_else_controlstructurebody_156(true, fake, state, depth + 1))
+    {
+        resetable2.reset();
+        m_else_controlstructurebody_156(false, actual, state, depth + 1);
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+    }
+    return actual;
+}
+bool yaoosl::parsing::instance::m_ifbody_157(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_if_body(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto val2 = p_match_if_body(depth + 1);
+    actual->if_ = val2;
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_elsebody_158(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_else_body(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    p_match_else_body(depth + 1);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_elsebody_159(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_else_body(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto val2 = p_match_else_body(depth + 1);
+    actual->else_ = val2;
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::if160_161(bool is_can, std::shared_ptr<yaoosl::parsing::instance::if_else>& actual, yaoosl::parsing::instance::if_else_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    bool cond2 = m_elsebody_158(true, actual, state, depth + 1);
     resetable1.reset();
     if (is_can)
     {
         if (cond2)
         {
-            if (m_else_controlstructurebody_169(true, actual, state, depth + 1))
+            if (m_elsebody_159(true, actual, state, depth + 1))
             {
                 skip();
             }
@@ -7349,7 +6929,7 @@ bool yaoosl::parsing::instance::if170_171(bool is_can, std::shared_ptr<yaoosl::p
             }
             else
             {
-                report("Failed to match { $ref: else ({ Token: else (else)}), $ref: control-structure-body (XCG.Parsing.Production) }", depth);
+                report("Failed to match { $ref: else-body (XCG.Parsing.Production) }", depth);
                 return false;
             }
             return true;
@@ -7360,7 +6940,7 @@ bool yaoosl::parsing::instance::if170_171(bool is_can, std::shared_ptr<yaoosl::p
     {
         if (cond2)
         {
-            if (m_else_controlstructurebody_169(false, actual, state, depth + 1))
+            if (m_elsebody_159(false, actual, state, depth + 1))
             {
                 skip();
             }
@@ -7370,7 +6950,7 @@ bool yaoosl::parsing::instance::if170_171(bool is_can, std::shared_ptr<yaoosl::p
             }
             else
             {
-                report("Failed to match { $ref: else ({ Token: else (else)}), $ref: control-structure-body (XCG.Parsing.Production) }", depth);
+                report("Failed to match { $ref: else-body (XCG.Parsing.Production) }", depth);
                 return false;
             }
             return true;
@@ -7383,12 +6963,12 @@ bool yaoosl::parsing::instance::p_can_if_else(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::if_else> fake;
     if_else_state state;
-    if (!m_if_roundbrackedopen_expression_roundbrackedclose_controlstructurebody_167(true, fake, state, depth + 1))
+    if (!m_ifbody_157(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
     }
-    else if (!if170_171(true, fake, state, depth + 1))
+    else if (!if160_161(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -7401,20 +6981,20 @@ std::shared_ptr<yaoosl::parsing::instance::if_else> yaoosl::parsing::instance::p
     std::shared_ptr<yaoosl::parsing::instance::if_else> fake;
     if_else_state state;
     resetable resetable2(*this);
-    if (m_if_roundbrackedopen_expression_roundbrackedclose_controlstructurebody_167(true, fake, state, depth + 1))
+    if (m_ifbody_157(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_if_roundbrackedopen_expression_roundbrackedclose_controlstructurebody_167(false, actual, state, depth + 1);
+        m_ifbody_157(false, actual, state, depth + 1);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
     }
     resetable resetable3(*this);
-    if (if170_171(true, fake, state, depth + 1))
+    if (if160_161(true, fake, state, depth + 1))
     {
         resetable3.reset();
-        if170_171(false, actual, state, depth + 1);
+        if160_161(false, actual, state, depth + 1);
     }
     else
     {
@@ -7422,7 +7002,7 @@ std::shared_ptr<yaoosl::parsing::instance::if_else> yaoosl::parsing::instance::p
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_case_expvalue_colon_controlstructurebody_172(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_case>& actual, yaoosl::parsing::instance::switch_case_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_case_expvalue_colon_controlstructurebody_162(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_case>& actual, yaoosl::parsing::instance::switch_case_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__case(depth + 1);
@@ -7521,7 +7101,7 @@ bool yaoosl::parsing::instance::p_can_switch_case(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::switch_case> fake;
     switch_case_state state;
-    if (!m_case_expvalue_colon_controlstructurebody_172(true, fake, state, depth + 1))
+    if (!m_case_expvalue_colon_controlstructurebody_162(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -7534,10 +7114,10 @@ std::shared_ptr<yaoosl::parsing::instance::switch_case> yaoosl::parsing::instanc
     std::shared_ptr<yaoosl::parsing::instance::switch_case> fake;
     switch_case_state state;
     resetable resetable2(*this);
-    if (m_case_expvalue_colon_controlstructurebody_172(true, fake, state, depth + 1))
+    if (m_case_expvalue_colon_controlstructurebody_162(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_case_expvalue_colon_controlstructurebody_172(false, actual, state, depth + 1);
+        m_case_expvalue_colon_controlstructurebody_162(false, actual, state, depth + 1);
     }
     else
     {
@@ -7545,7 +7125,7 @@ std::shared_ptr<yaoosl::parsing::instance::switch_case> yaoosl::parsing::instanc
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_switch_roundbrackedopen_expression_roundbrackedclose_173(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_switch_roundbrackedopen_expression_roundbrackedclose_163(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__switch(depth + 1);
@@ -7647,7 +7227,7 @@ bool yaoosl::parsing::instance::m_switch_roundbrackedopen_expression_roundbracke
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_curlybrackedclose_174(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_curlybrackedclose_164(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__curly_bracked_close(depth + 1);
@@ -7682,7 +7262,7 @@ bool yaoosl::parsing::instance::m_curlybrackedclose_174(bool is_can, std::shared
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_switchcase_175(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_switchcase_165(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_switch_case(depth + 1))
@@ -7709,7 +7289,7 @@ bool yaoosl::parsing::instance::m_switchcase_175(bool is_can, std::shared_ptr<ya
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::if176_177(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth)
+bool yaoosl::parsing::instance::if166_167(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth)
 {
     resetable resetable1(*this);
     bool cond2 = state.has_default.value();
@@ -7747,7 +7327,7 @@ bool yaoosl::parsing::instance::if176_177(bool is_can, std::shared_ptr<yaoosl::p
         }
     }
 }
-bool yaoosl::parsing::instance::m_default_colon_controlstructurebody_178(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_default_colon_controlstructurebody_168(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__default(depth + 1);
@@ -7822,13 +7402,13 @@ bool yaoosl::parsing::instance::m_default_colon_controlstructurebody_178(bool is
     auto val10 = p_match_control_structure_body(depth + 1);
     actual->default_body.push_back(val10);
     skip();
-    if176_177(false, actual, state, depth + 1);
+    if166_167(false, actual, state, depth + 1);
     return true;
 }
-bool yaoosl::parsing::instance::alternatives179(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth)
+bool yaoosl::parsing::instance::alternatives169(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth)
 {
     resetable resetable1(*this);
-    if (m_switchcase_175(true, actual, state, depth + 1))
+    if (m_switchcase_165(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -7837,11 +7417,11 @@ bool yaoosl::parsing::instance::alternatives179(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_switchcase_175(false, actual, state, depth + 1);
+            m_switchcase_165(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_default_colon_controlstructurebody_178(true, actual, state, depth + 1))
+    else if (m_default_colon_controlstructurebody_168(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -7850,7 +7430,7 @@ bool yaoosl::parsing::instance::alternatives179(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_default_colon_controlstructurebody_178(false, actual, state, depth + 1);
+            m_default_colon_controlstructurebody_168(false, actual, state, depth + 1);
             return true;
         }
     }
@@ -7861,21 +7441,21 @@ bool yaoosl::parsing::instance::alternatives179(bool is_can, std::shared_ptr<yao
     resetable1.reset();
     return false;
 }
-bool yaoosl::parsing::instance::while180_181(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth)
+bool yaoosl::parsing::instance::while170_171(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth)
 {
     resetable resetable1(*this);
-    bool cond3 = m_curlybrackedclose_174(true, actual, state, depth + 1);
+    bool cond3 = m_curlybrackedclose_164(true, actual, state, depth + 1);
     resetable1.reset();
     if (is_can)
     {
         while (!cond3 && current() != '\0')
         {
-            while (!alternatives179(true, actual, state, depth + 1) && current() != '\0')
+            while (!alternatives169(true, actual, state, depth + 1) && current() != '\0')
             {
                 next();
             }
             resetable resetable2(*this);
-            cond3 = m_curlybrackedclose_174(true, actual, state, depth + 1);
+            cond3 = m_curlybrackedclose_164(true, actual, state, depth + 1);
             resetable2.reset();
         }
         return true;
@@ -7884,12 +7464,12 @@ bool yaoosl::parsing::instance::while180_181(bool is_can, std::shared_ptr<yaoosl
     {
         while (!cond3 && current() != '\0')
         {
-            if (!alternatives179(false, actual, state, depth + 1))
+            if (!alternatives169(false, actual, state, depth + 1))
             {
                 while (current() != '\0')
                 {
                     resetable resetable4(*this);
-                    if (alternatives179(true, actual, state, depth + 1))
+                    if (alternatives169(true, actual, state, depth + 1))
                     {
                         resetable4.reset();
                         break;
@@ -7898,13 +7478,13 @@ bool yaoosl::parsing::instance::while180_181(bool is_can, std::shared_ptr<yaoosl
                 }
             }
             resetable resetable2(*this);
-            cond3 = m_curlybrackedclose_174(true, actual, state, depth + 1);
+            cond3 = m_curlybrackedclose_164(true, actual, state, depth + 1);
             resetable2.reset();
         }
         return true;
     }
 }
-bool yaoosl::parsing::instance::m_curlybrackedclose_182(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_curlybrackedclose_172(bool is_can, std::shared_ptr<yaoosl::parsing::instance::switch_>& actual, yaoosl::parsing::instance::switch__state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__curly_bracked_close(depth + 1);
@@ -7944,17 +7524,17 @@ bool yaoosl::parsing::instance::p_can_switch_(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::switch_> fake;
     switch__state state;
-    if (!m_switch_roundbrackedopen_expression_roundbrackedclose_173(true, fake, state, depth + 1))
+    if (!m_switch_roundbrackedopen_expression_roundbrackedclose_163(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
     }
-    else if (!while180_181(true, fake, state, depth + 1))
+    else if (!while170_171(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
     }
-    else if (!m_curlybrackedclose_182(true, fake, state, depth + 1))
+    else if (!m_curlybrackedclose_172(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -7968,30 +7548,30 @@ std::shared_ptr<yaoosl::parsing::instance::switch_> yaoosl::parsing::instance::p
     switch__state state;
     resetable resetable2(*this);
     resetable resetable3(*this);
-    if (m_switch_roundbrackedopen_expression_roundbrackedclose_173(true, fake, state, depth + 1))
+    if (m_switch_roundbrackedopen_expression_roundbrackedclose_163(true, fake, state, depth + 1))
     {
         resetable3.reset();
-        m_switch_roundbrackedopen_expression_roundbrackedclose_173(false, actual, state, depth + 1);
+        m_switch_roundbrackedopen_expression_roundbrackedclose_163(false, actual, state, depth + 1);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
     }
     resetable resetable4(*this);
-    if (while180_181(true, fake, state, depth + 1))
+    if (while170_171(true, fake, state, depth + 1))
     {
         resetable4.reset();
-        while180_181(false, actual, state, depth + 1);
+        while170_171(false, actual, state, depth + 1);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
     }
     resetable resetable5(*this);
-    if (m_curlybrackedclose_182(true, fake, state, depth + 1))
+    if (m_curlybrackedclose_172(true, fake, state, depth + 1))
     {
         resetable5.reset();
-        m_curlybrackedclose_182(false, actual, state, depth + 1);
+        m_curlybrackedclose_172(false, actual, state, depth + 1);
     }
     else
     {
@@ -7999,34 +7579,7 @@ std::shared_ptr<yaoosl::parsing::instance::switch_> yaoosl::parsing::instance::p
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_function_183(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state, size_t depth)
-{
-    resetable resetable1(*this);
-    if (p_can_function(depth + 1))
-    {
-        skip();
-    }
-    else if (is_can)
-    {
-        resetable1.reset();
-        return false;
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-        return false;
-    }
-    if (is_can)
-    {
-        return true;
-    }
-    resetable1.reset();
-    auto val2 = p_match_function(depth + 1);
-    actual->content = val2;
-    skip();
-    return true;
-}
-bool yaoosl::parsing::instance::m_whileloop_184(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_whileloop_173(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_while_loop(depth + 1))
@@ -8053,7 +7606,7 @@ bool yaoosl::parsing::instance::m_whileloop_184(bool is_can, std::shared_ptr<yao
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_ifelse_185(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_ifelse_174(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_if_else(depth + 1))
@@ -8080,7 +7633,7 @@ bool yaoosl::parsing::instance::m_ifelse_185(bool is_can, std::shared_ptr<yaoosl
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_switch_186(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_switch_175(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_switch_(depth + 1))
@@ -8107,7 +7660,7 @@ bool yaoosl::parsing::instance::m_switch_186(bool is_can, std::shared_ptr<yaoosl
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_scope_187(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_scope_176(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_scope(depth + 1))
@@ -8134,10 +7687,10 @@ bool yaoosl::parsing::instance::m_scope_187(bool is_can, std::shared_ptr<yaoosl:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives188(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state, size_t depth)
+bool yaoosl::parsing::instance::alternatives177(bool is_can, std::shared_ptr<yaoosl::parsing::instance::control_structure>& actual, yaoosl::parsing::instance::control_structure_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    if (m_function_183(true, actual, state, depth + 1))
+    if (m_whileloop_173(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -8146,11 +7699,11 @@ bool yaoosl::parsing::instance::alternatives188(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_function_183(false, actual, state, depth + 1);
+            m_whileloop_173(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_whileloop_184(true, actual, state, depth + 1))
+    else if (m_ifelse_174(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -8159,11 +7712,11 @@ bool yaoosl::parsing::instance::alternatives188(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_whileloop_184(false, actual, state, depth + 1);
+            m_ifelse_174(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_ifelse_185(true, actual, state, depth + 1))
+    else if (m_switch_175(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -8172,11 +7725,11 @@ bool yaoosl::parsing::instance::alternatives188(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_ifelse_185(false, actual, state, depth + 1);
+            m_switch_175(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_switch_186(true, actual, state, depth + 1))
+    else if (m_scope_176(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -8185,20 +7738,7 @@ bool yaoosl::parsing::instance::alternatives188(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_switch_186(false, actual, state, depth + 1);
-            return true;
-        }
-    }
-    else if (m_scope_187(true, actual, state, depth + 1))
-    {
-        if (is_can)
-        {
-            return true;
-        }
-        else
-        {
-            resetable1.reset();
-            m_scope_187(false, actual, state, depth + 1);
+            m_scope_176(false, actual, state, depth + 1);
             return true;
         }
     }
@@ -8210,7 +7750,7 @@ bool yaoosl::parsing::instance::p_can_control_structure(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::control_structure> fake;
     control_structure_state state;
-    if (!alternatives188(true, fake, state, depth + 1))
+    if (!alternatives177(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -8223,10 +7763,10 @@ std::shared_ptr<yaoosl::parsing::instance::control_structure> yaoosl::parsing::i
     std::shared_ptr<yaoosl::parsing::instance::control_structure> fake;
     control_structure_state state;
     resetable resetable2(*this);
-    if (alternatives188(true, fake, state, depth + 1))
+    if (alternatives177(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        alternatives188(false, actual, state, depth + 1);
+        alternatives177(false, actual, state, depth + 1);
     }
     else
     {
@@ -8234,7 +7774,7 @@ std::shared_ptr<yaoosl::parsing::instance::control_structure> yaoosl::parsing::i
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_public_189(bool is_can, std::shared_ptr<yaoosl::parsing::instance::encapsulation>& actual, yaoosl::parsing::instance::encapsulation_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_public_178(bool is_can, std::shared_ptr<yaoosl::parsing::instance::encapsulation>& actual, yaoosl::parsing::instance::encapsulation_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__public(depth + 1);
@@ -8266,7 +7806,7 @@ bool yaoosl::parsing::instance::m_public_189(bool is_can, std::shared_ptr<yaoosl
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_local_190(bool is_can, std::shared_ptr<yaoosl::parsing::instance::encapsulation>& actual, yaoosl::parsing::instance::encapsulation_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_local_179(bool is_can, std::shared_ptr<yaoosl::parsing::instance::encapsulation>& actual, yaoosl::parsing::instance::encapsulation_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__local(depth + 1);
@@ -8298,7 +7838,7 @@ bool yaoosl::parsing::instance::m_local_190(bool is_can, std::shared_ptr<yaoosl:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_derived_191(bool is_can, std::shared_ptr<yaoosl::parsing::instance::encapsulation>& actual, yaoosl::parsing::instance::encapsulation_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_derived_180(bool is_can, std::shared_ptr<yaoosl::parsing::instance::encapsulation>& actual, yaoosl::parsing::instance::encapsulation_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__derived(depth + 1);
@@ -8330,7 +7870,7 @@ bool yaoosl::parsing::instance::m_derived_191(bool is_can, std::shared_ptr<yaoos
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_private_192(bool is_can, std::shared_ptr<yaoosl::parsing::instance::encapsulation>& actual, yaoosl::parsing::instance::encapsulation_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_private_181(bool is_can, std::shared_ptr<yaoosl::parsing::instance::encapsulation>& actual, yaoosl::parsing::instance::encapsulation_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__private(depth + 1);
@@ -8362,10 +7902,10 @@ bool yaoosl::parsing::instance::m_private_192(bool is_can, std::shared_ptr<yaoos
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives193(bool is_can, std::shared_ptr<yaoosl::parsing::instance::encapsulation>& actual, yaoosl::parsing::instance::encapsulation_state& state, size_t depth)
+bool yaoosl::parsing::instance::alternatives182(bool is_can, std::shared_ptr<yaoosl::parsing::instance::encapsulation>& actual, yaoosl::parsing::instance::encapsulation_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    if (m_public_189(true, actual, state, depth + 1))
+    if (m_public_178(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -8374,11 +7914,11 @@ bool yaoosl::parsing::instance::alternatives193(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_public_189(false, actual, state, depth + 1);
+            m_public_178(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_local_190(true, actual, state, depth + 1))
+    else if (m_local_179(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -8387,11 +7927,11 @@ bool yaoosl::parsing::instance::alternatives193(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_local_190(false, actual, state, depth + 1);
+            m_local_179(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_derived_191(true, actual, state, depth + 1))
+    else if (m_derived_180(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -8400,11 +7940,11 @@ bool yaoosl::parsing::instance::alternatives193(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_derived_191(false, actual, state, depth + 1);
+            m_derived_180(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_private_192(true, actual, state, depth + 1))
+    else if (m_private_181(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -8413,7 +7953,7 @@ bool yaoosl::parsing::instance::alternatives193(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_private_192(false, actual, state, depth + 1);
+            m_private_181(false, actual, state, depth + 1);
             return true;
         }
     }
@@ -8425,7 +7965,7 @@ bool yaoosl::parsing::instance::p_can_encapsulation(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::encapsulation> fake;
     encapsulation_state state;
-    if (!alternatives193(true, fake, state, depth + 1))
+    if (!alternatives182(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -8438,10 +7978,10 @@ std::shared_ptr<yaoosl::parsing::instance::encapsulation> yaoosl::parsing::insta
     std::shared_ptr<yaoosl::parsing::instance::encapsulation> fake;
     encapsulation_state state;
     resetable resetable2(*this);
-    if (alternatives193(true, fake, state, depth + 1))
+    if (alternatives182(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        alternatives193(false, actual, state, depth + 1);
+        alternatives182(false, actual, state, depth + 1);
     }
     else
     {
@@ -8449,7 +7989,33 @@ std::shared_ptr<yaoosl::parsing::instance::encapsulation> yaoosl::parsing::insta
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_namespace_identnavigation_194(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_attributes_183(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attributes(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    p_match_attributes(depth + 1);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_namespace_identnavigation_184(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__namespace(depth + 1);
@@ -8501,7 +8067,7 @@ bool yaoosl::parsing::instance::m_namespace_identnavigation_194(bool is_can, std
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_curlybrackedopen_195(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_curlybrackedopen_185(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__curly_bracked_open(depth + 1);
@@ -8536,7 +8102,7 @@ bool yaoosl::parsing::instance::m_curlybrackedopen_195(bool is_can, std::shared_
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_curlybrackedclose_196(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_curlybrackedclose_186(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__curly_bracked_close(depth + 1);
@@ -8571,7 +8137,7 @@ bool yaoosl::parsing::instance::m_curlybrackedclose_196(bool is_can, std::shared
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_namespace_197(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_namespace_187(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_namespace_(depth + 1))
@@ -8598,7 +8164,7 @@ bool yaoosl::parsing::instance::m_namespace_197(bool is_can, std::shared_ptr<yao
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_conversion_198(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_conversion_188(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_conversion(depth + 1))
@@ -8625,7 +8191,7 @@ bool yaoosl::parsing::instance::m_conversion_198(bool is_can, std::shared_ptr<ya
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_class_199(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_class_189(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_class_(depth + 1))
@@ -8652,7 +8218,7 @@ bool yaoosl::parsing::instance::m_class_199(bool is_can, std::shared_ptr<yaoosl:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_method_200(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_method_190(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_method(depth + 1))
@@ -8679,10 +8245,10 @@ bool yaoosl::parsing::instance::m_method_200(bool is_can, std::shared_ptr<yaoosl
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives201(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth)
+bool yaoosl::parsing::instance::alternatives191(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth)
 {
     resetable resetable1(*this);
-    if (m_namespace_197(true, actual, state, depth + 1))
+    if (m_namespace_187(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -8691,11 +8257,11 @@ bool yaoosl::parsing::instance::alternatives201(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_namespace_197(false, actual, state, depth + 1);
+            m_namespace_187(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_conversion_198(true, actual, state, depth + 1))
+    else if (m_conversion_188(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -8704,11 +8270,11 @@ bool yaoosl::parsing::instance::alternatives201(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_conversion_198(false, actual, state, depth + 1);
+            m_conversion_188(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_class_199(true, actual, state, depth + 1))
+    else if (m_class_189(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -8717,11 +8283,11 @@ bool yaoosl::parsing::instance::alternatives201(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_class_199(false, actual, state, depth + 1);
+            m_class_189(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_method_200(true, actual, state, depth + 1))
+    else if (m_method_190(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -8730,7 +8296,7 @@ bool yaoosl::parsing::instance::alternatives201(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_method_200(false, actual, state, depth + 1);
+            m_method_190(false, actual, state, depth + 1);
             return true;
         }
     }
@@ -8741,21 +8307,21 @@ bool yaoosl::parsing::instance::alternatives201(bool is_can, std::shared_ptr<yao
     resetable1.reset();
     return false;
 }
-bool yaoosl::parsing::instance::while202_203(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth)
+bool yaoosl::parsing::instance::while192_193(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth)
 {
     resetable resetable1(*this);
-    bool cond3 = m_curlybrackedclose_196(true, actual, state, depth + 1);
+    bool cond3 = m_curlybrackedclose_186(true, actual, state, depth + 1);
     resetable1.reset();
     if (is_can)
     {
         while (!cond3 && current() != '\0')
         {
-            while (!alternatives201(true, actual, state, depth + 1) && current() != '\0')
+            while (!alternatives191(true, actual, state, depth + 1) && current() != '\0')
             {
                 next();
             }
             resetable resetable2(*this);
-            cond3 = m_curlybrackedclose_196(true, actual, state, depth + 1);
+            cond3 = m_curlybrackedclose_186(true, actual, state, depth + 1);
             resetable2.reset();
         }
         return true;
@@ -8764,12 +8330,12 @@ bool yaoosl::parsing::instance::while202_203(bool is_can, std::shared_ptr<yaoosl
     {
         while (!cond3 && current() != '\0')
         {
-            if (!alternatives201(false, actual, state, depth + 1))
+            if (!alternatives191(false, actual, state, depth + 1))
             {
                 while (current() != '\0')
                 {
                     resetable resetable4(*this);
-                    if (alternatives201(true, actual, state, depth + 1))
+                    if (alternatives191(true, actual, state, depth + 1))
                     {
                         resetable4.reset();
                         break;
@@ -8778,13 +8344,13 @@ bool yaoosl::parsing::instance::while202_203(bool is_can, std::shared_ptr<yaoosl
                 }
             }
             resetable resetable2(*this);
-            cond3 = m_curlybrackedclose_196(true, actual, state, depth + 1);
+            cond3 = m_curlybrackedclose_186(true, actual, state, depth + 1);
             resetable2.reset();
         }
         return true;
     }
 }
-bool yaoosl::parsing::instance::m_curlybrackedclose_204(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_curlybrackedclose_194(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__curly_bracked_close(depth + 1);
@@ -8819,27 +8385,127 @@ bool yaoosl::parsing::instance::m_curlybrackedclose_204(bool is_can, std::shared
     skip();
     return true;
 }
+bool yaoosl::parsing::instance::m_attributes_195(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attributes(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto val2 = p_match_attributes(depth + 1);
+    actual->att = val2;
+    skip();
+    if (m_namespace_identnavigation_184(false, actual, state, depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        return false;
+    }
+    else
+    {
+        report("Failed to match { $ref: namespace ({ Token: namespace (namespace)}), $ref: ident-navigation (XCG.Parsing.LeftRecursive) }", depth);
+        return false;
+    }
+    if (m_curlybrackedopen_185(false, actual, state, depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        return false;
+    }
+    else
+    {
+        report("Failed to match { $ref: { ({ Token: { ({)}) }", depth);
+        return false;
+    }
+    while192_193(false, actual, state, depth + 1);
+    if (m_curlybrackedclose_194(false, actual, state, depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        return false;
+    }
+    else
+    {
+        report("Failed to match { $ref: } ({ Token: } (})}) }", depth);
+        return false;
+    }
+    return true;
+}
+bool yaoosl::parsing::instance::if196_197(bool is_can, std::shared_ptr<yaoosl::parsing::instance::namespace_>& actual, yaoosl::parsing::instance::namespace__state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    bool cond2 = m_attributes_183(true, actual, state, depth + 1);
+    resetable1.reset();
+    if (is_can)
+    {
+        if (cond2)
+        {
+            if (m_attributes_195(true, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attributes (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+    else
+    {
+        if (cond2)
+        {
+            if (m_attributes_195(false, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attributes (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+}
 bool yaoosl::parsing::instance::p_can_namespace_(size_t depth)
 {
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::namespace_> fake;
     namespace__state state;
-    if (!m_namespace_identnavigation_194(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    else if (!m_curlybrackedopen_195(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    else if (!while202_203(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    else if (!m_curlybrackedclose_204(true, fake, state, depth + 1))
+    if (!if196_197(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -8852,40 +8518,10 @@ std::shared_ptr<yaoosl::parsing::instance::namespace_> yaoosl::parsing::instance
     std::shared_ptr<yaoosl::parsing::instance::namespace_> fake;
     namespace__state state;
     resetable resetable2(*this);
-    if (m_namespace_identnavigation_194(true, fake, state, depth + 1))
+    if (if196_197(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_namespace_identnavigation_194(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    resetable resetable3(*this);
-    if (m_curlybrackedopen_195(true, fake, state, depth + 1))
-    {
-        resetable3.reset();
-        m_curlybrackedopen_195(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    resetable resetable4(*this);
-    if (while202_203(true, fake, state, depth + 1))
-    {
-        resetable4.reset();
-        while202_203(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    resetable resetable5(*this);
-    if (m_curlybrackedclose_204(true, fake, state, depth + 1))
-    {
-        resetable5.reset();
-        m_curlybrackedclose_204(false, actual, state, depth + 1);
+        if196_197(false, actual, state, depth + 1);
     }
     else
     {
@@ -8893,7 +8529,33 @@ std::shared_ptr<yaoosl::parsing::instance::namespace_> yaoosl::parsing::instance
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_encapsulation_class_ident_205(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_attributes_198(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attributes(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    p_match_attributes(depth + 1);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_encapsulation_class_ident_199(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_encapsulation(depth + 1))
@@ -8967,7 +8629,7 @@ bool yaoosl::parsing::instance::m_encapsulation_class_ident_205(bool is_can, std
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_curlybrackedopen_206(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_curlybrackedopen_200(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__curly_bracked_open(depth + 1);
@@ -9002,7 +8664,7 @@ bool yaoosl::parsing::instance::m_curlybrackedopen_206(bool is_can, std::shared_
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_curlybrackedclose_207(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_curlybrackedclose_201(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__curly_bracked_close(depth + 1);
@@ -9037,7 +8699,7 @@ bool yaoosl::parsing::instance::m_curlybrackedclose_207(bool is_can, std::shared
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_indexer_208(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_indexer_202(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_indexer(depth + 1))
@@ -9064,7 +8726,7 @@ bool yaoosl::parsing::instance::m_indexer_208(bool is_can, std::shared_ptr<yaoos
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_operatorbinaryoverload_209(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_operatorbinaryoverload_203(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_operator_binary_overload(depth + 1))
@@ -9091,7 +8753,7 @@ bool yaoosl::parsing::instance::m_operatorbinaryoverload_209(bool is_can, std::s
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_operatorunaryoverload_210(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_operatorunaryoverload_204(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_operator_unary_overload(depth + 1))
@@ -9118,7 +8780,7 @@ bool yaoosl::parsing::instance::m_operatorunaryoverload_210(bool is_can, std::sh
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_conversion_211(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_conversion_205(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_conversion(depth + 1))
@@ -9145,7 +8807,7 @@ bool yaoosl::parsing::instance::m_conversion_211(bool is_can, std::shared_ptr<ya
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_class_212(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_class_206(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_class_(depth + 1))
@@ -9172,7 +8834,7 @@ bool yaoosl::parsing::instance::m_class_212(bool is_can, std::shared_ptr<yaoosl:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_constructor_213(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_constructor_207(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_constructor(depth + 1))
@@ -9199,7 +8861,7 @@ bool yaoosl::parsing::instance::m_constructor_213(bool is_can, std::shared_ptr<y
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_destructor_214(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_destructor_208(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_destructor(depth + 1))
@@ -9226,7 +8888,7 @@ bool yaoosl::parsing::instance::m_destructor_214(bool is_can, std::shared_ptr<ya
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_copystructor_215(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_copystructor_209(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_copystructor(depth + 1))
@@ -9253,7 +8915,7 @@ bool yaoosl::parsing::instance::m_copystructor_215(bool is_can, std::shared_ptr<
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_property_216(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_property_210(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_property(depth + 1))
@@ -9280,7 +8942,7 @@ bool yaoosl::parsing::instance::m_property_216(bool is_can, std::shared_ptr<yaoo
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_method_217(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_method_211(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_method(depth + 1))
@@ -9307,10 +8969,10 @@ bool yaoosl::parsing::instance::m_method_217(bool is_can, std::shared_ptr<yaoosl
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives218(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
+bool yaoosl::parsing::instance::alternatives212(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
 {
     resetable resetable1(*this);
-    if (m_indexer_208(true, actual, state, depth + 1))
+    if (m_indexer_202(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -9319,11 +8981,11 @@ bool yaoosl::parsing::instance::alternatives218(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_indexer_208(false, actual, state, depth + 1);
+            m_indexer_202(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_operatorbinaryoverload_209(true, actual, state, depth + 1))
+    else if (m_operatorbinaryoverload_203(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -9332,11 +8994,11 @@ bool yaoosl::parsing::instance::alternatives218(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_operatorbinaryoverload_209(false, actual, state, depth + 1);
+            m_operatorbinaryoverload_203(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_operatorunaryoverload_210(true, actual, state, depth + 1))
+    else if (m_operatorunaryoverload_204(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -9345,11 +9007,11 @@ bool yaoosl::parsing::instance::alternatives218(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_operatorunaryoverload_210(false, actual, state, depth + 1);
+            m_operatorunaryoverload_204(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_conversion_211(true, actual, state, depth + 1))
+    else if (m_conversion_205(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -9358,11 +9020,11 @@ bool yaoosl::parsing::instance::alternatives218(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_conversion_211(false, actual, state, depth + 1);
+            m_conversion_205(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_class_212(true, actual, state, depth + 1))
+    else if (m_class_206(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -9371,11 +9033,11 @@ bool yaoosl::parsing::instance::alternatives218(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_class_212(false, actual, state, depth + 1);
+            m_class_206(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_constructor_213(true, actual, state, depth + 1))
+    else if (m_constructor_207(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -9384,11 +9046,11 @@ bool yaoosl::parsing::instance::alternatives218(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_constructor_213(false, actual, state, depth + 1);
+            m_constructor_207(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_destructor_214(true, actual, state, depth + 1))
+    else if (m_destructor_208(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -9397,11 +9059,11 @@ bool yaoosl::parsing::instance::alternatives218(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_destructor_214(false, actual, state, depth + 1);
+            m_destructor_208(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_copystructor_215(true, actual, state, depth + 1))
+    else if (m_copystructor_209(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -9410,11 +9072,11 @@ bool yaoosl::parsing::instance::alternatives218(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_copystructor_215(false, actual, state, depth + 1);
+            m_copystructor_209(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_property_216(true, actual, state, depth + 1))
+    else if (m_property_210(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -9423,11 +9085,11 @@ bool yaoosl::parsing::instance::alternatives218(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_property_216(false, actual, state, depth + 1);
+            m_property_210(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_method_217(true, actual, state, depth + 1))
+    else if (m_method_211(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -9436,7 +9098,7 @@ bool yaoosl::parsing::instance::alternatives218(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_method_217(false, actual, state, depth + 1);
+            m_method_211(false, actual, state, depth + 1);
             return true;
         }
     }
@@ -9447,21 +9109,21 @@ bool yaoosl::parsing::instance::alternatives218(bool is_can, std::shared_ptr<yao
     resetable1.reset();
     return false;
 }
-bool yaoosl::parsing::instance::while219_220(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
+bool yaoosl::parsing::instance::while213_214(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
 {
     resetable resetable1(*this);
-    bool cond3 = m_curlybrackedclose_207(true, actual, state, depth + 1);
+    bool cond3 = m_curlybrackedclose_201(true, actual, state, depth + 1);
     resetable1.reset();
     if (is_can)
     {
         while (!cond3 && current() != '\0')
         {
-            while (!alternatives218(true, actual, state, depth + 1) && current() != '\0')
+            while (!alternatives212(true, actual, state, depth + 1) && current() != '\0')
             {
                 next();
             }
             resetable resetable2(*this);
-            cond3 = m_curlybrackedclose_207(true, actual, state, depth + 1);
+            cond3 = m_curlybrackedclose_201(true, actual, state, depth + 1);
             resetable2.reset();
         }
         return true;
@@ -9470,12 +9132,12 @@ bool yaoosl::parsing::instance::while219_220(bool is_can, std::shared_ptr<yaoosl
     {
         while (!cond3 && current() != '\0')
         {
-            if (!alternatives218(false, actual, state, depth + 1))
+            if (!alternatives212(false, actual, state, depth + 1))
             {
                 while (current() != '\0')
                 {
                     resetable resetable4(*this);
-                    if (alternatives218(true, actual, state, depth + 1))
+                    if (alternatives212(true, actual, state, depth + 1))
                     {
                         resetable4.reset();
                         break;
@@ -9484,13 +9146,13 @@ bool yaoosl::parsing::instance::while219_220(bool is_can, std::shared_ptr<yaoosl
                 }
             }
             resetable resetable2(*this);
-            cond3 = m_curlybrackedclose_207(true, actual, state, depth + 1);
+            cond3 = m_curlybrackedclose_201(true, actual, state, depth + 1);
             resetable2.reset();
         }
         return true;
     }
 }
-bool yaoosl::parsing::instance::m_curlybrackedclose_221(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
+bool yaoosl::parsing::instance::m_curlybrackedclose_215(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__curly_bracked_close(depth + 1);
@@ -9525,27 +9187,127 @@ bool yaoosl::parsing::instance::m_curlybrackedclose_221(bool is_can, std::shared
     skip();
     return true;
 }
+bool yaoosl::parsing::instance::m_attributes_216(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attributes(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto val2 = p_match_attributes(depth + 1);
+    actual->att = val2;
+    skip();
+    if (m_encapsulation_class_ident_199(false, actual, state, depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        return false;
+    }
+    else
+    {
+        report("Failed to match { $ref: encapsulation (XCG.Parsing.Production), $ref: class ({ Token: class (class)}), $ref: ident ({ Token: ident}) }", depth);
+        return false;
+    }
+    if (m_curlybrackedopen_200(false, actual, state, depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        return false;
+    }
+    else
+    {
+        report("Failed to match { $ref: { ({ Token: { ({)}) }", depth);
+        return false;
+    }
+    while213_214(false, actual, state, depth + 1);
+    if (m_curlybrackedclose_215(false, actual, state, depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        return false;
+    }
+    else
+    {
+        report("Failed to match { $ref: } ({ Token: } (})}) }", depth);
+        return false;
+    }
+    return true;
+}
+bool yaoosl::parsing::instance::if217_218(bool is_can, std::shared_ptr<yaoosl::parsing::instance::class_>& actual, yaoosl::parsing::instance::class__state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    bool cond2 = m_attributes_198(true, actual, state, depth + 1);
+    resetable1.reset();
+    if (is_can)
+    {
+        if (cond2)
+        {
+            if (m_attributes_216(true, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attributes (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+    else
+    {
+        if (cond2)
+        {
+            if (m_attributes_216(false, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attributes (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+}
 bool yaoosl::parsing::instance::p_can_class_(size_t depth)
 {
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::class_> fake;
     class__state state;
-    if (!m_encapsulation_class_ident_205(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    else if (!m_curlybrackedopen_206(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    else if (!while219_220(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    else if (!m_curlybrackedclose_221(true, fake, state, depth + 1))
+    if (!if217_218(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -9558,40 +9320,10 @@ std::shared_ptr<yaoosl::parsing::instance::class_> yaoosl::parsing::instance::p_
     std::shared_ptr<yaoosl::parsing::instance::class_> fake;
     class__state state;
     resetable resetable2(*this);
-    if (m_encapsulation_class_ident_205(true, fake, state, depth + 1))
+    if (if217_218(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_encapsulation_class_ident_205(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    resetable resetable3(*this);
-    if (m_curlybrackedopen_206(true, fake, state, depth + 1))
-    {
-        resetable3.reset();
-        m_curlybrackedopen_206(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    resetable resetable4(*this);
-    if (while219_220(true, fake, state, depth + 1))
-    {
-        resetable4.reset();
-        while219_220(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    resetable resetable5(*this);
-    if (m_curlybrackedclose_221(true, fake, state, depth + 1))
-    {
-        resetable5.reset();
-        m_curlybrackedclose_221(false, actual, state, depth + 1);
+        if217_218(false, actual, state, depth + 1);
     }
     else
     {
@@ -9599,7 +9331,33 @@ std::shared_ptr<yaoosl::parsing::instance::class_> yaoosl::parsing::instance::p_
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_typematch_ident_222(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default>& actual, yaoosl::parsing::instance::method_arglist_item_with_default_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_attributes_219(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default>& actual, yaoosl::parsing::instance::method_arglist_item_with_default_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attributes(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    p_match_attributes(depth + 1);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_typematch_ident_220(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default>& actual, yaoosl::parsing::instance::method_arglist_item_with_default_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_type_match(depth + 1))
@@ -9648,7 +9406,7 @@ bool yaoosl::parsing::instance::m_typematch_ident_222(bool is_can, std::shared_p
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_equal_223(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default>& actual, yaoosl::parsing::instance::method_arglist_item_with_default_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_equal_221(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default>& actual, yaoosl::parsing::instance::method_arglist_item_with_default_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__equal(depth + 1);
@@ -9683,7 +9441,7 @@ bool yaoosl::parsing::instance::m_equal_223(bool is_can, std::shared_ptr<yaoosl:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_equal_expvalue_224(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default>& actual, yaoosl::parsing::instance::method_arglist_item_with_default_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_equal_expvalue_222(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default>& actual, yaoosl::parsing::instance::method_arglist_item_with_default_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__equal(depth + 1);
@@ -9735,16 +9493,16 @@ bool yaoosl::parsing::instance::m_equal_expvalue_224(bool is_can, std::shared_pt
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::if225_226(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default>& actual, yaoosl::parsing::instance::method_arglist_item_with_default_state& state, size_t depth)
+bool yaoosl::parsing::instance::if223_224(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default>& actual, yaoosl::parsing::instance::method_arglist_item_with_default_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    bool cond2 = m_equal_223(true, actual, state, depth + 1);
+    bool cond2 = m_equal_221(true, actual, state, depth + 1);
     resetable1.reset();
     if (is_can)
     {
         if (cond2)
         {
-            if (m_equal_expvalue_224(true, actual, state, depth + 1))
+            if (m_equal_expvalue_222(true, actual, state, depth + 1))
             {
                 skip();
             }
@@ -9765,7 +9523,7 @@ bool yaoosl::parsing::instance::if225_226(bool is_can, std::shared_ptr<yaoosl::p
     {
         if (cond2)
         {
-            if (m_equal_expvalue_224(false, actual, state, depth + 1))
+            if (m_equal_expvalue_222(false, actual, state, depth + 1))
             {
                 skip();
             }
@@ -9776,6 +9534,95 @@ bool yaoosl::parsing::instance::if225_226(bool is_can, std::shared_ptr<yaoosl::p
             else
             {
                 report("Failed to match { $ref: = ({ Token: = (=)}), $ref: exp-value (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+}
+bool yaoosl::parsing::instance::m_attributes_225(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default>& actual, yaoosl::parsing::instance::method_arglist_item_with_default_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attributes(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto val2 = p_match_attributes(depth + 1);
+    actual->att = val2;
+    skip();
+    if (m_typematch_ident_220(false, actual, state, depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        return false;
+    }
+    else
+    {
+        report("Failed to match { $ref: type-match (XCG.Parsing.Production), $ref: ident ({ Token: ident}) }", depth);
+        return false;
+    }
+    if223_224(false, actual, state, depth + 1);
+    return true;
+}
+bool yaoosl::parsing::instance::if226_227(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default>& actual, yaoosl::parsing::instance::method_arglist_item_with_default_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    bool cond2 = m_attributes_219(true, actual, state, depth + 1);
+    resetable1.reset();
+    if (is_can)
+    {
+        if (cond2)
+        {
+            if (m_attributes_225(true, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attributes (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+    else
+    {
+        if (cond2)
+        {
+            if (m_attributes_225(false, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attributes (XCG.Parsing.Production) }", depth);
                 return false;
             }
             return true;
@@ -9788,12 +9635,7 @@ bool yaoosl::parsing::instance::p_can_method_arglist_item_with_default(size_t de
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default> fake;
     method_arglist_item_with_default_state state;
-    if (!m_typematch_ident_222(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    else if (!if225_226(true, fake, state, depth + 1))
+    if (!if226_227(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -9806,20 +9648,10 @@ std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default> yao
     std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default> fake;
     method_arglist_item_with_default_state state;
     resetable resetable2(*this);
-    if (m_typematch_ident_222(true, fake, state, depth + 1))
+    if (if226_227(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_typematch_ident_222(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    resetable resetable3(*this);
-    if (if225_226(true, fake, state, depth + 1))
-    {
-        resetable3.reset();
-        if225_226(false, actual, state, depth + 1);
+        if226_227(false, actual, state, depth + 1);
     }
     else
     {
@@ -9827,7 +9659,33 @@ std::shared_ptr<yaoosl::parsing::instance::method_arglist_item_with_default> yao
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_typematch_ident_227(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item>& actual, yaoosl::parsing::instance::method_arglist_item_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_attributes_228(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item>& actual, yaoosl::parsing::instance::method_arglist_item_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attributes(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    p_match_attributes(depth + 1);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_typematch_ident_229(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item>& actual, yaoosl::parsing::instance::method_arglist_item_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_type_match(depth + 1))
@@ -9876,12 +9734,100 @@ bool yaoosl::parsing::instance::m_typematch_ident_227(bool is_can, std::shared_p
     skip();
     return true;
 }
+bool yaoosl::parsing::instance::m_attributes_230(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item>& actual, yaoosl::parsing::instance::method_arglist_item_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attributes(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto val2 = p_match_attributes(depth + 1);
+    actual->att = val2;
+    skip();
+    if (m_typematch_ident_229(false, actual, state, depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        return false;
+    }
+    else
+    {
+        report("Failed to match { $ref: type-match (XCG.Parsing.Production), $ref: ident ({ Token: ident}) }", depth);
+        return false;
+    }
+    return true;
+}
+bool yaoosl::parsing::instance::if231_232(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_item>& actual, yaoosl::parsing::instance::method_arglist_item_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    bool cond2 = m_attributes_228(true, actual, state, depth + 1);
+    resetable1.reset();
+    if (is_can)
+    {
+        if (cond2)
+        {
+            if (m_attributes_230(true, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attributes (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+    else
+    {
+        if (cond2)
+        {
+            if (m_attributes_230(false, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attributes (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+}
 bool yaoosl::parsing::instance::p_can_method_arglist_item(size_t depth)
 {
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::method_arglist_item> fake;
     method_arglist_item_state state;
-    if (!m_typematch_ident_227(true, fake, state, depth + 1))
+    if (!if231_232(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -9894,10 +9840,10 @@ std::shared_ptr<yaoosl::parsing::instance::method_arglist_item> yaoosl::parsing:
     std::shared_ptr<yaoosl::parsing::instance::method_arglist_item> fake;
     method_arglist_item_state state;
     resetable resetable2(*this);
-    if (m_typematch_ident_227(true, fake, state, depth + 1))
+    if (if231_232(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_typematch_ident_227(false, actual, state, depth + 1);
+        if231_232(false, actual, state, depth + 1);
     }
     else
     {
@@ -9905,7 +9851,7 @@ std::shared_ptr<yaoosl::parsing::instance::method_arglist_item> yaoosl::parsing:
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_roundbrackedopen_228(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_roundbrackedopen_233(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__round_bracked_open(depth + 1);
@@ -9940,7 +9886,7 @@ bool yaoosl::parsing::instance::m_roundbrackedopen_228(bool is_can, std::shared_
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_methodarglistitemwithdefault_229(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_methodarglistitemwithdefault_234(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_method_arglist_item_with_default(depth + 1))
@@ -9966,7 +9912,7 @@ bool yaoosl::parsing::instance::m_methodarglistitemwithdefault_229(bool is_can, 
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_methodarglistitemwithdefault_230(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_methodarglistitemwithdefault_235(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_method_arglist_item_with_default(depth + 1))
@@ -9993,7 +9939,7 @@ bool yaoosl::parsing::instance::m_methodarglistitemwithdefault_230(bool is_can, 
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_roundbrackedclose_231(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_roundbrackedclose_236(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__round_bracked_close(depth + 1);
@@ -10028,7 +9974,7 @@ bool yaoosl::parsing::instance::m_roundbrackedclose_231(bool is_can, std::shared
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_comma_methodarglistitemwithdefault_232(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_comma_methodarglistitemwithdefault_237(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__comma(depth + 1);
@@ -10080,10 +10026,10 @@ bool yaoosl::parsing::instance::m_comma_methodarglistitemwithdefault_232(bool is
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives233(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth)
+bool yaoosl::parsing::instance::alternatives238(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    if (m_comma_methodarglistitemwithdefault_232(true, actual, state, depth + 1))
+    if (m_comma_methodarglistitemwithdefault_237(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -10092,7 +10038,7 @@ bool yaoosl::parsing::instance::alternatives233(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_comma_methodarglistitemwithdefault_232(false, actual, state, depth + 1);
+            m_comma_methodarglistitemwithdefault_237(false, actual, state, depth + 1);
             return true;
         }
     }
@@ -10103,21 +10049,21 @@ bool yaoosl::parsing::instance::alternatives233(bool is_can, std::shared_ptr<yao
     resetable1.reset();
     return false;
 }
-bool yaoosl::parsing::instance::while234_235(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth)
+bool yaoosl::parsing::instance::while239_240(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    bool cond3 = m_roundbrackedclose_231(true, actual, state, depth + 1);
+    bool cond3 = m_roundbrackedclose_236(true, actual, state, depth + 1);
     resetable1.reset();
     if (is_can)
     {
         while (!cond3 && current() != '\0')
         {
-            while (!alternatives233(true, actual, state, depth + 1) && current() != '\0')
+            while (!alternatives238(true, actual, state, depth + 1) && current() != '\0')
             {
                 next();
             }
             resetable resetable2(*this);
-            cond3 = m_roundbrackedclose_231(true, actual, state, depth + 1);
+            cond3 = m_roundbrackedclose_236(true, actual, state, depth + 1);
             resetable2.reset();
         }
         return true;
@@ -10126,12 +10072,12 @@ bool yaoosl::parsing::instance::while234_235(bool is_can, std::shared_ptr<yaoosl
     {
         while (!cond3 && current() != '\0')
         {
-            if (!alternatives233(false, actual, state, depth + 1))
+            if (!alternatives238(false, actual, state, depth + 1))
             {
                 while (current() != '\0')
                 {
                     resetable resetable4(*this);
-                    if (alternatives233(true, actual, state, depth + 1))
+                    if (alternatives238(true, actual, state, depth + 1))
                     {
                         resetable4.reset();
                         break;
@@ -10140,13 +10086,13 @@ bool yaoosl::parsing::instance::while234_235(bool is_can, std::shared_ptr<yaoosl
                 }
             }
             resetable resetable2(*this);
-            cond3 = m_roundbrackedclose_231(true, actual, state, depth + 1);
+            cond3 = m_roundbrackedclose_236(true, actual, state, depth + 1);
             resetable2.reset();
         }
         return true;
     }
 }
-bool yaoosl::parsing::instance::m_comma_236(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_comma_241(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__comma(depth + 1);
@@ -10181,7 +10127,7 @@ bool yaoosl::parsing::instance::m_comma_236(bool is_can, std::shared_ptr<yaoosl:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_comma_237(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_comma_242(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__comma(depth + 1);
@@ -10216,16 +10162,16 @@ bool yaoosl::parsing::instance::m_comma_237(bool is_can, std::shared_ptr<yaoosl:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::if238_239(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth)
+bool yaoosl::parsing::instance::if243_244(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    bool cond2 = m_comma_236(true, actual, state, depth + 1);
+    bool cond2 = m_comma_241(true, actual, state, depth + 1);
     resetable1.reset();
     if (is_can)
     {
         if (cond2)
         {
-            if (m_comma_237(true, actual, state, depth + 1))
+            if (m_comma_242(true, actual, state, depth + 1))
             {
                 skip();
             }
@@ -10246,7 +10192,7 @@ bool yaoosl::parsing::instance::if238_239(bool is_can, std::shared_ptr<yaoosl::p
     {
         if (cond2)
         {
-            if (m_comma_237(false, actual, state, depth + 1))
+            if (m_comma_242(false, actual, state, depth + 1))
             {
                 skip();
             }
@@ -10264,16 +10210,16 @@ bool yaoosl::parsing::instance::if238_239(bool is_can, std::shared_ptr<yaoosl::p
         return true;
     }
 }
-bool yaoosl::parsing::instance::if240_241(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth)
+bool yaoosl::parsing::instance::if245_246(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    bool cond2 = m_methodarglistitemwithdefault_229(true, actual, state, depth + 1);
+    bool cond2 = m_methodarglistitemwithdefault_234(true, actual, state, depth + 1);
     resetable1.reset();
     if (is_can)
     {
         if (cond2)
         {
-            if (m_methodarglistitemwithdefault_230(true, actual, state, depth + 1))
+            if (m_methodarglistitemwithdefault_235(true, actual, state, depth + 1))
             {
                 skip();
             }
@@ -10286,8 +10232,8 @@ bool yaoosl::parsing::instance::if240_241(bool is_can, std::shared_ptr<yaoosl::p
                 report("Failed to match { $ref: method-arglist-item-with-default (XCG.Parsing.Production) }", depth);
                 return false;
             }
-            while234_235(true, actual, state, depth + 1);
-            if238_239(true, actual, state, depth + 1);
+            while239_240(true, actual, state, depth + 1);
+            if243_244(true, actual, state, depth + 1);
             return true;
         }
         return true;
@@ -10296,7 +10242,7 @@ bool yaoosl::parsing::instance::if240_241(bool is_can, std::shared_ptr<yaoosl::p
     {
         if (cond2)
         {
-            if (m_methodarglistitemwithdefault_230(false, actual, state, depth + 1))
+            if (m_methodarglistitemwithdefault_235(false, actual, state, depth + 1))
             {
                 skip();
             }
@@ -10309,14 +10255,14 @@ bool yaoosl::parsing::instance::if240_241(bool is_can, std::shared_ptr<yaoosl::p
                 report("Failed to match { $ref: method-arglist-item-with-default (XCG.Parsing.Production) }", depth);
                 return false;
             }
-            while234_235(false, actual, state, depth + 1);
-            if238_239(false, actual, state, depth + 1);
+            while239_240(false, actual, state, depth + 1);
+            if243_244(false, actual, state, depth + 1);
             return true;
         }
         return true;
     }
 }
-bool yaoosl::parsing::instance::m_roundbrackedclose_242(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_roundbrackedclose_247(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist>& actual, yaoosl::parsing::instance::method_arglist_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__round_bracked_close(depth + 1);
@@ -10356,17 +10302,17 @@ bool yaoosl::parsing::instance::p_can_method_arglist(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::method_arglist> fake;
     method_arglist_state state;
-    if (!m_roundbrackedopen_228(true, fake, state, depth + 1))
+    if (!m_roundbrackedopen_233(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
     }
-    else if (!if240_241(true, fake, state, depth + 1))
+    else if (!if245_246(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
     }
-    else if (!m_roundbrackedclose_242(true, fake, state, depth + 1))
+    else if (!m_roundbrackedclose_247(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -10379,30 +10325,30 @@ std::shared_ptr<yaoosl::parsing::instance::method_arglist> yaoosl::parsing::inst
     std::shared_ptr<yaoosl::parsing::instance::method_arglist> fake;
     method_arglist_state state;
     resetable resetable2(*this);
-    if (m_roundbrackedopen_228(true, fake, state, depth + 1))
+    if (m_roundbrackedopen_233(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_roundbrackedopen_228(false, actual, state, depth + 1);
+        m_roundbrackedopen_233(false, actual, state, depth + 1);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
     }
     resetable resetable3(*this);
-    if (if240_241(true, fake, state, depth + 1))
+    if (if245_246(true, fake, state, depth + 1))
     {
         resetable3.reset();
-        if240_241(false, actual, state, depth + 1);
+        if245_246(false, actual, state, depth + 1);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
     }
     resetable resetable4(*this);
-    if (m_roundbrackedclose_242(true, fake, state, depth + 1))
+    if (m_roundbrackedclose_247(true, fake, state, depth + 1))
     {
         resetable4.reset();
-        m_roundbrackedclose_242(false, actual, state, depth + 1);
+        m_roundbrackedclose_247(false, actual, state, depth + 1);
     }
     else
     {
@@ -10410,7 +10356,7 @@ std::shared_ptr<yaoosl::parsing::instance::method_arglist> yaoosl::parsing::inst
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_squarebrackedopen_243(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_squarebrackedopen_248(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__square_bracked_open(depth + 1);
@@ -10445,7 +10391,7 @@ bool yaoosl::parsing::instance::m_squarebrackedopen_243(bool is_can, std::shared
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_methodarglistitem_244(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_methodarglistitem_249(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_method_arglist_item(depth + 1))
@@ -10472,7 +10418,7 @@ bool yaoosl::parsing::instance::m_methodarglistitem_244(bool is_can, std::shared
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_squarebrackedclose_245(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_squarebrackedclose_250(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__square_bracked_close(depth + 1);
@@ -10507,7 +10453,7 @@ bool yaoosl::parsing::instance::m_squarebrackedclose_245(bool is_can, std::share
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_comma_methodarglistitem_246(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_comma_methodarglistitem_251(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__comma(depth + 1);
@@ -10559,10 +10505,10 @@ bool yaoosl::parsing::instance::m_comma_methodarglistitem_246(bool is_can, std::
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives247(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth)
+bool yaoosl::parsing::instance::alternatives252(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    if (m_comma_methodarglistitem_246(true, actual, state, depth + 1))
+    if (m_comma_methodarglistitem_251(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -10571,7 +10517,7 @@ bool yaoosl::parsing::instance::alternatives247(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_comma_methodarglistitem_246(false, actual, state, depth + 1);
+            m_comma_methodarglistitem_251(false, actual, state, depth + 1);
             return true;
         }
     }
@@ -10582,21 +10528,21 @@ bool yaoosl::parsing::instance::alternatives247(bool is_can, std::shared_ptr<yao
     resetable1.reset();
     return false;
 }
-bool yaoosl::parsing::instance::while248_249(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth)
+bool yaoosl::parsing::instance::while253_254(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    bool cond3 = m_squarebrackedclose_245(true, actual, state, depth + 1);
+    bool cond3 = m_squarebrackedclose_250(true, actual, state, depth + 1);
     resetable1.reset();
     if (is_can)
     {
         while (!cond3 && current() != '\0')
         {
-            while (!alternatives247(true, actual, state, depth + 1) && current() != '\0')
+            while (!alternatives252(true, actual, state, depth + 1) && current() != '\0')
             {
                 next();
             }
             resetable resetable2(*this);
-            cond3 = m_squarebrackedclose_245(true, actual, state, depth + 1);
+            cond3 = m_squarebrackedclose_250(true, actual, state, depth + 1);
             resetable2.reset();
         }
         return true;
@@ -10605,12 +10551,12 @@ bool yaoosl::parsing::instance::while248_249(bool is_can, std::shared_ptr<yaoosl
     {
         while (!cond3 && current() != '\0')
         {
-            if (!alternatives247(false, actual, state, depth + 1))
+            if (!alternatives252(false, actual, state, depth + 1))
             {
                 while (current() != '\0')
                 {
                     resetable resetable4(*this);
-                    if (alternatives247(true, actual, state, depth + 1))
+                    if (alternatives252(true, actual, state, depth + 1))
                     {
                         resetable4.reset();
                         break;
@@ -10619,13 +10565,13 @@ bool yaoosl::parsing::instance::while248_249(bool is_can, std::shared_ptr<yaoosl
                 }
             }
             resetable resetable2(*this);
-            cond3 = m_squarebrackedclose_245(true, actual, state, depth + 1);
+            cond3 = m_squarebrackedclose_250(true, actual, state, depth + 1);
             resetable2.reset();
         }
         return true;
     }
 }
-bool yaoosl::parsing::instance::m_comma_250(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_comma_255(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__comma(depth + 1);
@@ -10660,7 +10606,7 @@ bool yaoosl::parsing::instance::m_comma_250(bool is_can, std::shared_ptr<yaoosl:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_comma_251(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_comma_256(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__comma(depth + 1);
@@ -10695,16 +10641,16 @@ bool yaoosl::parsing::instance::m_comma_251(bool is_can, std::shared_ptr<yaoosl:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::if252_253(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth)
+bool yaoosl::parsing::instance::if257_258(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    bool cond2 = m_comma_250(true, actual, state, depth + 1);
+    bool cond2 = m_comma_255(true, actual, state, depth + 1);
     resetable1.reset();
     if (is_can)
     {
         if (cond2)
         {
-            if (m_comma_251(true, actual, state, depth + 1))
+            if (m_comma_256(true, actual, state, depth + 1))
             {
                 skip();
             }
@@ -10725,7 +10671,7 @@ bool yaoosl::parsing::instance::if252_253(bool is_can, std::shared_ptr<yaoosl::p
     {
         if (cond2)
         {
-            if (m_comma_251(false, actual, state, depth + 1))
+            if (m_comma_256(false, actual, state, depth + 1))
             {
                 skip();
             }
@@ -10743,7 +10689,7 @@ bool yaoosl::parsing::instance::if252_253(bool is_can, std::shared_ptr<yaoosl::p
         return true;
     }
 }
-bool yaoosl::parsing::instance::m_squarebrackedclose_254(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_squarebrackedclose_259(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer>& actual, yaoosl::parsing::instance::method_arglist_indexer_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__square_bracked_close(depth + 1);
@@ -10783,27 +10729,27 @@ bool yaoosl::parsing::instance::p_can_method_arglist_indexer(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer> fake;
     method_arglist_indexer_state state;
-    if (!m_squarebrackedopen_243(true, fake, state, depth + 1))
+    if (!m_squarebrackedopen_248(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
     }
-    else if (!m_methodarglistitem_244(true, fake, state, depth + 1))
+    else if (!m_methodarglistitem_249(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
     }
-    else if (!while248_249(true, fake, state, depth + 1))
+    else if (!while253_254(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
     }
-    else if (!if252_253(true, fake, state, depth + 1))
+    else if (!if257_258(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
     }
-    else if (!m_squarebrackedclose_254(true, fake, state, depth + 1))
+    else if (!m_squarebrackedclose_259(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -10816,50 +10762,50 @@ std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer> yaoosl::parsi
     std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer> fake;
     method_arglist_indexer_state state;
     resetable resetable2(*this);
-    if (m_squarebrackedopen_243(true, fake, state, depth + 1))
+    if (m_squarebrackedopen_248(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_squarebrackedopen_243(false, actual, state, depth + 1);
+        m_squarebrackedopen_248(false, actual, state, depth + 1);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
     }
     resetable resetable3(*this);
-    if (m_methodarglistitem_244(true, fake, state, depth + 1))
+    if (m_methodarglistitem_249(true, fake, state, depth + 1))
     {
         resetable3.reset();
-        m_methodarglistitem_244(false, actual, state, depth + 1);
+        m_methodarglistitem_249(false, actual, state, depth + 1);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
     }
     resetable resetable4(*this);
-    if (while248_249(true, fake, state, depth + 1))
+    if (while253_254(true, fake, state, depth + 1))
     {
         resetable4.reset();
-        while248_249(false, actual, state, depth + 1);
+        while253_254(false, actual, state, depth + 1);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
     }
     resetable resetable5(*this);
-    if (if252_253(true, fake, state, depth + 1))
+    if (if257_258(true, fake, state, depth + 1))
     {
         resetable5.reset();
-        if252_253(false, actual, state, depth + 1);
+        if257_258(false, actual, state, depth + 1);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
     }
     resetable resetable6(*this);
-    if (m_squarebrackedclose_254(true, fake, state, depth + 1))
+    if (m_squarebrackedclose_259(true, fake, state, depth + 1))
     {
         resetable6.reset();
-        m_squarebrackedclose_254(false, actual, state, depth + 1);
+        m_squarebrackedclose_259(false, actual, state, depth + 1);
     }
     else
     {
@@ -10867,7 +10813,7 @@ std::shared_ptr<yaoosl::parsing::instance::method_arglist_indexer> yaoosl::parsi
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_ident_255(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_ident>& actual, yaoosl::parsing::instance::method_ident_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_ident_260(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_ident>& actual, yaoosl::parsing::instance::method_ident_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token_ident(depth + 1);
@@ -10899,7 +10845,7 @@ bool yaoosl::parsing::instance::m_ident_255(bool is_can, std::shared_ptr<yaoosl:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_templatedefinition_256(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_ident>& actual, yaoosl::parsing::instance::method_ident_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_templatedefinition_261(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_ident>& actual, yaoosl::parsing::instance::method_ident_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_template_definition(depth + 1))
@@ -10925,7 +10871,7 @@ bool yaoosl::parsing::instance::m_templatedefinition_256(bool is_can, std::share
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_templatedefinition_257(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_ident>& actual, yaoosl::parsing::instance::method_ident_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_templatedefinition_262(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_ident>& actual, yaoosl::parsing::instance::method_ident_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_template_definition(depth + 1))
@@ -10952,16 +10898,16 @@ bool yaoosl::parsing::instance::m_templatedefinition_257(bool is_can, std::share
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::if258_259(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_ident>& actual, yaoosl::parsing::instance::method_ident_state& state, size_t depth)
+bool yaoosl::parsing::instance::if263_264(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method_ident>& actual, yaoosl::parsing::instance::method_ident_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    bool cond2 = m_templatedefinition_256(true, actual, state, depth + 1);
+    bool cond2 = m_templatedefinition_261(true, actual, state, depth + 1);
     resetable1.reset();
     if (is_can)
     {
         if (cond2)
         {
-            if (m_templatedefinition_257(true, actual, state, depth + 1))
+            if (m_templatedefinition_262(true, actual, state, depth + 1))
             {
                 skip();
             }
@@ -10982,7 +10928,7 @@ bool yaoosl::parsing::instance::if258_259(bool is_can, std::shared_ptr<yaoosl::p
     {
         if (cond2)
         {
-            if (m_templatedefinition_257(false, actual, state, depth + 1))
+            if (m_templatedefinition_262(false, actual, state, depth + 1))
             {
                 skip();
             }
@@ -11005,12 +10951,12 @@ bool yaoosl::parsing::instance::p_can_method_ident(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::method_ident> fake;
     method_ident_state state;
-    if (!m_ident_255(true, fake, state, depth + 1))
+    if (!m_ident_260(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
     }
-    else if (!if258_259(true, fake, state, depth + 1))
+    else if (!if263_264(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -11023,20 +10969,20 @@ std::shared_ptr<yaoosl::parsing::instance::method_ident> yaoosl::parsing::instan
     std::shared_ptr<yaoosl::parsing::instance::method_ident> fake;
     method_ident_state state;
     resetable resetable2(*this);
-    if (m_ident_255(true, fake, state, depth + 1))
+    if (m_ident_260(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_ident_255(false, actual, state, depth + 1);
+        m_ident_260(false, actual, state, depth + 1);
     }
     else
     {
         report("Something moved wrong (todo: improve error messages)", depth);
     }
     resetable resetable3(*this);
-    if (if258_259(true, fake, state, depth + 1))
+    if (if263_264(true, fake, state, depth + 1))
     {
         resetable3.reset();
-        if258_259(false, actual, state, depth + 1);
+        if263_264(false, actual, state, depth + 1);
     }
     else
     {
@@ -11044,7 +10990,33 @@ std::shared_ptr<yaoosl::parsing::instance::method_ident> yaoosl::parsing::instan
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_encapsulation_260(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method>& actual, yaoosl::parsing::instance::method_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_attributes_265(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method>& actual, yaoosl::parsing::instance::method_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attributes(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    p_match_attributes(depth + 1);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_encapsulation_266(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method>& actual, yaoosl::parsing::instance::method_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_encapsulation(depth + 1))
@@ -11071,7 +11043,7 @@ bool yaoosl::parsing::instance::m_encapsulation_260(bool is_can, std::shared_ptr
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_unbound_261(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method>& actual, yaoosl::parsing::instance::method_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_unbound_267(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method>& actual, yaoosl::parsing::instance::method_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__unbound(depth + 1);
@@ -11106,7 +11078,7 @@ bool yaoosl::parsing::instance::m_unbound_261(bool is_can, std::shared_ptr<yaoos
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_unbound_262(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method>& actual, yaoosl::parsing::instance::method_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_unbound_268(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method>& actual, yaoosl::parsing::instance::method_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__unbound(depth + 1);
@@ -11141,16 +11113,16 @@ bool yaoosl::parsing::instance::m_unbound_262(bool is_can, std::shared_ptr<yaoos
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::if263_264(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method>& actual, yaoosl::parsing::instance::method_state& state, size_t depth)
+bool yaoosl::parsing::instance::if269_270(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method>& actual, yaoosl::parsing::instance::method_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    bool cond2 = m_unbound_261(true, actual, state, depth + 1);
+    bool cond2 = m_unbound_267(true, actual, state, depth + 1);
     resetable1.reset();
     if (is_can)
     {
         if (cond2)
         {
-            if (m_unbound_262(true, actual, state, depth + 1))
+            if (m_unbound_268(true, actual, state, depth + 1))
             {
                 skip();
             }
@@ -11175,7 +11147,7 @@ bool yaoosl::parsing::instance::if263_264(bool is_can, std::shared_ptr<yaoosl::p
     {
         if (cond2)
         {
-            if (m_unbound_262(false, actual, state, depth + 1))
+            if (m_unbound_268(false, actual, state, depth + 1))
             {
                 skip();
             }
@@ -11197,7 +11169,7 @@ bool yaoosl::parsing::instance::if263_264(bool is_can, std::shared_ptr<yaoosl::p
         return true;
     }
 }
-bool yaoosl::parsing::instance::m_typematch_methodident_methodarglist_scope_265(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method>& actual, yaoosl::parsing::instance::method_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_typematch_methodident_methodarglist_scope_271(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method>& actual, yaoosl::parsing::instance::method_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_type_match(depth + 1))
@@ -11275,22 +11247,114 @@ bool yaoosl::parsing::instance::m_typematch_methodident_methodarglist_scope_265(
     skip();
     return true;
 }
+bool yaoosl::parsing::instance::m_attributes_272(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method>& actual, yaoosl::parsing::instance::method_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attributes(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto val2 = p_match_attributes(depth + 1);
+    actual->att = val2;
+    skip();
+    if (m_encapsulation_266(false, actual, state, depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        return false;
+    }
+    else
+    {
+        report("Failed to match { $ref: encapsulation (XCG.Parsing.Production) }", depth);
+        return false;
+    }
+    if269_270(false, actual, state, depth + 1);
+    if (m_typematch_methodident_methodarglist_scope_271(false, actual, state, depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        return false;
+    }
+    else
+    {
+        report("Failed to match { $ref: type-match (XCG.Parsing.Production), $ref: method-ident (XCG.Parsing.Production), $ref: method-arglist (XCG.Parsing.Production), $ref: scope (XCG.Parsing.Production) }", depth);
+        return false;
+    }
+    return true;
+}
+bool yaoosl::parsing::instance::if273_274(bool is_can, std::shared_ptr<yaoosl::parsing::instance::method>& actual, yaoosl::parsing::instance::method_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    bool cond2 = m_attributes_265(true, actual, state, depth + 1);
+    resetable1.reset();
+    if (is_can)
+    {
+        if (cond2)
+        {
+            if (m_attributes_272(true, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attributes (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+    else
+    {
+        if (cond2)
+        {
+            if (m_attributes_272(false, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attributes (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+}
 bool yaoosl::parsing::instance::p_can_method(size_t depth)
 {
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::method> fake;
     method_state state;
-    if (!m_encapsulation_260(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    else if (!if263_264(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    else if (!m_typematch_methodident_methodarglist_scope_265(true, fake, state, depth + 1))
+    if (!if273_274(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -11303,30 +11367,10 @@ std::shared_ptr<yaoosl::parsing::instance::method> yaoosl::parsing::instance::p_
     std::shared_ptr<yaoosl::parsing::instance::method> fake;
     method_state state;
     resetable resetable2(*this);
-    if (m_encapsulation_260(true, fake, state, depth + 1))
+    if (if273_274(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_encapsulation_260(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    resetable resetable3(*this);
-    if (if263_264(true, fake, state, depth + 1))
-    {
-        resetable3.reset();
-        if263_264(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    resetable resetable4(*this);
-    if (m_typematch_methodident_methodarglist_scope_265(true, fake, state, depth + 1))
-    {
-        resetable4.reset();
-        m_typematch_methodident_methodarglist_scope_265(false, actual, state, depth + 1);
+        if273_274(false, actual, state, depth + 1);
     }
     else
     {
@@ -11334,7 +11378,33 @@ std::shared_ptr<yaoosl::parsing::instance::method> yaoosl::parsing::instance::p_
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_encapsulation_methodident_methodarglist_scope_266(bool is_can, std::shared_ptr<yaoosl::parsing::instance::constructor>& actual, yaoosl::parsing::instance::constructor_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_attributes_275(bool is_can, std::shared_ptr<yaoosl::parsing::instance::constructor>& actual, yaoosl::parsing::instance::constructor_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attributes(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    p_match_attributes(depth + 1);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_encapsulation_methodident_methodarglist_scope_276(bool is_can, std::shared_ptr<yaoosl::parsing::instance::constructor>& actual, yaoosl::parsing::instance::constructor_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_encapsulation(depth + 1))
@@ -11412,12 +11482,100 @@ bool yaoosl::parsing::instance::m_encapsulation_methodident_methodarglist_scope_
     skip();
     return true;
 }
+bool yaoosl::parsing::instance::m_attributes_277(bool is_can, std::shared_ptr<yaoosl::parsing::instance::constructor>& actual, yaoosl::parsing::instance::constructor_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attributes(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto val2 = p_match_attributes(depth + 1);
+    actual->att = val2;
+    skip();
+    if (m_encapsulation_methodident_methodarglist_scope_276(false, actual, state, depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        return false;
+    }
+    else
+    {
+        report("Failed to match { $ref: encapsulation (XCG.Parsing.Production), $ref: method-ident (XCG.Parsing.Production), $ref: method-arglist (XCG.Parsing.Production), $ref: scope (XCG.Parsing.Production) }", depth);
+        return false;
+    }
+    return true;
+}
+bool yaoosl::parsing::instance::if278_279(bool is_can, std::shared_ptr<yaoosl::parsing::instance::constructor>& actual, yaoosl::parsing::instance::constructor_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    bool cond2 = m_attributes_275(true, actual, state, depth + 1);
+    resetable1.reset();
+    if (is_can)
+    {
+        if (cond2)
+        {
+            if (m_attributes_277(true, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attributes (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+    else
+    {
+        if (cond2)
+        {
+            if (m_attributes_277(false, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attributes (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+}
 bool yaoosl::parsing::instance::p_can_constructor(size_t depth)
 {
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::constructor> fake;
     constructor_state state;
-    if (!m_encapsulation_methodident_methodarglist_scope_266(true, fake, state, depth + 1))
+    if (!if278_279(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -11430,10 +11588,10 @@ std::shared_ptr<yaoosl::parsing::instance::constructor> yaoosl::parsing::instanc
     std::shared_ptr<yaoosl::parsing::instance::constructor> fake;
     constructor_state state;
     resetable resetable2(*this);
-    if (m_encapsulation_methodident_methodarglist_scope_266(true, fake, state, depth + 1))
+    if (if278_279(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_encapsulation_methodident_methodarglist_scope_266(false, actual, state, depth + 1);
+        if278_279(false, actual, state, depth + 1);
     }
     else
     {
@@ -11441,7 +11599,33 @@ std::shared_ptr<yaoosl::parsing::instance::constructor> yaoosl::parsing::instanc
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_encapsulation_tilde_methodident_methodarglist_scope_267(bool is_can, std::shared_ptr<yaoosl::parsing::instance::destructor>& actual, yaoosl::parsing::instance::destructor_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_attributes_280(bool is_can, std::shared_ptr<yaoosl::parsing::instance::destructor>& actual, yaoosl::parsing::instance::destructor_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attributes(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    p_match_attributes(depth + 1);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_encapsulation_tilde_methodident_methodarglist_scope_281(bool is_can, std::shared_ptr<yaoosl::parsing::instance::destructor>& actual, yaoosl::parsing::instance::destructor_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_encapsulation(depth + 1))
@@ -11544,12 +11728,100 @@ bool yaoosl::parsing::instance::m_encapsulation_tilde_methodident_methodarglist_
     skip();
     return true;
 }
+bool yaoosl::parsing::instance::m_attributes_282(bool is_can, std::shared_ptr<yaoosl::parsing::instance::destructor>& actual, yaoosl::parsing::instance::destructor_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attributes(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto val2 = p_match_attributes(depth + 1);
+    actual->att = val2;
+    skip();
+    if (m_encapsulation_tilde_methodident_methodarglist_scope_281(false, actual, state, depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        return false;
+    }
+    else
+    {
+        report("Failed to match { $ref: encapsulation (XCG.Parsing.Production), $ref: ~ ({ Token: ~ (~)}), $ref: method-ident (XCG.Parsing.Production), $ref: method-arglist (XCG.Parsing.Production), $ref: scope (XCG.Parsing.Production) }", depth);
+        return false;
+    }
+    return true;
+}
+bool yaoosl::parsing::instance::if283_284(bool is_can, std::shared_ptr<yaoosl::parsing::instance::destructor>& actual, yaoosl::parsing::instance::destructor_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    bool cond2 = m_attributes_280(true, actual, state, depth + 1);
+    resetable1.reset();
+    if (is_can)
+    {
+        if (cond2)
+        {
+            if (m_attributes_282(true, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attributes (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+    else
+    {
+        if (cond2)
+        {
+            if (m_attributes_282(false, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attributes (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+}
 bool yaoosl::parsing::instance::p_can_destructor(size_t depth)
 {
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::destructor> fake;
     destructor_state state;
-    if (!m_encapsulation_tilde_methodident_methodarglist_scope_267(true, fake, state, depth + 1))
+    if (!if283_284(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -11562,10 +11834,10 @@ std::shared_ptr<yaoosl::parsing::instance::destructor> yaoosl::parsing::instance
     std::shared_ptr<yaoosl::parsing::instance::destructor> fake;
     destructor_state state;
     resetable resetable2(*this);
-    if (m_encapsulation_tilde_methodident_methodarglist_scope_267(true, fake, state, depth + 1))
+    if (if283_284(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_encapsulation_tilde_methodident_methodarglist_scope_267(false, actual, state, depth + 1);
+        if283_284(false, actual, state, depth + 1);
     }
     else
     {
@@ -11573,7 +11845,33 @@ std::shared_ptr<yaoosl::parsing::instance::destructor> yaoosl::parsing::instance
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_encapsulation_plus_methodident_methodarglist_268(bool is_can, std::shared_ptr<yaoosl::parsing::instance::copystructor>& actual, yaoosl::parsing::instance::copystructor_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_attributes_285(bool is_can, std::shared_ptr<yaoosl::parsing::instance::copystructor>& actual, yaoosl::parsing::instance::copystructor_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attributes(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    p_match_attributes(depth + 1);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_encapsulation_plus_methodident_methodarglist_286(bool is_can, std::shared_ptr<yaoosl::parsing::instance::copystructor>& actual, yaoosl::parsing::instance::copystructor_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_encapsulation(depth + 1))
@@ -11659,7 +11957,7 @@ bool yaoosl::parsing::instance::m_encapsulation_plus_methodident_methodarglist_2
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_scope_269(bool is_can, std::shared_ptr<yaoosl::parsing::instance::copystructor>& actual, yaoosl::parsing::instance::copystructor_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_scope_287(bool is_can, std::shared_ptr<yaoosl::parsing::instance::copystructor>& actual, yaoosl::parsing::instance::copystructor_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_scope(depth + 1))
@@ -11686,7 +11984,7 @@ bool yaoosl::parsing::instance::m_scope_269(bool is_can, std::shared_ptr<yaoosl:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_equal_delete_270(bool is_can, std::shared_ptr<yaoosl::parsing::instance::copystructor>& actual, yaoosl::parsing::instance::copystructor_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_equal_delete_288(bool is_can, std::shared_ptr<yaoosl::parsing::instance::copystructor>& actual, yaoosl::parsing::instance::copystructor_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__equal(depth + 1);
@@ -11746,10 +12044,10 @@ bool yaoosl::parsing::instance::m_equal_delete_270(bool is_can, std::shared_ptr<
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives271(bool is_can, std::shared_ptr<yaoosl::parsing::instance::copystructor>& actual, yaoosl::parsing::instance::copystructor_state& state, size_t depth)
+bool yaoosl::parsing::instance::alternatives289(bool is_can, std::shared_ptr<yaoosl::parsing::instance::copystructor>& actual, yaoosl::parsing::instance::copystructor_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    if (m_scope_269(true, actual, state, depth + 1))
+    if (m_scope_287(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -11758,11 +12056,11 @@ bool yaoosl::parsing::instance::alternatives271(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_scope_269(false, actual, state, depth + 1);
+            m_scope_287(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_equal_delete_270(true, actual, state, depth + 1))
+    else if (m_equal_delete_288(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -11771,24 +12069,108 @@ bool yaoosl::parsing::instance::alternatives271(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_equal_delete_270(false, actual, state, depth + 1);
+            m_equal_delete_288(false, actual, state, depth + 1);
             return true;
         }
     }
     resetable1.reset();
     return false;
 }
+bool yaoosl::parsing::instance::m_attributes_290(bool is_can, std::shared_ptr<yaoosl::parsing::instance::copystructor>& actual, yaoosl::parsing::instance::copystructor_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attributes(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto val2 = p_match_attributes(depth + 1);
+    actual->att = val2;
+    skip();
+    if (m_encapsulation_plus_methodident_methodarglist_286(false, actual, state, depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        return false;
+    }
+    else
+    {
+        report("Failed to match { $ref: encapsulation (XCG.Parsing.Production), $ref: + ({ Token: + (+)}), $ref: method-ident (XCG.Parsing.Production), $ref: method-arglist (XCG.Parsing.Production) }", depth);
+        return false;
+    }
+    alternatives289(false, actual, state, depth + 1);
+    return true;
+}
+bool yaoosl::parsing::instance::if291_292(bool is_can, std::shared_ptr<yaoosl::parsing::instance::copystructor>& actual, yaoosl::parsing::instance::copystructor_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    bool cond2 = m_attributes_285(true, actual, state, depth + 1);
+    resetable1.reset();
+    if (is_can)
+    {
+        if (cond2)
+        {
+            if (m_attributes_290(true, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attributes (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+    else
+    {
+        if (cond2)
+        {
+            if (m_attributes_290(false, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attributes (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+}
 bool yaoosl::parsing::instance::p_can_copystructor(size_t depth)
 {
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::copystructor> fake;
     copystructor_state state;
-    if (!m_encapsulation_plus_methodident_methodarglist_268(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    else if (!alternatives271(true, fake, state, depth + 1))
+    if (!if291_292(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -11801,20 +12183,10 @@ std::shared_ptr<yaoosl::parsing::instance::copystructor> yaoosl::parsing::instan
     std::shared_ptr<yaoosl::parsing::instance::copystructor> fake;
     copystructor_state state;
     resetable resetable2(*this);
-    if (m_encapsulation_plus_methodident_methodarglist_268(true, fake, state, depth + 1))
+    if (if291_292(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_encapsulation_plus_methodident_methodarglist_268(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    resetable resetable3(*this);
-    if (alternatives271(true, fake, state, depth + 1))
-    {
-        resetable3.reset();
-        alternatives271(false, actual, state, depth + 1);
+        if291_292(false, actual, state, depth + 1);
     }
     else
     {
@@ -11822,7 +12194,33 @@ std::shared_ptr<yaoosl::parsing::instance::copystructor> yaoosl::parsing::instan
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_encapsulation_unbound_conversion_typematch_272(bool is_can, std::shared_ptr<yaoosl::parsing::instance::conversion>& actual, yaoosl::parsing::instance::conversion_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_attributes_293(bool is_can, std::shared_ptr<yaoosl::parsing::instance::conversion>& actual, yaoosl::parsing::instance::conversion_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attributes(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    p_match_attributes(depth + 1);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_encapsulation_unbound_conversion_typematch_294(bool is_can, std::shared_ptr<yaoosl::parsing::instance::conversion>& actual, yaoosl::parsing::instance::conversion_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_encapsulation(depth + 1))
@@ -11916,7 +12314,7 @@ bool yaoosl::parsing::instance::m_encapsulation_unbound_conversion_typematch_272
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_roundbrackedopen_typematch_ident_roundbrackedclose_273(bool is_can, std::shared_ptr<yaoosl::parsing::instance::conversion>& actual, yaoosl::parsing::instance::conversion_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_roundbrackedopen_typematch_ident_roundbrackedclose_295(bool is_can, std::shared_ptr<yaoosl::parsing::instance::conversion>& actual, yaoosl::parsing::instance::conversion_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__round_bracked_open(depth + 1);
@@ -12015,7 +12413,7 @@ bool yaoosl::parsing::instance::m_roundbrackedopen_typematch_ident_roundbrackedc
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_scope_274(bool is_can, std::shared_ptr<yaoosl::parsing::instance::conversion>& actual, yaoosl::parsing::instance::conversion_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_scope_296(bool is_can, std::shared_ptr<yaoosl::parsing::instance::conversion>& actual, yaoosl::parsing::instance::conversion_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_scope(depth + 1))
@@ -12042,22 +12440,126 @@ bool yaoosl::parsing::instance::m_scope_274(bool is_can, std::shared_ptr<yaoosl:
     skip();
     return true;
 }
+bool yaoosl::parsing::instance::m_attributes_297(bool is_can, std::shared_ptr<yaoosl::parsing::instance::conversion>& actual, yaoosl::parsing::instance::conversion_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attributes(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto val2 = p_match_attributes(depth + 1);
+    actual->att = val2;
+    skip();
+    if (m_encapsulation_unbound_conversion_typematch_294(false, actual, state, depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        return false;
+    }
+    else
+    {
+        report("Failed to match { $ref: encapsulation (XCG.Parsing.Production), $ref: unbound ({ Token: unbound (unbound)}), $ref: conversion ({ Token: conversion (conversion)}), $ref: type-match (XCG.Parsing.Production) }", depth);
+        return false;
+    }
+    if (m_roundbrackedopen_typematch_ident_roundbrackedclose_295(false, actual, state, depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        return false;
+    }
+    else
+    {
+        report("Failed to match { $ref: ( ({ Token: ( (()}), $ref: type-match (XCG.Parsing.Production), $ref: ident ({ Token: ident}), $ref: ) ({ Token: ) ())}) }", depth);
+        return false;
+    }
+    if (m_scope_296(false, actual, state, depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        return false;
+    }
+    else
+    {
+        report("Failed to match { $ref: scope (XCG.Parsing.Production) }", depth);
+        return false;
+    }
+    return true;
+}
+bool yaoosl::parsing::instance::if298_299(bool is_can, std::shared_ptr<yaoosl::parsing::instance::conversion>& actual, yaoosl::parsing::instance::conversion_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    bool cond2 = m_attributes_293(true, actual, state, depth + 1);
+    resetable1.reset();
+    if (is_can)
+    {
+        if (cond2)
+        {
+            if (m_attributes_297(true, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attributes (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+    else
+    {
+        if (cond2)
+        {
+            if (m_attributes_297(false, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attributes (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+}
 bool yaoosl::parsing::instance::p_can_conversion(size_t depth)
 {
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::conversion> fake;
     conversion_state state;
-    if (!m_encapsulation_unbound_conversion_typematch_272(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    else if (!m_roundbrackedopen_typematch_ident_roundbrackedclose_273(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    else if (!m_scope_274(true, fake, state, depth + 1))
+    if (!if298_299(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -12070,30 +12572,10 @@ std::shared_ptr<yaoosl::parsing::instance::conversion> yaoosl::parsing::instance
     std::shared_ptr<yaoosl::parsing::instance::conversion> fake;
     conversion_state state;
     resetable resetable2(*this);
-    if (m_encapsulation_unbound_conversion_typematch_272(true, fake, state, depth + 1))
+    if (if298_299(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_encapsulation_unbound_conversion_typematch_272(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    resetable resetable3(*this);
-    if (m_roundbrackedopen_typematch_ident_roundbrackedclose_273(true, fake, state, depth + 1))
-    {
-        resetable3.reset();
-        m_roundbrackedopen_typematch_ident_roundbrackedclose_273(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    resetable resetable4(*this);
-    if (m_scope_274(true, fake, state, depth + 1))
-    {
-        resetable4.reset();
-        m_scope_274(false, actual, state, depth + 1);
+        if298_299(false, actual, state, depth + 1);
     }
     else
     {
@@ -12101,7 +12583,33 @@ std::shared_ptr<yaoosl::parsing::instance::conversion> yaoosl::parsing::instance
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_encapsulation_typematch_275(bool is_can, std::shared_ptr<yaoosl::parsing::instance::indexer>& actual, yaoosl::parsing::instance::indexer_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_attributes_300(bool is_can, std::shared_ptr<yaoosl::parsing::instance::indexer>& actual, yaoosl::parsing::instance::indexer_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attributes(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    p_match_attributes(depth + 1);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_encapsulation_typematch_301(bool is_can, std::shared_ptr<yaoosl::parsing::instance::indexer>& actual, yaoosl::parsing::instance::indexer_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_encapsulation(depth + 1))
@@ -12145,7 +12653,7 @@ bool yaoosl::parsing::instance::m_encapsulation_typematch_275(bool is_can, std::
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_templatedefinition_276(bool is_can, std::shared_ptr<yaoosl::parsing::instance::indexer>& actual, yaoosl::parsing::instance::indexer_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_templatedefinition_302(bool is_can, std::shared_ptr<yaoosl::parsing::instance::indexer>& actual, yaoosl::parsing::instance::indexer_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_template_definition(depth + 1))
@@ -12171,7 +12679,7 @@ bool yaoosl::parsing::instance::m_templatedefinition_276(bool is_can, std::share
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_templatedefinition_277(bool is_can, std::shared_ptr<yaoosl::parsing::instance::indexer>& actual, yaoosl::parsing::instance::indexer_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_templatedefinition_303(bool is_can, std::shared_ptr<yaoosl::parsing::instance::indexer>& actual, yaoosl::parsing::instance::indexer_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_template_definition(depth + 1))
@@ -12198,16 +12706,16 @@ bool yaoosl::parsing::instance::m_templatedefinition_277(bool is_can, std::share
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::if278_279(bool is_can, std::shared_ptr<yaoosl::parsing::instance::indexer>& actual, yaoosl::parsing::instance::indexer_state& state, size_t depth)
+bool yaoosl::parsing::instance::if304_305(bool is_can, std::shared_ptr<yaoosl::parsing::instance::indexer>& actual, yaoosl::parsing::instance::indexer_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    bool cond2 = m_templatedefinition_276(true, actual, state, depth + 1);
+    bool cond2 = m_templatedefinition_302(true, actual, state, depth + 1);
     resetable1.reset();
     if (is_can)
     {
         if (cond2)
         {
-            if (m_templatedefinition_277(true, actual, state, depth + 1))
+            if (m_templatedefinition_303(true, actual, state, depth + 1))
             {
                 skip();
             }
@@ -12228,7 +12736,7 @@ bool yaoosl::parsing::instance::if278_279(bool is_can, std::shared_ptr<yaoosl::p
     {
         if (cond2)
         {
-            if (m_templatedefinition_277(false, actual, state, depth + 1))
+            if (m_templatedefinition_303(false, actual, state, depth + 1))
             {
                 skip();
             }
@@ -12246,7 +12754,7 @@ bool yaoosl::parsing::instance::if278_279(bool is_can, std::shared_ptr<yaoosl::p
         return true;
     }
 }
-bool yaoosl::parsing::instance::m_methodarglistindexer_scopegetset_280(bool is_can, std::shared_ptr<yaoosl::parsing::instance::indexer>& actual, yaoosl::parsing::instance::indexer_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_methodarglistindexer_scopegetset_306(bool is_can, std::shared_ptr<yaoosl::parsing::instance::indexer>& actual, yaoosl::parsing::instance::indexer_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_method_arglist_indexer(depth + 1))
@@ -12290,22 +12798,114 @@ bool yaoosl::parsing::instance::m_methodarglistindexer_scopegetset_280(bool is_c
     skip();
     return true;
 }
+bool yaoosl::parsing::instance::m_attributes_307(bool is_can, std::shared_ptr<yaoosl::parsing::instance::indexer>& actual, yaoosl::parsing::instance::indexer_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attributes(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto val2 = p_match_attributes(depth + 1);
+    actual->att = val2;
+    skip();
+    if (m_encapsulation_typematch_301(false, actual, state, depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        return false;
+    }
+    else
+    {
+        report("Failed to match { $ref: encapsulation (XCG.Parsing.Production), $ref: type-match (XCG.Parsing.Production) }", depth);
+        return false;
+    }
+    if304_305(false, actual, state, depth + 1);
+    if (m_methodarglistindexer_scopegetset_306(false, actual, state, depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        return false;
+    }
+    else
+    {
+        report("Failed to match { $ref: method-arglist-indexer (XCG.Parsing.Production), $ref: scope-getset (XCG.Parsing.Production) }", depth);
+        return false;
+    }
+    return true;
+}
+bool yaoosl::parsing::instance::if308_309(bool is_can, std::shared_ptr<yaoosl::parsing::instance::indexer>& actual, yaoosl::parsing::instance::indexer_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    bool cond2 = m_attributes_300(true, actual, state, depth + 1);
+    resetable1.reset();
+    if (is_can)
+    {
+        if (cond2)
+        {
+            if (m_attributes_307(true, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attributes (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+    else
+    {
+        if (cond2)
+        {
+            if (m_attributes_307(false, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attributes (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+}
 bool yaoosl::parsing::instance::p_can_indexer(size_t depth)
 {
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::indexer> fake;
     indexer_state state;
-    if (!m_encapsulation_typematch_275(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    else if (!if278_279(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    else if (!m_methodarglistindexer_scopegetset_280(true, fake, state, depth + 1))
+    if (!if308_309(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -12318,30 +12918,10 @@ std::shared_ptr<yaoosl::parsing::instance::indexer> yaoosl::parsing::instance::p
     std::shared_ptr<yaoosl::parsing::instance::indexer> fake;
     indexer_state state;
     resetable resetable2(*this);
-    if (m_encapsulation_typematch_275(true, fake, state, depth + 1))
+    if (if308_309(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_encapsulation_typematch_275(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    resetable resetable3(*this);
-    if (if278_279(true, fake, state, depth + 1))
-    {
-        resetable3.reset();
-        if278_279(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    resetable resetable4(*this);
-    if (m_methodarglistindexer_scopegetset_280(true, fake, state, depth + 1))
-    {
-        resetable4.reset();
-        m_methodarglistindexer_scopegetset_280(false, actual, state, depth + 1);
+        if308_309(false, actual, state, depth + 1);
     }
     else
     {
@@ -12349,7 +12929,33 @@ std::shared_ptr<yaoosl::parsing::instance::indexer> yaoosl::parsing::instance::p
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_encapsulation_unbound_typematch_operator_281(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_attributes_310(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attributes(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    p_match_attributes(depth + 1);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_encapsulation_unbound_typematch_operator_311(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_encapsulation(depth + 1))
@@ -12443,7 +13049,7 @@ bool yaoosl::parsing::instance::m_encapsulation_unbound_typematch_operator_281(b
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_templatedefinition_282(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_templatedefinition_312(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_template_definition(depth + 1))
@@ -12469,7 +13075,7 @@ bool yaoosl::parsing::instance::m_templatedefinition_282(bool is_can, std::share
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_templatedefinition_283(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_templatedefinition_313(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_template_definition(depth + 1))
@@ -12496,16 +13102,16 @@ bool yaoosl::parsing::instance::m_templatedefinition_283(bool is_can, std::share
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::if284_285(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::if314_315(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    bool cond2 = m_templatedefinition_282(true, actual, state, depth + 1);
+    bool cond2 = m_templatedefinition_312(true, actual, state, depth + 1);
     resetable1.reset();
     if (is_can)
     {
         if (cond2)
         {
-            if (m_templatedefinition_283(true, actual, state, depth + 1))
+            if (m_templatedefinition_313(true, actual, state, depth + 1))
             {
                 skip();
             }
@@ -12526,7 +13132,7 @@ bool yaoosl::parsing::instance::if284_285(bool is_can, std::shared_ptr<yaoosl::p
     {
         if (cond2)
         {
-            if (m_templatedefinition_283(false, actual, state, depth + 1))
+            if (m_templatedefinition_313(false, actual, state, depth + 1))
             {
                 skip();
             }
@@ -12544,7 +13150,7 @@ bool yaoosl::parsing::instance::if284_285(bool is_can, std::shared_ptr<yaoosl::p
         return true;
     }
 }
-bool yaoosl::parsing::instance::m_roundbrackedopen_methodarglistitem_roundbrackedclose_286(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_roundbrackedopen_methodarglistitem_roundbrackedclose_316(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__round_bracked_open(depth + 1);
@@ -12621,7 +13227,7 @@ bool yaoosl::parsing::instance::m_roundbrackedopen_methodarglistitem_roundbracke
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_plus_287(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_plus_317(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token_plus(depth + 1);
@@ -12653,7 +13259,7 @@ bool yaoosl::parsing::instance::m_plus_287(bool is_can, std::shared_ptr<yaoosl::
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_minus_288(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_minus_318(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token_minus(depth + 1);
@@ -12685,7 +13291,7 @@ bool yaoosl::parsing::instance::m_minus_288(bool is_can, std::shared_ptr<yaoosl:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_star_289(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_star_319(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token_star(depth + 1);
@@ -12717,7 +13323,7 @@ bool yaoosl::parsing::instance::m_star_289(bool is_can, std::shared_ptr<yaoosl::
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_slash_290(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_slash_320(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token_slash(depth + 1);
@@ -12749,7 +13355,7 @@ bool yaoosl::parsing::instance::m_slash_290(bool is_can, std::shared_ptr<yaoosl:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_lessthenlessthenlessthen_291(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_lessthenlessthenlessthen_321(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__less_then_less_then_less_then(depth + 1);
@@ -12781,7 +13387,7 @@ bool yaoosl::parsing::instance::m_lessthenlessthenlessthen_291(bool is_can, std:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_lessthenlessthen_292(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_lessthenlessthen_322(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__less_then_less_then(depth + 1);
@@ -12813,7 +13419,7 @@ bool yaoosl::parsing::instance::m_lessthenlessthen_292(bool is_can, std::shared_
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_lessthenequal_293(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_lessthenequal_323(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__less_then_equal(depth + 1);
@@ -12845,7 +13451,7 @@ bool yaoosl::parsing::instance::m_lessthenequal_293(bool is_can, std::shared_ptr
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_lessthen_294(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_lessthen_324(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__less_then(depth + 1);
@@ -12877,7 +13483,7 @@ bool yaoosl::parsing::instance::m_lessthen_294(bool is_can, std::shared_ptr<yaoo
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_greaterthengreaterthengreaterthen_295(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_greaterthengreaterthengreaterthen_325(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__greater_then_greater_then_greater_then(depth + 1);
@@ -12909,7 +13515,7 @@ bool yaoosl::parsing::instance::m_greaterthengreaterthengreaterthen_295(bool is_
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_greaterthengreaterthen_296(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_greaterthengreaterthen_326(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__greater_then_greater_then(depth + 1);
@@ -12941,7 +13547,7 @@ bool yaoosl::parsing::instance::m_greaterthengreaterthen_296(bool is_can, std::s
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_greaterthenequal_297(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_greaterthenequal_327(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__greater_then_equal(depth + 1);
@@ -12973,7 +13579,7 @@ bool yaoosl::parsing::instance::m_greaterthenequal_297(bool is_can, std::shared_
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_greaterthen_298(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_greaterthen_328(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__greater_then(depth + 1);
@@ -13005,7 +13611,7 @@ bool yaoosl::parsing::instance::m_greaterthen_298(bool is_can, std::shared_ptr<y
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_verticalbarverticalbar_299(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_verticalbarverticalbar_329(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__vertical_bar_vertical_bar(depth + 1);
@@ -13037,7 +13643,7 @@ bool yaoosl::parsing::instance::m_verticalbarverticalbar_299(bool is_can, std::s
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_verticalbar_300(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_verticalbar_330(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__vertical_bar(depth + 1);
@@ -13069,7 +13675,7 @@ bool yaoosl::parsing::instance::m_verticalbar_300(bool is_can, std::shared_ptr<y
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_ampersandampersand_301(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_ampersandampersand_331(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__ampersand_ampersand(depth + 1);
@@ -13101,7 +13707,7 @@ bool yaoosl::parsing::instance::m_ampersandampersand_301(bool is_can, std::share
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_ampersand_302(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_ampersand_332(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__ampersand(depth + 1);
@@ -13133,10 +13739,10 @@ bool yaoosl::parsing::instance::m_ampersand_302(bool is_can, std::shared_ptr<yao
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives303(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::alternatives333(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    if (m_plus_287(true, actual, state, depth + 1))
+    if (m_plus_317(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -13145,11 +13751,11 @@ bool yaoosl::parsing::instance::alternatives303(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_plus_287(false, actual, state, depth + 1);
+            m_plus_317(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_minus_288(true, actual, state, depth + 1))
+    else if (m_minus_318(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -13158,11 +13764,11 @@ bool yaoosl::parsing::instance::alternatives303(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_minus_288(false, actual, state, depth + 1);
+            m_minus_318(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_star_289(true, actual, state, depth + 1))
+    else if (m_star_319(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -13171,11 +13777,11 @@ bool yaoosl::parsing::instance::alternatives303(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_star_289(false, actual, state, depth + 1);
+            m_star_319(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_slash_290(true, actual, state, depth + 1))
+    else if (m_slash_320(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -13184,11 +13790,11 @@ bool yaoosl::parsing::instance::alternatives303(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_slash_290(false, actual, state, depth + 1);
+            m_slash_320(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_lessthenlessthenlessthen_291(true, actual, state, depth + 1))
+    else if (m_lessthenlessthenlessthen_321(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -13197,11 +13803,11 @@ bool yaoosl::parsing::instance::alternatives303(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_lessthenlessthenlessthen_291(false, actual, state, depth + 1);
+            m_lessthenlessthenlessthen_321(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_lessthenlessthen_292(true, actual, state, depth + 1))
+    else if (m_lessthenlessthen_322(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -13210,11 +13816,11 @@ bool yaoosl::parsing::instance::alternatives303(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_lessthenlessthen_292(false, actual, state, depth + 1);
+            m_lessthenlessthen_322(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_lessthenequal_293(true, actual, state, depth + 1))
+    else if (m_lessthenequal_323(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -13223,11 +13829,11 @@ bool yaoosl::parsing::instance::alternatives303(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_lessthenequal_293(false, actual, state, depth + 1);
+            m_lessthenequal_323(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_lessthen_294(true, actual, state, depth + 1))
+    else if (m_lessthen_324(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -13236,11 +13842,11 @@ bool yaoosl::parsing::instance::alternatives303(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_lessthen_294(false, actual, state, depth + 1);
+            m_lessthen_324(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_greaterthengreaterthengreaterthen_295(true, actual, state, depth + 1))
+    else if (m_greaterthengreaterthengreaterthen_325(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -13249,11 +13855,11 @@ bool yaoosl::parsing::instance::alternatives303(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_greaterthengreaterthengreaterthen_295(false, actual, state, depth + 1);
+            m_greaterthengreaterthengreaterthen_325(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_greaterthengreaterthen_296(true, actual, state, depth + 1))
+    else if (m_greaterthengreaterthen_326(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -13262,11 +13868,11 @@ bool yaoosl::parsing::instance::alternatives303(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_greaterthengreaterthen_296(false, actual, state, depth + 1);
+            m_greaterthengreaterthen_326(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_greaterthenequal_297(true, actual, state, depth + 1))
+    else if (m_greaterthenequal_327(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -13275,11 +13881,11 @@ bool yaoosl::parsing::instance::alternatives303(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_greaterthenequal_297(false, actual, state, depth + 1);
+            m_greaterthenequal_327(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_greaterthen_298(true, actual, state, depth + 1))
+    else if (m_greaterthen_328(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -13288,11 +13894,11 @@ bool yaoosl::parsing::instance::alternatives303(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_greaterthen_298(false, actual, state, depth + 1);
+            m_greaterthen_328(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_verticalbarverticalbar_299(true, actual, state, depth + 1))
+    else if (m_verticalbarverticalbar_329(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -13301,11 +13907,11 @@ bool yaoosl::parsing::instance::alternatives303(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_verticalbarverticalbar_299(false, actual, state, depth + 1);
+            m_verticalbarverticalbar_329(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_verticalbar_300(true, actual, state, depth + 1))
+    else if (m_verticalbar_330(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -13314,11 +13920,11 @@ bool yaoosl::parsing::instance::alternatives303(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_verticalbar_300(false, actual, state, depth + 1);
+            m_verticalbar_330(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_ampersandampersand_301(true, actual, state, depth + 1))
+    else if (m_ampersandampersand_331(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -13327,11 +13933,11 @@ bool yaoosl::parsing::instance::alternatives303(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_ampersandampersand_301(false, actual, state, depth + 1);
+            m_ampersandampersand_331(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_ampersand_302(true, actual, state, depth + 1))
+    else if (m_ampersand_332(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -13340,14 +13946,14 @@ bool yaoosl::parsing::instance::alternatives303(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_ampersand_302(false, actual, state, depth + 1);
+            m_ampersand_332(false, actual, state, depth + 1);
             return true;
         }
     }
     resetable1.reset();
     return false;
 }
-bool yaoosl::parsing::instance::m_roundbrackedopen_methodarglistitem_roundbrackedclose_304(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_roundbrackedopen_methodarglistitem_roundbrackedclose_334(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__round_bracked_open(depth + 1);
@@ -13424,7 +14030,7 @@ bool yaoosl::parsing::instance::m_roundbrackedopen_methodarglistitem_roundbracke
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_scope_305(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_scope_335(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_scope(depth + 1))
@@ -13451,37 +14057,141 @@ bool yaoosl::parsing::instance::m_scope_305(bool is_can, std::shared_ptr<yaoosl:
     skip();
     return true;
 }
+bool yaoosl::parsing::instance::m_attributes_336(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attributes(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto val2 = p_match_attributes(depth + 1);
+    actual->att = val2;
+    skip();
+    if (m_encapsulation_unbound_typematch_operator_311(false, actual, state, depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        return false;
+    }
+    else
+    {
+        report("Failed to match { $ref: encapsulation (XCG.Parsing.Production), $ref: unbound ({ Token: unbound (unbound)}), $ref: type-match (XCG.Parsing.Production), $ref: operator ({ Token: operator (operator)}) }", depth);
+        return false;
+    }
+    if314_315(false, actual, state, depth + 1);
+    if (m_roundbrackedopen_methodarglistitem_roundbrackedclose_316(false, actual, state, depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        return false;
+    }
+    else
+    {
+        report("Failed to match { $ref: ( ({ Token: ( (()}), $ref: method-arglist-item (XCG.Parsing.Production), $ref: ) ({ Token: ) ())}) }", depth);
+        return false;
+    }
+    alternatives333(false, actual, state, depth + 1);
+    if (m_roundbrackedopen_methodarglistitem_roundbrackedclose_334(false, actual, state, depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        return false;
+    }
+    else
+    {
+        report("Failed to match { $ref: ( ({ Token: ( (()}), $ref: method-arglist-item (XCG.Parsing.Production), $ref: ) ({ Token: ) ())}) }", depth);
+        return false;
+    }
+    if (m_scope_335(false, actual, state, depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        return false;
+    }
+    else
+    {
+        report("Failed to match { $ref: scope (XCG.Parsing.Production) }", depth);
+        return false;
+    }
+    return true;
+}
+bool yaoosl::parsing::instance::if337_338(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload>& actual, yaoosl::parsing::instance::operator_binary_overload_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    bool cond2 = m_attributes_310(true, actual, state, depth + 1);
+    resetable1.reset();
+    if (is_can)
+    {
+        if (cond2)
+        {
+            if (m_attributes_336(true, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attributes (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+    else
+    {
+        if (cond2)
+        {
+            if (m_attributes_336(false, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attributes (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+}
 bool yaoosl::parsing::instance::p_can_operator_binary_overload(size_t depth)
 {
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload> fake;
     operator_binary_overload_state state;
-    if (!m_encapsulation_unbound_typematch_operator_281(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    else if (!if284_285(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    else if (!m_roundbrackedopen_methodarglistitem_roundbrackedclose_286(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    else if (!alternatives303(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    else if (!m_roundbrackedopen_methodarglistitem_roundbrackedclose_304(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    else if (!m_scope_305(true, fake, state, depth + 1))
+    if (!if337_338(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -13494,60 +14204,10 @@ std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload> yaoosl::par
     std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload> fake;
     operator_binary_overload_state state;
     resetable resetable2(*this);
-    if (m_encapsulation_unbound_typematch_operator_281(true, fake, state, depth + 1))
+    if (if337_338(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_encapsulation_unbound_typematch_operator_281(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    resetable resetable3(*this);
-    if (if284_285(true, fake, state, depth + 1))
-    {
-        resetable3.reset();
-        if284_285(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    resetable resetable4(*this);
-    if (m_roundbrackedopen_methodarglistitem_roundbrackedclose_286(true, fake, state, depth + 1))
-    {
-        resetable4.reset();
-        m_roundbrackedopen_methodarglistitem_roundbrackedclose_286(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    resetable resetable5(*this);
-    if (alternatives303(true, fake, state, depth + 1))
-    {
-        resetable5.reset();
-        alternatives303(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    resetable resetable6(*this);
-    if (m_roundbrackedopen_methodarglistitem_roundbrackedclose_304(true, fake, state, depth + 1))
-    {
-        resetable6.reset();
-        m_roundbrackedopen_methodarglistitem_roundbrackedclose_304(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    resetable resetable7(*this);
-    if (m_scope_305(true, fake, state, depth + 1))
-    {
-        resetable7.reset();
-        m_scope_305(false, actual, state, depth + 1);
+        if337_338(false, actual, state, depth + 1);
     }
     else
     {
@@ -13555,7 +14215,33 @@ std::shared_ptr<yaoosl::parsing::instance::operator_binary_overload> yaoosl::par
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_encapsulation_unbound_typematch_operator_306(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_attributes_339(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attributes(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    p_match_attributes(depth + 1);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_encapsulation_unbound_typematch_operator_340(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_encapsulation(depth + 1))
@@ -13649,7 +14335,7 @@ bool yaoosl::parsing::instance::m_encapsulation_unbound_typematch_operator_306(b
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_templatedefinition_307(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_templatedefinition_341(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_template_definition(depth + 1))
@@ -13675,7 +14361,7 @@ bool yaoosl::parsing::instance::m_templatedefinition_307(bool is_can, std::share
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_templatedefinition_308(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_templatedefinition_342(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_template_definition(depth + 1))
@@ -13702,16 +14388,16 @@ bool yaoosl::parsing::instance::m_templatedefinition_308(bool is_can, std::share
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::if309_310(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::if343_344(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    bool cond2 = m_templatedefinition_307(true, actual, state, depth + 1);
+    bool cond2 = m_templatedefinition_341(true, actual, state, depth + 1);
     resetable1.reset();
     if (is_can)
     {
         if (cond2)
         {
-            if (m_templatedefinition_308(true, actual, state, depth + 1))
+            if (m_templatedefinition_342(true, actual, state, depth + 1))
             {
                 skip();
             }
@@ -13732,7 +14418,7 @@ bool yaoosl::parsing::instance::if309_310(bool is_can, std::shared_ptr<yaoosl::p
     {
         if (cond2)
         {
-            if (m_templatedefinition_308(false, actual, state, depth + 1))
+            if (m_templatedefinition_342(false, actual, state, depth + 1))
             {
                 skip();
             }
@@ -13750,7 +14436,7 @@ bool yaoosl::parsing::instance::if309_310(bool is_can, std::shared_ptr<yaoosl::p
         return true;
     }
 }
-bool yaoosl::parsing::instance::m_plus_311(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_plus_345(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token_plus(depth + 1);
@@ -13782,7 +14468,7 @@ bool yaoosl::parsing::instance::m_plus_311(bool is_can, std::shared_ptr<yaoosl::
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_minus_312(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_minus_346(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token_minus(depth + 1);
@@ -13814,7 +14500,7 @@ bool yaoosl::parsing::instance::m_minus_312(bool is_can, std::shared_ptr<yaoosl:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_exclamation_313(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_exclamation_347(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__exclamation(depth + 1);
@@ -13846,7 +14532,7 @@ bool yaoosl::parsing::instance::m_exclamation_313(bool is_can, std::shared_ptr<y
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_tilde_314(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_tilde_348(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__tilde(depth + 1);
@@ -13878,10 +14564,10 @@ bool yaoosl::parsing::instance::m_tilde_314(bool is_can, std::shared_ptr<yaoosl:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives315(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::alternatives349(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    if (m_plus_311(true, actual, state, depth + 1))
+    if (m_plus_345(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -13890,11 +14576,11 @@ bool yaoosl::parsing::instance::alternatives315(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_plus_311(false, actual, state, depth + 1);
+            m_plus_345(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_minus_312(true, actual, state, depth + 1))
+    else if (m_minus_346(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -13903,11 +14589,11 @@ bool yaoosl::parsing::instance::alternatives315(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_minus_312(false, actual, state, depth + 1);
+            m_minus_346(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_exclamation_313(true, actual, state, depth + 1))
+    else if (m_exclamation_347(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -13916,11 +14602,11 @@ bool yaoosl::parsing::instance::alternatives315(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_exclamation_313(false, actual, state, depth + 1);
+            m_exclamation_347(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_tilde_314(true, actual, state, depth + 1))
+    else if (m_tilde_348(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -13929,14 +14615,14 @@ bool yaoosl::parsing::instance::alternatives315(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_tilde_314(false, actual, state, depth + 1);
+            m_tilde_348(false, actual, state, depth + 1);
             return true;
         }
     }
     resetable1.reset();
     return false;
 }
-bool yaoosl::parsing::instance::m_roundbrackedopen_methodarglistitem_roundbrackedclose_316(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_roundbrackedopen_methodarglistitem_roundbrackedclose_350(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__round_bracked_open(depth + 1);
@@ -14013,7 +14699,7 @@ bool yaoosl::parsing::instance::m_roundbrackedopen_methodarglistitem_roundbracke
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_scope_317(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_scope_351(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_scope(depth + 1))
@@ -14040,32 +14726,128 @@ bool yaoosl::parsing::instance::m_scope_317(bool is_can, std::shared_ptr<yaoosl:
     skip();
     return true;
 }
+bool yaoosl::parsing::instance::m_attributes_352(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attributes(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto val2 = p_match_attributes(depth + 1);
+    actual->att = val2;
+    skip();
+    if (m_encapsulation_unbound_typematch_operator_340(false, actual, state, depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        return false;
+    }
+    else
+    {
+        report("Failed to match { $ref: encapsulation (XCG.Parsing.Production), $ref: unbound ({ Token: unbound (unbound)}), $ref: type-match (XCG.Parsing.Production), $ref: operator ({ Token: operator (operator)}) }", depth);
+        return false;
+    }
+    if343_344(false, actual, state, depth + 1);
+    alternatives349(false, actual, state, depth + 1);
+    if (m_roundbrackedopen_methodarglistitem_roundbrackedclose_350(false, actual, state, depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        return false;
+    }
+    else
+    {
+        report("Failed to match { $ref: ( ({ Token: ( (()}), $ref: method-arglist-item (XCG.Parsing.Production), $ref: ) ({ Token: ) ())}) }", depth);
+        return false;
+    }
+    if (m_scope_351(false, actual, state, depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        return false;
+    }
+    else
+    {
+        report("Failed to match { $ref: scope (XCG.Parsing.Production) }", depth);
+        return false;
+    }
+    return true;
+}
+bool yaoosl::parsing::instance::if353_354(bool is_can, std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload>& actual, yaoosl::parsing::instance::operator_unary_overload_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    bool cond2 = m_attributes_339(true, actual, state, depth + 1);
+    resetable1.reset();
+    if (is_can)
+    {
+        if (cond2)
+        {
+            if (m_attributes_352(true, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attributes (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+    else
+    {
+        if (cond2)
+        {
+            if (m_attributes_352(false, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attributes (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+}
 bool yaoosl::parsing::instance::p_can_operator_unary_overload(size_t depth)
 {
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload> fake;
     operator_unary_overload_state state;
-    if (!m_encapsulation_unbound_typematch_operator_306(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    else if (!if309_310(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    else if (!alternatives315(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    else if (!m_roundbrackedopen_methodarglistitem_roundbrackedclose_316(true, fake, state, depth + 1))
-    {
-        resetable1.reset();
-        return false;
-    }
-    else if (!m_scope_317(true, fake, state, depth + 1))
+    if (!if353_354(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -14078,50 +14860,10 @@ std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload> yaoosl::pars
     std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload> fake;
     operator_unary_overload_state state;
     resetable resetable2(*this);
-    if (m_encapsulation_unbound_typematch_operator_306(true, fake, state, depth + 1))
+    if (if353_354(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        m_encapsulation_unbound_typematch_operator_306(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    resetable resetable3(*this);
-    if (if309_310(true, fake, state, depth + 1))
-    {
-        resetable3.reset();
-        if309_310(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    resetable resetable4(*this);
-    if (alternatives315(true, fake, state, depth + 1))
-    {
-        resetable4.reset();
-        alternatives315(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    resetable resetable5(*this);
-    if (m_roundbrackedopen_methodarglistitem_roundbrackedclose_316(true, fake, state, depth + 1))
-    {
-        resetable5.reset();
-        m_roundbrackedopen_methodarglistitem_roundbrackedclose_316(false, actual, state, depth + 1);
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-    }
-    resetable resetable6(*this);
-    if (m_scope_317(true, fake, state, depth + 1))
-    {
-        resetable6.reset();
-        m_scope_317(false, actual, state, depth + 1);
+        if353_354(false, actual, state, depth + 1);
     }
     else
     {
@@ -14129,7 +14871,33 @@ std::shared_ptr<yaoosl::parsing::instance::operator_unary_overload> yaoosl::pars
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_encapsulation_typematch_ident_semicolon_318(bool is_can, std::shared_ptr<yaoosl::parsing::instance::property>& actual, yaoosl::parsing::instance::property_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_attributes_355(bool is_can, std::shared_ptr<yaoosl::parsing::instance::property>& actual, yaoosl::parsing::instance::property_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attributes(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    p_match_attributes(depth + 1);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_encapsulation_typematch_ident_semicolon_356(bool is_can, std::shared_ptr<yaoosl::parsing::instance::property>& actual, yaoosl::parsing::instance::property_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_encapsulation(depth + 1))
@@ -14220,7 +14988,7 @@ bool yaoosl::parsing::instance::m_encapsulation_typematch_ident_semicolon_318(bo
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_encapsulation_typematch_ident_scopegetset_319(bool is_can, std::shared_ptr<yaoosl::parsing::instance::property>& actual, yaoosl::parsing::instance::property_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_encapsulation_typematch_ident_scopegetset_357(bool is_can, std::shared_ptr<yaoosl::parsing::instance::property>& actual, yaoosl::parsing::instance::property_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_encapsulation(depth + 1))
@@ -14303,10 +15071,10 @@ bool yaoosl::parsing::instance::m_encapsulation_typematch_ident_scopegetset_319(
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives320(bool is_can, std::shared_ptr<yaoosl::parsing::instance::property>& actual, yaoosl::parsing::instance::property_state& state, size_t depth)
+bool yaoosl::parsing::instance::alternatives358(bool is_can, std::shared_ptr<yaoosl::parsing::instance::property>& actual, yaoosl::parsing::instance::property_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    if (m_encapsulation_typematch_ident_semicolon_318(true, actual, state, depth + 1))
+    if (m_encapsulation_typematch_ident_semicolon_356(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -14315,11 +15083,11 @@ bool yaoosl::parsing::instance::alternatives320(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_encapsulation_typematch_ident_semicolon_318(false, actual, state, depth + 1);
+            m_encapsulation_typematch_ident_semicolon_356(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_encapsulation_typematch_ident_scopegetset_319(true, actual, state, depth + 1))
+    else if (m_encapsulation_typematch_ident_scopegetset_357(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -14328,19 +15096,95 @@ bool yaoosl::parsing::instance::alternatives320(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_encapsulation_typematch_ident_scopegetset_319(false, actual, state, depth + 1);
+            m_encapsulation_typematch_ident_scopegetset_357(false, actual, state, depth + 1);
             return true;
         }
     }
     resetable1.reset();
     return false;
 }
+bool yaoosl::parsing::instance::m_attributes_359(bool is_can, std::shared_ptr<yaoosl::parsing::instance::property>& actual, yaoosl::parsing::instance::property_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attributes(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto val2 = p_match_attributes(depth + 1);
+    actual->att = val2;
+    skip();
+    alternatives358(false, actual, state, depth + 1);
+    return true;
+}
+bool yaoosl::parsing::instance::if360_361(bool is_can, std::shared_ptr<yaoosl::parsing::instance::property>& actual, yaoosl::parsing::instance::property_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    bool cond2 = m_attributes_355(true, actual, state, depth + 1);
+    resetable1.reset();
+    if (is_can)
+    {
+        if (cond2)
+        {
+            if (m_attributes_359(true, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attributes (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+    else
+    {
+        if (cond2)
+        {
+            if (m_attributes_359(false, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attributes (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+}
 bool yaoosl::parsing::instance::p_can_property(size_t depth)
 {
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::property> fake;
     property_state state;
-    if (!alternatives320(true, fake, state, depth + 1))
+    if (!if360_361(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -14353,10 +15197,10 @@ std::shared_ptr<yaoosl::parsing::instance::property> yaoosl::parsing::instance::
     std::shared_ptr<yaoosl::parsing::instance::property> fake;
     property_state state;
     resetable resetable2(*this);
-    if (alternatives320(true, fake, state, depth + 1))
+    if (if360_361(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        alternatives320(false, actual, state, depth + 1);
+        if360_361(false, actual, state, depth + 1);
     }
     else
     {
@@ -14364,7 +15208,1804 @@ std::shared_ptr<yaoosl::parsing::instance::property> yaoosl::parsing::instance::
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_namespace_321(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expor_362(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_arg_item_a>& actual, yaoosl::parsing::instance::attribute_arg_item_a_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (lr_can_exp_or(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto val2 = lr_match_exp_or(depth + 1);
+    actual->value = val2;
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::p_can_attribute_arg_item_a(size_t depth)
+{
+    resetable resetable1(*this);
+    std::shared_ptr<yaoosl::parsing::instance::attribute_arg_item_a> fake;
+    attribute_arg_item_a_state state;
+    if (!m_expor_362(true, fake, state, depth + 1))
+    {
+        resetable1.reset();
+        return false;
+    }
+    return true;
+}
+std::shared_ptr<yaoosl::parsing::instance::attribute_arg_item_a> yaoosl::parsing::instance::p_match_attribute_arg_item_a(size_t depth)
+{
+    auto actual = std::make_shared<yaoosl::parsing::instance::attribute_arg_item_a>();
+    std::shared_ptr<yaoosl::parsing::instance::attribute_arg_item_a> fake;
+    attribute_arg_item_a_state state;
+    resetable resetable2(*this);
+    if (m_expor_362(true, fake, state, depth + 1))
+    {
+        resetable2.reset();
+        m_expor_362(false, actual, state, depth + 1);
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+    }
+    return actual;
+}
+bool yaoosl::parsing::instance::m_ident_colon_expor_363(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_arg_item_b>& actual, yaoosl::parsing::instance::attribute_arg_item_b_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    auto l2 = token_ident(depth + 1);
+    if (l2.has_value())
+    {
+        for (auto i3 = l2.value(); i3 != 0; i3--)
+        {
+            next();
+        }
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    auto l4 = token__colon(depth + 1);
+    if (l4.has_value())
+    {
+        for (auto i5 = l4.value(); i5 != 0; i5--)
+        {
+            next();
+        }
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (lr_can_exp_or(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto val6 = create_token(token_ident(depth + 1).value(), tok::IDENT);
+    actual->name = val6;
+    skip();
+    auto l8 = token__colon(depth + 1).value();
+    for (;l8 != 0; l8--)
+    {
+        next();
+    }
+    skip();
+    auto val9 = lr_match_exp_or(depth + 1);
+    actual->value = val9;
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::p_can_attribute_arg_item_b(size_t depth)
+{
+    resetable resetable1(*this);
+    std::shared_ptr<yaoosl::parsing::instance::attribute_arg_item_b> fake;
+    attribute_arg_item_b_state state;
+    if (!m_ident_colon_expor_363(true, fake, state, depth + 1))
+    {
+        resetable1.reset();
+        return false;
+    }
+    return true;
+}
+std::shared_ptr<yaoosl::parsing::instance::attribute_arg_item_b> yaoosl::parsing::instance::p_match_attribute_arg_item_b(size_t depth)
+{
+    auto actual = std::make_shared<yaoosl::parsing::instance::attribute_arg_item_b>();
+    std::shared_ptr<yaoosl::parsing::instance::attribute_arg_item_b> fake;
+    attribute_arg_item_b_state state;
+    resetable resetable2(*this);
+    if (m_ident_colon_expor_363(true, fake, state, depth + 1))
+    {
+        resetable2.reset();
+        m_ident_colon_expor_363(false, actual, state, depth + 1);
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+    }
+    return actual;
+}
+bool yaoosl::parsing::instance::m_attributeargitema_364(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attribute_arg_item_a(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    p_match_attribute_arg_item_a(depth + 1);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_attributeargitema_365(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attribute_arg_item_a(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto val2 = p_match_attribute_arg_item_a(depth + 1);
+    actual->args.push_back(val2);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_attributeargitema_366(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attribute_arg_item_a(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    p_match_attribute_arg_item_a(depth + 1);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_comma_attributeargitema_367(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    auto l2 = token__comma(depth + 1);
+    if (l2.has_value())
+    {
+        for (auto i3 = l2.value(); i3 != 0; i3--)
+        {
+            next();
+        }
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (p_can_attribute_arg_item_a(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto l5 = token__comma(depth + 1).value();
+    for (;l5 != 0; l5--)
+    {
+        next();
+    }
+    skip();
+    auto val6 = p_match_attribute_arg_item_a(depth + 1);
+    actual->args.push_back(val6);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::while368_369(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    bool cond3 = m_attributeargitema_366(true, actual, state, depth + 1);
+    resetable1.reset();
+    if (is_can)
+    {
+        while (cond3 && current() != '\0')
+        {
+            if (m_comma_attributeargitema_367(true, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: , ({ Token: , (,)}), $ref: attribute-arg-item-a (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            resetable resetable2(*this);
+            cond3 = m_attributeargitema_366(true, actual, state, depth + 1);
+            resetable2.reset();
+        }
+        return true;
+    }
+    else
+    {
+        while (cond3 && current() != '\0')
+        {
+            if (m_comma_attributeargitema_367(false, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: , ({ Token: , (,)}), $ref: attribute-arg-item-a (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            resetable resetable2(*this);
+            cond3 = m_attributeargitema_366(true, actual, state, depth + 1);
+            resetable2.reset();
+        }
+        return true;
+    }
+}
+bool yaoosl::parsing::instance::m_comma_370(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    auto l2 = token__comma(depth + 1);
+    if (l2.has_value())
+    {
+        for (auto i3 = l2.value(); i3 != 0; i3--)
+        {
+            next();
+        }
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto l5 = token__comma(depth + 1).value();
+    for (;l5 != 0; l5--)
+    {
+        next();
+    }
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_comma_371(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    auto l2 = token__comma(depth + 1);
+    if (l2.has_value())
+    {
+        for (auto i3 = l2.value(); i3 != 0; i3--)
+        {
+            next();
+        }
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto l5 = token__comma(depth + 1).value();
+    for (;l5 != 0; l5--)
+    {
+        next();
+    }
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::if372_373(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    bool cond2 = m_comma_370(true, actual, state, depth + 1);
+    resetable1.reset();
+    if (is_can)
+    {
+        if (cond2)
+        {
+            if (m_comma_371(true, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: , ({ Token: , (,)}) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+    else
+    {
+        if (cond2)
+        {
+            if (m_comma_371(false, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: , ({ Token: , (,)}) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+}
+bool yaoosl::parsing::instance::if374_375(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    bool cond2 = m_attributeargitema_364(true, actual, state, depth + 1);
+    resetable1.reset();
+    if (is_can)
+    {
+        if (cond2)
+        {
+            if (m_attributeargitema_365(true, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attribute-arg-item-a (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            while368_369(true, actual, state, depth + 1);
+            if372_373(true, actual, state, depth + 1);
+            return true;
+        }
+        return true;
+    }
+    else
+    {
+        if (cond2)
+        {
+            if (m_attributeargitema_365(false, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attribute-arg-item-a (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            while368_369(false, actual, state, depth + 1);
+            if372_373(false, actual, state, depth + 1);
+            return true;
+        }
+        return true;
+    }
+}
+bool yaoosl::parsing::instance::m_attributeargitemb_376(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attribute_arg_item_b(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    p_match_attribute_arg_item_b(depth + 1);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_attributeargitemb_377(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attribute_arg_item_b(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto val2 = p_match_attribute_arg_item_b(depth + 1);
+    actual->args.push_back(val2);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_attributeargitemb_378(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attribute_arg_item_b(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    p_match_attribute_arg_item_b(depth + 1);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_comma_attributeargitemb_379(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    auto l2 = token__comma(depth + 1);
+    if (l2.has_value())
+    {
+        for (auto i3 = l2.value(); i3 != 0; i3--)
+        {
+            next();
+        }
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (p_can_attribute_arg_item_b(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto l5 = token__comma(depth + 1).value();
+    for (;l5 != 0; l5--)
+    {
+        next();
+    }
+    skip();
+    auto val6 = p_match_attribute_arg_item_b(depth + 1);
+    actual->args.push_back(val6);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::while380_381(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    bool cond3 = m_attributeargitemb_378(true, actual, state, depth + 1);
+    resetable1.reset();
+    if (is_can)
+    {
+        while (cond3 && current() != '\0')
+        {
+            if (m_comma_attributeargitemb_379(true, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: , ({ Token: , (,)}), $ref: attribute-arg-item-b (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            resetable resetable2(*this);
+            cond3 = m_attributeargitemb_378(true, actual, state, depth + 1);
+            resetable2.reset();
+        }
+        return true;
+    }
+    else
+    {
+        while (cond3 && current() != '\0')
+        {
+            if (m_comma_attributeargitemb_379(false, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: , ({ Token: , (,)}), $ref: attribute-arg-item-b (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            resetable resetable2(*this);
+            cond3 = m_attributeargitemb_378(true, actual, state, depth + 1);
+            resetable2.reset();
+        }
+        return true;
+    }
+}
+bool yaoosl::parsing::instance::m_comma_382(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    auto l2 = token__comma(depth + 1);
+    if (l2.has_value())
+    {
+        for (auto i3 = l2.value(); i3 != 0; i3--)
+        {
+            next();
+        }
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto l5 = token__comma(depth + 1).value();
+    for (;l5 != 0; l5--)
+    {
+        next();
+    }
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_comma_383(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    auto l2 = token__comma(depth + 1);
+    if (l2.has_value())
+    {
+        for (auto i3 = l2.value(); i3 != 0; i3--)
+        {
+            next();
+        }
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto l5 = token__comma(depth + 1).value();
+    for (;l5 != 0; l5--)
+    {
+        next();
+    }
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::if384_385(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    bool cond2 = m_comma_382(true, actual, state, depth + 1);
+    resetable1.reset();
+    if (is_can)
+    {
+        if (cond2)
+        {
+            if (m_comma_383(true, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: , ({ Token: , (,)}) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+    else
+    {
+        if (cond2)
+        {
+            if (m_comma_383(false, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: , ({ Token: , (,)}) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+}
+bool yaoosl::parsing::instance::if386_387(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_args>& actual, yaoosl::parsing::instance::attribute_args_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    bool cond2 = m_attributeargitemb_376(true, actual, state, depth + 1);
+    resetable1.reset();
+    if (is_can)
+    {
+        if (cond2)
+        {
+            if (m_attributeargitemb_377(true, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attribute-arg-item-b (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            while380_381(true, actual, state, depth + 1);
+            if384_385(true, actual, state, depth + 1);
+            return true;
+        }
+        return true;
+    }
+    else
+    {
+        if (cond2)
+        {
+            if (m_attributeargitemb_377(false, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attribute-arg-item-b (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            while380_381(false, actual, state, depth + 1);
+            if384_385(false, actual, state, depth + 1);
+            return true;
+        }
+        return true;
+    }
+}
+bool yaoosl::parsing::instance::p_can_attribute_args(size_t depth)
+{
+    resetable resetable1(*this);
+    std::shared_ptr<yaoosl::parsing::instance::attribute_args> fake;
+    attribute_args_state state;
+    if (!if374_375(true, fake, state, depth + 1))
+    {
+        resetable1.reset();
+        return false;
+    }
+    else if (!if386_387(true, fake, state, depth + 1))
+    {
+        resetable1.reset();
+        return false;
+    }
+    return true;
+}
+std::shared_ptr<yaoosl::parsing::instance::attribute_args> yaoosl::parsing::instance::p_match_attribute_args(size_t depth)
+{
+    auto actual = std::make_shared<yaoosl::parsing::instance::attribute_args>();
+    std::shared_ptr<yaoosl::parsing::instance::attribute_args> fake;
+    attribute_args_state state;
+    resetable resetable2(*this);
+    if (if374_375(true, fake, state, depth + 1))
+    {
+        resetable2.reset();
+        if374_375(false, actual, state, depth + 1);
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+    }
+    resetable resetable3(*this);
+    if (if386_387(true, fake, state, depth + 1))
+    {
+        resetable3.reset();
+        if386_387(false, actual, state, depth + 1);
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+    }
+    return actual;
+}
+bool yaoosl::parsing::instance::m_typematch_388(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_item>& actual, yaoosl::parsing::instance::attribute_item_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_type_match(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto val2 = p_match_type_match(depth + 1);
+    actual->target_type = val2;
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_typematch_roundbrackedopen_roundbrackedclose_389(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_item>& actual, yaoosl::parsing::instance::attribute_item_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_type_match(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    auto l2 = token__round_bracked_open(depth + 1);
+    if (l2.has_value())
+    {
+        for (auto i3 = l2.value(); i3 != 0; i3--)
+        {
+            next();
+        }
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    auto l4 = token__round_bracked_close(depth + 1);
+    if (l4.has_value())
+    {
+        for (auto i5 = l4.value(); i5 != 0; i5--)
+        {
+            next();
+        }
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto val6 = p_match_type_match(depth + 1);
+    actual->target_type = val6;
+    skip();
+    auto l8 = token__round_bracked_open(depth + 1).value();
+    for (;l8 != 0; l8--)
+    {
+        next();
+    }
+    skip();
+    auto l10 = token__round_bracked_close(depth + 1).value();
+    for (;l10 != 0; l10--)
+    {
+        next();
+    }
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_typematch_roundbrackedopen_attributeargs_roundbrackedclose_390(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_item>& actual, yaoosl::parsing::instance::attribute_item_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_type_match(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    auto l2 = token__round_bracked_open(depth + 1);
+    if (l2.has_value())
+    {
+        for (auto i3 = l2.value(); i3 != 0; i3--)
+        {
+            next();
+        }
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (p_can_attribute_args(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    auto l4 = token__round_bracked_close(depth + 1);
+    if (l4.has_value())
+    {
+        for (auto i5 = l4.value(); i5 != 0; i5--)
+        {
+            next();
+        }
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto val6 = p_match_type_match(depth + 1);
+    actual->target_type = val6;
+    skip();
+    auto l8 = token__round_bracked_open(depth + 1).value();
+    for (;l8 != 0; l8--)
+    {
+        next();
+    }
+    skip();
+    auto val9 = p_match_attribute_args(depth + 1);
+    actual->args = val9;
+    skip();
+    auto l11 = token__round_bracked_close(depth + 1).value();
+    for (;l11 != 0; l11--)
+    {
+        next();
+    }
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::alternatives391(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute_item>& actual, yaoosl::parsing::instance::attribute_item_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (m_typematch_388(true, actual, state, depth + 1))
+    {
+        if (is_can)
+        {
+            return true;
+        }
+        else
+        {
+            resetable1.reset();
+            m_typematch_388(false, actual, state, depth + 1);
+            return true;
+        }
+    }
+    else if (m_typematch_roundbrackedopen_roundbrackedclose_389(true, actual, state, depth + 1))
+    {
+        if (is_can)
+        {
+            return true;
+        }
+        else
+        {
+            resetable1.reset();
+            m_typematch_roundbrackedopen_roundbrackedclose_389(false, actual, state, depth + 1);
+            return true;
+        }
+    }
+    else if (m_typematch_roundbrackedopen_attributeargs_roundbrackedclose_390(true, actual, state, depth + 1))
+    {
+        if (is_can)
+        {
+            return true;
+        }
+        else
+        {
+            resetable1.reset();
+            m_typematch_roundbrackedopen_attributeargs_roundbrackedclose_390(false, actual, state, depth + 1);
+            return true;
+        }
+    }
+    resetable1.reset();
+    return false;
+}
+bool yaoosl::parsing::instance::p_can_attribute_item(size_t depth)
+{
+    resetable resetable1(*this);
+    std::shared_ptr<yaoosl::parsing::instance::attribute_item> fake;
+    attribute_item_state state;
+    if (!alternatives391(true, fake, state, depth + 1))
+    {
+        resetable1.reset();
+        return false;
+    }
+    return true;
+}
+std::shared_ptr<yaoosl::parsing::instance::attribute_item> yaoosl::parsing::instance::p_match_attribute_item(size_t depth)
+{
+    auto actual = std::make_shared<yaoosl::parsing::instance::attribute_item>();
+    std::shared_ptr<yaoosl::parsing::instance::attribute_item> fake;
+    attribute_item_state state;
+    resetable resetable2(*this);
+    if (alternatives391(true, fake, state, depth + 1))
+    {
+        resetable2.reset();
+        alternatives391(false, actual, state, depth + 1);
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+    }
+    return actual;
+}
+bool yaoosl::parsing::instance::m_squarebrackedopen_392(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute>& actual, yaoosl::parsing::instance::attribute_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    auto l2 = token__square_bracked_open(depth + 1);
+    if (l2.has_value())
+    {
+        for (auto i3 = l2.value(); i3 != 0; i3--)
+        {
+            next();
+        }
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto l5 = token__square_bracked_open(depth + 1).value();
+    for (;l5 != 0; l5--)
+    {
+        next();
+    }
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_attributeitem_393(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute>& actual, yaoosl::parsing::instance::attribute_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attribute_item(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    p_match_attribute_item(depth + 1);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_attributeitem_394(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute>& actual, yaoosl::parsing::instance::attribute_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attribute_item(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto val2 = p_match_attribute_item(depth + 1);
+    actual->items.push_back(val2);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_attributeitem_395(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute>& actual, yaoosl::parsing::instance::attribute_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attribute_item(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    p_match_attribute_item(depth + 1);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_comma_attributeitem_396(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute>& actual, yaoosl::parsing::instance::attribute_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    auto l2 = token__comma(depth + 1);
+    if (l2.has_value())
+    {
+        for (auto i3 = l2.value(); i3 != 0; i3--)
+        {
+            next();
+        }
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (p_can_attribute_item(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto l5 = token__comma(depth + 1).value();
+    for (;l5 != 0; l5--)
+    {
+        next();
+    }
+    skip();
+    auto val6 = p_match_attribute_item(depth + 1);
+    actual->items.push_back(val6);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::while397_398(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute>& actual, yaoosl::parsing::instance::attribute_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    bool cond3 = m_attributeitem_395(true, actual, state, depth + 1);
+    resetable1.reset();
+    if (is_can)
+    {
+        while (cond3 && current() != '\0')
+        {
+            if (m_comma_attributeitem_396(true, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: , ({ Token: , (,)}), $ref: attribute-item (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            resetable resetable2(*this);
+            cond3 = m_attributeitem_395(true, actual, state, depth + 1);
+            resetable2.reset();
+        }
+        return true;
+    }
+    else
+    {
+        while (cond3 && current() != '\0')
+        {
+            if (m_comma_attributeitem_396(false, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: , ({ Token: , (,)}), $ref: attribute-item (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            resetable resetable2(*this);
+            cond3 = m_attributeitem_395(true, actual, state, depth + 1);
+            resetable2.reset();
+        }
+        return true;
+    }
+}
+bool yaoosl::parsing::instance::m_comma_399(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute>& actual, yaoosl::parsing::instance::attribute_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    auto l2 = token__comma(depth + 1);
+    if (l2.has_value())
+    {
+        for (auto i3 = l2.value(); i3 != 0; i3--)
+        {
+            next();
+        }
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto l5 = token__comma(depth + 1).value();
+    for (;l5 != 0; l5--)
+    {
+        next();
+    }
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_comma_400(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute>& actual, yaoosl::parsing::instance::attribute_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    auto l2 = token__comma(depth + 1);
+    if (l2.has_value())
+    {
+        for (auto i3 = l2.value(); i3 != 0; i3--)
+        {
+            next();
+        }
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto l5 = token__comma(depth + 1).value();
+    for (;l5 != 0; l5--)
+    {
+        next();
+    }
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::if401_402(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute>& actual, yaoosl::parsing::instance::attribute_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    bool cond2 = m_comma_399(true, actual, state, depth + 1);
+    resetable1.reset();
+    if (is_can)
+    {
+        if (cond2)
+        {
+            if (m_comma_400(true, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: , ({ Token: , (,)}) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+    else
+    {
+        if (cond2)
+        {
+            if (m_comma_400(false, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: , ({ Token: , (,)}) }", depth);
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+}
+bool yaoosl::parsing::instance::if403_404(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute>& actual, yaoosl::parsing::instance::attribute_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    bool cond2 = m_attributeitem_393(true, actual, state, depth + 1);
+    resetable1.reset();
+    if (is_can)
+    {
+        if (cond2)
+        {
+            if (m_attributeitem_394(true, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attribute-item (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            while397_398(true, actual, state, depth + 1);
+            if401_402(true, actual, state, depth + 1);
+            return true;
+        }
+        return true;
+    }
+    else
+    {
+        if (cond2)
+        {
+            if (m_attributeitem_394(false, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attribute-item (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            while397_398(false, actual, state, depth + 1);
+            if401_402(false, actual, state, depth + 1);
+            return true;
+        }
+        return true;
+    }
+}
+bool yaoosl::parsing::instance::m_squarebrackedclose_405(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attribute>& actual, yaoosl::parsing::instance::attribute_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    auto l2 = token__square_bracked_close(depth + 1);
+    if (l2.has_value())
+    {
+        for (auto i3 = l2.value(); i3 != 0; i3--)
+        {
+            next();
+        }
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto l5 = token__square_bracked_close(depth + 1).value();
+    for (;l5 != 0; l5--)
+    {
+        next();
+    }
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::p_can_attribute(size_t depth)
+{
+    resetable resetable1(*this);
+    std::shared_ptr<yaoosl::parsing::instance::attribute> fake;
+    attribute_state state;
+    if (!m_squarebrackedopen_392(true, fake, state, depth + 1))
+    {
+        resetable1.reset();
+        return false;
+    }
+    else if (!if403_404(true, fake, state, depth + 1))
+    {
+        resetable1.reset();
+        return false;
+    }
+    else if (!m_squarebrackedclose_405(true, fake, state, depth + 1))
+    {
+        resetable1.reset();
+        return false;
+    }
+    return true;
+}
+std::shared_ptr<yaoosl::parsing::instance::attribute> yaoosl::parsing::instance::p_match_attribute(size_t depth)
+{
+    auto actual = std::make_shared<yaoosl::parsing::instance::attribute>();
+    std::shared_ptr<yaoosl::parsing::instance::attribute> fake;
+    attribute_state state;
+    resetable resetable2(*this);
+    if (m_squarebrackedopen_392(true, fake, state, depth + 1))
+    {
+        resetable2.reset();
+        m_squarebrackedopen_392(false, actual, state, depth + 1);
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+    }
+    resetable resetable3(*this);
+    if (if403_404(true, fake, state, depth + 1))
+    {
+        resetable3.reset();
+        if403_404(false, actual, state, depth + 1);
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+    }
+    resetable resetable4(*this);
+    if (m_squarebrackedclose_405(true, fake, state, depth + 1))
+    {
+        resetable4.reset();
+        m_squarebrackedclose_405(false, actual, state, depth + 1);
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+    }
+    return actual;
+}
+bool yaoosl::parsing::instance::m_attribute_406(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attributes>& actual, yaoosl::parsing::instance::attributes_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attribute(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    p_match_attribute(depth + 1);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::m_attribute_407(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attributes>& actual, yaoosl::parsing::instance::attributes_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    if (p_can_attribute(depth + 1))
+    {
+        skip();
+    }
+    else if (is_can)
+    {
+        resetable1.reset();
+        return false;
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+        return false;
+    }
+    if (is_can)
+    {
+        return true;
+    }
+    resetable1.reset();
+    auto val2 = p_match_attribute(depth + 1);
+    actual->items.push_back(val2);
+    skip();
+    return true;
+}
+bool yaoosl::parsing::instance::while408_409(bool is_can, std::shared_ptr<yaoosl::parsing::instance::attributes>& actual, yaoosl::parsing::instance::attributes_state& state, size_t depth)
+{
+    resetable resetable1(*this);
+    bool cond3 = m_attribute_406(true, actual, state, depth + 1);
+    resetable1.reset();
+    if (is_can)
+    {
+        while (cond3 && current() != '\0')
+        {
+            if (m_attribute_407(true, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attribute (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            resetable resetable2(*this);
+            cond3 = m_attribute_406(true, actual, state, depth + 1);
+            resetable2.reset();
+        }
+        return true;
+    }
+    else
+    {
+        while (cond3 && current() != '\0')
+        {
+            if (m_attribute_407(false, actual, state, depth + 1))
+            {
+                skip();
+            }
+            else if (is_can)
+            {
+                return false;
+            }
+            else
+            {
+                report("Failed to match { $ref: attribute (XCG.Parsing.Production) }", depth);
+                return false;
+            }
+            resetable resetable2(*this);
+            cond3 = m_attribute_406(true, actual, state, depth + 1);
+            resetable2.reset();
+        }
+        return true;
+    }
+}
+bool yaoosl::parsing::instance::p_can_attributes(size_t depth)
+{
+    resetable resetable1(*this);
+    std::shared_ptr<yaoosl::parsing::instance::attributes> fake;
+    attributes_state state;
+    if (!while408_409(true, fake, state, depth + 1))
+    {
+        resetable1.reset();
+        return false;
+    }
+    return true;
+}
+std::shared_ptr<yaoosl::parsing::instance::attributes> yaoosl::parsing::instance::p_match_attributes(size_t depth)
+{
+    auto actual = std::make_shared<yaoosl::parsing::instance::attributes>();
+    std::shared_ptr<yaoosl::parsing::instance::attributes> fake;
+    attributes_state state;
+    resetable resetable2(*this);
+    if (while408_409(true, fake, state, depth + 1))
+    {
+        resetable2.reset();
+        while408_409(false, actual, state, depth + 1);
+    }
+    else
+    {
+        report("Something moved wrong (todo: improve error messages)", depth);
+    }
+    return actual;
+}
+bool yaoosl::parsing::instance::m_namespace_410(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_namespace_(depth + 1))
@@ -14391,7 +17032,7 @@ bool yaoosl::parsing::instance::m_namespace_321(bool is_can, std::shared_ptr<yao
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_conversion_322(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_conversion_411(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_conversion(depth + 1))
@@ -14418,7 +17059,7 @@ bool yaoosl::parsing::instance::m_conversion_322(bool is_can, std::shared_ptr<ya
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_class_323(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_class_412(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_class_(depth + 1))
@@ -14445,7 +17086,7 @@ bool yaoosl::parsing::instance::m_class_323(bool is_can, std::shared_ptr<yaoosl:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_method_324(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_method_413(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_method(depth + 1))
@@ -14472,10 +17113,10 @@ bool yaoosl::parsing::instance::m_method_324(bool is_can, std::shared_ptr<yaoosl
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::alternatives325(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth)
+bool yaoosl::parsing::instance::alternatives414(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth)
 {
     resetable resetable1(*this);
-    if (m_namespace_321(true, actual, state, depth + 1))
+    if (m_namespace_410(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -14484,11 +17125,11 @@ bool yaoosl::parsing::instance::alternatives325(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_namespace_321(false, actual, state, depth + 1);
+            m_namespace_410(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_conversion_322(true, actual, state, depth + 1))
+    else if (m_conversion_411(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -14497,11 +17138,11 @@ bool yaoosl::parsing::instance::alternatives325(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_conversion_322(false, actual, state, depth + 1);
+            m_conversion_411(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_class_323(true, actual, state, depth + 1))
+    else if (m_class_412(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -14510,11 +17151,11 @@ bool yaoosl::parsing::instance::alternatives325(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_class_323(false, actual, state, depth + 1);
+            m_class_412(false, actual, state, depth + 1);
             return true;
         }
     }
-    else if (m_method_324(true, actual, state, depth + 1))
+    else if (m_method_413(true, actual, state, depth + 1))
     {
         if (is_can)
         {
@@ -14523,7 +17164,7 @@ bool yaoosl::parsing::instance::alternatives325(bool is_can, std::shared_ptr<yao
         else
         {
             resetable1.reset();
-            m_method_324(false, actual, state, depth + 1);
+            m_method_413(false, actual, state, depth + 1);
             return true;
         }
     }
@@ -14534,7 +17175,7 @@ bool yaoosl::parsing::instance::alternatives325(bool is_can, std::shared_ptr<yao
     resetable1.reset();
     return false;
 }
-bool yaoosl::parsing::instance::while326_327(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth)
+bool yaoosl::parsing::instance::while415_416(bool is_can, std::shared_ptr<yaoosl::parsing::instance::main>& actual, yaoosl::parsing::instance::main_state& state, size_t depth)
 {
     resetable resetable1(*this);
     bool cond3 = current() == '\0';
@@ -14543,7 +17184,7 @@ bool yaoosl::parsing::instance::while326_327(bool is_can, std::shared_ptr<yaoosl
     {
         while (!cond3 && current() != '\0')
         {
-            while (!alternatives325(true, actual, state, depth + 1) && current() != '\0')
+            while (!alternatives414(true, actual, state, depth + 1) && current() != '\0')
             {
                 next();
             }
@@ -14557,12 +17198,12 @@ bool yaoosl::parsing::instance::while326_327(bool is_can, std::shared_ptr<yaoosl
     {
         while (!cond3 && current() != '\0')
         {
-            if (!alternatives325(false, actual, state, depth + 1))
+            if (!alternatives414(false, actual, state, depth + 1))
             {
                 while (current() != '\0')
                 {
                     resetable resetable4(*this);
-                    if (alternatives325(true, actual, state, depth + 1))
+                    if (alternatives414(true, actual, state, depth + 1))
                     {
                         resetable4.reset();
                         break;
@@ -14582,7 +17223,7 @@ bool yaoosl::parsing::instance::p_can_main(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::main> fake;
     main_state state;
-    if (!while326_327(true, fake, state, depth + 1))
+    if (!while415_416(true, fake, state, depth + 1))
     {
         resetable1.reset();
         return false;
@@ -14595,10 +17236,10 @@ std::shared_ptr<yaoosl::parsing::instance::main> yaoosl::parsing::instance::p_ma
     std::shared_ptr<yaoosl::parsing::instance::main> fake;
     main_state state;
     resetable resetable2(*this);
-    if (while326_327(true, fake, state, depth + 1))
+    if (while415_416(true, fake, state, depth + 1))
     {
         resetable2.reset();
-        while326_327(false, actual, state, depth + 1);
+        while415_416(false, actual, state, depth + 1);
     }
     else
     {
@@ -14606,7 +17247,7 @@ std::shared_ptr<yaoosl::parsing::instance::main> yaoosl::parsing::instance::p_ma
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_expchain_expchaincall_328(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain>& actual, yaoosl::parsing::instance::exp_chain_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expchain_expchaincall_417(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain>& actual, yaoosl::parsing::instance::exp_chain_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_exp_chain_call(depth + 1))
@@ -14633,7 +17274,7 @@ bool yaoosl::parsing::instance::m_expchain_expchaincall_328(bool is_can, std::sh
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expchain_expchainaccess_329(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain>& actual, yaoosl::parsing::instance::exp_chain_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expchain_expchainaccess_418(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain>& actual, yaoosl::parsing::instance::exp_chain_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_exp_chain_access(depth + 1))
@@ -14660,7 +17301,7 @@ bool yaoosl::parsing::instance::m_expchain_expchainaccess_329(bool is_can, std::
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expchain_expchainindexer_330(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain>& actual, yaoosl::parsing::instance::exp_chain_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expchain_expchainindexer_419(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain>& actual, yaoosl::parsing::instance::exp_chain_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_exp_chain_indexer(depth + 1))
@@ -14687,7 +17328,7 @@ bool yaoosl::parsing::instance::m_expchain_expchainindexer_330(bool is_can, std:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expchainstart_331(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain>& actual, yaoosl::parsing::instance::exp_chain_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expchainstart_420(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_chain>& actual, yaoosl::parsing::instance::exp_chain_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_exp_chain_start(depth + 1))
@@ -14719,7 +17360,7 @@ bool yaoosl::parsing::instance::lr_can_exp_chain(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::exp_chain> fake;
     exp_chain_state state;
-    if (!m_expchainstart_331(true, fake, state, depth + 1))
+    if (!m_expchainstart_420(true, fake, state, depth + 1))
     {
         return false;
     }
@@ -14727,13 +17368,13 @@ bool yaoosl::parsing::instance::lr_can_exp_chain(size_t depth)
     {
         skip();
         resetable resetable1(*this);
-        if (m_expchain_expchaincall_328(true, fake, state, depth + 1))
+        if (m_expchain_expchaincall_417(true, fake, state, depth + 1))
         {
         }
-        else if (m_expchain_expchainaccess_329(true, fake, state, depth + 1))
+        else if (m_expchain_expchainaccess_418(true, fake, state, depth + 1))
         {
         }
-        else if (m_expchain_expchainindexer_330(true, fake, state, depth + 1))
+        else if (m_expchain_expchainindexer_419(true, fake, state, depth + 1))
         {
         }
         else
@@ -14747,7 +17388,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_chain> yaoosl::parsing::instance:
     auto actual = std::make_shared<yaoosl::parsing::instance::exp_chain>();
     std::shared_ptr<yaoosl::parsing::instance::exp_chain> fake;
     exp_chain_state state;
-    if (!m_expchainstart_331(false, actual, state, depth + 1))
+    if (!m_expchainstart_420(false, actual, state, depth + 1))
     {
         report("Something moved wrong (todo: improve error messages)", depth);
         return {};
@@ -14757,7 +17398,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_chain> yaoosl::parsing::instance:
     {
         skip();
         resetable resetable1(*this);
-        if (m_expchain_expchaincall_328(true, fake, state, depth + 1))
+        if (m_expchain_expchaincall_417(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -14767,9 +17408,9 @@ std::shared_ptr<yaoosl::parsing::instance::exp_chain> yaoosl::parsing::instance:
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expchain_expchaincall_328(false, actual, state, depth + 1);
+            m_expchain_expchaincall_417(false, actual, state, depth + 1);
         }
-        else if (m_expchain_expchainaccess_329(true, fake, state, depth + 1))
+        else if (m_expchain_expchainaccess_418(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -14779,9 +17420,9 @@ std::shared_ptr<yaoosl::parsing::instance::exp_chain> yaoosl::parsing::instance:
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expchain_expchainaccess_329(false, actual, state, depth + 1);
+            m_expchain_expchainaccess_418(false, actual, state, depth + 1);
         }
-        else if (m_expchain_expchainindexer_330(true, fake, state, depth + 1))
+        else if (m_expchain_expchainindexer_419(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -14791,7 +17432,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_chain> yaoosl::parsing::instance:
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expchain_expchainindexer_330(false, actual, state, depth + 1);
+            m_expchain_expchainindexer_419(false, actual, state, depth + 1);
         }
         else
         {
@@ -14801,7 +17442,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_chain> yaoosl::parsing::instance:
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_identnavigation_dot_ident_332(bool is_can, std::shared_ptr<yaoosl::parsing::instance::ident_navigation>& actual, yaoosl::parsing::instance::ident_navigation_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_identnavigation_dot_ident_421(bool is_can, std::shared_ptr<yaoosl::parsing::instance::ident_navigation>& actual, yaoosl::parsing::instance::ident_navigation_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__dot(depth + 1);
@@ -14858,7 +17499,7 @@ bool yaoosl::parsing::instance::m_identnavigation_dot_ident_332(bool is_can, std
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_ident_333(bool is_can, std::shared_ptr<yaoosl::parsing::instance::ident_navigation>& actual, yaoosl::parsing::instance::ident_navigation_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_ident_422(bool is_can, std::shared_ptr<yaoosl::parsing::instance::ident_navigation>& actual, yaoosl::parsing::instance::ident_navigation_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token_ident(depth + 1);
@@ -14895,7 +17536,7 @@ bool yaoosl::parsing::instance::lr_can_ident_navigation(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::ident_navigation> fake;
     ident_navigation_state state;
-    if (!m_ident_333(true, fake, state, depth + 1))
+    if (!m_ident_422(true, fake, state, depth + 1))
     {
         return false;
     }
@@ -14903,7 +17544,7 @@ bool yaoosl::parsing::instance::lr_can_ident_navigation(size_t depth)
     {
         skip();
         resetable resetable1(*this);
-        if (m_identnavigation_dot_ident_332(true, fake, state, depth + 1))
+        if (m_identnavigation_dot_ident_421(true, fake, state, depth + 1))
         {
         }
         else
@@ -14917,7 +17558,7 @@ std::shared_ptr<yaoosl::parsing::instance::ident_navigation> yaoosl::parsing::in
     auto actual = std::make_shared<yaoosl::parsing::instance::ident_navigation>();
     std::shared_ptr<yaoosl::parsing::instance::ident_navigation> fake;
     ident_navigation_state state;
-    if (!m_ident_333(false, actual, state, depth + 1))
+    if (!m_ident_422(false, actual, state, depth + 1))
     {
         report("Something moved wrong (todo: improve error messages)", depth);
         return {};
@@ -14927,7 +17568,7 @@ std::shared_ptr<yaoosl::parsing::instance::ident_navigation> yaoosl::parsing::in
     {
         skip();
         resetable resetable1(*this);
-        if (m_identnavigation_dot_ident_332(true, fake, state, depth + 1))
+        if (m_identnavigation_dot_ident_421(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -14937,7 +17578,7 @@ std::shared_ptr<yaoosl::parsing::instance::ident_navigation> yaoosl::parsing::in
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_identnavigation_dot_ident_332(false, actual, state, depth + 1);
+            m_identnavigation_dot_ident_421(false, actual, state, depth + 1);
         }
         else
         {
@@ -14947,7 +17588,7 @@ std::shared_ptr<yaoosl::parsing::instance::ident_navigation> yaoosl::parsing::in
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_typenavigation_dot_ident_templateusage_334(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_navigation>& actual, yaoosl::parsing::instance::type_navigation_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_typenavigation_dot_ident_templateusage_423(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_navigation>& actual, yaoosl::parsing::instance::type_navigation_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__dot(depth + 1);
@@ -15021,7 +17662,7 @@ bool yaoosl::parsing::instance::m_typenavigation_dot_ident_templateusage_334(boo
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_typenavigation_dot_ident_335(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_navigation>& actual, yaoosl::parsing::instance::type_navigation_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_typenavigation_dot_ident_424(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_navigation>& actual, yaoosl::parsing::instance::type_navigation_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__dot(depth + 1);
@@ -15078,7 +17719,7 @@ bool yaoosl::parsing::instance::m_typenavigation_dot_ident_335(bool is_can, std:
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_ident_336(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_navigation>& actual, yaoosl::parsing::instance::type_navigation_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_ident_425(bool is_can, std::shared_ptr<yaoosl::parsing::instance::type_navigation>& actual, yaoosl::parsing::instance::type_navigation_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token_ident(depth + 1);
@@ -15115,7 +17756,7 @@ bool yaoosl::parsing::instance::lr_can_type_navigation(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::type_navigation> fake;
     type_navigation_state state;
-    if (!m_ident_336(true, fake, state, depth + 1))
+    if (!m_ident_425(true, fake, state, depth + 1))
     {
         return false;
     }
@@ -15123,10 +17764,10 @@ bool yaoosl::parsing::instance::lr_can_type_navigation(size_t depth)
     {
         skip();
         resetable resetable1(*this);
-        if (m_typenavigation_dot_ident_templateusage_334(true, fake, state, depth + 1))
+        if (m_typenavigation_dot_ident_templateusage_423(true, fake, state, depth + 1))
         {
         }
-        else if (m_typenavigation_dot_ident_335(true, fake, state, depth + 1))
+        else if (m_typenavigation_dot_ident_424(true, fake, state, depth + 1))
         {
         }
         else
@@ -15140,7 +17781,7 @@ std::shared_ptr<yaoosl::parsing::instance::type_navigation> yaoosl::parsing::ins
     auto actual = std::make_shared<yaoosl::parsing::instance::type_navigation>();
     std::shared_ptr<yaoosl::parsing::instance::type_navigation> fake;
     type_navigation_state state;
-    if (!m_ident_336(false, actual, state, depth + 1))
+    if (!m_ident_425(false, actual, state, depth + 1))
     {
         report("Something moved wrong (todo: improve error messages)", depth);
         return {};
@@ -15150,7 +17791,7 @@ std::shared_ptr<yaoosl::parsing::instance::type_navigation> yaoosl::parsing::ins
     {
         skip();
         resetable resetable1(*this);
-        if (m_typenavigation_dot_ident_templateusage_334(true, fake, state, depth + 1))
+        if (m_typenavigation_dot_ident_templateusage_423(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -15160,9 +17801,9 @@ std::shared_ptr<yaoosl::parsing::instance::type_navigation> yaoosl::parsing::ins
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_typenavigation_dot_ident_templateusage_334(false, actual, state, depth + 1);
+            m_typenavigation_dot_ident_templateusage_423(false, actual, state, depth + 1);
         }
-        else if (m_typenavigation_dot_ident_335(true, fake, state, depth + 1))
+        else if (m_typenavigation_dot_ident_424(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -15172,7 +17813,7 @@ std::shared_ptr<yaoosl::parsing::instance::type_navigation> yaoosl::parsing::ins
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_typenavigation_dot_ident_335(false, actual, state, depth + 1);
+            m_typenavigation_dot_ident_424(false, actual, state, depth + 1);
         }
         else
         {
@@ -15182,7 +17823,7 @@ std::shared_ptr<yaoosl::parsing::instance::type_navigation> yaoosl::parsing::ins
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_expbinary3_lessthenlessthen_expunary_337(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_3>& actual, yaoosl::parsing::instance::exp_binary_3_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expbinary3_lessthenlessthen_expunary_426(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_3>& actual, yaoosl::parsing::instance::exp_binary_3_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__less_then_less_then(depth + 1);
@@ -15231,7 +17872,7 @@ bool yaoosl::parsing::instance::m_expbinary3_lessthenlessthen_expunary_337(bool 
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expbinary3_greaterthengreaterthen_expunary_338(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_3>& actual, yaoosl::parsing::instance::exp_binary_3_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expbinary3_greaterthengreaterthen_expunary_427(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_3>& actual, yaoosl::parsing::instance::exp_binary_3_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__greater_then_greater_then(depth + 1);
@@ -15280,7 +17921,7 @@ bool yaoosl::parsing::instance::m_expbinary3_greaterthengreaterthen_expunary_338
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expbinary3_lessthenlessthenlessthen_expunary_339(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_3>& actual, yaoosl::parsing::instance::exp_binary_3_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expbinary3_lessthenlessthenlessthen_expunary_428(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_3>& actual, yaoosl::parsing::instance::exp_binary_3_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__less_then_less_then_less_then(depth + 1);
@@ -15329,7 +17970,7 @@ bool yaoosl::parsing::instance::m_expbinary3_lessthenlessthenlessthen_expunary_3
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expbinary3_greaterthengreaterthengreaterthen_expunary_340(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_3>& actual, yaoosl::parsing::instance::exp_binary_3_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expbinary3_greaterthengreaterthengreaterthen_expunary_429(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_3>& actual, yaoosl::parsing::instance::exp_binary_3_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__greater_then_greater_then_greater_then(depth + 1);
@@ -15378,7 +18019,7 @@ bool yaoosl::parsing::instance::m_expbinary3_greaterthengreaterthengreaterthen_e
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expunary_341(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_3>& actual, yaoosl::parsing::instance::exp_binary_3_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expunary_430(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_3>& actual, yaoosl::parsing::instance::exp_binary_3_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (p_can_exp_unary(depth + 1))
@@ -15410,7 +18051,7 @@ bool yaoosl::parsing::instance::lr_can_exp_binary_3(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::exp_binary_3> fake;
     exp_binary_3_state state;
-    if (!m_expunary_341(true, fake, state, depth + 1))
+    if (!m_expunary_430(true, fake, state, depth + 1))
     {
         return false;
     }
@@ -15418,16 +18059,16 @@ bool yaoosl::parsing::instance::lr_can_exp_binary_3(size_t depth)
     {
         skip();
         resetable resetable1(*this);
-        if (m_expbinary3_lessthenlessthen_expunary_337(true, fake, state, depth + 1))
+        if (m_expbinary3_lessthenlessthen_expunary_426(true, fake, state, depth + 1))
         {
         }
-        else if (m_expbinary3_greaterthengreaterthen_expunary_338(true, fake, state, depth + 1))
+        else if (m_expbinary3_greaterthengreaterthen_expunary_427(true, fake, state, depth + 1))
         {
         }
-        else if (m_expbinary3_lessthenlessthenlessthen_expunary_339(true, fake, state, depth + 1))
+        else if (m_expbinary3_lessthenlessthenlessthen_expunary_428(true, fake, state, depth + 1))
         {
         }
-        else if (m_expbinary3_greaterthengreaterthengreaterthen_expunary_340(true, fake, state, depth + 1))
+        else if (m_expbinary3_greaterthengreaterthengreaterthen_expunary_429(true, fake, state, depth + 1))
         {
         }
         else
@@ -15441,7 +18082,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_binary_3> yaoosl::parsing::instan
     auto actual = std::make_shared<yaoosl::parsing::instance::exp_binary_3>();
     std::shared_ptr<yaoosl::parsing::instance::exp_binary_3> fake;
     exp_binary_3_state state;
-    if (!m_expunary_341(false, actual, state, depth + 1))
+    if (!m_expunary_430(false, actual, state, depth + 1))
     {
         report("Something moved wrong (todo: improve error messages)", depth);
         return {};
@@ -15451,7 +18092,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_binary_3> yaoosl::parsing::instan
     {
         skip();
         resetable resetable1(*this);
-        if (m_expbinary3_lessthenlessthen_expunary_337(true, fake, state, depth + 1))
+        if (m_expbinary3_lessthenlessthen_expunary_426(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -15461,9 +18102,9 @@ std::shared_ptr<yaoosl::parsing::instance::exp_binary_3> yaoosl::parsing::instan
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expbinary3_lessthenlessthen_expunary_337(false, actual, state, depth + 1);
+            m_expbinary3_lessthenlessthen_expunary_426(false, actual, state, depth + 1);
         }
-        else if (m_expbinary3_greaterthengreaterthen_expunary_338(true, fake, state, depth + 1))
+        else if (m_expbinary3_greaterthengreaterthen_expunary_427(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -15473,9 +18114,9 @@ std::shared_ptr<yaoosl::parsing::instance::exp_binary_3> yaoosl::parsing::instan
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expbinary3_greaterthengreaterthen_expunary_338(false, actual, state, depth + 1);
+            m_expbinary3_greaterthengreaterthen_expunary_427(false, actual, state, depth + 1);
         }
-        else if (m_expbinary3_lessthenlessthenlessthen_expunary_339(true, fake, state, depth + 1))
+        else if (m_expbinary3_lessthenlessthenlessthen_expunary_428(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -15485,9 +18126,9 @@ std::shared_ptr<yaoosl::parsing::instance::exp_binary_3> yaoosl::parsing::instan
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expbinary3_lessthenlessthenlessthen_expunary_339(false, actual, state, depth + 1);
+            m_expbinary3_lessthenlessthenlessthen_expunary_428(false, actual, state, depth + 1);
         }
-        else if (m_expbinary3_greaterthengreaterthengreaterthen_expunary_340(true, fake, state, depth + 1))
+        else if (m_expbinary3_greaterthengreaterthengreaterthen_expunary_429(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -15497,7 +18138,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_binary_3> yaoosl::parsing::instan
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expbinary3_greaterthengreaterthengreaterthen_expunary_340(false, actual, state, depth + 1);
+            m_expbinary3_greaterthengreaterthengreaterthen_expunary_429(false, actual, state, depth + 1);
         }
         else
         {
@@ -15507,7 +18148,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_binary_3> yaoosl::parsing::instan
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_expbinary2_ampersand_expbinary3_342(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_2>& actual, yaoosl::parsing::instance::exp_binary_2_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expbinary2_ampersand_expbinary3_431(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_2>& actual, yaoosl::parsing::instance::exp_binary_2_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__ampersand(depth + 1);
@@ -15556,7 +18197,7 @@ bool yaoosl::parsing::instance::m_expbinary2_ampersand_expbinary3_342(bool is_ca
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expbinary3_343(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_2>& actual, yaoosl::parsing::instance::exp_binary_2_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expbinary3_432(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_2>& actual, yaoosl::parsing::instance::exp_binary_2_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (lr_can_exp_binary_3(depth + 1))
@@ -15588,7 +18229,7 @@ bool yaoosl::parsing::instance::lr_can_exp_binary_2(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::exp_binary_2> fake;
     exp_binary_2_state state;
-    if (!m_expbinary3_343(true, fake, state, depth + 1))
+    if (!m_expbinary3_432(true, fake, state, depth + 1))
     {
         return false;
     }
@@ -15596,7 +18237,7 @@ bool yaoosl::parsing::instance::lr_can_exp_binary_2(size_t depth)
     {
         skip();
         resetable resetable1(*this);
-        if (m_expbinary2_ampersand_expbinary3_342(true, fake, state, depth + 1))
+        if (m_expbinary2_ampersand_expbinary3_431(true, fake, state, depth + 1))
         {
         }
         else
@@ -15610,7 +18251,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_binary_2> yaoosl::parsing::instan
     auto actual = std::make_shared<yaoosl::parsing::instance::exp_binary_2>();
     std::shared_ptr<yaoosl::parsing::instance::exp_binary_2> fake;
     exp_binary_2_state state;
-    if (!m_expbinary3_343(false, actual, state, depth + 1))
+    if (!m_expbinary3_432(false, actual, state, depth + 1))
     {
         report("Something moved wrong (todo: improve error messages)", depth);
         return {};
@@ -15620,7 +18261,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_binary_2> yaoosl::parsing::instan
     {
         skip();
         resetable resetable1(*this);
-        if (m_expbinary2_ampersand_expbinary3_342(true, fake, state, depth + 1))
+        if (m_expbinary2_ampersand_expbinary3_431(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -15630,7 +18271,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_binary_2> yaoosl::parsing::instan
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expbinary2_ampersand_expbinary3_342(false, actual, state, depth + 1);
+            m_expbinary2_ampersand_expbinary3_431(false, actual, state, depth + 1);
         }
         else
         {
@@ -15640,7 +18281,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_binary_2> yaoosl::parsing::instan
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_expbinary1_verticalbar_expbinary2_344(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_1>& actual, yaoosl::parsing::instance::exp_binary_1_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expbinary1_verticalbar_expbinary2_433(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_1>& actual, yaoosl::parsing::instance::exp_binary_1_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__vertical_bar(depth + 1);
@@ -15689,7 +18330,7 @@ bool yaoosl::parsing::instance::m_expbinary1_verticalbar_expbinary2_344(bool is_
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expbinary2_345(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_1>& actual, yaoosl::parsing::instance::exp_binary_1_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expbinary2_434(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_binary_1>& actual, yaoosl::parsing::instance::exp_binary_1_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (lr_can_exp_binary_2(depth + 1))
@@ -15721,7 +18362,7 @@ bool yaoosl::parsing::instance::lr_can_exp_binary_1(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::exp_binary_1> fake;
     exp_binary_1_state state;
-    if (!m_expbinary2_345(true, fake, state, depth + 1))
+    if (!m_expbinary2_434(true, fake, state, depth + 1))
     {
         return false;
     }
@@ -15729,7 +18370,7 @@ bool yaoosl::parsing::instance::lr_can_exp_binary_1(size_t depth)
     {
         skip();
         resetable resetable1(*this);
-        if (m_expbinary1_verticalbar_expbinary2_344(true, fake, state, depth + 1))
+        if (m_expbinary1_verticalbar_expbinary2_433(true, fake, state, depth + 1))
         {
         }
         else
@@ -15743,7 +18384,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_binary_1> yaoosl::parsing::instan
     auto actual = std::make_shared<yaoosl::parsing::instance::exp_binary_1>();
     std::shared_ptr<yaoosl::parsing::instance::exp_binary_1> fake;
     exp_binary_1_state state;
-    if (!m_expbinary2_345(false, actual, state, depth + 1))
+    if (!m_expbinary2_434(false, actual, state, depth + 1))
     {
         report("Something moved wrong (todo: improve error messages)", depth);
         return {};
@@ -15753,7 +18394,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_binary_1> yaoosl::parsing::instan
     {
         skip();
         resetable resetable1(*this);
-        if (m_expbinary1_verticalbar_expbinary2_344(true, fake, state, depth + 1))
+        if (m_expbinary1_verticalbar_expbinary2_433(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -15763,7 +18404,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_binary_1> yaoosl::parsing::instan
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expbinary1_verticalbar_expbinary2_344(false, actual, state, depth + 1);
+            m_expbinary1_verticalbar_expbinary2_433(false, actual, state, depth + 1);
         }
         else
         {
@@ -15773,7 +18414,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_binary_1> yaoosl::parsing::instan
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_exparithmetic2_slash_expbinary1_346(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2>& actual, yaoosl::parsing::instance::exp_arithmetic_2_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_exparithmetic2_slash_expbinary1_435(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2>& actual, yaoosl::parsing::instance::exp_arithmetic_2_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token_slash(depth + 1);
@@ -15822,7 +18463,7 @@ bool yaoosl::parsing::instance::m_exparithmetic2_slash_expbinary1_346(bool is_ca
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_exparithmetic2_star_expbinary1_347(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2>& actual, yaoosl::parsing::instance::exp_arithmetic_2_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_exparithmetic2_star_expbinary1_436(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2>& actual, yaoosl::parsing::instance::exp_arithmetic_2_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token_star(depth + 1);
@@ -15871,7 +18512,7 @@ bool yaoosl::parsing::instance::m_exparithmetic2_star_expbinary1_347(bool is_can
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expbinary1_348(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2>& actual, yaoosl::parsing::instance::exp_arithmetic_2_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expbinary1_437(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2>& actual, yaoosl::parsing::instance::exp_arithmetic_2_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (lr_can_exp_binary_1(depth + 1))
@@ -15903,7 +18544,7 @@ bool yaoosl::parsing::instance::lr_can_exp_arithmetic_2(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2> fake;
     exp_arithmetic_2_state state;
-    if (!m_expbinary1_348(true, fake, state, depth + 1))
+    if (!m_expbinary1_437(true, fake, state, depth + 1))
     {
         return false;
     }
@@ -15911,10 +18552,10 @@ bool yaoosl::parsing::instance::lr_can_exp_arithmetic_2(size_t depth)
     {
         skip();
         resetable resetable1(*this);
-        if (m_exparithmetic2_slash_expbinary1_346(true, fake, state, depth + 1))
+        if (m_exparithmetic2_slash_expbinary1_435(true, fake, state, depth + 1))
         {
         }
-        else if (m_exparithmetic2_star_expbinary1_347(true, fake, state, depth + 1))
+        else if (m_exparithmetic2_star_expbinary1_436(true, fake, state, depth + 1))
         {
         }
         else
@@ -15928,7 +18569,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2> yaoosl::parsing::in
     auto actual = std::make_shared<yaoosl::parsing::instance::exp_arithmetic_2>();
     std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2> fake;
     exp_arithmetic_2_state state;
-    if (!m_expbinary1_348(false, actual, state, depth + 1))
+    if (!m_expbinary1_437(false, actual, state, depth + 1))
     {
         report("Something moved wrong (todo: improve error messages)", depth);
         return {};
@@ -15938,7 +18579,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2> yaoosl::parsing::in
     {
         skip();
         resetable resetable1(*this);
-        if (m_exparithmetic2_slash_expbinary1_346(true, fake, state, depth + 1))
+        if (m_exparithmetic2_slash_expbinary1_435(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -15948,9 +18589,9 @@ std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2> yaoosl::parsing::in
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_exparithmetic2_slash_expbinary1_346(false, actual, state, depth + 1);
+            m_exparithmetic2_slash_expbinary1_435(false, actual, state, depth + 1);
         }
-        else if (m_exparithmetic2_star_expbinary1_347(true, fake, state, depth + 1))
+        else if (m_exparithmetic2_star_expbinary1_436(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -15960,7 +18601,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2> yaoosl::parsing::in
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_exparithmetic2_star_expbinary1_347(false, actual, state, depth + 1);
+            m_exparithmetic2_star_expbinary1_436(false, actual, state, depth + 1);
         }
         else
         {
@@ -15970,7 +18611,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_2> yaoosl::parsing::in
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_exparithmetic1_plus_exparithmetic2_349(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1>& actual, yaoosl::parsing::instance::exp_arithmetic_1_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_exparithmetic1_plus_exparithmetic2_438(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1>& actual, yaoosl::parsing::instance::exp_arithmetic_1_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token_plus(depth + 1);
@@ -16019,7 +18660,7 @@ bool yaoosl::parsing::instance::m_exparithmetic1_plus_exparithmetic2_349(bool is
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_exparithmetic1_minus_exparithmetic2_350(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1>& actual, yaoosl::parsing::instance::exp_arithmetic_1_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_exparithmetic1_minus_exparithmetic2_439(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1>& actual, yaoosl::parsing::instance::exp_arithmetic_1_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token_minus(depth + 1);
@@ -16068,7 +18709,7 @@ bool yaoosl::parsing::instance::m_exparithmetic1_minus_exparithmetic2_350(bool i
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_exparithmetic2_351(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1>& actual, yaoosl::parsing::instance::exp_arithmetic_1_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_exparithmetic2_440(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1>& actual, yaoosl::parsing::instance::exp_arithmetic_1_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (lr_can_exp_arithmetic_2(depth + 1))
@@ -16100,7 +18741,7 @@ bool yaoosl::parsing::instance::lr_can_exp_arithmetic_1(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1> fake;
     exp_arithmetic_1_state state;
-    if (!m_exparithmetic2_351(true, fake, state, depth + 1))
+    if (!m_exparithmetic2_440(true, fake, state, depth + 1))
     {
         return false;
     }
@@ -16108,10 +18749,10 @@ bool yaoosl::parsing::instance::lr_can_exp_arithmetic_1(size_t depth)
     {
         skip();
         resetable resetable1(*this);
-        if (m_exparithmetic1_plus_exparithmetic2_349(true, fake, state, depth + 1))
+        if (m_exparithmetic1_plus_exparithmetic2_438(true, fake, state, depth + 1))
         {
         }
-        else if (m_exparithmetic1_minus_exparithmetic2_350(true, fake, state, depth + 1))
+        else if (m_exparithmetic1_minus_exparithmetic2_439(true, fake, state, depth + 1))
         {
         }
         else
@@ -16125,7 +18766,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1> yaoosl::parsing::in
     auto actual = std::make_shared<yaoosl::parsing::instance::exp_arithmetic_1>();
     std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1> fake;
     exp_arithmetic_1_state state;
-    if (!m_exparithmetic2_351(false, actual, state, depth + 1))
+    if (!m_exparithmetic2_440(false, actual, state, depth + 1))
     {
         report("Something moved wrong (todo: improve error messages)", depth);
         return {};
@@ -16135,7 +18776,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1> yaoosl::parsing::in
     {
         skip();
         resetable resetable1(*this);
-        if (m_exparithmetic1_plus_exparithmetic2_349(true, fake, state, depth + 1))
+        if (m_exparithmetic1_plus_exparithmetic2_438(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -16145,9 +18786,9 @@ std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1> yaoosl::parsing::in
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_exparithmetic1_plus_exparithmetic2_349(false, actual, state, depth + 1);
+            m_exparithmetic1_plus_exparithmetic2_438(false, actual, state, depth + 1);
         }
-        else if (m_exparithmetic1_minus_exparithmetic2_350(true, fake, state, depth + 1))
+        else if (m_exparithmetic1_minus_exparithmetic2_439(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -16157,7 +18798,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1> yaoosl::parsing::in
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_exparithmetic1_minus_exparithmetic2_350(false, actual, state, depth + 1);
+            m_exparithmetic1_minus_exparithmetic2_439(false, actual, state, depth + 1);
         }
         else
         {
@@ -16167,7 +18808,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_arithmetic_1> yaoosl::parsing::in
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_expcompare_lessthenequal_exparithmetic1_352(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expcompare_lessthenequal_exparithmetic1_441(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__less_then_equal(depth + 1);
@@ -16216,7 +18857,7 @@ bool yaoosl::parsing::instance::m_expcompare_lessthenequal_exparithmetic1_352(bo
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expcompare_lessthen_exparithmetic1_353(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expcompare_lessthen_exparithmetic1_442(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__less_then(depth + 1);
@@ -16265,7 +18906,7 @@ bool yaoosl::parsing::instance::m_expcompare_lessthen_exparithmetic1_353(bool is
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expcompare_greaterthenequal_exparithmetic1_354(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expcompare_greaterthenequal_exparithmetic1_443(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__greater_then_equal(depth + 1);
@@ -16314,7 +18955,7 @@ bool yaoosl::parsing::instance::m_expcompare_greaterthenequal_exparithmetic1_354
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expcompare_greaterthen_exparithmetic1_355(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expcompare_greaterthen_exparithmetic1_444(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__greater_then(depth + 1);
@@ -16363,7 +19004,7 @@ bool yaoosl::parsing::instance::m_expcompare_greaterthen_exparithmetic1_355(bool
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_exparithmetic1_356(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_exparithmetic1_445(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_compare>& actual, yaoosl::parsing::instance::exp_compare_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (lr_can_exp_arithmetic_1(depth + 1))
@@ -16395,7 +19036,7 @@ bool yaoosl::parsing::instance::lr_can_exp_compare(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::exp_compare> fake;
     exp_compare_state state;
-    if (!m_exparithmetic1_356(true, fake, state, depth + 1))
+    if (!m_exparithmetic1_445(true, fake, state, depth + 1))
     {
         return false;
     }
@@ -16403,16 +19044,16 @@ bool yaoosl::parsing::instance::lr_can_exp_compare(size_t depth)
     {
         skip();
         resetable resetable1(*this);
-        if (m_expcompare_lessthenequal_exparithmetic1_352(true, fake, state, depth + 1))
+        if (m_expcompare_lessthenequal_exparithmetic1_441(true, fake, state, depth + 1))
         {
         }
-        else if (m_expcompare_lessthen_exparithmetic1_353(true, fake, state, depth + 1))
+        else if (m_expcompare_lessthen_exparithmetic1_442(true, fake, state, depth + 1))
         {
         }
-        else if (m_expcompare_greaterthenequal_exparithmetic1_354(true, fake, state, depth + 1))
+        else if (m_expcompare_greaterthenequal_exparithmetic1_443(true, fake, state, depth + 1))
         {
         }
-        else if (m_expcompare_greaterthen_exparithmetic1_355(true, fake, state, depth + 1))
+        else if (m_expcompare_greaterthen_exparithmetic1_444(true, fake, state, depth + 1))
         {
         }
         else
@@ -16426,7 +19067,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_compare> yaoosl::parsing::instanc
     auto actual = std::make_shared<yaoosl::parsing::instance::exp_compare>();
     std::shared_ptr<yaoosl::parsing::instance::exp_compare> fake;
     exp_compare_state state;
-    if (!m_exparithmetic1_356(false, actual, state, depth + 1))
+    if (!m_exparithmetic1_445(false, actual, state, depth + 1))
     {
         report("Something moved wrong (todo: improve error messages)", depth);
         return {};
@@ -16436,7 +19077,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_compare> yaoosl::parsing::instanc
     {
         skip();
         resetable resetable1(*this);
-        if (m_expcompare_lessthenequal_exparithmetic1_352(true, fake, state, depth + 1))
+        if (m_expcompare_lessthenequal_exparithmetic1_441(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -16446,9 +19087,9 @@ std::shared_ptr<yaoosl::parsing::instance::exp_compare> yaoosl::parsing::instanc
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expcompare_lessthenequal_exparithmetic1_352(false, actual, state, depth + 1);
+            m_expcompare_lessthenequal_exparithmetic1_441(false, actual, state, depth + 1);
         }
-        else if (m_expcompare_lessthen_exparithmetic1_353(true, fake, state, depth + 1))
+        else if (m_expcompare_lessthen_exparithmetic1_442(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -16458,9 +19099,9 @@ std::shared_ptr<yaoosl::parsing::instance::exp_compare> yaoosl::parsing::instanc
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expcompare_lessthen_exparithmetic1_353(false, actual, state, depth + 1);
+            m_expcompare_lessthen_exparithmetic1_442(false, actual, state, depth + 1);
         }
-        else if (m_expcompare_greaterthenequal_exparithmetic1_354(true, fake, state, depth + 1))
+        else if (m_expcompare_greaterthenequal_exparithmetic1_443(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -16470,9 +19111,9 @@ std::shared_ptr<yaoosl::parsing::instance::exp_compare> yaoosl::parsing::instanc
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expcompare_greaterthenequal_exparithmetic1_354(false, actual, state, depth + 1);
+            m_expcompare_greaterthenequal_exparithmetic1_443(false, actual, state, depth + 1);
         }
-        else if (m_expcompare_greaterthen_exparithmetic1_355(true, fake, state, depth + 1))
+        else if (m_expcompare_greaterthen_exparithmetic1_444(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -16482,7 +19123,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_compare> yaoosl::parsing::instanc
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expcompare_greaterthen_exparithmetic1_355(false, actual, state, depth + 1);
+            m_expcompare_greaterthen_exparithmetic1_444(false, actual, state, depth + 1);
         }
         else
         {
@@ -16492,7 +19133,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_compare> yaoosl::parsing::instanc
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_expequality_lessthenequal_expcompare_357(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expequality_lessthenequal_expcompare_446(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__less_then_equal(depth + 1);
@@ -16541,7 +19182,7 @@ bool yaoosl::parsing::instance::m_expequality_lessthenequal_expcompare_357(bool 
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expequality_lessthen_expcompare_358(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expequality_lessthen_expcompare_447(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__less_then(depth + 1);
@@ -16590,7 +19231,7 @@ bool yaoosl::parsing::instance::m_expequality_lessthen_expcompare_358(bool is_ca
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expequality_greaterthenequal_expcompare_359(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expequality_greaterthenequal_expcompare_448(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__greater_then_equal(depth + 1);
@@ -16639,7 +19280,7 @@ bool yaoosl::parsing::instance::m_expequality_greaterthenequal_expcompare_359(bo
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expequality_greaterthen_expcompare_360(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expequality_greaterthen_expcompare_449(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__greater_then(depth + 1);
@@ -16688,7 +19329,7 @@ bool yaoosl::parsing::instance::m_expequality_greaterthen_expcompare_360(bool is
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expcompare_361(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expcompare_450(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_equality>& actual, yaoosl::parsing::instance::exp_equality_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (lr_can_exp_compare(depth + 1))
@@ -16720,7 +19361,7 @@ bool yaoosl::parsing::instance::lr_can_exp_equality(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::exp_equality> fake;
     exp_equality_state state;
-    if (!m_expcompare_361(true, fake, state, depth + 1))
+    if (!m_expcompare_450(true, fake, state, depth + 1))
     {
         return false;
     }
@@ -16728,16 +19369,16 @@ bool yaoosl::parsing::instance::lr_can_exp_equality(size_t depth)
     {
         skip();
         resetable resetable1(*this);
-        if (m_expequality_lessthenequal_expcompare_357(true, fake, state, depth + 1))
+        if (m_expequality_lessthenequal_expcompare_446(true, fake, state, depth + 1))
         {
         }
-        else if (m_expequality_lessthen_expcompare_358(true, fake, state, depth + 1))
+        else if (m_expequality_lessthen_expcompare_447(true, fake, state, depth + 1))
         {
         }
-        else if (m_expequality_greaterthenequal_expcompare_359(true, fake, state, depth + 1))
+        else if (m_expequality_greaterthenequal_expcompare_448(true, fake, state, depth + 1))
         {
         }
-        else if (m_expequality_greaterthen_expcompare_360(true, fake, state, depth + 1))
+        else if (m_expequality_greaterthen_expcompare_449(true, fake, state, depth + 1))
         {
         }
         else
@@ -16751,7 +19392,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_equality> yaoosl::parsing::instan
     auto actual = std::make_shared<yaoosl::parsing::instance::exp_equality>();
     std::shared_ptr<yaoosl::parsing::instance::exp_equality> fake;
     exp_equality_state state;
-    if (!m_expcompare_361(false, actual, state, depth + 1))
+    if (!m_expcompare_450(false, actual, state, depth + 1))
     {
         report("Something moved wrong (todo: improve error messages)", depth);
         return {};
@@ -16761,7 +19402,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_equality> yaoosl::parsing::instan
     {
         skip();
         resetable resetable1(*this);
-        if (m_expequality_lessthenequal_expcompare_357(true, fake, state, depth + 1))
+        if (m_expequality_lessthenequal_expcompare_446(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -16771,9 +19412,9 @@ std::shared_ptr<yaoosl::parsing::instance::exp_equality> yaoosl::parsing::instan
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expequality_lessthenequal_expcompare_357(false, actual, state, depth + 1);
+            m_expequality_lessthenequal_expcompare_446(false, actual, state, depth + 1);
         }
-        else if (m_expequality_lessthen_expcompare_358(true, fake, state, depth + 1))
+        else if (m_expequality_lessthen_expcompare_447(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -16783,9 +19424,9 @@ std::shared_ptr<yaoosl::parsing::instance::exp_equality> yaoosl::parsing::instan
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expequality_lessthen_expcompare_358(false, actual, state, depth + 1);
+            m_expequality_lessthen_expcompare_447(false, actual, state, depth + 1);
         }
-        else if (m_expequality_greaterthenequal_expcompare_359(true, fake, state, depth + 1))
+        else if (m_expequality_greaterthenequal_expcompare_448(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -16795,9 +19436,9 @@ std::shared_ptr<yaoosl::parsing::instance::exp_equality> yaoosl::parsing::instan
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expequality_greaterthenequal_expcompare_359(false, actual, state, depth + 1);
+            m_expequality_greaterthenequal_expcompare_448(false, actual, state, depth + 1);
         }
-        else if (m_expequality_greaterthen_expcompare_360(true, fake, state, depth + 1))
+        else if (m_expequality_greaterthen_expcompare_449(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -16807,7 +19448,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_equality> yaoosl::parsing::instan
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expequality_greaterthen_expcompare_360(false, actual, state, depth + 1);
+            m_expequality_greaterthen_expcompare_449(false, actual, state, depth + 1);
         }
         else
         {
@@ -16817,7 +19458,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_equality> yaoosl::parsing::instan
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_expand_ampersandampersand_expequality_362(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_and>& actual, yaoosl::parsing::instance::exp_and_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expand_ampersandampersand_expequality_451(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_and>& actual, yaoosl::parsing::instance::exp_and_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__ampersand_ampersand(depth + 1);
@@ -16869,7 +19510,7 @@ bool yaoosl::parsing::instance::m_expand_ampersandampersand_expequality_362(bool
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expequality_363(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_and>& actual, yaoosl::parsing::instance::exp_and_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expequality_452(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_and>& actual, yaoosl::parsing::instance::exp_and_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (lr_can_exp_equality(depth + 1))
@@ -16901,7 +19542,7 @@ bool yaoosl::parsing::instance::lr_can_exp_and(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::exp_and> fake;
     exp_and_state state;
-    if (!m_expequality_363(true, fake, state, depth + 1))
+    if (!m_expequality_452(true, fake, state, depth + 1))
     {
         return false;
     }
@@ -16909,7 +19550,7 @@ bool yaoosl::parsing::instance::lr_can_exp_and(size_t depth)
     {
         skip();
         resetable resetable1(*this);
-        if (m_expand_ampersandampersand_expequality_362(true, fake, state, depth + 1))
+        if (m_expand_ampersandampersand_expequality_451(true, fake, state, depth + 1))
         {
         }
         else
@@ -16923,7 +19564,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_and> yaoosl::parsing::instance::l
     auto actual = std::make_shared<yaoosl::parsing::instance::exp_and>();
     std::shared_ptr<yaoosl::parsing::instance::exp_and> fake;
     exp_and_state state;
-    if (!m_expequality_363(false, actual, state, depth + 1))
+    if (!m_expequality_452(false, actual, state, depth + 1))
     {
         report("Something moved wrong (todo: improve error messages)", depth);
         return {};
@@ -16933,7 +19574,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_and> yaoosl::parsing::instance::l
     {
         skip();
         resetable resetable1(*this);
-        if (m_expand_ampersandampersand_expequality_362(true, fake, state, depth + 1))
+        if (m_expand_ampersandampersand_expequality_451(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -16943,7 +19584,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_and> yaoosl::parsing::instance::l
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expand_ampersandampersand_expequality_362(false, actual, state, depth + 1);
+            m_expand_ampersandampersand_expequality_451(false, actual, state, depth + 1);
         }
         else
         {
@@ -16953,7 +19594,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_and> yaoosl::parsing::instance::l
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_expor_verticalbarverticalbar_expand_364(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_or>& actual, yaoosl::parsing::instance::exp_or_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expor_verticalbarverticalbar_expand_453(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_or>& actual, yaoosl::parsing::instance::exp_or_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__vertical_bar_vertical_bar(depth + 1);
@@ -17005,7 +19646,7 @@ bool yaoosl::parsing::instance::m_expor_verticalbarverticalbar_expand_364(bool i
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expequality_365(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_or>& actual, yaoosl::parsing::instance::exp_or_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expequality_454(bool is_can, std::shared_ptr<yaoosl::parsing::instance::exp_or>& actual, yaoosl::parsing::instance::exp_or_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (lr_can_exp_equality(depth + 1))
@@ -17037,7 +19678,7 @@ bool yaoosl::parsing::instance::lr_can_exp_or(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::exp_or> fake;
     exp_or_state state;
-    if (!m_expequality_365(true, fake, state, depth + 1))
+    if (!m_expequality_454(true, fake, state, depth + 1))
     {
         return false;
     }
@@ -17045,7 +19686,7 @@ bool yaoosl::parsing::instance::lr_can_exp_or(size_t depth)
     {
         skip();
         resetable resetable1(*this);
-        if (m_expor_verticalbarverticalbar_expand_364(true, fake, state, depth + 1))
+        if (m_expor_verticalbarverticalbar_expand_453(true, fake, state, depth + 1))
         {
         }
         else
@@ -17059,7 +19700,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_or> yaoosl::parsing::instance::lr
     auto actual = std::make_shared<yaoosl::parsing::instance::exp_or>();
     std::shared_ptr<yaoosl::parsing::instance::exp_or> fake;
     exp_or_state state;
-    if (!m_expequality_365(false, actual, state, depth + 1))
+    if (!m_expequality_454(false, actual, state, depth + 1))
     {
         report("Something moved wrong (todo: improve error messages)", depth);
         return {};
@@ -17069,7 +19710,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_or> yaoosl::parsing::instance::lr
     {
         skip();
         resetable resetable1(*this);
-        if (m_expor_verticalbarverticalbar_expand_364(true, fake, state, depth + 1))
+        if (m_expor_verticalbarverticalbar_expand_453(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -17079,7 +19720,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_or> yaoosl::parsing::instance::lr
                 actual->left = tmp_actual3;
             }
             is_first2 = false;
-            m_expor_verticalbarverticalbar_expand_364(false, actual, state, depth + 1);
+            m_expor_verticalbarverticalbar_expand_453(false, actual, state, depth + 1);
         }
         else
         {
@@ -17089,7 +19730,7 @@ std::shared_ptr<yaoosl::parsing::instance::exp_or> yaoosl::parsing::instance::lr
     }
     return actual;
 }
-bool yaoosl::parsing::instance::m_expression_equal_expression_366(bool is_can, std::shared_ptr<yaoosl::parsing::instance::expression>& actual, yaoosl::parsing::instance::expression_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expression_equal_expression_455(bool is_can, std::shared_ptr<yaoosl::parsing::instance::expression>& actual, yaoosl::parsing::instance::expression_state& state, size_t depth)
 {
     resetable resetable1(*this);
     auto l2 = token__equal(depth + 1);
@@ -17141,59 +19782,7 @@ bool yaoosl::parsing::instance::m_expression_equal_expression_366(bool is_can, s
     skip();
     return true;
 }
-bool yaoosl::parsing::instance::m_expression_equal_expression_367(bool is_can, std::shared_ptr<yaoosl::parsing::instance::expression>& actual, yaoosl::parsing::instance::expression_state& state, size_t depth)
-{
-    resetable resetable1(*this);
-    auto l2 = token__equal(depth + 1);
-    if (l2.has_value())
-    {
-        for (auto i3 = l2.value(); i3 != 0; i3--)
-        {
-            next();
-        }
-        skip();
-    }
-    else if (is_can)
-    {
-        resetable1.reset();
-        return false;
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-        return false;
-    }
-    if (lr_can_expression(depth + 1))
-    {
-        skip();
-    }
-    else if (is_can)
-    {
-        resetable1.reset();
-        return false;
-    }
-    else
-    {
-        report("Something moved wrong (todo: improve error messages)", depth);
-        return false;
-    }
-    if (is_can)
-    {
-        return true;
-    }
-    resetable1.reset();
-    auto l5 = token__equal(depth + 1).value();
-    for (;l5 != 0; l5--)
-    {
-        next();
-    }
-    skip();
-    auto val6 = lr_match_expression(depth + 1);
-    actual->value = val6;
-    skip();
-    return true;
-}
-bool yaoosl::parsing::instance::m_expor_368(bool is_can, std::shared_ptr<yaoosl::parsing::instance::expression>& actual, yaoosl::parsing::instance::expression_state& state, size_t depth)
+bool yaoosl::parsing::instance::m_expor_456(bool is_can, std::shared_ptr<yaoosl::parsing::instance::expression>& actual, yaoosl::parsing::instance::expression_state& state, size_t depth)
 {
     resetable resetable1(*this);
     if (lr_can_exp_or(depth + 1))
@@ -17225,7 +19814,7 @@ bool yaoosl::parsing::instance::lr_can_expression(size_t depth)
     resetable resetable1(*this);
     std::shared_ptr<yaoosl::parsing::instance::expression> fake;
     expression_state state;
-    if (!m_expor_368(true, fake, state, depth + 1))
+    if (!m_expor_456(true, fake, state, depth + 1))
     {
         return false;
     }
@@ -17233,10 +19822,7 @@ bool yaoosl::parsing::instance::lr_can_expression(size_t depth)
     {
         skip();
         resetable resetable1(*this);
-        if (m_expression_equal_expression_366(true, fake, state, depth + 1))
-        {
-        }
-        else if (m_expression_equal_expression_367(true, fake, state, depth + 1))
+        if (m_expression_equal_expression_455(true, fake, state, depth + 1))
         {
         }
         else
@@ -17250,7 +19836,7 @@ std::shared_ptr<yaoosl::parsing::instance::expression> yaoosl::parsing::instance
     auto actual = std::make_shared<yaoosl::parsing::instance::expression>();
     std::shared_ptr<yaoosl::parsing::instance::expression> fake;
     expression_state state;
-    if (!m_expor_368(false, actual, state, depth + 1))
+    if (!m_expor_456(false, actual, state, depth + 1))
     {
         report("Something moved wrong (todo: improve error messages)", depth);
         return {};
@@ -17260,7 +19846,7 @@ std::shared_ptr<yaoosl::parsing::instance::expression> yaoosl::parsing::instance
     {
         skip();
         resetable resetable1(*this);
-        if (m_expression_equal_expression_366(true, fake, state, depth + 1))
+        if (m_expression_equal_expression_455(true, fake, state, depth + 1))
         {
             resetable1.reset();
             if (!is_first2)
@@ -17270,19 +19856,7 @@ std::shared_ptr<yaoosl::parsing::instance::expression> yaoosl::parsing::instance
                 actual->value = tmp_actual3;
             }
             is_first2 = false;
-            m_expression_equal_expression_366(false, actual, state, depth + 1);
-        }
-        else if (m_expression_equal_expression_367(true, fake, state, depth + 1))
-        {
-            resetable1.reset();
-            if (!is_first2)
-            {
-                auto tmp_actual3 = actual;
-                actual = std::make_shared<yaoosl::parsing::instance::expression>();
-                actual->value = tmp_actual3;
-            }
-            is_first2 = false;
-            m_expression_equal_expression_367(false, actual, state, depth + 1);
+            m_expression_equal_expression_455(false, actual, state, depth + 1);
         }
         else
         {
@@ -17814,13 +20388,6 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
     }
     return output;
 }
-std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shared_ptr<function_arg> node, std::string_view contents)
-{
-    std::vector<std::string> output;
-    output.push_back("function_arg:");
-    output.push_back(std::string("  ") + "token (L" + std::to_string(node->name.line) + "; C" + std::to_string(node->name.column) + "; O" + std::to_string(node->name.offset) + ") `" + std::string(contents.substr(node->name.offset, node->name.length).begin(), contents.substr(node->name.offset, node->name.length).end()) + "`");
-    return output;
-}
 std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shared_ptr<scope> node, std::string_view contents)
 {
     std::vector<std::string> output;
@@ -17878,36 +20445,6 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
         for (auto line : lines)
         {
             output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [set]" "\u001b[0m" : line));
-            first = false;
-        }
-    }
-    return output;
-}
-std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shared_ptr<function> node, std::string_view contents)
-{
-    std::vector<std::string> output;
-    output.push_back("function:");
-    output.push_back(std::string("  ") + "token (L" + std::to_string(node->name.line) + "; C" + std::to_string(node->name.column) + "; O" + std::to_string(node->name.offset) + ") `" + std::string(contents.substr(node->name.offset, node->name.length).begin(), contents.substr(node->name.offset, node->name.length).end()) + "`");
-    for (auto element : node->args)
-    {
-        if (element)
-        {
-            auto lines = create_string_tree(element, contents);
-            bool first = true;
-            for (auto line : lines)
-            {
-                output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [args]" "\u001b[0m" : line));
-                first = false;
-            }
-        }
-    }
-    if (node->body)
-    {
-        auto lines = create_string_tree(node->body, contents);
-        bool first = true;
-        for (auto line : lines)
-        {
-            output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [body]" "\u001b[0m" : line));
             first = false;
         }
     }
@@ -17984,10 +20521,10 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
     }
     return output;
 }
-std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shared_ptr<if_else> node, std::string_view contents)
+std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shared_ptr<if_body> node, std::string_view contents)
 {
     std::vector<std::string> output;
-    output.push_back("if_else:");
+    output.push_back("if_body:");
     if (node->condition)
     {
         auto lines = create_string_tree(node->condition, contents);
@@ -17998,16 +20535,22 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
             first = false;
         }
     }
-    if (node->if_body)
+    if (node->body)
     {
-        auto lines = create_string_tree(node->if_body, contents);
+        auto lines = create_string_tree(node->body, contents);
         bool first = true;
         for (auto line : lines)
         {
-            output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [if_body]" "\u001b[0m" : line));
+            output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [body]" "\u001b[0m" : line));
             first = false;
         }
     }
+    return output;
+}
+std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shared_ptr<else_body> node, std::string_view contents)
+{
+    std::vector<std::string> output;
+    output.push_back("else_body:");
     if (node->else_body)
     {
         auto lines = create_string_tree(node->else_body, contents);
@@ -18015,6 +20558,32 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
         for (auto line : lines)
         {
             output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [else_body]" "\u001b[0m" : line));
+            first = false;
+        }
+    }
+    return output;
+}
+std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shared_ptr<if_else> node, std::string_view contents)
+{
+    std::vector<std::string> output;
+    output.push_back("if_else:");
+    if (node->if_)
+    {
+        auto lines = create_string_tree(node->if_, contents);
+        bool first = true;
+        for (auto line : lines)
+        {
+            output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [if_]" "\u001b[0m" : line));
+            first = false;
+        }
+    }
+    if (node->else_)
+    {
+        auto lines = create_string_tree(node->else_, contents);
+        bool first = true;
+        for (auto line : lines)
+        {
+            output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [else_]" "\u001b[0m" : line));
             first = false;
         }
     }
@@ -18095,18 +20664,6 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
     switch (node->content.index())
     {
         case 0:
-        if (std::get<std::shared_ptr<function>>(node->content))
-        {
-            auto lines = create_string_tree(std::get<std::shared_ptr<function>>(node->content), contents);
-            bool first = true;
-            for (auto line : lines)
-            {
-                output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [content]" "\u001b[0m" : line));
-                first = false;
-            }
-        }
-        break;
-        case 1:
         if (std::get<std::shared_ptr<while_loop>>(node->content))
         {
             auto lines = create_string_tree(std::get<std::shared_ptr<while_loop>>(node->content), contents);
@@ -18118,7 +20675,7 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
             }
         }
         break;
-        case 2:
+        case 1:
         if (std::get<std::shared_ptr<if_else>>(node->content))
         {
             auto lines = create_string_tree(std::get<std::shared_ptr<if_else>>(node->content), contents);
@@ -18130,7 +20687,7 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
             }
         }
         break;
-        case 3:
+        case 2:
         if (std::get<std::shared_ptr<switch_>>(node->content))
         {
             auto lines = create_string_tree(std::get<std::shared_ptr<switch_>>(node->content), contents);
@@ -18142,7 +20699,7 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
             }
         }
         break;
-        case 4:
+        case 3:
         if (std::get<std::shared_ptr<scope>>(node->content))
         {
             auto lines = create_string_tree(std::get<std::shared_ptr<scope>>(node->content), contents);
@@ -18228,6 +20785,16 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
                 output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [methods]" "\u001b[0m" : line));
                 first = false;
             }
+        }
+    }
+    if (node->att)
+    {
+        auto lines = create_string_tree(node->att, contents);
+        bool first = true;
+        for (auto line : lines)
+        {
+            output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [att]" "\u001b[0m" : line));
+            first = false;
         }
     }
     return output;
@@ -18377,6 +20944,16 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
             }
         }
     }
+    if (node->att)
+    {
+        auto lines = create_string_tree(node->att, contents);
+        bool first = true;
+        for (auto line : lines)
+        {
+            output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [att]" "\u001b[0m" : line));
+            first = false;
+        }
+    }
     return output;
 }
 std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shared_ptr<method_arglist_item_with_default> node, std::string_view contents)
@@ -18404,6 +20981,16 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
             first = false;
         }
     }
+    if (node->att)
+    {
+        auto lines = create_string_tree(node->att, contents);
+        bool first = true;
+        for (auto line : lines)
+        {
+            output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [att]" "\u001b[0m" : line));
+            first = false;
+        }
+    }
     return output;
 }
 std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shared_ptr<method_arglist_item> node, std::string_view contents)
@@ -18421,6 +21008,16 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
         }
     }
     output.push_back(std::string("  ") + "token (L" + std::to_string(node->name.line) + "; C" + std::to_string(node->name.column) + "; O" + std::to_string(node->name.offset) + ") `" + std::string(contents.substr(node->name.offset, node->name.length).begin(), contents.substr(node->name.offset, node->name.length).end()) + "`");
+    if (node->att)
+    {
+        auto lines = create_string_tree(node->att, contents);
+        bool first = true;
+        for (auto line : lines)
+        {
+            output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [att]" "\u001b[0m" : line));
+            first = false;
+        }
+    }
     return output;
 }
 std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shared_ptr<method_arglist> node, std::string_view contents)
@@ -18536,6 +21133,16 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
             first = false;
         }
     }
+    if (node->att)
+    {
+        auto lines = create_string_tree(node->att, contents);
+        bool first = true;
+        for (auto line : lines)
+        {
+            output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [att]" "\u001b[0m" : line));
+            first = false;
+        }
+    }
     return output;
 }
 std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shared_ptr<constructor> node, std::string_view contents)
@@ -18579,6 +21186,16 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
         for (auto line : lines)
         {
             output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [body]" "\u001b[0m" : line));
+            first = false;
+        }
+    }
+    if (node->att)
+    {
+        auto lines = create_string_tree(node->att, contents);
+        bool first = true;
+        for (auto line : lines)
+        {
+            output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [att]" "\u001b[0m" : line));
             first = false;
         }
     }
@@ -18628,6 +21245,16 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
             first = false;
         }
     }
+    if (node->att)
+    {
+        auto lines = create_string_tree(node->att, contents);
+        bool first = true;
+        for (auto line : lines)
+        {
+            output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [att]" "\u001b[0m" : line));
+            first = false;
+        }
+    }
     return output;
 }
 std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shared_ptr<copystructor> node, std::string_view contents)
@@ -18671,6 +21298,16 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
         for (auto line : lines)
         {
             output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [body]" "\u001b[0m" : line));
+            first = false;
+        }
+    }
+    if (node->att)
+    {
+        auto lines = create_string_tree(node->att, contents);
+        bool first = true;
+        for (auto line : lines)
+        {
+            output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [att]" "\u001b[0m" : line));
             first = false;
         }
     }
@@ -18718,6 +21355,16 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
         for (auto line : lines)
         {
             output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [body]" "\u001b[0m" : line));
+            first = false;
+        }
+    }
+    if (node->att)
+    {
+        auto lines = create_string_tree(node->att, contents);
+        bool first = true;
+        for (auto line : lines)
+        {
+            output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [att]" "\u001b[0m" : line));
             first = false;
         }
     }
@@ -18774,6 +21421,16 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
         for (auto line : lines)
         {
             output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [body]" "\u001b[0m" : line));
+            first = false;
+        }
+    }
+    if (node->att)
+    {
+        auto lines = create_string_tree(node->att, contents);
+        bool first = true;
+        for (auto line : lines)
+        {
+            output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [att]" "\u001b[0m" : line));
             first = false;
         }
     }
@@ -18844,6 +21501,16 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
             first = false;
         }
     }
+    if (node->att)
+    {
+        auto lines = create_string_tree(node->att, contents);
+        bool first = true;
+        for (auto line : lines)
+        {
+            output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [att]" "\u001b[0m" : line));
+            first = false;
+        }
+    }
     return output;
 }
 std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shared_ptr<operator_unary_overload> node, std::string_view contents)
@@ -18901,6 +21568,16 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
             first = false;
         }
     }
+    if (node->att)
+    {
+        auto lines = create_string_tree(node->att, contents);
+        bool first = true;
+        for (auto line : lines)
+        {
+            output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [att]" "\u001b[0m" : line));
+            first = false;
+        }
+    }
     return output;
 }
 std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shared_ptr<property> node, std::string_view contents)
@@ -18936,6 +21613,149 @@ std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shar
         {
             output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [body]" "\u001b[0m" : line));
             first = false;
+        }
+    }
+    if (node->att)
+    {
+        auto lines = create_string_tree(node->att, contents);
+        bool first = true;
+        for (auto line : lines)
+        {
+            output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [att]" "\u001b[0m" : line));
+            first = false;
+        }
+    }
+    return output;
+}
+std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shared_ptr<attribute_arg_item_a> node, std::string_view contents)
+{
+    std::vector<std::string> output;
+    output.push_back("attribute_arg_item_a:");
+    if (node->value)
+    {
+        auto lines = create_string_tree(node->value, contents);
+        bool first = true;
+        for (auto line : lines)
+        {
+            output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [value]" "\u001b[0m" : line));
+            first = false;
+        }
+    }
+    return output;
+}
+std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shared_ptr<attribute_arg_item_b> node, std::string_view contents)
+{
+    std::vector<std::string> output;
+    output.push_back("attribute_arg_item_b:");
+    output.push_back(std::string("  ") + "token (L" + std::to_string(node->name.line) + "; C" + std::to_string(node->name.column) + "; O" + std::to_string(node->name.offset) + ") `" + std::string(contents.substr(node->name.offset, node->name.length).begin(), contents.substr(node->name.offset, node->name.length).end()) + "`");
+    if (node->value)
+    {
+        auto lines = create_string_tree(node->value, contents);
+        bool first = true;
+        for (auto line : lines)
+        {
+            output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [value]" "\u001b[0m" : line));
+            first = false;
+        }
+    }
+    return output;
+}
+std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shared_ptr<attribute_args> node, std::string_view contents)
+{
+    std::vector<std::string> output;
+    output.push_back("attribute_args:");
+    for (auto element : node->args)
+    {
+        switch (element.index())
+        {
+            case 0:
+            if (std::get<std::shared_ptr<attribute_arg_item_a>>(element))
+            {
+                auto lines = create_string_tree(std::get<std::shared_ptr<attribute_arg_item_a>>(element), contents);
+                bool first = true;
+                for (auto line : lines)
+                {
+                    output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [args]" "\u001b[0m" : line));
+                    first = false;
+                }
+            }
+            break;
+            case 1:
+            if (std::get<std::shared_ptr<attribute_arg_item_b>>(element))
+            {
+                auto lines = create_string_tree(std::get<std::shared_ptr<attribute_arg_item_b>>(element), contents);
+                bool first = true;
+                for (auto line : lines)
+                {
+                    output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [args]" "\u001b[0m" : line));
+                    first = false;
+                }
+            }
+            break;
+        }
+    }
+    return output;
+}
+std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shared_ptr<attribute_item> node, std::string_view contents)
+{
+    std::vector<std::string> output;
+    output.push_back("attribute_item:");
+    if (node->target_type)
+    {
+        auto lines = create_string_tree(node->target_type, contents);
+        bool first = true;
+        for (auto line : lines)
+        {
+            output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [target_type]" "\u001b[0m" : line));
+            first = false;
+        }
+    }
+    if (node->args)
+    {
+        auto lines = create_string_tree(node->args, contents);
+        bool first = true;
+        for (auto line : lines)
+        {
+            output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [args]" "\u001b[0m" : line));
+            first = false;
+        }
+    }
+    return output;
+}
+std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shared_ptr<attribute> node, std::string_view contents)
+{
+    std::vector<std::string> output;
+    output.push_back("attribute:");
+    for (auto element : node->items)
+    {
+        if (element)
+        {
+            auto lines = create_string_tree(element, contents);
+            bool first = true;
+            for (auto line : lines)
+            {
+                output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [items]" "\u001b[0m" : line));
+                first = false;
+            }
+        }
+    }
+    return output;
+}
+std::vector<std::string> yaoosl::parsing::instance::create_string_tree(std::shared_ptr<attributes> node, std::string_view contents)
+{
+    std::vector<std::string> output;
+    output.push_back("attributes:");
+    for (auto element : node->items)
+    {
+        if (element)
+        {
+            auto lines = create_string_tree(element, contents);
+            bool first = true;
+            for (auto line : lines)
+            {
+                output.push_back((first ? std::string("- ") : std::string("  ")) + (first ? line + "\u001b[30;1m" " [items]" "\u001b[0m" : line));
+                first = false;
+            }
         }
     }
     return output;
