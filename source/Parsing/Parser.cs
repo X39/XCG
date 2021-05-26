@@ -1962,6 +1962,44 @@ namespace XCG.Parsing
         /// <exception cref="InvalidOperationException">Thrown if two or more threads try to access this method at the same time</exception>
         public bool Parse(string filePath, string contents, out IEnumerable<ParseNote> outParseNotes)
         {
+            static bool SameWhitespaceStyle(string contents, ref List<ParseNote> parseNotes)
+            {
+                var index = -1;
+                var ws = new char[] { '\t', ' ' };
+                char spaceCharacter = '\0';
+                bool success = false;
+                do
+                {
+                    // Extract next line
+                    var newIndex = contents.IndexOf('\n', index + 1);
+                    var line = newIndex == -1 ? contents[(index + 1)..] : contents[(index + 1)..newIndex];
+                    index = newIndex;
+                    // Extract starting spaces from line
+                    var spaces = line.TakeWhile((c) => ws.Contains(c));
+                    if (spaceCharacter == '\0')
+                    {
+                        if (spaces.Any())
+                        {
+                            spaceCharacter = spaces.First();
+                        }
+                    }
+                    if (spaceCharacter != '\0')
+                    {
+                        if (!spaces.All((c) => c == spaceCharacter))
+                        {
+                            parseNotes.Add(new ParseNote { Message = "Mixed whitespaces (tab vs space) found. Cannot Continue." });
+                            return false;
+                        }
+                    }
+                } while (index != -1);
+                return true;
+            }
+            this.parseNotes = new List<ParseNote>();
+            if (!SameWhitespaceStyle(contents, ref parseNotes))
+            {
+                outParseNotes = parseNotes;
+                return false;
+            }
             lock (this)
             {
                 if (this.isParsing)
@@ -1972,7 +2010,6 @@ namespace XCG.Parsing
             }
             try
             {
-                this.parseNotes = new List<ParseNote>();
                 this.contents = contents;
                 this.line = 1;
                 this.column = 1;
