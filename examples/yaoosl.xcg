@@ -64,30 +64,30 @@ production call
 
 
 production template-usage-item
-	match @[key]ident
+    match @[key]ident
 
 production template-usage
-	match "<"
-	match @[items]template-usage-item
-	while match ","
+    match "<"
+    match @[items]template-usage-item
+    while match ","
         alternatives
             match "," @[items]template-usage-item
             error
-	match ">"
+    match ">"
 
 production template-definition-item
-	match @[key]ident
-	if match "="
-		match "=" @[value]exp-value
+    match @[key]ident
+    if match "="
+        match "=" @[value]exp-value
 
 production template-definition
-	match "<"
-	match @[items]template-definition-item
-	while match ","
+    match "<"
+    match @[items]template-definition-item
+    while match ","
         alternatives
             match "," @[items]template-definition-item
             error
-	match ">"
+    match ">"
 
 production exp-chain-start
     alternatives
@@ -165,51 +165,51 @@ production exp-unary
         match @[value]exp-nullar
 
 left-recursive exp-binary-3
-	match @[left]exp-binary-3 @[operator]"<<" @[right]exp-unary
-	match @[left]exp-binary-3 @[operator]">>" @[right]exp-unary
-	match @[left]exp-binary-3 @[operator]"<<<" @[right]exp-unary
-	match @[left]exp-binary-3 @[operator]">>>" @[right]exp-unary
-	match @[left]exp-unary
+    match @[left]exp-binary-3 @[operator]"<<" @[right]exp-unary
+    match @[left]exp-binary-3 @[operator]">>" @[right]exp-unary
+    match @[left]exp-binary-3 @[operator]"<<<" @[right]exp-unary
+    match @[left]exp-binary-3 @[operator]">>>" @[right]exp-unary
+    match @[left]exp-unary
 
 left-recursive exp-binary-2
-	match @[left]exp-binary-2 @[operator]"&" @[right]exp-binary-3
-	match @[left]exp-binary-3
+    match @[left]exp-binary-2 @[operator]"&" @[right]exp-binary-3
+    match @[left]exp-binary-3
 
 left-recursive exp-binary-1
-	match @[left]exp-binary-1 @[operator]"|" @[right]exp-binary-2
-	match @[left]exp-binary-2
+    match @[left]exp-binary-1 @[operator]"|" @[right]exp-binary-2
+    match @[left]exp-binary-2
 
 left-recursive exp-arithmetic-2
-	match @[left]exp-arithmetic-2 @[operator]"/" @[right]exp-binary-1
-	match @[left]exp-arithmetic-2 @[operator]"*" @[right]exp-binary-1
-	match @[left]exp-binary-1
+    match @[left]exp-arithmetic-2 @[operator]"/" @[right]exp-binary-1
+    match @[left]exp-arithmetic-2 @[operator]"*" @[right]exp-binary-1
+    match @[left]exp-binary-1
 
 left-recursive exp-arithmetic-1
-	match @[left]exp-arithmetic-1 @[operator]"+" @[right]exp-arithmetic-2
-	match @[left]exp-arithmetic-1 @[operator]"-" @[right]exp-arithmetic-2
-	match @[left]exp-arithmetic-2
+    match @[left]exp-arithmetic-1 @[operator]"+" @[right]exp-arithmetic-2
+    match @[left]exp-arithmetic-1 @[operator]"-" @[right]exp-arithmetic-2
+    match @[left]exp-arithmetic-2
     
 left-recursive exp-compare
-	match @[left]exp-compare @[operator]"<=" @[right]exp-arithmetic-1
-	match @[left]exp-compare @[operator]"<" @[right]exp-arithmetic-1
-	match @[left]exp-compare @[operator]">=" @[right]exp-arithmetic-1
-	match @[left]exp-compare @[operator]">" @[right]exp-arithmetic-1
-	match @[left]exp-arithmetic-1
+    match @[left]exp-compare @[operator]"<=" @[right]exp-arithmetic-1
+    match @[left]exp-compare @[operator]"<" @[right]exp-arithmetic-1
+    match @[left]exp-compare @[operator]">=" @[right]exp-arithmetic-1
+    match @[left]exp-compare @[operator]">" @[right]exp-arithmetic-1
+    match @[left]exp-arithmetic-1
     
 left-recursive exp-equality
-	match @[left]exp-equality @[operator]"<=" @[right]exp-compare
-	match @[left]exp-equality @[operator]"<" @[right]exp-compare
-	match @[left]exp-equality @[operator]">=" @[right]exp-compare
-	match @[left]exp-equality @[operator]">" @[right]exp-compare
-	match @[left]exp-compare
+    match @[left]exp-equality @[operator]"<=" @[right]exp-compare
+    match @[left]exp-equality @[operator]"<" @[right]exp-compare
+    match @[left]exp-equality @[operator]">=" @[right]exp-compare
+    match @[left]exp-equality @[operator]">" @[right]exp-compare
+    match @[left]exp-compare
     
 left-recursive exp-and
-	match @[left]exp-and "&&" @[right]exp-equality
-	match @[left]exp-equality
+    match @[left]exp-and "&&" @[right]exp-equality
+    match @[left]exp-equality
     
 left-recursive exp-or
-	match @[left]exp-or "||" @[right]exp-and
-	match @[left]exp-equality
+    match @[left]exp-or "||" @[right]exp-and
+    match @[left]exp-equality
     
 left-recursive expression
     match @[assign-to]expression "=" @[value]expression
@@ -255,10 +255,10 @@ production while-loop
     match "while" "(" @[condition]expression ")" @[body]control-structure-body
 
 production if-body
-	match "if" "(" @[condition]expression ")" @[body]control-structure-body
+    match "if" "(" @[condition]expression ")" @[body]control-structure-body
 
 production else-body
-	match "else" @[else-body]control-structure-body
+    match "else" @[else-body]control-structure-body
 
 production if-else
     match @[if]if-body
@@ -294,15 +294,15 @@ production control-structure
         match @[content]scope
 
 production encapsulation
-	alternatives
-		match @[tok]"public"
-		match @[tok]"local"
-		match @[tok]"derived"
-		match @[tok]"private"
+    alternatives
+        match @[tok]"public"
+        match @[tok]"local"
+        match @[tok]"derived"
+        match @[tok]"private"
 
 production namespace
-	if match attributes
-		match @[att]attributes
+    while match attribute
+        match @[attributes]attribute
     match "namespace" @[name]ident-navigation
     match "{"
     while not match "}"
@@ -315,8 +315,8 @@ production namespace
     match "}"
     
 production class
-	if match attributes
-		match @[att]attributes
+    while match attribute
+        match @[attributes]attribute
     match @[scope]encapsulation "class" @[name]ident
     match "{"
     while not match "}"
@@ -335,15 +335,15 @@ production class
     match "}"
 
 production method-arglist-item-with-default
-	if match attributes
-		match @[att]attributes
+    while match attribute
+        match @[attributes]attribute
     match @[type]type-match @[name]ident
     if match "="
         match "=" @[value]exp-value
 
 production method-arglist-item
-	if match attributes
-		match @[att]attributes
+    while match attribute
+        match @[attributes]attribute
     match @[type]type-match @[name]ident
 
 production method-arglist
@@ -375,8 +375,8 @@ production method-ident
         match @[template]template-definition
     
 production method
-	if match attributes
-		match @[att]attributes
+    while match attribute
+        match @[attributes]attribute
     match @[encaps]encapsulation
     if match "unbound"
         match "unbound"
@@ -384,41 +384,41 @@ production method
     match @[return-type]type-match @[ident]method-ident @[arglist]method-arglist @[body]scope
 
 production constructor
-	if match attributes
-		match @[att]attributes
+    while match attribute
+        match @[attributes]attribute
     match @[encaps]encapsulation @[ident]method-ident @[arglist]method-arglist @[body]scope
 
 production destructor
-	if match attributes
-		match @[att]attributes
+    while match attribute
+        match @[attributes]attribute
     match @[encaps]encapsulation "~" @[ident]method-ident @[arglist]method-arglist @[body]scope
 
 production copystructor
-	if match attributes
-		match @[att]attributes
+    while match attribute
+        match @[attributes]attribute
     match @[encaps]encapsulation "+" @[ident]method-ident @[arglist]method-arglist
     alternatives
         match @[body]scope
         match "=" "delete"
 
 production conversion
-	if match attributes
-		match @[att]attributes
+    while match attribute
+        match @[attributes]attribute
     match @[encaps]encapsulation "unbound" "conversion" @[target-type]type-match
     match "(" @[source-type]type-match @[name]ident ")"
     match @[body]scope
 
 production indexer
-	if match attributes
-		match @[att]attributes
+    while match attribute
+        match @[attributes]attribute
     match @[encaps]encapsulation @[target-type]type-match
     if match template-definition
         match @[template]template-definition
     match @[arglist]method-arglist-indexer @[body]scope-getset
     
 production operator-binary-overload
-	if match attributes
-		match @[att]attributes
+    while match attribute
+        match @[attributes]attribute
     match @[encaps]encapsulation "unbound" @[target-type]type-match  "operator"
     if match template-definition
         match @[template]template-definition
@@ -444,8 +444,8 @@ production operator-binary-overload
     match @[body]scope
 
 production operator-unary-overload
-	if match attributes
-		match @[att]attributes
+    while match attribute
+        match @[attributes]attribute
     match @[encaps]encapsulation "unbound" @[target-type]type-match  "operator"
     if match template-definition
         match @[template]template-definition
@@ -458,52 +458,49 @@ production operator-unary-overload
     match @[body]scope
 
 production property
-	if match attributes
-		match @[att]attributes
+    while match attribute
+        match @[attributes]attribute
     alternatives
         match @[encaps]encapsulation @[target-type]type-match @[name]ident ";"
         match @[encaps]encapsulation @[target-type]type-match @[name]ident @[body]scope-getset
 
-	
+    
 production attribute-arg-item-a
-	match @[value]exp-or
+    match @[value]exp-or
 
 production attribute-arg-item-b
-	match @[name]ident ":" @[value]exp-or
+    match @[name]ident ":" @[value]exp-or
 
-production attribute-args
-	if match attribute-arg-item-a
-		match @[args]attribute-arg-item-a
-		while match attribute-arg-item-a
-			match "," @[args]attribute-arg-item-a
-		if match ","
-			match ","
-	if match attribute-arg-item-b
-		match @[args]attribute-arg-item-b
-		while match attribute-arg-item-b
-			match "," @[args]attribute-arg-item-b
-		if match ","
-			match ","
+production attribute-args-a
+    match @[args]attribute-arg-item-a
+    while match attribute-arg-item-a
+        match "," @[args]attribute-arg-item-a
+    if match ","
+        match ","
+production attribute-args-b
+    match @[args]attribute-arg-item-b
+    while match attribute-arg-item-b
+        match "," @[args]attribute-arg-item-b
+    if match ","
+        match ","
 
 production attribute-item
-	alternatives
-		match @[target-type]type-match
-		match @[target-type]type-match "(" ")"
-		match @[target-type]type-match "(" @[args]attribute-args ")"
-		
+    alternatives
+        match @[target-type]type-match
+        match @[target-type]type-match "(" ")"
+        match @[target-type]type-match "(" @[args]attribute-args-a attribute-args-b ")"
+        match @[target-type]type-match "(" @[args]attribute-args-a ")"
+        match @[target-type]type-match "(" @[args]attribute-args-b ")"
+        
 production attribute
-	match "["
-	if match attribute-item
-		match @[items]attribute-item
-		while match attribute-item
-			match "," @[items]attribute-item
-		if match ","
-			match ","
-	match "]"
-
-production attributes
-	while match attribute
-		match @[items]attribute
+    match "["
+    if match attribute-item
+        match @[items]attribute-item
+        while match attribute-item
+            match "," @[items]attribute-item
+        if match ","
+            match ","
+    match "]"
 
 production main
     while not eof
