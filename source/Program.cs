@@ -859,6 +859,24 @@ namespace XCG
                     Message = $@"Comment is lacking end."
                 });
             });
+            // ensure all productions are non-empty
+            validator.Register("XCG", ESeverity.Error, (parser) =>
+            {
+                return parser.Productions
+                .Where((production) => production.Children.All(
+                    (q) => q is Parsing.Statements.While
+                    || q is Parsing.Statements.If 
+                    || q is Parsing.Statements.Set
+                    || q is Parsing.Statements.Get 
+                    || q is Parsing.Statements.Print))
+                .Where((production) => !production.Identifier.Equals("main", StringComparison.InvariantCultureIgnoreCase))
+                .Select((production) => new Validation.Hint
+                {
+                    Line = production.Diagnostics.Line,
+                    File = production.Diagnostics.File,
+                    Message = $@"Possibly empty productions are not allowed."
+                });
+            });
         }
     }
 }
