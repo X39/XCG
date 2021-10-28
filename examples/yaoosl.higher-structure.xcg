@@ -1,0 +1,238 @@
+production encapsulation
+    alternatives
+        match @[tok]"public"
+        match @[tok]"local"
+        match @[tok]"derived"
+        match @[tok]"private"
+
+production namespace
+    while match attribute
+        match @[attributes]attribute
+    match "namespace" @[name]ident-navigation
+    match "{"
+    while not match "}"
+        alternatives
+            match @[aliases]alias-encapsulated
+            match @[constants]constant
+            match @[usings]using
+            match @[namespaces]namespace
+            match @[conversions]conversion
+            match @[classes]class
+            match @[methods]method
+            match @[properties]property
+            match @[fields]field
+            match @[pragmas]pragma
+            error
+    match "}"
+    
+production class
+    while match attribute
+        match @[attributes]attribute
+    match @[scope]encapsulation "class" @[name]ident
+    if match template-definition
+        match @[template]template-definition
+    if match lifetime
+        match @[lifetime]lifetime
+    match "{"
+    while not match "}"
+        alternatives
+            match @[aliases]alias-encapsulated
+            match @[constants]constant
+            match @[usings]using
+            match @[indexers]indexer
+            match @[operators-binary]operator-binary-overload
+            match @[operators-unary]operator-unary-overload
+            match @[conversions]conversion
+            match @[classes]class
+            match @[constructors]constructor
+            match @[destructors]destructor
+            match @[copystructors]copystructor
+            match @[properties]property
+            match @[fields]field
+            match @[methods]method
+            match @[pragmas]pragma
+            error
+    match "}"
+
+production method-arglist-item
+    while match attribute
+        match @[attributes]attribute
+    match @[type]type-match @[name]ident
+
+production method-arglist
+    match "("
+    if match method-arglist-item
+        match @[args]method-arglist-item
+        while not match ")" 
+            alternatives
+                match "," @[args]method-arglist-item
+                error
+        if match ","
+            match ","
+    match ")"
+    
+production method-arglist-indexer
+    match "["
+    match @[args]method-arglist-item
+    while not match "]"
+        alternatives
+            match "," @[args]method-arglist-item
+            error
+    if match ","
+        match ","
+    match "]"
+
+production method-meta
+    match @[encaps]encapsulation
+    if match "sealed"
+        match "sealed"
+        set capture is-sealed true
+    if match "virtual"
+        match "virtual"
+        set capture is-virtual true
+    if match "unbound"
+        match "unbound"
+        set capture is-static true
+    if match "inline"
+        match "inline"
+        set capture is-inline true
+    
+    
+production method
+    while match attribute
+        match @[attributes]attribute
+    match @[meta]method-meta @[return-type]type-match @[name]ident
+    if match template-definition
+        match @[template]template-definition
+    match @[arglist]method-arglist @[body]scope
+
+production constructor
+    while match attribute
+        match @[attributes]attribute
+    match @[encaps]encapsulation 
+    if match template-definition
+        match @[template]template-definition
+    match @[arglist]method-arglist @[body]scope
+
+production destructor
+    while match attribute
+        match @[attributes]attribute
+    match @[encaps]encapsulation "~" 
+    if match template-definition
+        match @[template]template-definition
+    match @[arglist]method-arglist @[body]scope
+
+production copystructor
+    while match attribute
+        match @[attributes]attribute
+    match @[encaps]encapsulation "+" 
+    if match template-definition
+        match @[template]template-definition
+    match @[arglist]method-arglist
+    alternatives
+        match @[body]scope
+        match "=" "delete"
+
+production conversion
+    while match attribute
+        match @[attributes]attribute
+    match @[meta]method-meta "conversion" @[target-type]type-match
+    match "(" @[source-type]type-match @[name]ident ")"
+    match @[body]scope
+
+production indexer
+    while match attribute
+        match @[attributes]attribute
+    match @[meta]method-meta @[target-type]type-match
+    if match template-definition
+        match @[template]template-definition
+    match @[arglist]method-arglist-indexer @[body]scope-getset
+    
+production operator-binary-overload
+    while match attribute
+        match @[attributes]attribute
+    match @[meta]method-meta @[target-type]type-match  "operator"
+    if match template-definition
+        match @[template]template-definition
+    match "(" @[left]method-arglist-item ")"
+    alternatives
+        match @[operator]"+"
+        match @[operator]"-"
+        match @[operator]"*"
+        match @[operator]"/"
+        match @[operator]"<<<"
+        match @[operator]"<<"
+        match @[operator]"<="
+        match @[operator]"<"
+        match @[operator]">>>"
+        match @[operator]">>"
+        match @[operator]">="
+        match @[operator]">"
+        match @[operator]"||"
+        match @[operator]"|"
+        match @[operator]"&&"
+        match @[operator]"&"
+        match @[operator]"==="
+        match @[operator]"=="
+        match @[operator]"!="
+        match @[operator]"^"
+    match "(" @[right]method-arglist-item ")"
+    match @[body]scope
+
+production operator-unary-overload
+    while match attribute
+        match @[attributes]attribute
+    match @[meta]method-meta @[target-type]type-match  "operator"
+    if match template-definition
+        match @[template]template-definition
+    alternatives
+        match @[operator]"+"
+        match @[operator]"-"
+        match @[operator]"!"
+        match @[operator]"~"
+    match "(" @[right]method-arglist-item ")"
+    match @[body]scope
+
+production operator-nullar-overload
+    while match attribute
+        match @[attributes]attribute
+    match @[meta]method-meta "operator"
+    if match template-definition
+        match @[template]template-definition
+    alternatives
+        match @[operator]"."
+        match @[operator]"->"
+    match @[body]scope
+
+production property
+    while match attribute
+        match @[attributes]attribute
+    match @[meta]method-meta @[target-type]type-match @[name]ident @[body]scope-getset
+
+production field
+    while match attribute
+        match @[attributes]attribute
+    match @[encaps]encapsulation
+    if match "unbound"
+        match "unbound"
+        set capture is-static true
+    match @[target-type]type-match @[name]ident ";"
+
+production constant
+    match "const" @[target-type]type-match @[name]ident = @[exp-or] ";"
+
+production using
+    match "using"
+    alternatives
+        match "namespace" @[ident]ident-navigation
+            set capture is-namespace true
+        match "class" @[ident]ident-navigation
+            set capture is-class true
+    if match "="
+        match "=" @[alias]ident
+
+production alias-encapsulated
+    match @[encaps]encapsulation @[actual]alias
+
+production alias
+    match "alias" @[alias]ident "=" @[ident]type-match

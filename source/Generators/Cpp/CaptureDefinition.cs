@@ -12,6 +12,13 @@ namespace XCG.Generators.Cpp
         public string Name { get; init; }
         public bool IsSingleHit { get; set; } = true;
 
+        /// <summary>
+        /// Tells wether a given item is optional and hence should be wrapped with optional.
+        /// Always false unless <see cref="Types"/> has a <see cref="List{T}.Count"/> &gt; 1.
+        /// Will be ignored if <see cref="IsSingleHit"/> is false.
+        /// </summary>
+        public bool IsOptional { get; set; } = false;
+
         public CaptureDefinition(string name, params TypeImpl[] typeImpls) : this(name, typeImpls as IEnumerable<TypeImpl>) {}
         public CaptureDefinition(string name, IEnumerable<TypeImpl> typeImpls)
         {
@@ -41,6 +48,7 @@ namespace XCG.Generators.Cpp
             {
                 writer.Write(whitespace);
                 if (!this.IsSingleHit) { writer.Write("std::vector<"); }
+                if (this.IsOptional && IsSingleHit) { writer.Write("std::optional<"); }
                 writer.Write($"std::variant<");
                 bool isFirst = true;
                 foreach (var typeImpl in this.Types)
@@ -49,6 +57,7 @@ namespace XCG.Generators.Cpp
                     writer.Write(typeImpl.ToString(cppOptions));
                 }
                 writer.Write($">");
+                if (this.IsOptional && IsSingleHit) { writer.Write(">"); }
                 if (!this.IsSingleHit) { writer.Write(">"); }
                 writer.Write($" ");
                 writer.Write(this.Name);

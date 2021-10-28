@@ -1,0 +1,160 @@
+production call
+    match @[method]ident @[body]call-body
+
+production call-body
+    match "("
+    if match expression
+        match @[args]expression
+        while not match ")"
+            alternatives
+                match "," @[args]expression
+                match ","
+                error
+    match ")"
+    
+production free
+    match "free" @[value]expression
+
+production alloc
+    alternatives
+        match "alloc" "stack" @[type]type-navigation "[" @[exp]expression "]"
+            set capture is-stack true
+            set capture is-heap false
+        match "alloc" "stack" @[type]type-navigation @[body]call-body
+            set capture is-stack true
+            set capture is-heap false
+        match "alloc" "heap" @[type]type-navigation "[" @[exp]expression "]"
+            set capture is-stack false
+            set capture is-heap true
+        match "alloc" "heap" @[type]type-navigation @[body]call-body
+            set capture is-stack false
+            set capture is-heap true
+
+
+
+
+production typeof
+    match "typeof" "(" @[value]type-match ")"
+
+production nameof
+    match "nameof" "(" @[value]exp-or ")"
+
+production sizeof
+    match "sizeof" "(" @[type]type-match ")"
+
+left-recursive ident-navigation
+    match @[left]ident-navigation "." @[right]ident
+    match @[left]ident
+    
+left-recursive type-navigation
+    match @[left]type-navigation "." @[right]ident @[template]template-usage
+    match @[left]type-navigation "." @[right]ident
+    match @[left]type-navigation @[template]template-usage
+    match @[left]ident
+    
+production lifetime
+    match "'"
+    alternatives
+        match "scope"
+            set capture is-scope true
+        match "static"
+            set capture is-static true
+        match @[named]ident
+    
+production type-match
+    alternatives
+        match @[base]type-navigation "[" "]" "*" @[lifetime]lifetime
+            set capture is-array true
+            set capture is-heap true
+        match @[base]type-navigation "*" @[lifetime]lifetime
+            set capture is-array false
+            set capture is-heap true
+        match @[base]type-navigation @[lifetime]lifetime
+            set capture is-array false
+            set capture is-heap false
+        match @[base]type-navigation "[" "]" "*"
+            set capture is-array true
+            set capture is-heap true
+        match @[base]type-navigation "*"
+            set capture is-array false
+            set capture is-heap true
+        match @[base]type-navigation
+            set capture is-array false
+            set capture is-heap false
+    
+production string-formatable
+    match @[parts]string-formatable-start
+    match expression
+    while not match string-formatable-end
+        match @[parts]string-formatable-continuation
+        match @[parts]expression
+    match @[parts]string-formatable-end
+    
+production string-literal
+    alternatives
+        match @[prefix]ident @[value]string-formatable @[postfix]ident
+        match @[value]string-formatable @[postfix]ident
+        match @[prefix]ident @[value]string-formatable
+        match @[value]string-formatable
+        match @[prefix]ident @[value]string-formatable-fake @[postfix]ident
+        match @[value]string-formatable-fake @[postfix]ident
+        match @[prefix]ident @[value]string-formatable-fake
+        match @[value]string-formatable-fake
+        match @[prefix]ident @[value]string @[postfix]ident
+        match @[value]string @[postfix]ident
+        match @[prefix]ident @[value]string
+        match @[value]string
+    
+production scalar-literal
+    alternatives
+        match @[prefix]ident @[value]scalar @[postfix]ident
+        match @[value]scalar @[postfix]ident
+        match @[prefix]ident @[value]scalar
+        match @[value]scalar
+    
+production integer-hex-literal
+    alternatives
+        match @[prefix]ident @[value]integer-hex @[postfix]ident
+        match @[value]integer-hex @[postfix]ident
+        match @[prefix]ident @[value]integer-hex
+        match @[value]integer-hex
+
+production integer-binary-literal
+    alternatives
+        match @[prefix]ident @[value]integer-binary @[postfix]ident
+        match @[value]integer-binary @[postfix]ident
+        match @[prefix]ident @[value]integer-binary
+        match @[value]integer-binary
+
+production integer-literal
+    alternatives
+        match @[prefix]ident @[value]integer @[postfix]ident
+        match @[value]integer @[postfix]ident
+        match @[prefix]ident @[value]integer
+        match @[value]integer
+
+production char-literal
+    alternatives
+        match @[prefix]ident @[value]char @[postfix]ident
+        match @[value]char @[postfix]ident
+        match @[prefix]ident @[value]char
+        match @[value]char
+
+production declaration
+    match @[type]type-match @[name]ident
+    
+production return-statement
+    alternatives
+        match "return" ";"
+        match "return" @[exp]expression ";"
+    
+production statement
+    alternatives
+        match @[aliases]alias
+        match @[constants]constant
+        match @[ret]return-statement
+        match @[fwrd-decl]declaration "=" @[exp]expression ";"
+        match @[fwrd-decl]declaration ";"
+        match @[exp]expression ";"
+        match ";"
+        match @[pragma]pragma

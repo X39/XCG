@@ -1,0 +1,117 @@
+production exp-chain-start
+    alternatives
+        /* Requires type resolution */
+        match @[part-alloc]alloc
+        /* Requires type resolution */
+        match @[part-free]free
+        /* Requires method lookup in local type upwards */
+        match @[part-call]call
+        /* Cannot be determined at this point. Could be variable or start of type */
+        match @[part-ident]ident
+    
+left-recursive exp-chain
+    match @[left]exp-chain "." @[chain-call]call
+    match @[left]exp-chain "." @[chain-access]ident
+    match @[left]exp-chain "->" @[indirection-call]call
+    match @[left]exp-chain "->" @[indirection-access]ident
+    match @[left]exp-chain "[" @[chain-indexer]expression "]"
+    match @[left]exp-chain @[chain-template]template-usage
+    match @[left]exp-chain-start
+
+production exp-constant
+    alternatives
+        match @[typeof]typeof
+        match @[nameof]nameof
+        match @[sizeof]sizeof
+        match @[t]scalar
+        match @[t]false
+        match @[t]true
+        match @[t]integer-hex
+        match @[t]integer-binary
+        match @[t]integer
+        match @[t]string
+        match @[t]char
+
+production exp-lambda
+    match @[args]method-arglist @[scope]scope
+    
+production exp-value
+    alternatives
+        match @[exp-lambda]exp-constant
+        match @[scalar]scalar-literal
+        match @[integer-hex]integer-hex-literal
+        match @[integer-binary]integer-binary-literal
+        match @[integer]integer-literal
+        match @[character]char-literal
+        match @[string]string-literal
+        match @[constant]exp-constant
+
+production exp-nullar
+    alternatives
+        match "(" @[value]expression ")"
+        match @[value]exp-chain
+        match @[value]exp-value
+
+production exp-unary
+    alternatives
+        match @[operator]"!" @[value]exp-unary
+        match @[operator]"~" @[value]exp-unary
+        match @[operator]"-" @[value]exp-unary
+        match @[operator]"+" @[value]exp-unary
+        match "(" @[cast-target]type-match ")" @[value]exp-unary
+        match @[value]exp-nullar
+
+left-recursive exp-binary-4
+    match @[left]exp-binary-4 @[operator]"<<" @[right]exp-unary
+    match @[left]exp-binary-4 @[operator]">>" @[right]exp-unary
+    match @[left]exp-binary-4 @[operator]"<<<" @[right]exp-unary
+    match @[left]exp-binary-4 @[operator]">>>" @[right]exp-unary
+    match @[left]exp-unary
+
+left-recursive exp-binary-3
+    match @[left]exp-binary-3 @[operator]"&" @[right]exp-binary-4
+    match @[left]exp-binary-4
+
+left-recursive exp-binary-2
+    match @[left]exp-binary-2 @[operator]"^" @[right]exp-binary-3
+    match @[left]exp-binary-3
+
+left-recursive exp-binary-1
+    match @[left]exp-binary-1 @[operator]"|" @[right]exp-binary-2
+    match @[left]exp-binary-2
+
+left-recursive exp-arithmetic-2
+    match @[left]exp-arithmetic-2 @[operator]"/" @[right]exp-binary-1
+    match @[left]exp-arithmetic-2 @[operator]"*" @[right]exp-binary-1
+    match @[left]exp-binary-1
+
+left-recursive exp-arithmetic-1
+    match @[left]exp-arithmetic-1 @[operator]"+" @[right]exp-arithmetic-2
+    match @[left]exp-arithmetic-1 @[operator]"-" @[right]exp-arithmetic-2
+    match @[left]exp-arithmetic-2
+    
+left-recursive exp-compare
+    match @[left]exp-compare @[operator]"<=" @[right]exp-arithmetic-1
+    match @[left]exp-compare @[operator]"<" @[right]exp-arithmetic-1
+    match @[left]exp-compare @[operator]">=" @[right]exp-arithmetic-1
+    match @[left]exp-compare @[operator]">" @[right]exp-arithmetic-1
+    match @[left]exp-arithmetic-1
+    
+left-recursive exp-equality
+    match @[left]exp-equality @[operator]"!=" @[right]exp-compare
+    match @[left]exp-equality @[operator]"===" @[right]exp-compare
+    match @[left]exp-equality @[operator]"==" @[right]exp-compare
+    match @[left]exp-equality @[operator]"~=" @[right]exp-compare
+    match @[left]exp-compare
+    
+left-recursive exp-and
+    match @[left]exp-and @[operator]"&&" @[right]exp-equality
+    match @[left]exp-equality
+    
+left-recursive exp-or
+    match @[left]exp-or @[operator]"||" @[right]exp-and
+    match @[left]exp-and
+    
+production expression
+    match @[assign-to]exp-or "=" @[value]expression
+    match @[exp]exp-or

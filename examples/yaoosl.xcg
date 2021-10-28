@@ -1,6 +1,25 @@
 /* comment */
-token integer
+token integer-binary
+    require once 0b
+    require plus { 0-9, underscore }
+    
+token integer-hex
+    require once 0x
+    require plus { 0-9, underscore }
+
+token integer-unsigned
     require plus { 0-9 }
+    
+token integer-signed-negative
+    require once -
+    require plus { 0-9 }
+    
+token integer-signed-positive
+    require once +
+    require plus { 0-9 }
+
+token integer
+    require once { integer-signed-positive, integer-signed-negative, integer-unsigned }
 
 token scalar
     require once { integer }
@@ -28,20 +47,51 @@ token true
 token false
     require once false
 
-token boolean
-    require once { true, false }
-
 token ident
-    require once { a-z, A-Z, underscore, minus }
-    require [0, *) { a-z, A-Z, 0-9, underscore, minus }
+    require once { a-z, A-Z, underscore }
+    require [0, *) { a-z, A-Z, 0-9, underscore }
     backtrack not once -
+
+token string-formatable-start
+    require once $
+    require once "
+    require not [0, *) {
+    require once {
+
+token string-formatable-fake
+    require once $
+    require once "
+    require not [0, *) { string-unescaped-ending }
+    require once "
+
+token string-formatable-continuation
+    require once }
+    require not [0, *) {
+    require once {
+
+token string-formatable-end
+    require once }
+    require not [0, *) { string-unescaped-ending }
+    require once "
+
+token string-unescaped-ending
+    backtrack not once \
+    require once "
 
 token string
     require once "
-    require not [0, *) "
+    require not [0, *) { string-unescaped-ending }
     require once "
 
-/*"*/
+token char-unescaped-ending
+    backtrack not once \
+    require once '
+    
+token char
+    require once '
+    require not [0, *) { char-unescaped-ending }
+    require once '
+
 
 comment
     start //
@@ -50,463 +100,18 @@ comment
     start /*
     end */
 
-production call
-    match @[method]ident "("
-    if match expression
-        match @[args]expression
-        while not match ")"
-            alternatives
-                match "," @[args]expression
-                match ","
-                error
-    match ")"
-
-
-
-production template-usage-item
-    match @[key]ident
-
-production template-usage
-    match "<"
-    match @[items]template-usage-item
-    while match ","
-        alternatives
-            match "," @[items]template-usage-item
-            error
-    match ">"
-
-production template-definition-item
-    match @[key]ident
-    if match "="
-        match "=" @[value]exp-value
-
-production template-definition
-    match "<"
-    match @[items]template-definition-item
-    while match ","
-        alternatives
-            match "," @[items]template-definition-item
-            error
-    match ">"
-
-production exp-chain-start
-    alternatives
-        match @[part]call
-        match @[part]ident
-
-production exp-chain-indexer
-    match "["
-    match "]"
-
-production exp-chain-access
-    match "." @ident
-
-production exp-chain-call
-    match "." @call
-    
-left-recursive exp-chain
-    match @[left]exp-chain @[right]exp-chain-call
-    match @[left]exp-chain @[right]exp-chain-access
-    match @[left]exp-chain @[right]exp-chain-indexer
-    match @[left]exp-chain-start
-    
-left-recursive ident-navigation
-    match @[left]ident-navigation "." @[right]ident
-    match @[left]ident
-    
-left-recursive type-navigation
-    match @[left]type-navigation "." @[right]ident @[template]template-usage
-    match @[left]type-navigation "." @[right]ident
-    match @[left]ident
-    
-production type-match
-    alternatives
-        match @[base]type-navigation "[" @[array-size]exp-value "]"
-            set capture is-array true
-        match @[base]type-navigation "[" "]"
-            set capture is-array true
-        match @[base]type-navigation
-
-production typeof
-    match "typeof" "(" @[value]type-match ")"
-
-production nameof
-    match "nameof" "(" @[value]exp-or ")"
-    
-production string-literal
-    alternatives
-        match @[prefix]ident @[value]string @[postfix]ident
-        match @[value]string @[postfix]ident
-        match @[prefix]ident @[value]string
-        match @[value]string
-    
-production exp-value
-    alternatives
-        match @[type]typeof
-        match @[name]nameof
-        match @[float]scalar
-        match @[bool]boolean
-        match @[string]string-literal
-        match @[int]integer
-
-production exp-nullar
-    alternatives
-        match "(" @[value]statement ")"
-        match @[value]declaration
-        match @[value]exp-chain
-        match @[value]exp-value
-
-production exp-unary
-    alternatives
-        match @[operator]"!" @[value]exp-unary
-        match @[operator]"~" @[value]exp-unary
-        match @[operator]"-" @[value]exp-unary
-        match @[operator]"+" @[value]exp-unary
-        match @[value]exp-nullar
-
-left-recursive exp-binary-3
-    match @[left]exp-binary-3 @[operator]"<<" @[right]exp-unary
-    match @[left]exp-binary-3 @[operator]">>" @[right]exp-unary
-    match @[left]exp-binary-3 @[operator]"<<<" @[right]exp-unary
-    match @[left]exp-binary-3 @[operator]">>>" @[right]exp-unary
-    match @[left]exp-unary
-
-left-recursive exp-binary-2
-    match @[left]exp-binary-2 @[operator]"&" @[right]exp-binary-3
-    match @[left]exp-binary-3
-
-left-recursive exp-binary-1
-    match @[left]exp-binary-1 @[operator]"|" @[right]exp-binary-2
-    match @[left]exp-binary-2
-
-left-recursive exp-arithmetic-2
-    match @[left]exp-arithmetic-2 @[operator]"/" @[right]exp-binary-1
-    match @[left]exp-arithmetic-2 @[operator]"*" @[right]exp-binary-1
-    match @[left]exp-binary-1
-
-left-recursive exp-arithmetic-1
-    match @[left]exp-arithmetic-1 @[operator]"+" @[right]exp-arithmetic-2
-    match @[left]exp-arithmetic-1 @[operator]"-" @[right]exp-arithmetic-2
-    match @[left]exp-arithmetic-2
-    
-left-recursive exp-compare
-    match @[left]exp-compare @[operator]"<=" @[right]exp-arithmetic-1
-    match @[left]exp-compare @[operator]"<" @[right]exp-arithmetic-1
-    match @[left]exp-compare @[operator]">=" @[right]exp-arithmetic-1
-    match @[left]exp-compare @[operator]">" @[right]exp-arithmetic-1
-    match @[left]exp-arithmetic-1
-    
-left-recursive exp-equality
-    match @[left]exp-equality @[operator]"<=" @[right]exp-compare
-    match @[left]exp-equality @[operator]"<" @[right]exp-compare
-    match @[left]exp-equality @[operator]">=" @[right]exp-compare
-    match @[left]exp-equality @[operator]">" @[right]exp-compare
-    match @[left]exp-compare
-    
-left-recursive exp-and
-    match @[left]exp-and "&&" @[right]exp-equality
-    match @[left]exp-equality
-    
-left-recursive exp-or
-    match @[left]exp-or "||" @[right]exp-and
-    match @[left]exp-equality
-    
-left-recursive expression
-    match @[assign-to]expression "=" @[value]expression
-    match @[value]exp-or
-
-production return-statement
-    match "return" @[value]exp-or
-
-production declaration
-    match @[type]type-match @[name]ident
-    
-production statement
-    alternatives
-        match @[expression]return-statement ";"
-        match @[expression]expression ";"
-        match ";"
-    
-production scope
-    match "{"
-    while not match "}"
-        alternatives
-            match @[body]control-structure
-            match @[body]statement
-            error
-    match "}"
-    
-production scope-getset
-    match "{"
-    alternatives
-        match "get" @[get]scope "set" @[set]scope
-        match "set" @[set]scope "get" @[get]scope
-        match "get" @[get]scope
-        match "set" @[set]scope
-    match "}"
-    
-production control-structure-body
-    alternatives
-        match @[body]scope
-        match @[body]control-structure
-        match @[body]statement
-
-production while-loop
-    match "while" "(" @[condition]expression ")" @[body]control-structure-body
-
-production if-body
-    match "if" "(" @[condition]expression ")" @[body]control-structure-body
-
-production else-body
-    match "else" @[else-body]control-structure-body
-
-production if-else
-    match @[if]if-body
-    if match else-body
-        match @[else]else-body
-
-message switch-default-already-set
-    with Multiple default cases found
-    level error
-
-production switch-case
-    match "case" @[value]exp-value ":" @[body]control-structure-body
-
-production switch
-    set local has-default false
-    match "switch" "(" @[value]expression ")"
-    while not match "}"
-        alternatives
-            match @[part]switch-case
-            match "default" ":" @[default-body]control-structure-body
-                if get has-default
-                    print switch-default-already-set
-                else
-                    set local has-default true
-            error
-    match "}"
-
-production control-structure
-    alternatives
-        match @[content]while-loop
-        match @[content]if-else
-        match @[content]switch
-        match @[content]scope
-
-production encapsulation
-    alternatives
-        match @[tok]"public"
-        match @[tok]"local"
-        match @[tok]"derived"
-        match @[tok]"private"
-
-production namespace
-    while match attribute
-        match @[attributes]attribute
-    match "namespace" @[name]ident-navigation
-    match "{"
-    while not match "}"
-        alternatives
-            match @[namespaces]namespace
-            match @[conversions]conversion
-            match @[classes]class
-            match @[methods]method
-            error
-    match "}"
-    
-production class
-    while match attribute
-        match @[attributes]attribute
-    match @[scope]encapsulation "class" @[name]ident
-    match "{"
-    while not match "}"
-        alternatives
-            match @[indexers]indexer
-            match @[operators-binary]operator-binary-overload
-            match @[operators-unary]operator-unary-overload
-            match @[conversions]conversion
-            match @[classes]class
-            match @[constructors]constructor
-            match @[destructors]destructor
-            match @[copystructors]copystructor
-            match @[properties]property
-            match @[methods]method
-            error
-    match "}"
-
-production method-arglist-item-with-default
-    while match attribute
-        match @[attributes]attribute
-    match @[type]type-match @[name]ident
-    if match "="
-        match "=" @[value]exp-value
-
-production method-arglist-item
-    while match attribute
-        match @[attributes]attribute
-    match @[type]type-match @[name]ident
-
-production method-arglist
-    match "("
-    if match method-arglist-item-with-default
-        match @[args]method-arglist-item-with-default
-        while not match ")"
-            alternatives
-                match "," @[args]method-arglist-item-with-default
-                error
-        if match ","
-            match ","
-    match ")"
-    
-production method-arglist-indexer
-    match "["
-    match @[args]method-arglist-item
-    while not match "]"
-        alternatives
-            match "," @[args]method-arglist-item
-            error
-    if match ","
-        match ","
-    match "]"
-
-production method-ident
-    match @[name]ident
-    if match template-definition
-        match @[template]template-definition
-    
-production method
-    while match attribute
-        match @[attributes]attribute
-    match @[encaps]encapsulation
-    if match "unbound"
-        match "unbound"
-        set capture is-static true
-    match @[return-type]type-match @[ident]method-ident @[arglist]method-arglist @[body]scope
-
-production constructor
-    while match attribute
-        match @[attributes]attribute
-    match @[encaps]encapsulation @[ident]method-ident @[arglist]method-arglist @[body]scope
-
-production destructor
-    while match attribute
-        match @[attributes]attribute
-    match @[encaps]encapsulation "~" @[ident]method-ident @[arglist]method-arglist @[body]scope
-
-production copystructor
-    while match attribute
-        match @[attributes]attribute
-    match @[encaps]encapsulation "+" @[ident]method-ident @[arglist]method-arglist
-    alternatives
-        match @[body]scope
-        match "=" "delete"
-
-production conversion
-    while match attribute
-        match @[attributes]attribute
-    match @[encaps]encapsulation "unbound" "conversion" @[target-type]type-match
-    match "(" @[source-type]type-match @[name]ident ")"
-    match @[body]scope
-
-production indexer
-    while match attribute
-        match @[attributes]attribute
-    match @[encaps]encapsulation @[target-type]type-match
-    if match template-definition
-        match @[template]template-definition
-    match @[arglist]method-arglist-indexer @[body]scope-getset
-    
-production operator-binary-overload
-    while match attribute
-        match @[attributes]attribute
-    match @[encaps]encapsulation "unbound" @[target-type]type-match  "operator"
-    if match template-definition
-        match @[template]template-definition
-    match "(" @[left]method-arglist-item ")"
-    alternatives
-        match @[operator]"+"
-        match @[operator]"-"
-        match @[operator]"*"
-        match @[operator]"/"
-        match @[operator]"<<<"
-        match @[operator]"<<"
-        match @[operator]"<="
-        match @[operator]"<"
-        match @[operator]">>>"
-        match @[operator]">>"
-        match @[operator]">="
-        match @[operator]">"
-        match @[operator]"||"
-        match @[operator]"|"
-        match @[operator]"&&"
-        match @[operator]"&"
-    match "(" @[right]method-arglist-item ")"
-    match @[body]scope
-
-production operator-unary-overload
-    while match attribute
-        match @[attributes]attribute
-    match @[encaps]encapsulation "unbound" @[target-type]type-match  "operator"
-    if match template-definition
-        match @[template]template-definition
-    alternatives
-        match @[operator]"+"
-        match @[operator]"-"
-        match @[operator]"!"
-        match @[operator]"~"
-    match "(" @[right]method-arglist-item ")"
-    match @[body]scope
-
-production property
-    while match attribute
-        match @[attributes]attribute
-    alternatives
-        match @[encaps]encapsulation @[target-type]type-match @[name]ident ";"
-        match @[encaps]encapsulation @[target-type]type-match @[name]ident @[body]scope-getset
-
-    
-production attribute-arg-item-a
-    match @[value]exp-or
-
-production attribute-arg-item-b
-    match @[name]ident ":" @[value]exp-or
-
-production attribute-args-a
-    match @[args]attribute-arg-item-a
-    while match attribute-arg-item-a
-        match "," @[args]attribute-arg-item-a
-    if match ","
-        match ","
-production attribute-args-b
-    match @[args]attribute-arg-item-b
-    while match attribute-arg-item-b
-        match "," @[args]attribute-arg-item-b
-    if match ","
-        match ","
-
-production attribute-item
-    alternatives
-        match @[target-type]type-match
-        match @[target-type]type-match "(" ")"
-        match @[target-type]type-match "(" @[args]attribute-args-a attribute-args-b ")"
-        match @[target-type]type-match "(" @[args]attribute-args-a ")"
-        match @[target-type]type-match "(" @[args]attribute-args-b ")"
-        
-production attribute
-    match "["
-    if match attribute-item
-        match @[items]attribute-item
-        while match attribute-item
-            match "," @[items]attribute-item
-        if match ","
-            match ","
-    match "]"
 
 production main
+    if match using
+        while match using
+            match @[usings]using
     while not eof
         alternatives
             match @[namespaces]namespace
             match @[conversions]conversion
             match @[classes]class
             match @[methods]method
+            match @[properties]property
+            match @[fields]field
+            match @[pragmas]pragma
             error

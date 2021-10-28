@@ -1,0 +1,36 @@
+production attribute-arg-item-a
+    match @[value]exp-or
+
+production attribute-arg-item-b
+    match @[name]ident ":" @[value]exp-or
+
+production attribute-args-a
+    match @[args]attribute-arg-item-a
+    while match attribute-arg-item-a
+        match "," @[args]attribute-arg-item-a
+    if match ","
+        match ","
+production attribute-args-b
+    match @[args]attribute-arg-item-b
+    while match attribute-arg-item-b
+        match "," @[args]attribute-arg-item-b
+    if match ","
+        match ","
+
+production attribute-item
+    alternatives
+        match @[target-type]type-match
+        match @[target-type]type-match "(" ")"
+        match @[target-type]type-match "(" @[args]attribute-args-a attribute-args-b ")"
+        match @[target-type]type-match "(" @[args]attribute-args-a ")"
+        match @[target-type]type-match "(" @[args]attribute-args-b ")"
+        
+production attribute
+    match "["
+    if match attribute-item
+        match @[items]attribute-item
+        while match attribute-item
+            match "," @[items]attribute-item
+        if match ","
+            match ","
+    match "]"

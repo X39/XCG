@@ -1,0 +1,108 @@
+
+    
+production scope
+    alternatives        
+        match "{"
+            while not match "}"
+                alternatives
+                    match @[usings]using
+                    match @[body]control-structure
+                    match @[body]statement
+                    error
+            match "}"
+        match "=>"
+            alternatives
+                match @[usings]using
+                match @[body]control-structure
+                match @[body]statement
+            
+    
+production scope-getset
+    match "{"
+    alternatives
+        match "get" @[get]scope "set" @[set]scope
+        match "set" @[set]scope "get" @[get]scope
+        match "get" @[get]scope
+        match "set" @[set]scope
+    match "}"
+    
+production control-structure-body
+    alternatives
+        match @[body]scope
+        match @[body]control-structure
+        match @[body]statement
+
+production while-loop
+    match "while" "(" @[condition]expression ")" @[body]control-structure-body
+
+production if-body
+    match "if" "(" @[condition]expression ")" @[body]control-structure-body
+
+production else-body
+    match "else" @[else-body]control-structure-body
+
+production for-body
+    match "for" "("
+    if match expression
+        match @[pre]expression
+    match ";"
+    if match expression
+        match @[condition]expression
+    match ";"
+    if match expression
+        match @[post-inner]expression
+    match ")" @[body]control-structure-body
+
+production for-each-body
+    match "for" "(" @[pre]declaration ":" @[exp]expression ")" @[body]control-structure-body
+
+production if-else
+    match @[if]if-body
+    if match else-body
+        match @[else]else-body
+
+production switch-case
+    match "case" @[value]exp-value ":" @[body]control-structure-body
+
+production switch
+    set local has-default false
+    match "switch" "(" @[value]expression ")"
+    while not match "}"
+        alternatives
+            match @[part]switch-case
+            match "default" ":" @[default-body]control-structure-body
+                if get has-default
+                    print switch-default-already-set
+                else
+                    set local has-default true
+            match @[pragmas]pragma
+            error
+    match "}"
+
+production assembly-terminate
+    alternatives
+        match EOL
+        match "}"
+
+production assembly
+    match "assembly" "{"
+    while not match "}"
+        match @[opcode]ident
+            while not match assembly-terminate
+                alternatives
+                    match @[args]scalar
+                    match @[args]integer-binary
+                    match @[args]integer-hex
+                    match @[args]integer
+    match "}"
+
+production control-structure
+    alternatives
+        match @[pragmas]pragma
+        match @[content]while-loop
+        match @[content]for-body
+        match @[content]for-each-body
+        match @[content]if-else
+        match @[content]switch
+        match @[content]scope
+        match @[content]assembly

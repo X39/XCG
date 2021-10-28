@@ -1,0 +1,31 @@
+production template-usage-item
+    match @[key]ident
+
+production template-usage
+    match "<"
+    match @[items]template-usage-item
+    while match ","
+        alternatives
+            match "," @[items]template-usage-item
+            error
+    match ">"
+
+production template-definition-item-direct-type
+    match @[key]ident
+    if match "="
+        match "=" @[value]exp-value
+
+production template-definition-item-identifier
+    match "identifier" @[key]ident
+
+production template-definition
+    match "<"
+    alternatives
+        match @[items]template-definition-item-identifier
+        match @[items]template-definition-item-direct-type
+    while match ","
+        alternatives
+            match "," @[items]template-definition-item
+            match ","
+            error
+    match ">"

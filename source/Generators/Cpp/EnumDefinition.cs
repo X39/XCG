@@ -28,7 +28,9 @@ namespace XCG.Generators.Cpp
             writer.WriteLine("{");
 
             var subWhitespace = whitespace + "    ";
-            foreach(var entry in this.Entries)
+            writer.Write(subWhitespace);
+            writer.WriteLine("__UNSET__,");
+            foreach (var entry in this.Entries)
             {
                 writer.Write(subWhitespace);
                 writer.Write(entry);

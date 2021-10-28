@@ -1,4 +1,5 @@
-﻿using XCG.Parsing;
+﻿using System.Collections.Generic;
+using XCG.Parsing;
 using XCG.Validation;
 
 namespace XCG
@@ -8,5 +9,6 @@ namespace XCG
         void Generate(Parser parser, string output);
         void SetOption(string key, string? value);
         void RegisterRules(Validator validator);
+        IEnumerable<(string option, object? value)> GetOptions();
     }
 }

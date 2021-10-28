@@ -1,0 +1,3 @@
+message switch-default-already-set
+    with Multiple default cases found
+    level error

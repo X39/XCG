@@ -35,6 +35,12 @@ namespace XCG.Generators.Cpp
         [CppOption("console-color-capture-name")]
         public bool ConsoleColorCaptureName { get; set; } = true;
 
+        [CppOption("create-string-tree")]
+        public bool CreateStringTree { get; set; } = true;
+
+        [CppOption("create-visitor")]
+        public bool CreateVisitor { get; set; } = true;
+
         [CppOption("debug")]
         public bool Debug { get; set; } = false;
 

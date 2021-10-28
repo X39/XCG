@@ -215,11 +215,50 @@ namespace XCG.Generators.Cpp
                 .GroupBy((q) => q.Key)
                 .Select((g) => new CaptureDefinition(g.Key, g.Select((q) => q.ToTypeImpl(this.Options)))));
 
-            instanceClass.PublicParts.AddRange(captureClasses.Select((q) => q.CreatePrintTreeMethodDefinition(this.Options)));
+            if (this.Options.CreateStringTree)
+            {
+                instanceClass.PublicParts.AddRange(captureClasses.Select((q) => q.CreatePrintTreeMethodDefinition(this.Options)));
+            }
+            if (this.Options.CreateVisitor)
+            {
+                var visitorClass = new ClassDefinition("visitor");
+                visitorClass.ProtectedParts.AddRange(
+                    captureClasses.Select((q) =>
+                    {
+                        var methodDefinition = new MethodDefinition(
+                            EType.Boolean,
+                            String.Concat(this.Options.MethodsPrefix, "visit_enter"),
+                            new ArgImpl { Name = "node", TypeString = q.FullName.ToCppSharedPtrType() })
+                        {
+                            new ReturnPart(EValueConstant.True),
+                        };
+                        methodDefinition.IsVirtual = true;
+                        return methodDefinition;
+                    }));
+                visitorClass.ProtectedParts.AddRange(
+                    captureClasses.Select((q) =>
+                    {
+                        var methodDefinition = new MethodDefinition(
+                            EType.Boolean,
+                            String.Concat( this.Options.MethodsPrefix, "visit_leave"),
+                            new ArgImpl { Name = "node", TypeString = q.FullName.ToCppSharedPtrType() })
+                        {
+                            new ReturnPart(EValueConstant.True),
+                        };
+                        methodDefinition.IsVirtual = true;
+                        return methodDefinition;
+                    }));
+                visitorClass.PublicParts.AddRange(captureClasses.Where((q) => q.Name == "main").Select((q) => q.CreateVisitTreeMethodDefinition(this.Options)));
+                visitorClass.PrivateParts.AddRange(captureClasses.Where((q) => q.Name != "main").Select((q) => q.CreateVisitTreeMethodDefinition(this.Options)));
+                instanceClass.PublicParts.Add(visitorClass);
+            }
             instanceClass.PrivateParts.Add(GetSkipMethod(parser, this.Options));
             System.IO.Directory.CreateDirectory(output);
             using (var writer = new System.IO.StreamWriter(System.IO.Path.Combine(output, this.Options.HeaderFileName)))
             {
+                var guardName = String.Concat("INCLUDE_GUARD_", this.Options.ImplementationFileName.Replace('.', '_'),Options.TypePrefix, "_", Options.ClassName).ToUpper();
+                writer.WriteLine($@"#ifndef {guardName}");
+                writer.WriteLine($@"#define {guardName}");
                 writer.WriteLine($@"#include <memory>");
                 writer.WriteLine($@"#include <string>");
                 writer.WriteLine($@"#include <string_view>");
@@ -240,6 +279,7 @@ namespace XCG.Generators.Cpp
                     };
                     ns.WriteHeader(this.Options, writer, String.Empty);
                 }
+                writer.WriteLine($@"#endif // {guardName}");
             }
             using (var writer = new System.IO.StreamWriter(System.IO.Path.Combine(output, this.Options.ImplementationFileName)))
             {
@@ -430,6 +470,16 @@ namespace XCG.Generators.Cpp
             {
                 throw new KeyNotFoundException($@"The option ""{key}"" was not found.");
             }
+        }
+
+        public IEnumerable<(string option, object? value)> GetOptions()
+        {
+            var properties = this.Options.GetType().GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+            return properties.Select((q) => new
+            {
+                prop = q,
+                att = q.GetCustomAttributes(true).Where((q) => q is CppOptionAttribute).Cast<CppOptionAttribute>().FirstOrDefault()
+            }).Where((q) => q.att is not null).Select((q) => (option: q.att!.Name.ToLower(), value: q.prop.GetValue(this.Options)));
         }
     }
 }

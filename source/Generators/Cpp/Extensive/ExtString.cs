@@ -22,39 +22,48 @@ namespace XCG.Generators.Cpp.Extensive
             switch (name)
             {
                 default: return name;
-                case "class":
-                case "namespace":
-                case "switch":
+                case "auto":
+                case "bool":
                 case "case":
+                case "char":
+                case "class":
+                case "const":
                 case "default":
-                case "if":
-                case "else":
-                case "for":
-                case "typename":
-                case "template":
-                case "return":
-                case "while":
                 case "do":
-                case "public":
-                case "static":
+                case "double":
+                case "else":
+                case "export":
+                case "false":
+                case "float":
+                case "for":
+                case "if":
+                case "import ":
                 case "inline":
+                case "int":
+                case "long":
+                case "module":
+                case "mutable":
+                case "namespace":
+                case "operator":
                 case "private":
                 case "protected":
-                case "struct":
-                case "virtual":
-                case "operator":
-                case "true":
-                case "false":
-                case "auto":
-                case "int":
-                case "bool":
-                case "float":
-                case "double":
-                case "char":
-                case "short":
-                case "long":
-                case "this":
+                case "public":
                 case "register":
+                case "return":
+                case "short":
+                case "std":
+                case "static":
+                case "struct":
+                case "sizeof":
+                case "switch":
+                case "template":
+                case "this":
+                case "true":
+                case "typeof":
+                case "typename":
+                case "using":
+                case "virtual":
+                case "while":
                     return String.Concat(name, '_');
             }
         }

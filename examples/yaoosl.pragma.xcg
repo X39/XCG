@@ -1,0 +1,32 @@
+production pragma
+    match "<!pragma"
+    while not match "!>"
+        alternatives
+            match @[contents]pragma-disable
+            match @[contents]pragma-enable
+            match @[contents]pragma-size
+            match @[contents]pragma-align
+            error
+    match "!>"
+    
+production pragma-align
+    match "align"
+    alternatives
+        match @[bytes]integer-binary
+        match @[bytes]integer-hex
+        match @[bytes]integer
+    
+production pragma-size
+    match "size"
+    alternatives
+        match @[bytes]integer-binary
+        match @[bytes]integer-hex
+        match @[bytes]integer
+    
+production pragma-disable
+    match "disable"
+    match @[code]ident
+    
+production pragma-enable
+    match "enable"
+    match @[code]ident

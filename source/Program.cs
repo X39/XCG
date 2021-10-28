@@ -20,6 +20,12 @@ namespace XCG
 
             [Option('s', "set", HelpText = "Allows to change generator-dependant settings.", MetaValue = "OPTION:VALUE ...")]
             public IEnumerable<string>? Settings { get; set; }
+
+            [Option("options", HelpText = "Lists all options of a given generator.")]
+            public bool ListOptions{ get; set; }
+
+            [Option('d', "dry-run", HelpText = "Will not generate any output files if set.")]
+            public bool DryRun { get; set; }
         }
 
         private static void Colored(ESeverity severity, Action action)
@@ -88,6 +94,47 @@ namespace XCG
             };
         }
 
+        private static IEnumerable<string> ResolveWildcards(IEnumerable<string> strings)
+        {
+            foreach (var filePathWithPossibleWildcard in strings)
+            {
+                if (filePathWithPossibleWildcard.Contains('*'))
+                {
+                    var splitted = filePathWithPossibleWildcard.Split('*');
+                    var root = splitted.First();
+                    var root_dir = System.IO.Path.GetDirectoryName(root);
+                    if (root_dir is null) throw new FatalException("Failed to apply wildcard - System.IO.Path.GetDirectoryName returned NULL.");
+                    var files = System.IO.Directory.GetFiles(root_dir);
+                    foreach (var filePath in files.Where((q) => q.StartsWith(root)))
+                    {
+                        var part = filePath.Substring(root.Length);
+                        bool aborted = false;
+                        foreach (var s in splitted.Skip(1).Where((q) => !String.IsNullOrWhiteSpace(q)))
+                        {
+                            var index = part.IndexOf(s);
+                            if (index != -1)
+                            {
+                                part = part.Substring(index + s.Length);
+                            }
+                            else
+                            {
+                                aborted = true;
+                                break;
+                            }
+                        }
+                        if (!aborted)
+                        {
+                            yield return filePath;
+                        }
+                    }
+                }
+                else
+                {
+                    yield return filePathWithPossibleWildcard;
+                }
+            }
+        }
+
         private static int Main(string[] args)
         {
             CLIOptions? cliOptions = null;
@@ -99,7 +146,7 @@ namespace XCG
             #region Parsing
             var parser = new Parsing.Parser();
             bool parseOk = true;
-            foreach (string? s in cliOptions.Input ?? Array.Empty<string>())
+            foreach (string? s in ResolveWildcards(cliOptions.Input ?? Array.Empty<string>()))
             {
                 string? filePath = System.IO.Path.GetFullPath(s);
                 if (System.IO.File.Exists(filePath))
@@ -325,7 +372,17 @@ namespace XCG
                     }
                     return -1;
             }
-
+            #endregion
+            #region List Generator Options
+            if (cliOptions.ListOptions)
+            {
+                foreach (var it in generator.GetOptions())
+                {
+                    Console.WriteLine($"{it.option}:{it.value}");
+                }
+            }
+            #endregion
+            #region Set Generator Options
             // Set generator options
             bool optionError = false;
             foreach (string? option in cliOptions.Settings ?? Array.Empty<string>())
@@ -375,6 +432,7 @@ namespace XCG
             }
             #endregion
 
+            if (cliOptions.DryRun) { return 0; }
             // Tell the generator to generate the parser
             string? outputPath = System.IO.Path.GetFullPath(cliOptions.Output ?? System.Environment.CurrentDirectory);
             try
@@ -467,13 +525,13 @@ namespace XCG
             validator.Register("XCG", ESeverity.Error, (parser) =>
             {
                 return parser.Productions.Concat<Parsing.IStatement>(parser.LeftRecursives)
-                .SelectMany((q) => q.FindChildren<Parsing.Reference>())
-                .Where((q) => q.Refered is null)
-                .Select((q) => new Validation.Hint
+                .SelectMany((reference) => reference.FindChildren<Parsing.Reference>())
+                .Where((reference) => reference.Refered is null)
+                .Select((reference) => new Validation.Hint
                 {
-                    File = q.Diagnostics.File,
-                    Line = q.Diagnostics.Line,
-                    Message = $@"Reference is not refering to anything existing."
+                    File = reference.Diagnostics.File,
+                    Line = reference.Diagnostics.Line,
+                    Message = $@"Reference {{ {reference.Text} }} is not refering to anything existing."
                 });
             });
             // Alias Collision
@@ -496,44 +554,6 @@ namespace XCG
                             Line = token.Diagnostics.Line,
                             Message = $@"Alias ""{token.Alias}"" collides with existing identifier or alias"
                         });
-                    }
-                }
-                return hints;
-            });
-            // Ensure token parts only refer to tokens
-            validator.Register("XCG", ESeverity.Error, (parser) =>
-            {
-                var hints = new List<Validation.Hint>();
-                var identifiers = parser.Tokens.Select((q) => q.Identifier).Concat(parser.Productions.Select((q) => q.Identifier)).Distinct().ToHashSet();
-                foreach (var token in parser.Tokens)
-                {
-                    foreach (var it in token.Children)
-                    {
-                        List<Parsing.IStatement> parts;
-                        if (it is Parsing.TokenStatements.Require require)
-                        {
-                            parts = require.Parts;
-                        }
-                        else if (it is Parsing.TokenStatements.Backtrack backtrack)
-                        {
-                            parts = backtrack.Parts;
-                        }
-                        else
-                        {
-                            throw new FatalException("Missing TokenStatement implementation");
-                        }
-                        foreach (var reference in parts.Where((q) => q is Parsing.Reference).Cast<Parsing.Reference>())
-                        {
-                            if (reference.Refered is not Parsing.Token)
-                            {
-                                hints.Add(new Validation.Hint
-                                {
-                                    File = token.Diagnostics.File,
-                                    Line = token.Diagnostics.Line,
-                                    Message = $@"Expected reference to refer to a token."
-                                });
-                            }
-                        }
                     }
                 }
                 return hints;
@@ -677,7 +697,7 @@ namespace XCG
                 return hints;
             });
 
-            // require only ever refers to tokens
+            // require references must refer to anything
             validator.Register("XCG", ESeverity.Error, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
@@ -687,13 +707,61 @@ namespace XCG
                     var references = require.Parts.WhereIs<Parsing.Reference>();
                     foreach (var reference in references)
                     {
-                        if (reference.Refered is not Parsing.Token)
+                        if (reference.Refered is null)
                         {
                             hints.Add(new Validation.Hint
                             {
                                 Line = require.Diagnostics.Line,
                                 File = require.Diagnostics.File,
-                                Message = $@"Require may only refer to tokens."
+                                Message = $@"Reference {{ {reference.Text} }} is not refering to anything."
+                            });
+                        }
+                    }
+                }
+                return hints;
+            });
+
+            // backtrack references must refer to to tokens
+            validator.Register("XCG", ESeverity.Error, (parser) =>
+            {
+                var hints = new List<Validation.Hint>();
+                var requires = parser.Tokens.SelectMany((q) => q.Children.WhereIs<Parsing.TokenStatements.Require>());
+                foreach (var require in requires)
+                {
+                    var references = require.Parts.WhereIs<Parsing.Reference>();
+                    foreach (var reference in references)
+                    {
+                        if (reference.Refered is not null && reference.Refered is not Parsing.Token)
+                        {
+                            hints.Add(new Validation.Hint
+                            {
+                                Line = require.Diagnostics.Line,
+                                File = require.Diagnostics.File,
+                                Message = $@"Reference {{ {reference.Text} }} may only refer to tokens but refers to a {reference.Refered.GetType().FullName}."
+                            });
+                        }
+                    }
+                }
+                return hints;
+            });
+
+            // require references must refer to to tokens
+            validator.Register("XCG", ESeverity.Error, (parser) =>
+            {
+                var hints = new List<Validation.Hint>();
+                var backtracks = parser.Tokens.SelectMany((q) => q.Children.WhereIs<Parsing.TokenStatements.Backtrack>());
+                foreach (var backtrack in backtracks)
+                {
+                    var references = backtrack.Parts.WhereIs<Parsing.Reference>();
+                    foreach (var reference in references)
+                    {
+                        if (reference.Refered is not null && reference.Refered is not Parsing.Token)
+                        {
+                            hints.Add(new Validation.Hint
+                            {
+                                Line = backtrack.Diagnostics.Line,
+                                File = backtrack.Diagnostics.File,
+                                Message = $@"Reference {{ {reference.Text} }} may only refer to tokens but refers to a {reference.Refered.GetType().FullName}."
                             });
                         }
                     }

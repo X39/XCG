@@ -281,7 +281,7 @@ namespace XCG.Parsing
                 this.NextChar();
             }
             int endIndex = this.index;
-            return this.contents[startIndex..(endIndex - 1)];
+            return this.contents[startIndex..endIndex];
         }
         /// <summary>
         /// Skips until a character not in <paramref name="chars"/> is encountered.
@@ -487,8 +487,8 @@ namespace XCG.Parsing
                 }
                 else if (this.TryMatch("level"))
                 {
-                    string? res = this.ReadToEndOfLine();
-                    message.Severity = res.Trim().ToLower() switch
+                    string? res = this.ReadToEndOfLine().Trim();
+                    message.Severity = res.ToLower() switch
                     {
                         "error" => ESeverity.Error,
                         "info" => ESeverity.Info,

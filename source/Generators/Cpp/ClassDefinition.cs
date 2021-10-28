@@ -129,6 +129,76 @@ namespace XCG.Generators.Cpp
         }
 
 
+        public MethodDefinition CreateVisitTreeMethodDefinition(CppOptions cppOptions)
+        {
+            string level = $@"std::string(""{new string(' ', cppOptions.CreateStringTreeSpaces)}  "")";
+            string level_alt = $@"std::string(""{new string(' ', cppOptions.CreateStringTreeSpaces)}- "")";
+            var methodDefinition = new MethodDefinition(
+                "bool", String.Concat(cppOptions.MethodsPrefix, "visit"),
+                new ArgImpl { Name = "node", TypeString = this.FullName.ToCppSharedPtrType() })
+            {
+                $@"if (!visit_enter(node)) {{ return false; }}",
+            };
+
+            var captureNameColoringStart = !cppOptions.ConsoleColorCaptureName ? string.Empty : string.Concat("\"", TerminalColor.ForegroundBrightBlack, "\"");
+            var captureNameColoringEnd = !cppOptions.ConsoleColorCaptureName ? string.Empty : string.Concat("\"", TerminalColor.Reset, "\"");
+
+            CaptureDefinition[] captureDefinitions = this.PublicParts.Concat(this.ProtectedParts).Concat(this.PrivateParts).WhereIs<CaptureDefinition>().ToArray();
+            for (int i = 0; i < captureDefinitions.Length; i++)
+            {
+                void handleSingle(CppContainerBase container, TypeImpl type, string nav, string captureName)
+                {
+                    if (type.TypeString is not null)
+                    {
+                        container.Add(new IfPart(IfPart.EIfScope.If, nav)
+                        {
+                            new VariableDefinition(EType.Auto, "lines", $@"{String.Concat(cppOptions.MethodsPrefix, "visit")}({nav})"),
+                        });
+                    }
+                }
+                void handle(CaptureDefinition def, CppContainerBase container, string nav, string captureName)
+                {
+                    if (def.Types.Count == 1)
+                    {
+                        var type = def.Types.First();
+                        handleSingle(container, type, nav, captureName);
+                    }
+                    else
+                    {
+                        //var nav = captureDefinition.IsSingleHit ? $"node{n}{captureDefinition.Name}" : iteratorName;
+                        container.Add($@"switch ({nav}.index())");
+                        var scope = new ScopePart();
+                        container.Add(scope);
+
+                        for (int typeIndex = 0; typeIndex < def.Types.Count; typeIndex++)
+                        {
+                            var type = def.Types[typeIndex];
+                            scope.Add($@"case {typeIndex}:");
+                            handleSingle(scope, type, $@"std::get<{type.ToString(cppOptions)}>({nav})", captureName);
+                            scope.Add($@"break;");
+                        }
+                    }
+                }
+                var captureDefinition = captureDefinitions[i];
+
+                if (captureDefinition.IsSingleHit)
+                {
+                    var nav = $"node->{captureDefinition.Name}";
+                    handle(captureDefinition, methodDefinition, nav, captureDefinition.Name);
+                }
+                else
+                {
+                    var nav = $"element";
+                    methodDefinition.Add($@"for (auto element : node->{captureDefinition.Name})");
+                    var scope = new ScopePart();
+                    methodDefinition.Add(scope);
+                    handle(captureDefinition, scope, nav, captureDefinition.Name);
+                }
+            }
+
+            methodDefinition.Add(new ReturnPart("visit_leave(node)"));
+            return methodDefinition;
+        }
         public MethodDefinition CreatePrintTreeMethodDefinition(CppOptions cppOptions)
         {
             string level     = $@"std::string(""{new string(' ', cppOptions.CreateStringTreeSpaces)}  "")";

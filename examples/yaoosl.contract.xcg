@@ -1,0 +1,110 @@
+production contract
+    match @[scope]encapsulation "contract" @[name]ident
+    if match template-definition
+        match @[template]template-definition
+    match "{"
+    while not match "}"
+        alternatives
+            match contract-method
+            match contract-constructor
+            match contract-indexer
+            match contract-operator-binary-overload
+            match contract-operator-unary-overload
+            match contract-operator-nullar-overload
+            match contract-property
+            match contract-field
+    match "}"
+
+production contract-method
+    match @[return-type]type-match @[name]ident @[arglist]contract-method-arglist ";"
+
+production contract-constructor
+    match @[name]ident @[arglist]contract-method-arglist ";"
+
+production contract-indexer
+    match @[target-type]type-match @[arglist]contract-method-arglist-indexer 
+    alternatives
+        match "{" "get" ";" "set" ";" "}"
+            set capture is-set true
+            set capture is-get true
+        match "{" "get" ";" "}"
+            set capture is-get true
+        match "{" "set" ";" "}"
+            set capture is-set true
+    
+production contract-operator-binary-overload
+    match @[target-type]type-match  "operator"
+    match "(" @[left]type-match ")"
+    alternatives
+        match @[operator]"+"
+        match @[operator]"-"
+        match @[operator]"*"
+        match @[operator]"/"
+        match @[operator]"<<<"
+        match @[operator]"<<"
+        match @[operator]"<="
+        match @[operator]"<"
+        match @[operator]">>>"
+        match @[operator]">>"
+        match @[operator]">="
+        match @[operator]">"
+        match @[operator]"||"
+        match @[operator]"|"
+        match @[operator]"&&"
+        match @[operator]"&"
+        match @[operator]"==="
+        match @[operator]"=="
+        match @[operator]"!="
+        match @[operator]"^"
+    match "(" @[right]type-match ")" ";"
+
+production contract-operator-unary-overload
+    match @[target-type]type-match  "operator"
+    alternatives
+        match @[operator]"+"
+        match @[operator]"-"
+        match @[operator]"!"
+        match @[operator]"~"
+    match "(" @[right]type-match ")" ";"
+
+production contract-operator-nullar-overload
+    match @[meta]method-meta "operator"
+    alternatives
+        match @[operator]"."
+        match @[operator]"->"
+    match ";"
+
+production contract-property
+    match @[target-type]type-match @[name]ident
+    alternatives
+        match "{" "get" ";" "set" ";" "}"
+            set capture is-set true
+            set capture is-get true
+        match "{" "get" ";" "}"
+            set capture is-get true
+        match "{" "set" ";" "}"
+            set capture is-set true
+
+production contract-field
+    match @[target-type]type-match @[name]ident ";"
+
+production contract-method-arglist
+    match "("
+    if match type-match
+        match @[args]type-match
+        while not match ")" 
+            alternatives
+                match "," @[args]type-match
+                match ","
+                error
+    match ")"
+    
+production contract-method-arglist-indexer
+    match "["
+    match @[args]type-match
+    while not match "]"
+        alternatives
+            match "," @[args]type-match
+            match ","
+            error
+    match "]"

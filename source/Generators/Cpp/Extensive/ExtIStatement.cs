@@ -127,6 +127,9 @@ namespace XCG.Generators.Cpp.Extensive
                 cppOptions.ClassCaptureDefinitionsMap.Add(captureContainingReference, captureDefinition);
             }
 
+
+            // ToDo: Implement optional captures with multiple types (std::variant default-initializes to first variant, we want std::optional here instead)
+
             return new ClassDefinition(statement switch
             {
                 Parsing.Token token => token.ToCppTypeName(cppOptions, false),
