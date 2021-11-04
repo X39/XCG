@@ -4,16 +4,16 @@ namespace XCG.Generators.Cpp
 {
     internal class ScopePart : CppContainerBase
     {
-        private readonly EUsage usage;
+        private readonly EUsage _usage;
 
         public ScopePart(EUsage usage = EUsage.Implementation)
         {
-            this.usage = usage;
+            this._usage = usage;
         }
 
         public override void WriteHeader(CppOptions options, StreamWriter writer, string whitespace)
         {
-            if (!usage.HasFlag(EUsage.Header)) return;
+            if (!_usage.HasFlag(EUsage.Header)) return;
             writer.Write(whitespace);
             writer.WriteLine("{");
             var subWhitespace = string.Concat("    ", whitespace);
@@ -28,7 +28,7 @@ namespace XCG.Generators.Cpp
 
         public override void WriteImplementation(CppOptions options, StreamWriter writer, string whitespace)
         {
-            if (!usage.HasFlag(EUsage.Implementation)) return;
+            if (!_usage.HasFlag(EUsage.Implementation)) return;
             writer.Write(whitespace);
             writer.WriteLine("{");
             var subWhitespace = string.Concat("    ", whitespace);

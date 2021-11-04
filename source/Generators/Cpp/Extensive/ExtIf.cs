@@ -14,45 +14,45 @@ namespace XCG.Generators.Cpp.Extensive
         /// </remarks>
         /// <param name="if"></param>
         /// <param name="cppOptions"></param>
-        /// <param name="skip">The amount of match-tokens to skip.</param>
         /// <param name="typeName">The type the <paramref name="if"/> gets to capture things onto.</param>
+        /// <param name="stateTypeName"></param>
         /// <returns></returns>
         public static MethodDefinition CreateMethodDefinition(this Parsing.Statements.If @if, CppOptions cppOptions, string typeName, string stateTypeName)
         {
-            var ___localsCount = 0;
-            string toUnique(string str) => string.Concat(str, (++___localsCount).ToString());
-            var resettable = toUnique("resettable");
+            var localsCount = 0;
+            string ToUnique(string str) => string.Concat(str, (++localsCount).ToString());
+            var resettable = ToUnique("resettable");
 
             var ifName = cppOptions.ToUnique("if");
             var methodDefinition = new MethodDefinition(
                 EType.Boolean,
                 cppOptions.ToUnique(string.Concat(cppOptions.MethodsPrefix, ifName, "_")),
-                new ArgImpl { Name = Constants.isCanVariable, Type = EType.Boolean },
-                new ArgImpl { Name = Constants.classInstanceVariable, TypeString = typeName, ReferenceCount = 1 },
-                new ArgImpl { Name = Constants.stateInstanceVariable, TypeString = stateTypeName, ReferenceCount = 1 },
-                new ArgImpl { Name = Constants.depthVariable, Type = EType.SizeT }
+                new ArgImpl { Name = Constants.IsCanVariable, Type = EType.Boolean },
+                new ArgImpl { Name = Constants.ClassInstanceVariable, TypeString = typeName, ReferenceCount = 1 },
+                new ArgImpl { Name = Constants.StateInstanceVariable, TypeString = stateTypeName, ReferenceCount = 1 },
+                new ArgImpl { Name = Constants.DepthVariable, Type = EType.SizeT }
             )
             {
                 $@"resettable {resettable}(*this);"
             };
 
 
-            var conditionVariable = toUnique("cond");
-            methodDefinition.AddRange(@if.Condition!.GetEvaluationResult(cppOptions, stateTypeName, conditionVariable, true, toUnique));
+            var conditionVariable = ToUnique("cond");
+            methodDefinition.AddRange(@if.Condition!.GetEvaluationResult(cppOptions, stateTypeName, conditionVariable, true, ToUnique));
             methodDefinition.Add($@"{resettable}.reset();");
 
 
             foreach (var isCan in Constants.TrueFalseArray)
             {
-                var isCanIf = isCan ? new IfPart(IfPart.EIfScope.If, Constants.isCanVariable) : new IfPart(IfPart.EIfScope.Else, null);
+                var isCanIf = isCan ? new IfPart(IfPart.EIfScope.If, Constants.IsCanVariable) : new IfPart(IfPart.EIfScope.Else, null);
                 methodDefinition.Add(isCanIf);
 
 
                 var ifPart = new IfPart(IfPart.EIfScope.If, @if.Negated ? $"!{conditionVariable}" : conditionVariable);
                 isCanIf.Add(ifPart);
                 // Handle any if statements
-                ifPart.AddRange(@if.Children.Handle(cppOptions, isCan, toUnique));
-                ifPart.Add(new DebugPart { $@"trace(""Returning true on {methodDefinition.Name}"", {Constants.depthVariable});" });
+                ifPart.AddRange(@if.Children.Handle(cppOptions, isCan, ToUnique));
+                ifPart.Add(new DebugPart { $@"trace(""Returning true on {methodDefinition.Name}"", {Constants.DepthVariable});" });
                 ifPart.Add(new ReturnPart(EValueConstant.True));
 
 
@@ -62,14 +62,14 @@ namespace XCG.Generators.Cpp.Extensive
                     isCanIf.Add(elsePart);
 
                     // Handle any else statements
-                    elsePart.AddRange(@if.Else.Handle(cppOptions, isCan, toUnique));
-                    elsePart.Add(new DebugPart { $@"trace(""Returning true on {methodDefinition.Name}"", {Constants.depthVariable});" });
+                    elsePart.AddRange(@if.Else.Handle(cppOptions, isCan, ToUnique));
+                    elsePart.Add(new DebugPart { $@"trace(""Returning true on {methodDefinition.Name}"", {Constants.DepthVariable});" });
                     elsePart.Add(new ReturnPart(EValueConstant.True));
                 }
                 else
                 {
                     // Handle any else statements
-                    isCanIf.Add(new DebugPart { $@"trace(""Returning true on {methodDefinition.Name}"", {Constants.depthVariable});" });
+                    isCanIf.Add(new DebugPart { $@"trace(""Returning true on {methodDefinition.Name}"", {Constants.DepthVariable});" });
                     isCanIf.Add(new ReturnPart(EValueConstant.True));
                 }
             }

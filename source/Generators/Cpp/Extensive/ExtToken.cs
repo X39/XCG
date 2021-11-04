@@ -11,7 +11,7 @@ namespace XCG.Generators.Cpp.Extensive
         }
         public static string GetCppEnumName(this Parsing.Token token)
         {
-            return string.Concat(token.Identifier.ToCppName().ToUpper());
+            return token.Identifier.ToCppName().ToUpper();
         }
         public static string ToCppTypeName(this Parsing.Token token, CppOptions cppOptions, bool full)
         {
@@ -19,161 +19,157 @@ namespace XCG.Generators.Cpp.Extensive
         }
         public static IEnumerable<ICppPart> ToParts(this Parsing.Token token, CppOptions cppOptions)
         {
-            var ___localsCount = 0;
-            string toUnique(string str) => string.Concat(str, (++___localsCount).ToString());
-            var resettable = toUnique("resettable");
+            var localsCount = 0;
+            string ToUnique(string str) => string.Concat(str, (++localsCount).ToString());
+            var resettable = ToUnique("resettable");
             var methodDefinition = new MethodDefinition(EType.OptionalSizeT, token.GetMethodName(),
-                new ArgImpl { Name = Constants.depthVariable, Type = EType.SizeT })
+                new ArgImpl { Name = Constants.DepthVariable, Type = EType.SizeT })
             {
                 new FullBody { $@"resettable {resettable}(*this);" }
             };
 
             foreach (var statement in token.Children)
             {
-                if (statement is Parsing.TokenStatements.Require require)
+                switch (statement)
                 {
-                    var countVariable = toUnique("count");
-                    methodDefinition.Add(new VariableDefinition(EType.SizeT, countVariable, "0"));
-                    var localLoop = require.Range.To != int.MaxValue ? new WhilePart($"current() != '\\0' && {countVariable} < {require.Range.To}") : new WhilePart("current() != '\\0'");
-                    methodDefinition.Add(localLoop);
-                    var isFirst = true;
-                    foreach (var part in require.Parts)
+                    case Parsing.TokenStatements.Require require:
                     {
-                        if (part is Parsing.Word word)
+                        var countVariable = ToUnique("count");
+                        methodDefinition.Add(new VariableDefinition(EType.SizeT, countVariable, "0"));
+                        var localLoop = require.Range.To != int.MaxValue ? new WhilePart($"current() != '\\0' && {countVariable} < {require.Range.To}") : new WhilePart("current() != '\\0'");
+                        methodDefinition.Add(localLoop);
+                        var isFirst = true;
+                        foreach (var part in require.Parts)
                         {
-                            if (word.Text.Length > 1)
+                            switch (part)
                             {
-                                var wordHolderVariable = toUnique("str");
-                                localLoop.Add(new VariableDefinition(new TypeImpl { Type = EType.Char, PointerCount = 1, IsConst = true }, wordHolderVariable, $@"""{string.Concat(word.Text.Select((c) => c.Escape()))}"""));
-                                localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"m_contents.length() - m_offset >= {word.Text.Length} && {(require.Negated ? "!" : string.Empty)}std::equal(m_contents.begin() + m_offset, m_contents.begin() + m_offset + {word.Text.Length}, {wordHolderVariable}, {wordHolderVariable} + {word.Text.Length})")
+                                case Parsing.Word word when word.Text.Length > 1:
                                 {
-                                    $@"{countVariable}++;",
-                                    $@"for (size_t i = 0; i < {word.Text.Length}; i++)",
-                                    $@"{{",
-                                    $@"    next();",
-                                    $@"}}",
-                                    $@"continue;",
-                                });
-                            }
-                            else
-                            {
-                                localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"current() {(require.Negated ? "!" : "=")}= '{word.Text.First().Escape()}'")
+                                    var wordHolderVariable = ToUnique("str");
+                                    localLoop.Add(new VariableDefinition(new TypeImpl { Type = EType.Char, PointerCount = 1, IsConst = true }, wordHolderVariable, $@"""{string.Concat(word.Text.Select((c) => c.Escape()))}"""));
+                                    localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"m_contents.length() - m_offset >= {word.Text.Length} && {(require.Negated ? "!" : string.Empty)}std::equal(m_contents.begin() + m_offset, m_contents.begin() + m_offset + {word.Text.Length}, {wordHolderVariable}, {wordHolderVariable} + {word.Text.Length})")
+                                    {
+                                        $@"{countVariable}++;",
+                                        $@"for (size_t i = 0; i < {word.Text.Length}; i++)",
+                                        $@"{{",
+                                        $@"    next();",
+                                        $@"}}",
+                                        $@"continue;",
+                                    });
+                                    break;
+                                }
+                                case Parsing.Word word:
+                                    localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"current() {(require.Negated ? "!" : "=")}= '{word.Text.First().Escape()}'")
+                                    {
+                                        $@"{countVariable}++;",
+                                        $@"next();",
+                                        $@"continue;",
+                                    });
+                                    break;
+                                case Parsing.CharacterRange range:
+                                    localLoop.Add(new IfPart(isFirst, $@"{(require.Negated ? "!" : string.Empty)}('{range.Start}' <= current() && current() <= '{range.End}')")
+                                    {
+                                        $@"{countVariable}++;",
+                                        $@"next();",
+                                        $@"continue;",
+                                    });
+                                    break;
+                                case Parsing.Reference {Referred: Parsing.Token referredToken}:
                                 {
-                                    $@"{countVariable}++;",
-                                    $@"next();",
-                                    $@"continue;",
-                                });
+                                    var tokenHolderVariable = ToUnique("res");
+                                    localLoop.Add(new VariableDefinition(new TypeImpl { Type = EType.OptionalSizeT }, tokenHolderVariable, $@"{referredToken.GetMethodName()}({Constants.DepthVariable} + 1)"));
+                                    localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"{tokenHolderVariable}.has_value()")
+                                    {
+                                        $@"{countVariable}++;",
+                                        $@"for (size_t i = 0; i < {tokenHolderVariable}; i++)",
+                                        $@"{{",
+                                        $@"    next();",
+                                        $@"}}",
+                                        $@"continue;",
+                                    });
+                                    break;
+                                }
+                                case Parsing.Reference:
+                                    throw new FatalException("Unimplemented require part");
+                                default:
+                                    throw new FatalException("Unimplemented require part");
                             }
+
+                            isFirst = false;
                         }
-                        else if (part is Parsing.CharacterRange range)
+                        localLoop.Add(new FullBody { $@"break;" });
+                        if (require.Range.From > 0)
                         {
-                            localLoop.Add(new IfPart(isFirst, $@"{(require.Negated ? "!" : string.Empty)}('{range.Start}' <= current() && current() <= '{range.End}')")
+                            methodDefinition.Add(new IfPart(IfPart.EIfScope.If, $@"{countVariable} < {require.Range.From}")
                             {
-                                $@"{countVariable}++;",
-                                $@"next();",
-                                $@"continue;",
+                                $@"{resettable}.reset();",
+                                new DebugPart { $@"trace(""Returning EmptyClosure on {token.Identifier}"", {Constants.DepthVariable});" },
+                                new ReturnPart(EValueConstant.EmptyClosure),
                             });
                         }
-                        else if (part is Parsing.Reference reference)
-                        {
-                            if (reference.Refered is Parsing.Token referedToken)
-                            {
-                                var tokenHolderVariable = toUnique("res");
-                                localLoop.Add(new VariableDefinition(new TypeImpl { Type = EType.OptionalSizeT }, tokenHolderVariable, $@"{referedToken.GetMethodName()}({Constants.depthVariable} + 1)"));
-                                localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"{tokenHolderVariable}.has_value()")
-                                {
-                                    $@"{countVariable}++;",
-                                    $@"for (size_t i = 0; i < {tokenHolderVariable}; i++)",
-                                    $@"{{",
-                                    $@"    next();",
-                                    $@"}}",
-                                    $@"continue;",
-                                });
-                            }
-                            else
-                            {
-                                throw new FatalException("Unimplemented require part");
-                            }
-                        }
-                        else
-                        {
-                            throw new FatalException("Unimplemented require part");
-                        }
-                        isFirst = false;
+
+                        break;
                     }
-                    localLoop.Add(new FullBody { $@"break;" });
-                    if (require.Range.From > 0)
+                    case Parsing.TokenStatements.Backtrack backtrack:
                     {
-                        methodDefinition.Add(new IfPart(IfPart.EIfScope.If, $@"{countVariable} < {require.Range.From}")
+                        var countVariable = ToUnique("count");
+                        var localOffsetVariable = ToUnique("local_offset");
+                        methodDefinition.Add(new VariableDefinition(EType.SizeT, countVariable, backtrack.Range.To.ToString()));
+                        methodDefinition.Add(new VariableDefinition(EType.SizeT, localOffsetVariable, "0"));
+                        var localLoop = backtrack.Range.To != int.MaxValue ? new WhilePart($"current() != '\\0' && {countVariable} > 0") : new WhilePart("current() != '\\0'");
+                        methodDefinition.Add(localLoop);
+                        var localsCount2 = 0;
+                        var isFirst = true;
+                        foreach (var part in backtrack.Parts)
+                        {
+                            switch (part)
+                            {
+                                case Parsing.Word word when word.Text.Length > 1:
+                                {
+                                    var wordHolderVariable = ToUnique("str");
+                                    localLoop.Add(new VariableDefinition(new TypeImpl { Type = EType.Char, PointerCount = 1, IsConst = true }, wordHolderVariable, $@"""{word.Text.Replace("\"", "\\\"")}"""));
+                                    localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"m_offset >= {word.Text.Length} && {(!backtrack.Negated ? "!" : string.Empty)}std::equal(m_contents.begin() + m_offset - {word.Text.Length}, m_contents.begin() + m_offset, l{localsCount2}, l{localsCount2} + {word.Text.Length})")
+                                    {
+                                        $@"break;"
+                                    });
+                                    break;
+                                }
+                                case Parsing.Word word:
+                                    localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"m_offset >= 1 && m_contents[m_offset - 1] {(!backtrack.Negated ? "!" : "=")}= '{word.Text.First()}'")
+                                    {
+                                        $@"break;"
+                                    });
+                                    break;
+                                case Parsing.CharacterRange range:
+                                    localLoop.Add(new IfPart(isFirst, $@"'m_offset >= 1 && {(!backtrack.Negated ? "!" : string.Empty)}({range.Start}' <= m_contents[m_offset - 1] && m_contents[m_offset - 1] <= '{range.End}')")
+                                    {
+                                        $@"break;"
+                                    });
+                                    break;
+                                default:
+                                    throw new FatalException("Unimplemented backtrack part");
+                            }
+
+                            isFirst = false;
+                        }
+                        localLoop.Add(new FullBody { $@"{countVariable}--;" });
+                        methodDefinition.Add(new IfPart(IfPart.EIfScope.If, $@"{countVariable} {(backtrack.Range.From > 0 ? ">=" : "!=")} {backtrack.Range.From}")
                         {
                             $@"{resettable}.reset();",
-                            new DebugPart { $@"trace(""Returning EmptyClosure on {token.Identifier}"", {Constants.depthVariable});" },
+                            new DebugPart { $@"trace(""Returning EmptyClosure on {token.Identifier}"", {Constants.DepthVariable});" },
                             new ReturnPart(EValueConstant.EmptyClosure),
                         });
+                        break;
                     }
-                }
-                else if (statement is Parsing.TokenStatements.Backtrack backtrack)
-                {
-                    var countVariable = toUnique("count");
-                    var localOffsetVariable = toUnique("loff");
-                    methodDefinition.Add(new VariableDefinition(EType.SizeT, countVariable, backtrack.Range.To.ToString()));
-                    methodDefinition.Add(new VariableDefinition(EType.SizeT, localOffsetVariable, "0"));
-                    var localLoop = backtrack.Range.To != int.MaxValue ? new WhilePart($"current() != '\\0' && {countVariable} > 0") : new WhilePart("current() != '\\0'");
-                    methodDefinition.Add(localLoop);
-                    var localsCount = 0;
-                    var isFirst = true;
-                    foreach (var part in backtrack.Parts)
-                    {
-                        if (part is Parsing.Word word)
-                        {
-                            if (word.Text.Length > 1)
-                            {
-                                var wordHolderVariable = toUnique("str");
-                                localLoop.Add(new VariableDefinition(new TypeImpl { Type = EType.Char, PointerCount = 1, IsConst = true }, wordHolderVariable, $@"""{word.Text.Replace("\"", "\\\"")}"""));
-                                localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"m_offset >= {word.Text.Length} && {(!backtrack.Negated ? "!" : string.Empty)}std::equal(m_contents.begin() + m_offset - {word.Text.Length}, m_contents.begin() + m_offset, l{localsCount}, l{localsCount} + {word.Text.Length})")
-                                {
-                                    $@"break;"
-                                });
-                            }
-                            else
-                            {
-                                localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"m_offset >= 1 && m_contents[m_offset - 1] {(!backtrack.Negated ? "!" : "=")}= '{word.Text.First()}'")
-                                {
-                                    $@"break;"
-                                });
-                            }
-                        }
-                        else if (part is Parsing.CharacterRange range)
-                        {
-                            localLoop.Add(new IfPart(isFirst, $@"'m_offset >= 1 && {(!backtrack.Negated ? "!" : string.Empty)}({range.Start}' <= m_contents[m_offset - 1] && m_contents[m_offset - 1] <= '{range.End}')")
-                            {
-                                $@"break;"
-                            });
-                        }
-                        else
-                        {
-                            throw new FatalException("Unimplemented backtrack part");
-                        }
-                        isFirst = false;
-                    }
-                    localLoop.Add(new FullBody { $@"{countVariable}--;" });
-                    methodDefinition.Add(new IfPart(IfPart.EIfScope.If, $@"{countVariable} {(backtrack.Range.From > 0 ? ">=" : "!=")} {backtrack.Range.From}")
-                    {
-                        $@"{resettable}.reset();",
-                        new DebugPart { $@"trace(""Returning EmptyClosure on {token.Identifier}"", {Constants.depthVariable});" },
-                        new ReturnPart(EValueConstant.EmptyClosure),
-                    });
-                }
-                else
-                {
-                    throw new FatalException("Unimplemented TokenStatement");
+                    default:
+                        throw new FatalException("Unimplemented TokenStatement");
                 }
             }
 
             var resultVariable = cppOptions.ToUnique("resultVariable");
             methodDefinition.Add($@"auto {resultVariable} = m_offset - {resettable}.m_offset;");
             methodDefinition.Add($@"{resettable}.reset();");
-            methodDefinition.Add(new DebugPart { $@"trace((std::string(""Returning "") + std::to_string({resultVariable}) + "" on {token.Identifier}"").c_str(), {Constants.depthVariable});" });
+            methodDefinition.Add(new DebugPart { $@"trace((std::string(""Returning "") + std::to_string({resultVariable}) + "" on {token.Identifier}"").c_str(), {Constants.DepthVariable});" });
             methodDefinition.Add(new ReturnPart(resultVariable));
             return new[] { methodDefinition };
         }

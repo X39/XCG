@@ -4,16 +4,16 @@ namespace XCG.Generators.Cpp
 {
     internal class DebugPart : CppContainerBase
     {
-        private readonly EUsage usage;
+        private readonly EUsage _usage;
 
         public DebugPart(EUsage usage = EUsage.All)
         {
-            this.usage = usage;
+            this._usage = usage;
         }
 
         public override void WriteHeader(CppOptions options, StreamWriter writer, string whitespace)
         {
-            if (!options.Debug || !usage.HasFlag(EUsage.Header)) return;
+            if (!options.Debug || !_usage.HasFlag(EUsage.Header)) return;
             foreach (var part in Parts)
             {
                 part.BaseName = BaseName;
@@ -23,7 +23,7 @@ namespace XCG.Generators.Cpp
 
         public override void WriteImplementation(CppOptions options, StreamWriter writer, string whitespace)
         {
-            if (!options.Debug || !usage.HasFlag(EUsage.Implementation)) return;
+            if (!options.Debug || !_usage.HasFlag(EUsage.Implementation)) return;
             foreach (var part in Parts)
             {
                 part.BaseName = BaseName;

@@ -16,7 +16,7 @@
         }
         public static string ToCppName(this string str)
         {
-            var name = string.Concat(str.Replace('-', '_').Replace('@', '_').ToLower());
+            var name = str.Replace('-', '_').Replace('@', '_').ToLower();
             switch (name)
             {
                 default: return name;

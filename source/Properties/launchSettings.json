@@ -2,7 +2,7 @@
   "profiles": {
     "leaf": {
       "commandName": "Project",
-      "commandLineArgs": "-i leaf.* -g c++ -o parser -v",
+      "commandLineArgs": "-i leaf.* -g c++ -o D:\\dev\\git\\leaf\\generator-test -v -s namespace:leaf::parsing create-string-tree-spaces:0 debug:false",
       "workingDirectory": "D:\\dev\\git\\leaf\\syntax"
     },
     "xcg": {

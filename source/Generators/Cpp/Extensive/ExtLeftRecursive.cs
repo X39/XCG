@@ -23,8 +23,8 @@ namespace XCG.Generators.Cpp.Extensive
         }
         public static IEnumerable<ICppPart> ToParts(this Parsing.LeftRecursive leftRecursive, CppOptions cppOptions)
         {
-            var ___localsCount = 0;
-            string toUnique(string str) => string.Concat(str, (++___localsCount).ToString());
+            var localsCount = 0;
+            string ToUnique(string str) => string.Concat(str, (++localsCount).ToString());
             // Output matches
             var matches = leftRecursive.Children.Cast<Parsing.Statements.Match>().ToArray();
             var lastMatch = matches.Last();
@@ -52,21 +52,21 @@ namespace XCG.Generators.Cpp.Extensive
 
             // Generate can method
             #region CanMatch method
-            var resettable = toUnique("resettable");
+            var resettable = ToUnique("resettable");
             var whileScope = new WhilePart
             {
                 $@"skip();",
                 $@"resettable {resettable}(*this);",
             };
             var canMatchMethodDefinition = new MethodDefinition(EType.Boolean, leftRecursive.ToCppCanMatchMethodName(cppOptions),
-                new ArgImpl { Name = Constants.depthVariable, Type = EType.SizeT })
+                new ArgImpl { Name = Constants.DepthVariable, Type = EType.SizeT })
             {
                 $@"resettable {resettable}(*this);",
-                new VariableDefinition(new TypeImpl {  TypeString = leftRecursive.ToCppTypeName(cppOptions, true).ToCppSharedPtrType() }, Constants.classInstanceFakeVariable),
-                new VariableDefinition(new TypeImpl {  TypeString = leftRecursive.ToCppStateTypeName(cppOptions, false) }, Constants.stateInstanceVariable),
-                new IfPart(IfPart.EIfScope.If, $@"!{cppOptions.FromCache(lastMatch).Name}(true, {Constants.classInstanceFakeVariable}, {Constants.stateInstanceVariable}, {Constants.depthVariable} + 1)")
+                new VariableDefinition(new TypeImpl {  TypeString = leftRecursive.ToCppTypeName(cppOptions, true).ToCppSharedPtrType() }, Constants.ClassInstanceFakeVariable),
+                new VariableDefinition(new TypeImpl {  TypeString = leftRecursive.ToCppStateTypeName(cppOptions, false) }, Constants.StateInstanceVariable),
+                new IfPart(IfPart.EIfScope.If, $@"!{cppOptions.FromCache(lastMatch).Name}(true, {Constants.ClassInstanceFakeVariable}, {Constants.StateInstanceVariable}, {Constants.DepthVariable} + 1)")
                 {
-                    new DebugPart { $@"trace(""Returning false on {leftRecursive.Identifier}"", {Constants.depthVariable});" },
+                    new DebugPart { $@"trace(""Returning false on {leftRecursive.Identifier}"", {Constants.DepthVariable});" },
                     new ReturnPart(EValueConstant.False),
                 },
                 whileScope
@@ -74,12 +74,12 @@ namespace XCG.Generators.Cpp.Extensive
             var isFirst = true;
             foreach (var match in matches.Take(matches.Length - 1))
             {
-                whileScope.Add(new IfPart(isFirst, $"{cppOptions.FromCache(match).Name}(true, {Constants.classInstanceFakeVariable}, {Constants.stateInstanceVariable}, {Constants.depthVariable} + 1)"));
+                whileScope.Add(new IfPart(isFirst, $"{cppOptions.FromCache(match).Name}(true, {Constants.ClassInstanceFakeVariable}, {Constants.StateInstanceVariable}, {Constants.DepthVariable} + 1)"));
                 isFirst = false;
             }
             whileScope.Add(new IfPart(IfPart.EIfScope.Else, null)
             {
-                new DebugPart { $@"trace(""Returning true on {leftRecursive.Identifier}"", {Constants.depthVariable});" },
+                new DebugPart { $@"trace(""Returning true on {leftRecursive.Identifier}"", {Constants.DepthVariable});" },
                 new ReturnPart(EValueConstant.True)
             });
 
@@ -92,18 +92,18 @@ namespace XCG.Generators.Cpp.Extensive
                 $@"skip();",
                 $@"resettable {resettable}(*this);",
             };
-            var isFirstVariable = toUnique($@"is_first");
-            var tmpActualVariable = toUnique($@"tmp_{Constants.classInstanceVariable}");
+            var isFirstVariable = ToUnique($@"is_first");
+            var tmpActualVariable = ToUnique($@"tmp_{Constants.ClassInstanceVariable}");
             var matchMethodDefinition = new MethodDefinition(leftRecursive.ToCppTypeName(cppOptions, true).ToCppSharedPtrType(), leftRecursive.ToCppMatchMethodName(cppOptions),
-                new ArgImpl { Name = Constants.depthVariable, Type = EType.SizeT })
+                new ArgImpl { Name = Constants.DepthVariable, Type = EType.SizeT })
             {
-                new VariableDefinition(EType.Auto, Constants.classInstanceVariable, leftRecursive.ToCppTypeName(cppOptions, true).ToCppSharedPtrMake()),
-                new VariableDefinition(new TypeImpl {  TypeString = leftRecursive.ToCppTypeName(cppOptions, true).ToCppSharedPtrType() }, Constants.classInstanceFakeVariable),
-                new VariableDefinition(new TypeImpl {  TypeString = leftRecursive.ToCppStateTypeName(cppOptions, false) }, Constants.stateInstanceVariable),
-                new IfPart(IfPart.EIfScope.If, $@"!{cppOptions.FromCache(lastMatch).Name}(false, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable}, {Constants.depthVariable} + 1)")
+                new VariableDefinition(EType.Auto, Constants.ClassInstanceVariable, leftRecursive.ToCppTypeName(cppOptions, true).ToCppSharedPtrMake()),
+                new VariableDefinition(new TypeImpl {  TypeString = leftRecursive.ToCppTypeName(cppOptions, true).ToCppSharedPtrType() }, Constants.ClassInstanceFakeVariable),
+                new VariableDefinition(new TypeImpl {  TypeString = leftRecursive.ToCppStateTypeName(cppOptions, false) }, Constants.StateInstanceVariable),
+                new IfPart(IfPart.EIfScope.If, $@"!{cppOptions.FromCache(lastMatch).Name}(false, {Constants.ClassInstanceVariable}, {Constants.StateInstanceVariable}, {Constants.DepthVariable} + 1)")
                 {
-                    $@"report(""Something moved wrong (todo: improve error messages)"", {Constants.depthVariable});",
-                    new DebugPart { $@"trace(""Returning EmptyClosure on {leftRecursive.Identifier}"", {Constants.depthVariable});" },
+                    $@"report(""Something moved wrong (todo: improve error messages)"", {Constants.DepthVariable});",
+                    new DebugPart { $@"trace(""Returning EmptyClosure on {leftRecursive.Identifier}"", {Constants.DepthVariable});" },
                     new ReturnPart(EValueConstant.EmptyClosure),
                 },
                 $@"bool {isFirstVariable} = true;",
@@ -112,17 +112,17 @@ namespace XCG.Generators.Cpp.Extensive
             isFirst = true;
             foreach (var match in matches.Take(matches.Length - 1))
             {
-                whileScope.Add(new IfPart(isFirst, $"{cppOptions.FromCache(match).Name}(true, {Constants.classInstanceFakeVariable}, {Constants.stateInstanceVariable}, {Constants.depthVariable} + 1)")
+                whileScope.Add(new IfPart(isFirst, $"{cppOptions.FromCache(match).Name}(true, {Constants.ClassInstanceFakeVariable}, {Constants.StateInstanceVariable}, {Constants.DepthVariable} + 1)")
                 {
                     $@"{resettable}.reset();",
                     new IfPart(IfPart.EIfScope.If, $"!{isFirstVariable}")
                     {
-                        new VariableDefinition(EType.Auto, tmpActualVariable, Constants.classInstanceVariable),
-                        $@"{Constants.classInstanceVariable} = {leftRecursive.ToCppTypeName(cppOptions, true).ToCppSharedPtrMake()};",
-                        $@"{Constants.classInstanceVariable}->{(lastMatch.Matches.First() as Parsing.Reference)?.CaptureName ?? throw new FatalException()} = {tmpActualVariable};",
+                        new VariableDefinition(EType.Auto, tmpActualVariable, Constants.ClassInstanceVariable),
+                        $@"{Constants.ClassInstanceVariable} = {leftRecursive.ToCppTypeName(cppOptions, true).ToCppSharedPtrMake()};",
+                        $@"{Constants.ClassInstanceVariable}->{(lastMatch.Matches.First() as Parsing.Reference)?.CaptureName ?? throw new FatalException()} = {tmpActualVariable};",
                     },
                     $"{isFirstVariable} = false;",
-                    $"{cppOptions.FromCache(match).Name}(false, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable}, {Constants.depthVariable} + 1);",
+                    $"{cppOptions.FromCache(match).Name}(false, {Constants.ClassInstanceVariable}, {Constants.StateInstanceVariable}, {Constants.DepthVariable} + 1);",
                 });
                 isFirst = false;
             }
@@ -132,7 +132,7 @@ namespace XCG.Generators.Cpp.Extensive
                 $@"{resettable}.reset();",
                 "break;",
             });
-            matchMethodDefinition.Add($@"return {Constants.classInstanceVariable};");
+            matchMethodDefinition.Add($@"return {Constants.ClassInstanceVariable};");
             yield return matchMethodDefinition;
         }
     }

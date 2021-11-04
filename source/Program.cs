@@ -302,7 +302,7 @@ namespace XCG
                     possibleActual = parser.Tokens.FirstOrDefault((q) => q.Alias == reference.Text);
                     if (possibleActual is not null)
                     {
-                        reference.Refered = possibleActual;
+                        reference.Referred = possibleActual;
                         continue;
                     }
                 }
@@ -310,7 +310,7 @@ namespace XCG
                 {
                     if (reference.Text.Equals("eol", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        reference.Refered = endOfLineToken;
+                        reference.Referred = endOfLineToken;
                         if (!parser.Tokens.Contains(endOfLineToken))
                         {
                             parser.Tokens.Add(endOfLineToken);
@@ -321,7 +321,7 @@ namespace XCG
 
                     if (reference.Text.Equals("eof", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        reference.Refered = endOfFileToken;
+                        reference.Referred = endOfFileToken;
                         if (!parser.Tokens.Contains(endOfFileToken))
                         {
                             parser.Tokens.Add(endOfFileToken);
@@ -333,28 +333,28 @@ namespace XCG
                     possibleActual = parser.Tokens.FirstOrDefault((q) => q.Identifier == reference.Text);
                     if (possibleActual is not null)
                     {
-                        reference.Refered = possibleActual;
+                        reference.Referred = possibleActual;
                         continue;
                     }
 
                     possibleActual = parser.Productions.FirstOrDefault((q) => q.Identifier == reference.Text);
                     if (possibleActual is not null)
                     {
-                        reference.Refered = possibleActual;
+                        reference.Referred = possibleActual;
                         continue;
                     }
 
                     possibleActual = parser.LeftRecursiveItems.FirstOrDefault((q) => q.Identifier == reference.Text);
                     if (possibleActual is not null)
                     {
-                        reference.Refered = possibleActual;
+                        reference.Referred = possibleActual;
                         continue;
                     }
 
                     possibleActual = parser.Messages.FirstOrDefault((q) => q.Identifier == reference.Text);
                     if (possibleActual is not null)
                     {
-                        reference.Refered = possibleActual;
+                        reference.Referred = possibleActual;
                         continue;
                     }
                 }
@@ -394,7 +394,7 @@ namespace XCG
                         }
                     }
                 };
-                reference.Refered = token;
+                reference.Referred = token;
                 parser.Tokens.Add(token);
             }
 
@@ -651,7 +651,7 @@ namespace XCG
             {
                 return parser.Productions.Concat<Parsing.IStatement>(parser.LeftRecursiveItems)
                     .SelectMany((reference) => reference.FindChildren<Parsing.Reference>())
-                    .Where((reference) => reference.Refered is null)
+                    .Where((reference) => reference.Referred is null)
                     .Select((reference) => new Validation.Hint
                     {
                         File = reference.Diagnostics.File,
@@ -695,12 +695,12 @@ namespace XCG
                             Parsing.Statements.Alternatives alternatives => alternatives.Matches
                                 .Where((q2) => q2.Matches.First() is Parsing.Reference),
                             Parsing.Statements.Match match => match.Matches.First() is Parsing.Reference reference
-                                                              && reference.Refered == q
+                                                              && reference.Referred == q
                                 ? new[] {match}
                                 : Array.Empty<Parsing.Statements.Match>(),
                             _ => Array.Empty<Parsing.Statements.Match>()
                         }).Where((match) =>
-                            match.Matches.First() is Parsing.Reference reference && reference.Refered == q))
+                            match.Matches.First() is Parsing.Reference reference && reference.Referred == q))
                     .SelectMany((q) => q);
                 foreach (var match in recursiveMatches)
                 {
@@ -769,7 +769,7 @@ namespace XCG
                     {
                         if (match.Matches.First() is Parsing.Reference reference)
                         {
-                            if (reference.Refered != leftRecursive)
+                            if (reference.Referred != leftRecursive)
                             {
                                 hints.Add(new Validation.Hint
                                 {
@@ -798,7 +798,7 @@ namespace XCG
                         .Cast<Parsing.Statements.Match>().Last();
                     if (match.Matches.Last() is Parsing.Reference reference)
                     {
-                        if (reference.Refered == leftRecursive)
+                        if (reference.Referred == leftRecursive)
                         {
                             hints.Add(new Validation.Hint
                             {
@@ -849,7 +849,7 @@ namespace XCG
                     var references = require.Parts.WhereIs<Parsing.Reference>();
                     foreach (var reference in references)
                     {
-                        if (reference.Refered is null)
+                        if (reference.Referred is null)
                         {
                             hints.Add(new Validation.Hint
                             {
@@ -874,14 +874,14 @@ namespace XCG
                     var references = require.Parts.WhereIs<Parsing.Reference>();
                     foreach (var reference in references)
                     {
-                        if (reference.Refered is not null && reference.Refered is not Parsing.Token)
+                        if (reference.Referred is not null && reference.Referred is not Parsing.Token)
                         {
                             hints.Add(new Validation.Hint
                             {
                                 Line = require.Diagnostics.Line,
                                 File = require.Diagnostics.File,
                                 Message =
-                                    $@"Reference {{ {reference.Text} }} may only refer to tokens but refers to a {reference.Refered.GetType().FullName}."
+                                    $@"Reference {{ {reference.Text} }} may only refer to tokens but refers to a {reference.Referred.GetType().FullName}."
                             });
                         }
                     }
@@ -901,14 +901,14 @@ namespace XCG
                     var references = backtrack.Parts.WhereIs<Parsing.Reference>();
                     foreach (var reference in references)
                     {
-                        if (reference.Refered is not null && reference.Refered is not Parsing.Token)
+                        if (reference.Referred is not null && reference.Referred is not Parsing.Token)
                         {
                             hints.Add(new Validation.Hint
                             {
                                 Line = backtrack.Diagnostics.Line,
                                 File = backtrack.Diagnostics.File,
                                 Message =
-                                    $@"Reference {{ {reference.Text} }} may only refer to tokens but refers to a {reference.Refered.GetType().FullName}."
+                                    $@"Reference {{ {reference.Text} }} may only refer to tokens but refers to a {reference.Referred.GetType().FullName}."
                             });
                         }
                     }
@@ -989,12 +989,12 @@ namespace XCG
                     var references = statement.FindChildren<Parsing.Reference>();
                     foreach (var reference in references)
                     {
-                        if (reference.Refered is Parsing.Production production)
+                        if (reference.Referred is Parsing.Production production)
                         {
                             productionDictionary[production]++;
                         }
 
-                        if (reference.Refered is { } childStatement)
+                        if (reference.Referred is { } childStatement)
                         {
                             Walk(childStatement);
                         }
@@ -1034,12 +1034,12 @@ namespace XCG
                     var references = statement.FindChildren<Parsing.Reference>();
                     foreach (var reference in references)
                     {
-                        if (reference.Refered is Parsing.LeftRecursive leftRecursive)
+                        if (reference.Referred is Parsing.LeftRecursive leftRecursive)
                         {
                             leftRecursiveDictionary[leftRecursive]++;
                         }
 
-                        if (reference.Refered is { } childStatement)
+                        if (reference.Referred is { } childStatement)
                         {
                             Walk(childStatement);
                         }
@@ -1065,7 +1065,7 @@ namespace XCG
                     production.FindChildren<Parsing.Statements.Print>()))
                 {
                     hints.AddRange(from print in result
-                        where print.Reference.Refered is not Parsing.Message
+                        where print.Reference.Referred is not Parsing.Message
                         select new Validation.Hint
                         {
                             Line = print.Diagnostics.Line, File = print.Diagnostics.File,

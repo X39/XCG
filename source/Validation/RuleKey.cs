@@ -2,10 +2,10 @@
 
 namespace XCG.Validation
 {
-    internal struct RuleKey : IEquatable<RuleKey>
+    internal readonly struct RuleKey : IEquatable<RuleKey>
     {
-        public string Realm { get; set; }
-        public int Code { get; set; }
+        public string Realm { get; init; }
+        public int Code { get; init; }
 
         public override bool Equals(object? obj)
         {

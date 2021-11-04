@@ -5,7 +5,7 @@ namespace XCG.Parsing
 {
     public class Reference : IMatchPart, IStatement, IHasDiagnostics
     {
-        public IStatement? Refered { get; set; }
+        public IStatement? Referred { get; set; }
         public string Text { get; set; }
         public bool IsOptional { get; set; }
         public bool IsCaptured { get; set; }
@@ -16,13 +16,13 @@ namespace XCG.Parsing
 
         public Reference(string text)
         {
-            this.Refered = null;
+            this.Referred = null;
             this.Text = text;
         }
 
         public override string ToString()
         {
-            return $@"$ref: {this.Text} ({this.Refered?.ToString() ?? "NULL"})";
+            return $@"$ref: {this.Text} ({this.Referred?.ToString() ?? "NULL"})";
         }
     }
 }

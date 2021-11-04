@@ -12,36 +12,41 @@
         /// </remarks>
         /// <param name="while"></param>
         /// <param name="cppOptions"></param>
-        /// <param name="skip">The amount of match-tokens to skip.</param>
         /// <param name="typeName">The type the <paramref name="while"/> gets to capture things onto.</param>
+        /// <param name="stateTypeName"></param>
         /// <returns></returns>
-        public static MethodDefinition CreateMethodDefinition(this Parsing.Statements.While @while, CppOptions cppOptions, string typeName, string stateTypeName)
+        public static MethodDefinition CreateMethodDefinition(this Parsing.Statements.While @while,
+            CppOptions cppOptions, string typeName, string stateTypeName)
         {
-            var ___localsCount = 0;
-            string toUnique(string str) => string.Concat(str, (++___localsCount).ToString());
-            var resettable = toUnique("resettable");
-            var resetable_condition = toUnique("resettable");
+            var localsCount = 0;
+            string ToUnique(string str) => string.Concat(str, (++localsCount).ToString());
+            var resettable = ToUnique("resettable");
+            var resettableCondition = ToUnique("resettable");
 
             var whileName = cppOptions.ToUnique("while");
             var methodDefinition = new MethodDefinition(
                 EType.Boolean,
                 cppOptions.ToUnique(string.Concat(cppOptions.MethodsPrefix, whileName, "_")),
-                new ArgImpl { Name = Constants.isCanVariable, Type = EType.Boolean },
-                new ArgImpl { Name = Constants.classInstanceVariable, TypeString = typeName, ReferenceCount = 1 },
-                new ArgImpl { Name = Constants.stateInstanceVariable, TypeString = stateTypeName, ReferenceCount = 1 },
-                new ArgImpl { Name = Constants.depthVariable, Type = EType.SizeT }
+                new ArgImpl {Name = Constants.IsCanVariable, Type = EType.Boolean},
+                new ArgImpl {Name = Constants.ClassInstanceVariable, TypeString = typeName, ReferenceCount = 1},
+                new ArgImpl {Name = Constants.StateInstanceVariable, TypeString = stateTypeName, ReferenceCount = 1},
+                new ArgImpl {Name = Constants.DepthVariable, Type = EType.SizeT}
             )
             {
                 $@"resettable {resettable}(*this);"
             };
 
-            var conditionVariable = toUnique("cond");
-            var effectiveCondition = string.Concat(@while.Negated ? $"!{conditionVariable}" : conditionVariable, " && current() != '\\0'");
-            methodDefinition.AddRange(@while.Condition!.GetEvaluationResult(cppOptions, stateTypeName, conditionVariable, true, toUnique));
+            var conditionVariable = ToUnique("cond");
+            var effectiveCondition = string.Concat(@while.Negated ? $"!{conditionVariable}" : conditionVariable,
+                " && current() != '\\0'");
+            methodDefinition.AddRange(@while.Condition!.GetEvaluationResult(cppOptions, stateTypeName,
+                conditionVariable, true, ToUnique));
             methodDefinition.Add($@"{resettable}.reset();");
             foreach (var isCan in Constants.TrueFalseArray)
             {
-                var isCanIf = isCan ? new IfPart(IfPart.EIfScope.If, Constants.isCanVariable) : new IfPart(IfPart.EIfScope.Else, null);
+                var isCanIf = isCan
+                    ? new IfPart(IfPart.EIfScope.If, Constants.IsCanVariable)
+                    : new IfPart(IfPart.EIfScope.Else, null);
                 methodDefinition.Add(isCanIf);
 
                 // Create while loop
@@ -49,17 +54,20 @@
                 isCanIf.Add(whilePart);
 
                 // Handle any following statement
-                whilePart.AddRange(@while.Children.Handle(cppOptions, isCan, toUnique));
+                whilePart.AddRange(@while.Children.Handle(cppOptions, isCan, ToUnique));
 
                 // and re-evaluate the while condition
-                whilePart.Add($@"resettable {resetable_condition}(*this);");
-                whilePart.AddRange(@while.Condition!.GetEvaluationResult(cppOptions, stateTypeName, conditionVariable, false, toUnique));
-                whilePart.Add($@"{resetable_condition}.reset();");
+                whilePart.Add($@"resettable {resettableCondition}(*this);");
+                whilePart.AddRange(@while.Condition!.GetEvaluationResult(cppOptions, stateTypeName, conditionVariable,
+                    false, ToUnique));
+                whilePart.Add($@"{resettableCondition}.reset();");
 
                 // finally return true
-                isCanIf.Add(new DebugPart { $@"trace(""Returning true on {methodDefinition.Name}"", {Constants.depthVariable});" });
+                isCanIf.Add(new DebugPart
+                    {$@"trace(""Returning true on {methodDefinition.Name}"", {Constants.DepthVariable});"});
                 isCanIf.Add(new ReturnPart(EValueConstant.True));
             }
+
             return methodDefinition;
         }
     }

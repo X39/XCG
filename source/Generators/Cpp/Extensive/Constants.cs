@@ -2,12 +2,12 @@
 {
     internal static class Constants
     {
-        public const string isCanVariable = "is_can";
-        public const string classInstanceVariable = "actual";
-        public const string classInstanceFakeVariable = "fake";
-        public const string stateInstanceVariable = "state";
-        public const string depthVariable = "depth";
+        public const string IsCanVariable = "is_can";
+        public const string ClassInstanceVariable = "actual";
+        public const string ClassInstanceFakeVariable = "fake";
+        public const string StateInstanceVariable = "state";
+        public const string DepthVariable = "depth";
 
-        public static readonly bool[] TrueFalseArray = new bool[] { true, false };
+        public static readonly bool[] TrueFalseArray = new[] { true, false };
     }
 }

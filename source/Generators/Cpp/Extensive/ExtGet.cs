@@ -12,12 +12,12 @@ namespace XCG.Generators.Cpp.Extensive
                     switch (get.Mode)
                     {
                         case Parsing.EMode.GetProperty:
-                            return $"{Constants.classInstanceVariable}->{get.Property.ToCppName()}.value()";
+                            return $"{Constants.ClassInstanceVariable}->{get.Property.ToCppName()}.value()";
                         case Parsing.EMode.GetMapProperty:
                         case Parsing.EMode.GetListIndex:
                             throw new NotImplementedException();
                         case Parsing.EMode.GetListPop:
-                            return $"[](){{ auto tmp = {Constants.classInstanceVariable}->{get.Property.ToCppName()}.back(); {Constants.classInstanceVariable}->{get.Property.ToCppName()}.pop_back(); return tmp.value(); }}()";
+                            return $"[](){{ auto tmp = {Constants.ClassInstanceVariable}->{get.Property.ToCppName()}.back(); {Constants.ClassInstanceVariable}->{get.Property.ToCppName()}.pop_back(); return tmp.value(); }}()";
                         default:
                             throw new FatalException();
                     }
@@ -39,12 +39,12 @@ namespace XCG.Generators.Cpp.Extensive
                     switch (get.Mode)
                     {
                         case Parsing.EMode.GetProperty:
-                            return $"{Constants.stateInstanceVariable}.{get.Property.ToCppName()}.value()";
+                            return $"{Constants.StateInstanceVariable}.{get.Property.ToCppName()}.value()";
                         case Parsing.EMode.GetMapProperty:
                         case Parsing.EMode.GetListIndex:
                             throw new NotImplementedException();
                         case Parsing.EMode.GetListPop:
-                            return $"[](){{ auto tmp = {Constants.stateInstanceVariable}.{get.Property.ToCppName()}.back(); {Constants.stateInstanceVariable}.{get.Property.ToCppName()}.pop_back(); return tmp.value(); }}()";
+                            return $"[](){{ auto tmp = {Constants.StateInstanceVariable}.{get.Property.ToCppName()}.back(); {Constants.StateInstanceVariable}.{get.Property.ToCppName()}.pop_back(); return tmp.value(); }}()";
                         default:
                             throw new FatalException();
                     }

@@ -6,13 +6,13 @@ namespace XCG.Generators.Cpp.Extensive
     {
         public static IEnumerable<ICppPart> ToParts(this Parsing.Statements.Print print, CppOptions cppOptions)
         {
-            if (print.Reference.Refered is not Parsing.Message message)
+            if (print.Reference?.Referred is not Parsing.Message message)
             {
                 throw new FatalException();
             }
             yield return new FullBody
             {
-                $@"report(""{message.Text.Replace("\"", "\\\"")}"", {Constants.depthVariable});"
+                $@"report(""{message.Text.Replace("\"", "\\\"")}"", {Constants.DepthVariable});"
             };
         }
     }

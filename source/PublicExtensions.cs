@@ -40,7 +40,7 @@ namespace XCG
         }
 
         /// <summary>
-        /// Returns all occurances of <typeparamref name="T"/> inside of the <see cref="Parsing.IStatement"/>.
+        /// Returns all occurrences of <typeparamref name="T"/> inside of the <see cref="Parsing.IStatement"/>.
         /// Will not descend into the found ones.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -62,7 +62,7 @@ namespace XCG
         }
 
         /// <summary>
-        /// Returns all occurances of <typeparamref name="T"/> inside of the <see cref="Parsing.IStatement"/>.
+        /// Returns all occurrences of <typeparamref name="T"/> inside of the <see cref="Parsing.IStatement"/>.
         /// Will not descend into the found ones.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -70,40 +70,42 @@ namespace XCG
         /// <returns></returns>
         public static IEnumerable<(T, Parsing.IStatement[])> FindChildrenWithParents<T>(this Parsing.IStatement statement)
         {
-            IEnumerable<(T, Parsing.IStatement[])> recurse(Parsing.IStatement l)
+            IEnumerable<(T, Parsing.IStatement[])> Recurse(Parsing.IStatement l)
             {
                 foreach (var it in l.Statements)
                 {
-                    foreach (var found in recurse(it))
+                    foreach (var (t, statements) in Recurse(it))
                     {
-                        yield return (found.Item1, found.Item2.Append(l).ToArray());
+                        yield return (t, statements.Append(l).ToArray());
                     }
-                    if (it is T t)
+                    if (it is T t2)
                     {
-                        yield return (t, new Parsing.IStatement[] { l });
+                        yield return (t2, new[] { l });
                     }
                 }
             }
-            return recurse(statement);
+            return Recurse(statement);
         }
 
 
         /// <summary>
-        /// Extracts the whole stacktrace, including possible datamembers and inner exceptions, from the provided exception.
+        /// Extracts the whole stacktrace, including possible data members and inner exceptions, from the provided exception.
         /// </summary>
-        /// <param name="exception"></param>
+        /// <param name="ex"></param>
         /// <returns></returns>
-        public static string FullStackTrace(this Exception exception)
+        public static string FullStackTrace(this Exception ex)
         {
             var builder = new StringBuilder();
-            void recurse(Exception ex, int intendation)
+
+            var indentation = 0;
+            while (true)
             {
-                var tab = new string(' ', intendation * 4);
+                var tab = new string(' ', indentation * 4);
                 builder.Append(tab);
                 builder.AppendLine(ex.GetType().FullName ?? "unavailable");
 
                 builder.Append(tab);
-                builder.AppendLine(ex.Message ?? "unavailable");
+                builder.AppendLine(ex.Message);
 
                 foreach (DictionaryEntry dictionaryEntry in ex.Data)
                 {
@@ -117,10 +119,13 @@ namespace XCG
                 builder.AppendLine(stackTrace.Replace("\n", string.Concat("\n", tab)));
                 if (ex.InnerException is not null)
                 {
-                    recurse(ex.InnerException, intendation + 1);
+                    ex = ex.InnerException;
+                    indentation++;
+                    continue;
                 }
+
+                break;
             }
-            recurse(exception, 0);
             return builder.ToString();
         }
     }
