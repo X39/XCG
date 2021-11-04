@@ -1,6 +1,6 @@
 ﻿namespace XCG.Generators.Cpp
 {
-    internal struct ArgImpl : IHasName
+    internal readonly struct ArgImpl : IHasName
     {
         public EType Type { get; init; }
 
@@ -10,12 +10,11 @@
         /// </summary>
         public string? TypeString { get; init; }
         public int ReferenceCount { get; init; }
-        public int PointerCount { get; init; }
         public string Name { get; init; }
 
         public string ToString(CppOptions cppOptions)
         {
-            return $"{(TypeString ?? this.Type.ToCppString(cppOptions))}{new string('*', this.PointerCount)}{new string('&', this.ReferenceCount)} {this.Name}";
+            return $"{(TypeString ?? Type.ToCppString(cppOptions))}{new string('&', ReferenceCount)} {Name}";
         }
     }
 }

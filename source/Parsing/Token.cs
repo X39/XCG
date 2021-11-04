@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace XCG.Parsing
 {
-    public class Token : IStatement
+    public class Token : IStatement, IHasDiagnostics
     {
         public Diagnostic Diagnostics { get; set; }
-        public string Identifier { get; set; } = String.Empty;
-        public string Alias { get; set; } = String.Empty;
-        public List<ITokenStatement> Children { get; set; } = new List<ITokenStatement>();
+        public string Identifier { get; set; } = string.Empty;
+        public string Alias { get; set; } = string.Empty;
+        public List<ITokenStatement> Children { get; set; } = new();
         IEnumerable<IStatement> IStatement.Statements => Children;
 
 
-        public override string ToString() => $@"{{ {nameof(Token)}: {(String.IsNullOrWhiteSpace(this.Alias) ? this.Identifier : this.Alias)}{(String.IsNullOrWhiteSpace(this.Alias) ? "" : $" ({this.Alias})")}}}";
+        public override string ToString() =>
+            $@"{{ {nameof(Token)}: {(string.IsNullOrWhiteSpace(Alias) ? Identifier : Alias)}{(string.IsNullOrWhiteSpace(Alias) ? "" : $" ({Alias})")}}}";
     }
 }

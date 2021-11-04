@@ -1,8 +1,14 @@
 {
   "profiles": {
+    "leaf": {
+      "commandName": "Project",
+      "commandLineArgs": "-i leaf.*.xcg -g c++ -o parser",
+      "workingDirectory": "D:\\dev\\git\\leaf\\syntax"
+    },
     "xcg": {
       "commandName": "Project",
-      "commandLineArgs": "-i ..\\..\\..\\..\\examples\\yaoosl.*xcg -o ..\\..\\..\\..\\generator-test\\generator-test -g cpp -s namespace:yaoosl::parsing create-string-tree-spaces:0 debug:false"
+      "commandLineArgs": "-i ..\\..\\..\\..\\examples\\yaoosl.*xcg -o ..\\..\\..\\..\\generator-test\\generator-test -g cpp -s namespace:yaoosl::parsing create-string-tree-spaces:0 debug:false",
+      "workingDirectory": "D:\\dev\\git\\leaf\\syntax"
     }
   }
 }

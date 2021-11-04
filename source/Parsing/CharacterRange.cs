@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace XCG.Parsing
 {
-    public struct CharacterRange : IStatement
+    public struct CharacterRange : IStatement, IHasDiagnostics
     {
         public char Start { get; set; }
         public char End { get; set; }
@@ -13,10 +13,10 @@ namespace XCG.Parsing
 
         public CharacterRange(char start, char end, Diagnostic diagnostic)
         {
-            this.Start = start;
-            this.End = end;
-            this.Diagnostics = diagnostic;
+            Start = start;
+            End = end;
+            Diagnostics = diagnostic;
         }
-        public override string ToString() => $@"range: `{this.Start}-{this.End}`";
+        public override string ToString() => $@"range: `{Start}-{End}`";
     }
 }

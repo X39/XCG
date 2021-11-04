@@ -11,7 +11,7 @@ namespace XCG.Validation
 
         public ESeverity Severity { get; init; }
 
-        public Func<Parsing.Parser, IEnumerable<Hint>> ValidationFunc { get; init; } = (parser) => Array.Empty<Hint>();
+        public Func<Parsing.Parser, IEnumerable<Hint>> ValidationFunc { get; init; } = (_) => Array.Empty<Hint>();
 
         public IEnumerable<Hint> IsValid(Parsing.Parser parser) => ValidationFunc(parser);
     }

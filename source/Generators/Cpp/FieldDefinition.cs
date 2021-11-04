@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace XCG.Generators.Cpp
 {
     internal class FieldDefinition : ICppPart, IHasName
     {
         public string? BaseName { get; set; }
-        public ArgImpl Type { get; set; }
-        public string Name => this.Type.Name;
+        private ArgImpl Type { get; }
+        public string Name => Type.Name;
 
         public FieldDefinition(ArgImpl typeImpl)
         {
-            this.Type = typeImpl;
+            Type = typeImpl;
         }
+
         public void WriteHeader(CppOptions cppOptions, StreamWriter writer, string whitespace)
         {
             writer.Write(whitespace);

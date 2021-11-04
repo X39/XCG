@@ -2,7 +2,7 @@
 
 namespace XCG.Parsing.Expressions
 {
-    public class And : IStatement
+    public class And : IStatement, IHasDiagnostics
     {
         public List<IStatement> Children { get; }
         IEnumerable<IStatement> IStatement.Statements => Children;
@@ -10,7 +10,7 @@ namespace XCG.Parsing.Expressions
 
         public And(params IStatement[] statements)
         {
-            this.Children = new List<IStatement>(statements);
+            Children = new List<IStatement>(statements);
         }
     }
 }

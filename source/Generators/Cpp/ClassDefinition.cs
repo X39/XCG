@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using XCG.Generators.Cpp.Extensive;
@@ -10,32 +9,32 @@ namespace XCG.Generators.Cpp
     {
         public string? BaseName { get; set; }
         public string Name { get; }
-        public string FullName => this.BaseName is null ? this.Name : String.Concat(this.BaseName, "::", this.Name);
+        public string FullName => BaseName is null ? Name : string.Concat(BaseName, "::", Name);
         public List<ICppPart> PrivateParts { get; init; }
         public List<ICppPart> ProtectedParts { get; init; }
         public List<ICppPart> PublicParts { get; init; }
         public ClassDefinition(string name)
         {
-            this.Name = name;
-            this.PrivateParts = new();
-            this.ProtectedParts = new();
-            this.PublicParts = new();
+            Name = name;
+            PrivateParts = new List<ICppPart>();
+            ProtectedParts = new List<ICppPart>();
+            PublicParts = new List<ICppPart>();
         }
         public void WriteHeader(CppOptions options, StreamWriter writer, string whitespace)
         {
             writer.Write(whitespace);
             writer.Write("class ");
-            writer.WriteLine(this.FullName);
+            writer.WriteLine(FullName);
 
             writer.Write(whitespace);
             writer.WriteLine("{");
 
-            string? subWhitespace = String.Concat(whitespace, "    ");
-            if (this.PrivateParts.WhereIs<ClassDefinition>().Any())
+            var subWhitespace = string.Concat(whitespace, "    ");
+            if (PrivateParts.WhereIs<ClassDefinition>().Any())
             {
                 writer.Write(whitespace);
                 writer.WriteLine("private:");
-                foreach (var generatorPart in this.PrivateParts.WhereIs<ClassDefinition>())
+                foreach (var generatorPart in PrivateParts.WhereIs<ClassDefinition>())
                 {
                     writer.Write(subWhitespace);
                     writer.Write("class ");
@@ -44,11 +43,11 @@ namespace XCG.Generators.Cpp
                 }
             }
 
-            if (this.ProtectedParts.WhereIs<ClassDefinition>().Any())
+            if (ProtectedParts.WhereIs<ClassDefinition>().Any())
             {
                 writer.Write(whitespace);
                 writer.WriteLine("protected:");
-                foreach (var generatorPart in this.ProtectedParts.WhereIs<ClassDefinition>())
+                foreach (var generatorPart in ProtectedParts.WhereIs<ClassDefinition>())
                 {
                     writer.Write(subWhitespace);
                     writer.Write("class ");
@@ -57,11 +56,11 @@ namespace XCG.Generators.Cpp
                 }
             }
 
-            if (this.PublicParts.WhereIs<ClassDefinition>().Any())
+            if (PublicParts.WhereIs<ClassDefinition>().Any())
             {
                 writer.Write(whitespace);
                 writer.WriteLine("public:");
-                foreach (var generatorPart in this.PublicParts.WhereIs<ClassDefinition>())
+                foreach (var generatorPart in PublicParts.WhereIs<ClassDefinition>())
                 {
                     writer.Write(subWhitespace);
                     writer.Write("class ");
@@ -70,33 +69,33 @@ namespace XCG.Generators.Cpp
                 }
             }
 
-            if (this.PrivateParts.Any())
+            if (PrivateParts.Any())
             {
                 writer.Write(whitespace);
                 writer.WriteLine("private:");
-                foreach (var generatorPart in this.PrivateParts)
+                foreach (var generatorPart in PrivateParts)
                 {
                     generatorPart.BaseName = null;
                     generatorPart.WriteHeader(options, writer, subWhitespace);
                 }
             }
 
-            if (this.ProtectedParts.Any())
+            if (ProtectedParts.Any())
             {
                 writer.Write(whitespace);
                 writer.WriteLine("protected:");
-                foreach (var generatorPart in this.ProtectedParts)
+                foreach (var generatorPart in ProtectedParts)
                 {
                     generatorPart.BaseName = null;
                     generatorPart.WriteHeader(options, writer, subWhitespace);
                 }
             }
 
-            if (this.PublicParts.Any())
+            if (PublicParts.Any())
             {
                 writer.Write(whitespace);
                 writer.WriteLine("public:");
-                foreach (var generatorPart in this.PublicParts)
+                foreach (var generatorPart in PublicParts)
                 {
                     generatorPart.BaseName = null;
                     generatorPart.WriteHeader(options, writer, subWhitespace);
@@ -109,21 +108,21 @@ namespace XCG.Generators.Cpp
 
         public void WriteImplementation(CppOptions options, StreamWriter writer, string whitespace)
         {
-            foreach (var generatorPart in this.PrivateParts)
+            foreach (var generatorPart in PrivateParts)
             {
-                generatorPart.BaseName = this.FullName;
+                generatorPart.BaseName = FullName;
                 generatorPart.WriteImplementation(options, writer, whitespace);
             }
 
-            foreach (var generatorPart in this.ProtectedParts)
+            foreach (var generatorPart in ProtectedParts)
             {
-                generatorPart.BaseName = this.FullName;
+                generatorPart.BaseName = FullName;
                 generatorPart.WriteImplementation(options, writer, whitespace);
             }
 
-            foreach (var generatorPart in this.PublicParts)
+            foreach (var generatorPart in PublicParts)
             {
-                generatorPart.BaseName = this.FullName;
+                generatorPart.BaseName = FullName;
                 generatorPart.WriteImplementation(options, writer, whitespace);
             }
         }
@@ -131,37 +130,32 @@ namespace XCG.Generators.Cpp
 
         public MethodDefinition CreateVisitTreeMethodDefinition(CppOptions cppOptions)
         {
-            string level = $@"std::string(""{new string(' ', cppOptions.CreateStringTreeSpaces)}  "")";
-            string level_alt = $@"std::string(""{new string(' ', cppOptions.CreateStringTreeSpaces)}- "")";
             var methodDefinition = new MethodDefinition(
-                "bool", String.Concat(cppOptions.MethodsPrefix, "visit"),
-                new ArgImpl { Name = "node", TypeString = this.FullName.ToCppSharedPtrType() })
+                "bool", string.Concat(cppOptions.MethodsPrefix, "visit"),
+                new ArgImpl { Name = "node", TypeString = FullName.ToCppSharedPtrType() })
             {
                 $@"if (!visit_enter(node)) {{ return false; }}",
             };
 
-            var captureNameColoringStart = !cppOptions.ConsoleColorCaptureName ? string.Empty : string.Concat("\"", TerminalColor.ForegroundBrightBlack, "\"");
-            var captureNameColoringEnd = !cppOptions.ConsoleColorCaptureName ? string.Empty : string.Concat("\"", TerminalColor.Reset, "\"");
-
-            CaptureDefinition[] captureDefinitions = this.PublicParts.Concat(this.ProtectedParts).Concat(this.PrivateParts).WhereIs<CaptureDefinition>().ToArray();
-            for (int i = 0; i < captureDefinitions.Length; i++)
+            var captureDefinitions = PublicParts.Concat(ProtectedParts).Concat(PrivateParts).WhereIs<CaptureDefinition>().ToArray();
+            foreach (var t in captureDefinitions)
             {
-                void handleSingle(CppContainerBase container, TypeImpl type, string nav, string captureName)
+                void HandleSingle(CppContainerBase container, TypeImpl type, string nav)
                 {
                     if (type.TypeString is not null)
                     {
                         container.Add(new IfPart(IfPart.EIfScope.If, nav)
                         {
-                            new VariableDefinition(EType.Auto, "lines", $@"{String.Concat(cppOptions.MethodsPrefix, "visit")}({nav})"),
+                            new VariableDefinition(EType.Auto, "lines", $@"{string.Concat(cppOptions.MethodsPrefix, "visit")}({nav})"),
                         });
                     }
                 }
-                void handle(CaptureDefinition def, CppContainerBase container, string nav, string captureName)
+                void Handle(CaptureDefinition def, CppContainerBase container, string nav)
                 {
                     if (def.Types.Count == 1)
                     {
                         var type = def.Types.First();
-                        handleSingle(container, type, nav, captureName);
+                        HandleSingle(container, type, nav);
                     }
                     else
                     {
@@ -170,29 +164,28 @@ namespace XCG.Generators.Cpp
                         var scope = new ScopePart();
                         container.Add(scope);
 
-                        for (int typeIndex = 0; typeIndex < def.Types.Count; typeIndex++)
+                        for (var typeIndex = 0; typeIndex < def.Types.Count; typeIndex++)
                         {
                             var type = def.Types[typeIndex];
                             scope.Add($@"case {typeIndex}:");
-                            handleSingle(scope, type, $@"std::get<{type.ToString(cppOptions)}>({nav})", captureName);
+                            HandleSingle(scope, type, $@"std::get<{type.ToString(cppOptions)}>({nav})");
                             scope.Add($@"break;");
                         }
                     }
                 }
-                var captureDefinition = captureDefinitions[i];
 
-                if (captureDefinition.IsSingleHit)
+                if (t.IsSingleHit)
                 {
-                    var nav = $"node->{captureDefinition.Name}";
-                    handle(captureDefinition, methodDefinition, nav, captureDefinition.Name);
+                    var nav = $"node->{t.Name}";
+                    Handle(t, methodDefinition, nav);
                 }
                 else
                 {
                     var nav = $"element";
-                    methodDefinition.Add($@"for (auto element : node->{captureDefinition.Name})");
+                    methodDefinition.Add($@"for (auto element : node->{t.Name})");
                     var scope = new ScopePart();
                     methodDefinition.Add(scope);
-                    handle(captureDefinition, scope, nav, captureDefinition.Name);
+                    Handle(t, scope, nav);
                 }
             }
 
@@ -201,35 +194,35 @@ namespace XCG.Generators.Cpp
         }
         public MethodDefinition CreatePrintTreeMethodDefinition(CppOptions cppOptions)
         {
-            string level     = $@"std::string(""{new string(' ', cppOptions.CreateStringTreeSpaces)}  "")";
-            string level_alt = $@"std::string(""{new string(' ', cppOptions.CreateStringTreeSpaces)}- "")";
+            var level     = $@"std::string(""{new string(' ', cppOptions.CreateStringTreeSpaces)}  "")";
+            var levelAlt = $@"std::string(""{new string(' ', cppOptions.CreateStringTreeSpaces)}- "")";
             var methodDefinition = new MethodDefinition(
-                "std::vector<std::string>", String.Concat(cppOptions.MethodsPrefix, "create_string_tree"),
-                new ArgImpl { Name = "node", TypeString = this.FullName.ToCppSharedPtrType() },
+                "std::vector<std::string>", string.Concat(cppOptions.MethodsPrefix, "create_string_tree"),
+                new ArgImpl { Name = "node", TypeString = FullName.ToCppSharedPtrType() },
                 new ArgImpl { Name = "contents", Type = EType.StringView })
             {
                 new VariableDefinition("std::vector<std::string>", "output"),
-                $@"output.push_back(""{this.Name}:"");",
+                $@"output.push_back(""{Name}:"");",
             };
 
             var captureNameColoringStart = !cppOptions.ConsoleColorCaptureName ? string.Empty : string.Concat("\"", TerminalColor.ForegroundBrightBlack, "\"");
             var captureNameColoringEnd = !cppOptions.ConsoleColorCaptureName ? string.Empty : string.Concat("\"", TerminalColor.Reset, "\"");
 
-            CaptureDefinition[] captureDefinitions = this.PublicParts.Concat(this.ProtectedParts).Concat(this.PrivateParts).WhereIs<CaptureDefinition>().ToArray();
-            for (int i = 0; i < captureDefinitions.Length; i++)
+            var captureDefinitions = PublicParts.Concat(ProtectedParts).Concat(PrivateParts).WhereIs<CaptureDefinition>().ToArray();
+            foreach (var t in captureDefinitions)
             {
-                void handleSingle(CppContainerBase container, TypeImpl type, string nav, string captureName)
+                void HandleSingle(CppContainerBase container, TypeImpl type, string nav, string captureName)
                 {
                     if (type.TypeString is not null)
                     {
                         container.Add(new IfPart(IfPart.EIfScope.If, nav)
                         {
-                            new VariableDefinition(EType.Auto, "lines", $@"{String.Concat(cppOptions.MethodsPrefix, "create_string_tree")}({nav}, contents)"),
+                            new VariableDefinition(EType.Auto, "lines", $@"{string.Concat(cppOptions.MethodsPrefix, "create_string_tree")}({nav}, contents)"),
                             $@"bool first = true;",
                             $@"for (auto line : lines)",
                             new ScopePart
                             {
-                                $@"output.push_back((first ? {level_alt} : {level}) + (first ? line + {captureNameColoringStart} "" [{captureName}]"" {captureNameColoringEnd} : line));",
+                                $@"output.push_back((first ? {levelAlt} : {level}) + (first ? line + {captureNameColoringStart} "" [{captureName}]"" {captureNameColoringEnd} : line));",
                                 $@"first = false;",
                             }
                         });
@@ -281,12 +274,12 @@ namespace XCG.Generators.Cpp
                         }
                     }
                 }
-                void handle(CaptureDefinition def, CppContainerBase container, string nav, string captureName)
+                void Handle(CaptureDefinition def, CppContainerBase container, string nav, string captureName)
                 {
                     if (def.Types.Count == 1)
                     {
                         var type = def.Types.First();
-                        handleSingle(container, type, nav, captureName);
+                        HandleSingle(container, type, nav, captureName);
                     }
                     else
                     {
@@ -295,21 +288,21 @@ namespace XCG.Generators.Cpp
                         var scope = new ScopePart();
                         container.Add(scope);
 
-                        for (int typeIndex = 0; typeIndex < def.Types.Count; typeIndex++)
+                        for (var typeIndex = 0; typeIndex < def.Types.Count; typeIndex++)
                         {
                             var type = def.Types[typeIndex];
                             scope.Add($@"case {typeIndex}:");
-                            handleSingle(scope, type, $@"std::get<{type.ToString(cppOptions)}>({nav})", captureName);
+                            HandleSingle(scope, type, $@"std::get<{type.ToString(cppOptions)}>({nav})", captureName);
                             scope.Add($@"break;");
                         }
                     }
                 }
-                var captureDefinition = captureDefinitions[i];
+                var captureDefinition = t;
 
                 if (captureDefinition.IsSingleHit)
                 {
                     var nav = $"node->{captureDefinition.Name}";
-                    handle(captureDefinition, methodDefinition, nav, captureDefinition.Name);
+                    Handle(captureDefinition, methodDefinition, nav, captureDefinition.Name);
                 }
                 else
                 {
@@ -317,7 +310,7 @@ namespace XCG.Generators.Cpp
                     methodDefinition.Add($@"for (auto element : node->{captureDefinition.Name})");
                     var scope = new ScopePart();
                     methodDefinition.Add(scope);
-                    handle(captureDefinition, scope, nav, captureDefinition.Name);
+                    Handle(captureDefinition, scope, nav, captureDefinition.Name);
                 }
             }
 

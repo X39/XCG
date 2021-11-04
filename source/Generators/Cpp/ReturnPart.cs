@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace XCG.Generators.Cpp
 {
@@ -16,37 +11,37 @@ namespace XCG.Generators.Cpp
 
         public ReturnPart(EUsage usage = EUsage.Implementation)
         {
-            this.Value = EValueConstant.None;
-            this.Usage = usage;
+            Value = EValueConstant.None;
+            Usage = usage;
         }
         public ReturnPart(EValueConstant value, EUsage usage = EUsage.Implementation)
         {
-            this.Value = value;
-            this.Usage = usage;
+            Value = value;
+            Usage = usage;
         }
         public ReturnPart(string value, EUsage usage = EUsage.Implementation)
         {
-            this.ValueString = value;
-            this.Usage = usage;
+            ValueString = value;
+            Usage = usage;
         }
         public void WriteHeader(CppOptions cppOptions, StreamWriter writer, string whitespace)
         {
-            if (this.Usage == EUsage.Header)
+            if (Usage == EUsage.Header)
             {
                 writer.Write(whitespace);
-                if (!String.IsNullOrWhiteSpace(this.ValueString))
+                if (!string.IsNullOrWhiteSpace(ValueString))
                 {
                     writer.Write("return ");
-                    writer.Write(this.ValueString);
+                    writer.Write(ValueString);
                 }
-                else if (this.Value == EValueConstant.None)
+                else if (Value == EValueConstant.None)
                 {
                     writer.Write("return");
                 }
                 else
                 {
                     writer.Write("return ");
-                    writer.Write(this.Value.ToCppString());
+                    writer.Write(Value.ToCppString());
                 }
                 writer.WriteLine(";");
             }
@@ -54,22 +49,22 @@ namespace XCG.Generators.Cpp
 
         public void WriteImplementation(CppOptions cppOptions, StreamWriter writer, string whitespace)
         {
-            if (this.Usage == EUsage.Implementation)
+            if (Usage == EUsage.Implementation)
             {
                 writer.Write(whitespace);
-                if (!String.IsNullOrWhiteSpace(this.ValueString))
+                if (!string.IsNullOrWhiteSpace(ValueString))
                 {
                     writer.Write("return ");
-                    writer.Write(this.ValueString);
+                    writer.Write(ValueString);
                 }
-                else if (this.Value == EValueConstant.None)
+                else if (Value == EValueConstant.None)
                 {
                     writer.Write("return");
                 }
                 else
                 {
                     writer.Write("return ");
-                    writer.Write(this.Value.ToCppString());
+                    writer.Write(Value.ToCppString());
                 }
                 writer.WriteLine(";");
             }

@@ -5,11 +5,9 @@ namespace XCG.Generators.Cpp
 {
     public class CppOptions
     {
-        [CppOption("class", Nullable = false)]
-        public string ClassName { get; set; } = "instance";
+        [CppOption("class", Nullable = false)] public string ClassName { get; set; } = "instance";
 
-        [CppOption("token", Nullable = false)]
-        public string TokenName { get; set; } = "token";
+        [CppOption("token", Nullable = false)] public string TokenName { get; set; } = "token";
 
         [CppOption("token-enum", Nullable = false)]
         public string TokenEnumName { get; set; } = "tok";
@@ -35,44 +33,55 @@ namespace XCG.Generators.Cpp
         [CppOption("console-color-capture-name")]
         public bool ConsoleColorCaptureName { get; set; } = true;
 
-        [CppOption("create-string-tree")]
-        public bool CreateStringTree { get; set; } = true;
+        [CppOption("create-string-tree")] public bool CreateStringTree { get; set; } = true;
 
-        [CppOption("create-visitor")]
-        public bool CreateVisitor { get; set; } = true;
+        [CppOption("create-visitor")] public bool CreateVisitor { get; set; } = true;
 
-        [CppOption("debug")]
-        public bool Debug { get; set; } = false;
+        [CppOption("debug")] public bool Debug { get; set; } = false;
 
-        internal Dictionary<object, CaptureDefinition> ClassCaptureDefinitionsMap { get; } = new Dictionary<object, CaptureDefinition>();
-        internal Dictionary<(string StateClassName, string Property), CaptureDefinition> StateCaptureDefinitionsMap { get; } = new Dictionary<(string StateClassName, string Property), CaptureDefinition>();
-        public string RootClassName => String.Concat(this.NamespaceName ?? String.Empty, this.NamespaceName is null ? String.Empty : "::", this.ClassName, "::");
+        internal Dictionary<object, CaptureDefinition> ClassCaptureDefinitionsMap { get; } =
+            new();
+
+        internal Dictionary<(string StateClassName, string Property), CaptureDefinition>
+            StateCaptureDefinitionsMap { get; } =
+            new();
+
+        public string RootClassName => string.Concat(NamespaceName ?? string.Empty,
+            NamespaceName is null ? string.Empty : "::", ClassName, "::");
+
         /// <summary>
         /// An internal counter, allowing to create variables
-        /// collission-free.
+        /// collision-free.
         /// </summary>
-        internal int Counter { get; set; } = 0;
+        private int Counter { get; set; }
 
         internal string ToUnique(string value)
         {
-            return String.Concat(value, ++this.Counter);
+            return string.Concat(value, ++Counter);
         }
 
-        private Dictionary<object, MethodDefinition> MethodCache { get; } = new Dictionary<object, MethodDefinition>();
+        private Dictionary<object, MethodDefinition> MethodCache { get; } = new();
 
         internal MethodDefinition FromCache<T>(T target)
         {
-            if (target is null) { throw new ArgumentNullException(nameof(target)); }
-            return this.MethodCache[target];
+            if (target is null)
+            {
+                throw new ArgumentNullException(nameof(target));
+            }
+
+            return MethodCache[target];
         }
+
         internal MethodDefinition FromCacheOrCreate<T>(T target, Func<T, MethodDefinition> action)
         {
-            if (target is null) { throw new ArgumentNullException(nameof(target)); }
-            if (!this.MethodCache.TryGetValue(target, out var cached))
+            if (target is null)
             {
-                cached = action(target);
-                this.MethodCache[target] = cached;
+                throw new ArgumentNullException(nameof(target));
             }
+
+            if (MethodCache.TryGetValue(target, out var cached)) return cached;
+            cached = action(target);
+            MethodCache[target] = cached;
             return cached;
         }
     }

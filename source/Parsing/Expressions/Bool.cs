@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace XCG.Parsing.Expressions
 {
-    public class Bool : IStatement
+    public class Bool : IStatement, IHasDiagnostics
     {
         public bool Value { get; }
         IEnumerable<IStatement> IStatement.Statements => Array.Empty<IStatement>();
@@ -11,7 +11,7 @@ namespace XCG.Parsing.Expressions
 
         public Bool(bool v)
         {
-            this.Value = v;
+            Value = v;
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace XCG.Parsing.Expressions
 {
-    public class Character : IStatement
+    public class Character : IStatement, IHasDiagnostics
     {
         public char Value { get; }
         IEnumerable<IStatement> IStatement.Statements => Array.Empty<IStatement>();
@@ -11,7 +11,7 @@ namespace XCG.Parsing.Expressions
 
         public Character(char v)
         {
-            this.Value = v;
+            Value = v;
         }
     }
 }

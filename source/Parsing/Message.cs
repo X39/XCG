@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace XCG.Parsing
 {
-    public class Message : IStatement
+    public class Message : IStatement, IHasDiagnostics
     {
         IEnumerable<IStatement> IStatement.Statements => Array.Empty<IStatement>();
         public string Identifier { get; set; }
@@ -13,8 +13,8 @@ namespace XCG.Parsing
 
         public Message()
         {
-            this.Identifier = string.Empty;
-            this.Text = string.Empty;
+            Identifier = string.Empty;
+            Text = string.Empty;
         }
     }
 }

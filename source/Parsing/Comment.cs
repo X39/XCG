@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace XCG.Parsing
 {
-    public class Comment : IStatement
+    public class Comment : IStatement, IHasDiagnostics
     {
         public string? Start { get; set; }
         public string? End { get; set; }

@@ -2,7 +2,7 @@
 
 namespace XCG.Parsing.Expressions
 {
-    public class Multiply : IStatement
+    public class Multiply : IStatement, IHasDiagnostics
     {
         public List<IStatement> Children { get; }
         IEnumerable<IStatement> IStatement.Statements => Children;
@@ -10,7 +10,7 @@ namespace XCG.Parsing.Expressions
 
         public Multiply(params IStatement[] statements)
         {
-            this.Children = new List<IStatement>(statements);
+            Children = new List<IStatement>(statements);
         }
     }
 }

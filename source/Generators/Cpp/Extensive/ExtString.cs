@@ -1,12 +1,10 @@
-﻿using System;
-
-namespace XCG.Generators.Cpp.Extensive
+﻿namespace XCG.Generators.Cpp.Extensive
 {
     internal static class ExtString
     {
         public static string ToCppSharedPtrType(this string str)
         {
-            return String.Concat("std::shared_ptr<", str, ">");
+            return string.Concat("std::shared_ptr<", str, ">");
         }
         public static ICppPart ToCppPart(this string str, EUsage usage = EUsage.Implementation)
         {
@@ -14,11 +12,11 @@ namespace XCG.Generators.Cpp.Extensive
         }
         public static string ToCppSharedPtrMake(this string str, params string[] args)
         {
-            return String.Concat("std::make_shared<", str, ">(", String.Join(", ", args), ")");
+            return string.Concat("std::make_shared<", str, ">(", string.Join(", ", args), ")");
         }
         public static string ToCppName(this string str)
         {
-            var name = String.Concat(str.Replace('-', '_').Replace('@', '_').ToLower());
+            var name = string.Concat(str.Replace('-', '_').Replace('@', '_').ToLower());
             switch (name)
             {
                 default: return name;
@@ -64,7 +62,7 @@ namespace XCG.Generators.Cpp.Extensive
                 case "using":
                 case "virtual":
                 case "while":
-                    return String.Concat(name, '_');
+                    return string.Concat(name, '_');
             }
         }
     }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace XCG.Generators.Cpp
 {
@@ -10,19 +7,21 @@ namespace XCG.Generators.Cpp
     {
         public string Name { get; }
         public string? BaseName { get; set; }
-        public string FullName => this.BaseName is null ? this.Name : String.Concat(this.BaseName, "::", this.Name);
+        private string FullName => BaseName is null ? Name : string.Concat(BaseName, "::", Name);
 
         public List<string> Entries { get; init; }
+
         public EnumDefinition(string name)
         {
             Entries = new List<string>();
-            this.Name = name;
+            Name = name;
         }
+
         public void WriteHeader(CppOptions options, StreamWriter writer, string whitespace)
         {
             writer.Write(whitespace);
             writer.Write("enum class ");
-            writer.WriteLine(this.FullName);
+            writer.WriteLine(FullName);
 
             writer.Write(whitespace);
             writer.WriteLine("{");
@@ -30,12 +29,13 @@ namespace XCG.Generators.Cpp
             var subWhitespace = whitespace + "    ";
             writer.Write(subWhitespace);
             writer.WriteLine("__UNSET__,");
-            foreach (var entry in this.Entries)
+            foreach (var entry in Entries)
             {
                 writer.Write(subWhitespace);
                 writer.Write(entry);
                 writer.WriteLine(",");
             }
+
             writer.Write(subWhitespace);
             writer.WriteLine("__MAX__");
 

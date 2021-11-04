@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace XCG.Parsing.Expressions
 {
-    public class EquivalentTo : IStatement
+    public class EquivalentTo : IStatement, IHasDiagnostics
     {
         public List<IStatement> Children { get; }
         IEnumerable<IStatement> IStatement.Statements => Children;
@@ -11,7 +11,7 @@ namespace XCG.Parsing.Expressions
 
         public EquivalentTo(params IStatement[] statements)
         {
-            this.Children = new List<IStatement>(statements);
+            Children = new List<IStatement>(statements);
         }
     }
 }

@@ -9,18 +9,18 @@ namespace XCG.Validation
 
         public override bool Equals(object? obj)
         {
-            return obj is RuleKey key && this.Equals(key);
+            return obj is RuleKey key && Equals(key);
         }
 
         public bool Equals(RuleKey other)
         {
-            return this.Realm == other.Realm &&
-                   this.Code == other.Code;
+            return Realm == other.Realm &&
+                   Code == other.Code;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(this.Realm, this.Code);
+            return HashCode.Combine(Realm, Code);
         }
     }
 }

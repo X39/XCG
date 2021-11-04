@@ -29,11 +29,10 @@ namespace XCG.Generators.Cpp
     }
     internal static class ETypeExtensions
     {
-        internal static string ToCppString(this EType type, CppOptions cppOptions)
-        {
-            return type switch
+        internal static string ToCppString(this EType type, CppOptions cppOptions) =>
+            type switch
             {
-                EType.None => String.Empty,
+                EType.None => string.Empty,
                 EType.Void => "void",
                 EType.Auto => "auto",
                 EType.Boolean => "bool",
@@ -54,9 +53,8 @@ namespace XCG.Generators.Cpp
                 EType.OptionalStringView => "std::optional<std::string_view>",
                 EType.OptionalSizeT => "std::optional<size_t>",
                 EType.OptionalChar => "std::optional<char>",
-                EType.Token => String.Concat(cppOptions.TypePrefix, cppOptions.TokenName),
+                EType.Token => string.Concat(cppOptions.TypePrefix, cppOptions.TokenName),
                 _ => throw new NotImplementedException(),
             };
-        }
     }
 }

@@ -8,15 +8,16 @@ namespace XCG.Generators.Cpp
 {
     internal class MethodDefinition : CppContainerBase, IHasName
     {
-        public EType ReturnType { get; }
+        private EType ReturnType { get; }
 
         /// <summary>
         /// The exact type returned.
         /// If provided, <see cref="ReturnType"/> is ignored.
         /// </summary>
         public string? ReturnTypeString { get; }
+
         public string Name { get; }
-        public string FullName => this.BaseName is null ? this.Name : String.Concat(this.BaseName, "::", this.Name);
+        public string FullName => BaseName is null ? Name : string.Concat(BaseName, "::", Name);
         public IEnumerable<ArgImpl> Arguments { get; }
         public string? AfterMethodImpl { get; init; }
         public bool HeaderOnly { get; init; }
@@ -24,89 +25,134 @@ namespace XCG.Generators.Cpp
 
         public MethodDefinition(EType returnType, string name, string? afterMethodImpl, IEnumerable<ArgImpl> arguments)
         {
-            this.ReturnType = returnType;
-            this.AfterMethodImpl = afterMethodImpl;
-            this.Name = name;
-            this.Arguments = new ReadOnlyCollection<ArgImpl>(arguments.ToList());
+            ReturnType = returnType;
+            AfterMethodImpl = afterMethodImpl;
+            Name = name;
+            Arguments = new ReadOnlyCollection<ArgImpl>(arguments.ToList());
         }
-        public MethodDefinition(EType returnType, string name, IEnumerable<ArgImpl> arguments) : this(returnType, name, null, arguments) { }
-        public MethodDefinition(EType returnType, string name) : this(returnType, name, null, Array.Empty<ArgImpl>() as IEnumerable<ArgImpl>) { }
-        public MethodDefinition(EType returnType, string name, string afterMethodImpl) : this(returnType, name, afterMethodImpl, Array.Empty<ArgImpl>() as IEnumerable<ArgImpl>) { }
-        public MethodDefinition(EType returnType, string name, params ArgImpl[] arguments) : this(returnType, name, null, arguments as IEnumerable<ArgImpl>) { }
-        public MethodDefinition(EType returnType, string name, string afterMethodImpl, params ArgImpl[] arguments) : this(returnType, name, afterMethodImpl, arguments as IEnumerable<ArgImpl>) { }
+
+        public MethodDefinition(EType returnType, string name, IEnumerable<ArgImpl> arguments) : this(returnType, name,
+            null, arguments)
+        {
+        }
+
+        public MethodDefinition(EType returnType, string name) : this(returnType, name, null,
+            Array.Empty<ArgImpl>() as IEnumerable<ArgImpl>)
+        {
+        }
+
+        public MethodDefinition(EType returnType, string name, string afterMethodImpl) : this(returnType, name,
+            afterMethodImpl, Array.Empty<ArgImpl>() as IEnumerable<ArgImpl>)
+        {
+        }
+
+        public MethodDefinition(EType returnType, string name, params ArgImpl[] arguments) : this(returnType, name,
+            null, arguments as IEnumerable<ArgImpl>)
+        {
+        }
+
+        public MethodDefinition(EType returnType, string name, string afterMethodImpl, params ArgImpl[] arguments) :
+            this(returnType, name, afterMethodImpl, arguments as IEnumerable<ArgImpl>)
+        {
+        }
 
         public MethodDefinition(string returnType, string name, string? afterMethodImpl, IEnumerable<ArgImpl> arguments)
         {
-            this.ReturnTypeString = returnType;
-            this.AfterMethodImpl = afterMethodImpl;
-            this.Name = name;
-            this.Arguments = new ReadOnlyCollection<ArgImpl>(arguments.ToList());
+            ReturnTypeString = returnType;
+            AfterMethodImpl = afterMethodImpl;
+            Name = name;
+            Arguments = new ReadOnlyCollection<ArgImpl>(arguments.ToList());
         }
-        public MethodDefinition(string returnType, string name, IEnumerable<ArgImpl> arguments) : this(returnType, name, null, arguments) { }
-        public MethodDefinition(string returnType, string name) : this(returnType, name, null, Array.Empty<ArgImpl>() as IEnumerable<ArgImpl>) { }
-        public MethodDefinition(string returnType, string name, string afterMethodImpl) : this(returnType, name, afterMethodImpl, Array.Empty<ArgImpl>() as IEnumerable<ArgImpl>) { }
-        public MethodDefinition(string returnType, string name, params ArgImpl[] arguments) : this(returnType, name, null, arguments as IEnumerable<ArgImpl>) { }
-        public MethodDefinition(string returnType, string name, string afterMethodImpl, params ArgImpl[] arguments) : this(returnType, name, afterMethodImpl, arguments as IEnumerable<ArgImpl>) { }
+
+        public MethodDefinition(string returnType, string name, IEnumerable<ArgImpl> arguments) : this(returnType, name,
+            null, arguments)
+        {
+        }
+
+        public MethodDefinition(string returnType, string name) : this(returnType, name, null,
+            Array.Empty<ArgImpl>() as IEnumerable<ArgImpl>)
+        {
+        }
+
+        public MethodDefinition(string returnType, string name, string afterMethodImpl) : this(returnType, name,
+            afterMethodImpl, Array.Empty<ArgImpl>() as IEnumerable<ArgImpl>)
+        {
+        }
+
+        public MethodDefinition(string returnType, string name, params ArgImpl[] arguments) : this(returnType, name,
+            null, arguments as IEnumerable<ArgImpl>)
+        {
+        }
+
+        public MethodDefinition(string returnType, string name, string afterMethodImpl, params ArgImpl[] arguments) :
+            this(returnType, name, afterMethodImpl, arguments as IEnumerable<ArgImpl>)
+        {
+        }
 
         public override void WriteHeader(CppOptions cppOptions, StreamWriter writer, string whitespace)
         {
-            if (this.HeaderOnly)
+            if (HeaderOnly)
             {
-                this.WriteImplementationActual(cppOptions, writer, whitespace);
+                WriteImplementationActual(cppOptions, writer, whitespace);
                 return;
             }
+
             writer.Write(whitespace);
             if (IsVirtual)
             {
                 writer.Write("virtual ");
             }
-            if (this.ReturnTypeString is null)
+
+            if (ReturnTypeString is null)
             {
-                writer.Write(this.ReturnType.ToCppString(cppOptions));
+                writer.Write(ReturnType.ToCppString(cppOptions));
                 writer.Write(" ");
             }
-            else if (!String.IsNullOrWhiteSpace(this.ReturnTypeString))
+            else if (!string.IsNullOrWhiteSpace(ReturnTypeString))
             {
-                writer.Write(this.ReturnTypeString);
+                writer.Write(ReturnTypeString);
                 writer.Write(" ");
             }
-            writer.Write(this.FullName);
+
+            writer.Write(FullName);
             writer.Write("(");
-            writer.Write(String.Join(", ", this.Arguments.Select((q) => q.ToString(cppOptions))));
+            writer.Write(string.Join(", ", Arguments.Select((q) => q.ToString(cppOptions))));
             writer.WriteLine(");");
         }
 
         public override void WriteImplementation(CppOptions options, StreamWriter writer, string whitespace)
         {
-            if (!this.HeaderOnly)
+            if (!HeaderOnly)
             {
-                this.WriteImplementationActual(options, writer, whitespace);
+                WriteImplementationActual(options, writer, whitespace);
             }
         }
+
         private void WriteImplementationActual(CppOptions cppOptions, StreamWriter writer, string whitespace)
         {
             writer.Write(whitespace);
-            if (this.ReturnTypeString is null)
+            if (ReturnTypeString is null)
             {
-                writer.Write(this.ReturnType.ToCppString(cppOptions));
+                writer.Write(ReturnType.ToCppString(cppOptions));
                 writer.Write(" ");
             }
-            else if (!String.IsNullOrWhiteSpace(this.ReturnTypeString))
+            else if (!string.IsNullOrWhiteSpace(ReturnTypeString))
             {
-                writer.Write(this.ReturnTypeString);
+                writer.Write(ReturnTypeString);
                 writer.Write(" ");
             }
-            writer.Write(this.FullName);
+
+            writer.Write(FullName);
             writer.Write("(");
-            writer.Write(String.Join(", ", this.Arguments.Select((q) => q.ToString(cppOptions))));
+            writer.Write(string.Join(", ", Arguments.Select((q) => q.ToString(cppOptions))));
             writer.Write(")");
-            writer.WriteLine(this.AfterMethodImpl ?? String.Empty);
+            writer.WriteLine(AfterMethodImpl ?? string.Empty);
 
             writer.Write(whitespace);
             writer.WriteLine("{");
 
-            string? subWhitespace = String.Concat(whitespace, "    ");
-            foreach (var generatorPart in this.Parts)
+            var subWhitespace = string.Concat(whitespace, "    ");
+            foreach (var generatorPart in Parts)
             {
                 generatorPart.WriteImplementation(cppOptions, writer, subWhitespace);
             }

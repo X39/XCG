@@ -2,11 +2,12 @@
 
 namespace XCG.Generators.Cpp
 {
+    [AttributeUsage(AttributeTargets.Property)]
     internal class CppOptionAttribute : Attribute
     {
         public CppOptionAttribute(string v)
         {
-            this.Name = v;
+            Name = v;
         }
 
         public string Name { get; }

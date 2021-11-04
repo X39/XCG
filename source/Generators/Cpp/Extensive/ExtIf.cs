@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 namespace XCG.Generators.Cpp.Extensive
 {
@@ -20,27 +19,27 @@ namespace XCG.Generators.Cpp.Extensive
         /// <returns></returns>
         public static MethodDefinition CreateMethodDefinition(this Parsing.Statements.If @if, CppOptions cppOptions, string typeName, string stateTypeName)
         {
-            int ___localsCount = 0;
-            string toUnique(string str) => String.Concat(str, (++___localsCount).ToString());
-            string? resetable = toUnique("resetable");
+            var ___localsCount = 0;
+            string toUnique(string str) => string.Concat(str, (++___localsCount).ToString());
+            var resettable = toUnique("resettable");
 
             var ifName = cppOptions.ToUnique("if");
             var methodDefinition = new MethodDefinition(
                 EType.Boolean,
-                cppOptions.ToUnique(String.Concat(cppOptions.MethodsPrefix, ifName, "_")),
+                cppOptions.ToUnique(string.Concat(cppOptions.MethodsPrefix, ifName, "_")),
                 new ArgImpl { Name = Constants.isCanVariable, Type = EType.Boolean },
                 new ArgImpl { Name = Constants.classInstanceVariable, TypeString = typeName, ReferenceCount = 1 },
                 new ArgImpl { Name = Constants.stateInstanceVariable, TypeString = stateTypeName, ReferenceCount = 1 },
                 new ArgImpl { Name = Constants.depthVariable, Type = EType.SizeT }
             )
             {
-                $@"resetable {resetable}(*this);"
+                $@"resettable {resettable}(*this);"
             };
 
 
             var conditionVariable = toUnique("cond");
             methodDefinition.AddRange(@if.Condition!.GetEvaluationResult(cppOptions, stateTypeName, conditionVariable, true, toUnique));
-            methodDefinition.Add($@"{resetable}.reset();");
+            methodDefinition.Add($@"{resettable}.reset();");
 
 
             foreach (var isCan in Constants.TrueFalseArray)

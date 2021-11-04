@@ -2,7 +2,7 @@
 
 namespace XCG.Generators.Cpp
 {
-    internal struct TypeImpl : IEquatable<TypeImpl>
+    internal readonly struct TypeImpl : IEquatable<TypeImpl>
     {
         public EType Type { get; init; }
 
@@ -11,31 +11,33 @@ namespace XCG.Generators.Cpp
         /// Will be used directly for output.
         /// </summary>
         public string? TypeString { get; init; }
+
         public int ReferenceCount { get; init; }
         public int PointerCount { get; init; }
         public bool IsConst { get; init; }
 
         public override bool Equals(object? obj)
         {
-            return obj is TypeImpl impl && this.Equals(impl);
+            return obj is TypeImpl impl && Equals(impl);
         }
 
         public bool Equals(TypeImpl other)
         {
-            return this.Type == other.Type &&
-                   this.TypeString == other.TypeString &&
-                   this.ReferenceCount == other.ReferenceCount &&
-                   this.PointerCount == other.PointerCount;
+            return Type == other.Type &&
+                   TypeString == other.TypeString &&
+                   ReferenceCount == other.ReferenceCount &&
+                   PointerCount == other.PointerCount;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(this.Type, this.TypeString, this.ReferenceCount, this.PointerCount);
+            return HashCode.Combine(Type, TypeString, ReferenceCount, PointerCount);
         }
 
         public string ToString(CppOptions cppOptions)
         {
-            return $"{(IsConst ? "const " : String.Empty)}{(TypeString ?? this.Type.ToCppString(cppOptions))}{new string('*', this.PointerCount)}{new string('&', this.ReferenceCount)}";
+            return
+                $"{(IsConst ? "const " : string.Empty)}{(TypeString ?? Type.ToCppString(cppOptions))}{new string('*', PointerCount)}{new string('&', ReferenceCount)}";
         }
     }
 }

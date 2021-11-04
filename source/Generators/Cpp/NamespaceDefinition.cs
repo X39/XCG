@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
@@ -9,26 +8,26 @@ namespace XCG.Generators.Cpp
     {
         public string? BaseName { get; set; }
         public string Name { get; }
-        public string FullName => this.BaseName is null ? this.Name : String.Concat(this.BaseName, "::", this.Name);
+        public string FullName => BaseName is null ? Name : string.Concat(BaseName, "::", Name);
         public List<ICppPart> Parts { get; init; }
 
         public NamespaceDefinition(string name)
         {
-            this.Name = name;
-            this.Parts = new List<ICppPart>();
+            Name = name;
+            Parts = new List<ICppPart>();
         }
 
         public void WriteHeader(CppOptions options, StreamWriter writer, string whitespace)
         {
             writer.Write(whitespace);
             writer.Write("namespace ");
-            writer.WriteLine(this.FullName);
+            writer.WriteLine(FullName);
 
             writer.Write(whitespace);
             writer.WriteLine("{");
 
-            string? subWhitespace = String.Concat(whitespace, "    ");
-            foreach (var generatorPart in this.Parts)
+            var subWhitespace = string.Concat(whitespace, "    ");
+            foreach (var generatorPart in Parts)
             {
                 generatorPart.BaseName = null;
                 generatorPart.WriteHeader(options, writer, subWhitespace);
@@ -40,69 +39,75 @@ namespace XCG.Generators.Cpp
 
         public void WriteImplementation(CppOptions options, StreamWriter writer, string whitespace)
         {
-            foreach (var generatorPart in this.Parts)
+            foreach (var generatorPart in Parts)
             {
-                generatorPart.BaseName = this.FullName;
+                generatorPart.BaseName = FullName;
                 generatorPart.WriteImplementation(options, writer, whitespace);
             }
         }
 
         #region IList<ICppPart>
-        public int Count => ((ICollection<ICppPart>)this.Parts).Count;
 
-        public bool IsReadOnly => ((ICollection<ICppPart>)this.Parts).IsReadOnly;
+        public int Count => ((ICollection<ICppPart>) Parts).Count;
 
-        public ICppPart this[int index] { get => ((IList<ICppPart>)this.Parts)[index]; set => ((IList<ICppPart>)this.Parts)[index] = value; }
+        public bool IsReadOnly => ((ICollection<ICppPart>) Parts).IsReadOnly;
+
+        public ICppPart this[int index]
+        {
+            get => ((IList<ICppPart>) Parts)[index];
+            set => ((IList<ICppPart>) Parts)[index] = value;
+        }
 
         public int IndexOf(ICppPart item)
         {
-            return ((IList<ICppPart>)this.Parts).IndexOf(item);
+            return ((IList<ICppPart>) Parts).IndexOf(item);
         }
 
         public void Insert(int index, ICppPart item)
         {
-            ((IList<ICppPart>)this.Parts).Insert(index, item);
+            ((IList<ICppPart>) Parts).Insert(index, item);
         }
 
         public void RemoveAt(int index)
         {
-            ((IList<ICppPart>)this.Parts).RemoveAt(index);
+            ((IList<ICppPart>) Parts).RemoveAt(index);
         }
 
         public void Add(ICppPart item)
         {
-            ((ICollection<ICppPart>)this.Parts).Add(item);
+            ((ICollection<ICppPart>) Parts).Add(item);
         }
 
         public void Clear()
         {
-            ((ICollection<ICppPart>)this.Parts).Clear();
+            ((ICollection<ICppPart>) Parts).Clear();
         }
 
         public bool Contains(ICppPart item)
         {
-            return ((ICollection<ICppPart>)this.Parts).Contains(item);
+            return ((ICollection<ICppPart>) Parts).Contains(item);
         }
 
         public void CopyTo(ICppPart[] array, int arrayIndex)
         {
-            ((ICollection<ICppPart>)this.Parts).CopyTo(array, arrayIndex);
+            ((ICollection<ICppPart>) Parts).CopyTo(array, arrayIndex);
         }
 
         public bool Remove(ICppPart item)
         {
-            return ((ICollection<ICppPart>)this.Parts).Remove(item);
+            return ((ICollection<ICppPart>) Parts).Remove(item);
         }
 
         public IEnumerator<ICppPart> GetEnumerator()
         {
-            return ((IEnumerable<ICppPart>)this.Parts).GetEnumerator();
+            return ((IEnumerable<ICppPart>) Parts).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IEnumerable)this.Parts).GetEnumerator();
+            return ((IEnumerable) Parts).GetEnumerator();
         }
+
         #endregion
     }
 }

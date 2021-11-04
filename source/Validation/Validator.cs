@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace XCG.Validation
 {
     public class Validator
     {
-        public IEnumerable<IRule> Rules => _Rules.AsReadOnly();
-        private readonly List<IRule> _Rules = new();
-        private readonly HashSet<RuleKey> _RuleKeys = new();
+        private readonly List<IRule> _rules = new();
+        private readonly HashSet<RuleKey> _ruleKeys = new();
 
         /// <summary>
         /// 
@@ -21,13 +18,14 @@ namespace XCG.Validation
         {
             lock (this)
             {
-                var ruleKey = new RuleKey { Realm = rule.Realm, Code = rule.Code };
-                if (_RuleKeys.Contains(ruleKey))
+                var ruleKey = new RuleKey {Realm = rule.Realm, Code = rule.Code};
+                if (_ruleKeys.Contains(ruleKey))
                 {
                     throw new KeyAlreadyPresentException(rule.Realm, rule.Code);
                 }
-                this._Rules.Add(rule);
-                this._RuleKeys.Add(ruleKey);
+
+                _rules.Add(rule);
+                _ruleKeys.Add(ruleKey);
             }
         }
 
@@ -43,13 +41,14 @@ namespace XCG.Validation
         {
             lock (this)
             {
-                var ruleKey = new RuleKey { Realm = realm, Code = code };
-                if (_RuleKeys.Contains(ruleKey))
+                var ruleKey = new RuleKey {Realm = realm, Code = code};
+                if (_ruleKeys.Contains(ruleKey))
                 {
                     throw new KeyAlreadyPresentException(realm, code);
                 }
-                this._Rules.Add(new Rule { Realm = realm, Severity = severity, Code = code, ValidationFunc = func });
-                this._RuleKeys.Add(ruleKey);
+
+                _rules.Add(new Rule {Realm = realm, Severity = severity, Code = code, ValidationFunc = func});
+                _ruleKeys.Add(ruleKey);
             }
         }
 
@@ -64,14 +63,15 @@ namespace XCG.Validation
         {
             lock (this)
             {
-                var code = this.Rules.Where((q) => q.Realm == realm).Select((q) => q.Code).Append(0).Max() + 1;
-                var ruleKey = new RuleKey { Realm = realm, Code = code };
-                if (_RuleKeys.Contains(ruleKey))
+                var code = _rules.Where((q) => q.Realm == realm).Select((q) => q.Code).Append(0).Max() + 1;
+                var ruleKey = new RuleKey {Realm = realm, Code = code};
+                if (_ruleKeys.Contains(ruleKey))
                 {
                     throw new KeyAlreadyPresentException(realm, code);
                 }
-                this._Rules.Add(new Rule { Realm = realm, Severity = severity, Code = code, ValidationFunc = func });
-                this._RuleKeys.Add(ruleKey);
+
+                _rules.Add(new Rule {Realm = realm, Severity = severity, Code = code, ValidationFunc = func});
+                _ruleKeys.Add(ruleKey);
             }
         }
 
@@ -83,18 +83,23 @@ namespace XCG.Validation
         /// <returns>True if no <see cref="IRule"/> with a <see cref="IRule.Severity"/> of <see cref="ESeverity.Error"/> evaluated to false.</returns>
         public bool Validate(Parsing.Parser parser, Action<IRule, Hint> reportCallback)
         {
-            bool success = true;
-            foreach (var rule in this._Rules)
+            var success = true;
+            lock (this)
             {
-                foreach (var hint in rule.IsValid(parser))
+                foreach (var rule in _rules)
                 {
-                    if (rule.Severity == ESeverity.Error)
+                    foreach (var hint in rule.IsValid(parser))
                     {
-                        success = false;
+                        if (rule.Severity == ESeverity.Error)
+                        {
+                            success = false;
+                        }
+
+                        reportCallback(rule, hint);
                     }
-                    reportCallback(rule, hint);
                 }
             }
+
             return success;
         }
     }

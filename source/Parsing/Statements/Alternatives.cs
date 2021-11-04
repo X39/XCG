@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace XCG.Parsing.Statements
 {
-    public class Alternatives : IStatement
+    public class Alternatives : IStatement, IHasDiagnostics
     {
         IEnumerable<IStatement> IStatement.Statements => Matches;
-        public List<Match> Matches { get; set; } = new List<Match>();
+        public List<Match> Matches { get; set; } = new();
         public Diagnostic Diagnostics { get; internal set; }
 
         /// <summary>
-        /// Indicates wether this <see cref="Alternatives"/> is supposed
+        /// Indicates whether this <see cref="Alternatives"/> is supposed
         /// to handle error catching.
         /// </summary>
         public bool CatchesErrors { get; internal set; }

@@ -2,56 +2,62 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace XCG
 {
-    internal class Program
+    internal static class Program
     {
-        private class CLIOptions
+        [UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature | ImplicitUseKindFlags.Assign)]
+        private class CliOptions
         {
-            [Option('i', "input", Required = true, HelpText = "Declares a single input xcg file.", MetaValue = "PATH ...")]
-            public IEnumerable<string>? Input { get; set; }
+            [Option('i', "input", Required = true, HelpText = "Declares a single input xcg file.",
+                MetaValue = "PATH ...")]
+            public IEnumerable<string>? Input { get; [UsedImplicitly] set; }
 
-            [Option('g', "generator", Required = true, HelpText = "Sets the generator to use. Might be a path to a file or one of the build-in ones.", MetaValue = "GENERATOR")]
-            public string? Generator { get; set; }
+            [Option('g', "generator", Required = true,
+                HelpText = "Sets the generator to use. Might be a path to a file or one of the build-in ones.",
+                MetaValue = "GENERATOR")]
+            public string? Generator { get; [UsedImplicitly] set; }
 
-            [Option('o', "output", HelpText = "Set the output filepath to where the generated file(s) should be generated to.", MetaValue = "PATH", Default = "output")]
-            public string? Output { get; set; }
+            [Option('o', "output",
+                HelpText = "Set the output filepath to where the generated file(s) should be generated to.",
+                MetaValue = "PATH", Default = "output")]
+            public string? Output { get; [UsedImplicitly] set; }
 
-            [Option('s', "set", HelpText = "Allows to change generator-dependant settings.", MetaValue = "OPTION:VALUE ...")]
-            public IEnumerable<string>? Settings { get; set; }
+            [Option('s', "set", HelpText = "Allows to change generator-dependant settings.",
+                MetaValue = "OPTION:VALUE ...")]
+            public IEnumerable<string>? Settings { get; [UsedImplicitly] set; }
 
             [Option("options", HelpText = "Lists all options of a given generator.")]
-            public bool ListOptions{ get; set; }
+            public bool ListOptions { get; [UsedImplicitly] set; }
 
             [Option('d', "dry-run", HelpText = "Will not generate any output files if set.")]
-            public bool DryRun { get; set; }
+            public bool DryRun { get; [UsedImplicitly] set; }
         }
 
         private static void Colored(ESeverity severity, Action action)
         {
-            switch (severity)
+            Console.ForegroundColor = severity switch
             {
-                case ESeverity.Error:
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    break;
-                case ESeverity.Warning:
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    break;
-            }
+                ESeverity.Error => ConsoleColor.Red,
+                ESeverity.Warning => ConsoleColor.Yellow,
+                _ => Console.ForegroundColor
+            };
+
             action();
             Console.ResetColor();
         }
 
         private static string SeverityString(ESeverity severity)
         {
-            switch (severity)
+            return severity switch
             {
-                case ESeverity.Error: return "ERR";
-                case ESeverity.Warning: return "WRN";
-                case ESeverity.Info: return "INF";
-                default: return String.Empty;
-            }
+                ESeverity.Error => "ERR",
+                ESeverity.Warning => "WRN",
+                ESeverity.Info => "INF",
+                _ => string.Empty
+            };
         }
 
         private static string? ToStringRepresentation(char c)
@@ -84,12 +90,12 @@ namespace XCG
                 '°' => "degree",
                 '<' => "less-then",
                 '>' => "greater-then",
-                '(' => "round-bracked-open",
-                ')' => "round-bracked-close",
-                '[' => "square-bracked-open",
-                ']' => "square-bracked-close",
-                '{' => "curly-bracked-open",
-                '}' => "curly-bracked-close",
+                '(' => "round-bracket-open",
+                ')' => "round-bracket-close",
+                '[' => "square-bracket-open",
+                ']' => "square-bracket-close",
+                '{' => "curly-bracket-open",
+                '}' => "curly-bracket-close",
                 _ => null,
             };
         }
@@ -100,21 +106,23 @@ namespace XCG
             {
                 if (filePathWithPossibleWildcard.Contains('*'))
                 {
-                    var splitted = filePathWithPossibleWildcard.Split('*');
-                    var root = splitted.First();
-                    var root_dir = System.IO.Path.GetDirectoryName(root);
-                    if (root_dir is null) throw new FatalException("Failed to apply wildcard - System.IO.Path.GetDirectoryName returned NULL.");
-                    var files = System.IO.Directory.GetFiles(root_dir);
+                    var splatted = filePathWithPossibleWildcard.Split('*');
+                    var root = splatted.First();
+                    var rootDir = System.IO.Path.GetDirectoryName(root);
+                    if (rootDir is null)
+                        throw new FatalException(
+                            "Failed to apply wildcard - System.IO.Path.GetDirectoryName returned NULL.");
+                    var files = System.IO.Directory.GetFiles(rootDir);
                     foreach (var filePath in files.Where((q) => q.StartsWith(root)))
                     {
-                        var part = filePath.Substring(root.Length);
-                        bool aborted = false;
-                        foreach (var s in splitted.Skip(1).Where((q) => !String.IsNullOrWhiteSpace(q)))
+                        var part = filePath[root.Length..];
+                        var aborted = false;
+                        foreach (var s in splatted.Skip(1).Where((q) => !string.IsNullOrWhiteSpace(q)))
                         {
-                            var index = part.IndexOf(s);
+                            var index = part.IndexOf(s, StringComparison.Ordinal);
                             if (index != -1)
                             {
-                                part = part.Substring(index + s.Length);
+                                part = part[(index + s.Length)..];
                             }
                             else
                             {
@@ -122,6 +130,7 @@ namespace XCG
                                 break;
                             }
                         }
+
                         if (!aborted)
                         {
                             yield return filePath;
@@ -137,31 +146,35 @@ namespace XCG
 
         private static int Main(string[] args)
         {
-            CLIOptions? cliOptions = null;
-            var cliResult = Parser.Default.ParseArguments<CLIOptions>(args).WithParsed((options) => cliOptions = options);
+            CliOptions? cliOptions = null;
+            var cliResult = Parser.Default.ParseArguments<CliOptions>(args)
+                .WithParsed((options) => cliOptions = options);
             if (cliResult.Tag == ParserResultType.NotParsed || cliOptions is null)
             {
                 return -1;
             }
+
             #region Parsing
+
             var parser = new Parsing.Parser();
-            bool parseOk = true;
-            foreach (string? s in ResolveWildcards(cliOptions.Input ?? Array.Empty<string>()))
+            var parseOk = true;
+            foreach (var s in ResolveWildcards(cliOptions.Input ?? Array.Empty<string>()))
             {
-                string? filePath = System.IO.Path.GetFullPath(s);
+                var filePath = System.IO.Path.GetFullPath(s);
                 if (System.IO.File.Exists(filePath))
                 {
-                    string? contents = System.IO.File.ReadAllText(s);
-                    bool parseResult = parser.Parse(filePath, contents, out var parseNotes);
+                    var contents = System.IO.File.ReadAllText(s);
+                    var parseResult = parser.Parse(filePath, contents, out var parseNotes);
                     foreach (var it in parseNotes)
                     {
                         Colored(it.Severity, () => Console.WriteLine(it.Message));
                     }
+
                     if (parseResult)
                     {
                         Console.BackgroundColor = ConsoleColor.Green;
                         Console.ForegroundColor = ConsoleColor.Black;
-                        Console.WriteLine($"Parsing {filePath} ({s}) suceeded.");
+                        Console.WriteLine($"Parsing {filePath} ({s}) succeeded.");
                         Console.ResetColor();
                     }
                     else
@@ -181,6 +194,7 @@ namespace XCG
                     parseOk = false;
                 }
             }
+
             if (!parseOk)
             {
                 Console.WriteLine();
@@ -190,9 +204,12 @@ namespace XCG
                 Console.ResetColor();
                 return -1;
             }
+
             #endregion
+
             #region Fixup References
-            int generatedReferences = 0;
+
+            var generatedReferences = 0;
             var endOfLineToken = new Parsing.Token
             {
                 Identifier = "@eol",
@@ -201,7 +218,8 @@ namespace XCG
                     new Parsing.TokenStatements.Require
                     {
                         Negated = false,
-                        Range = new Parsing.Multiplicity(1, new Parsing.Diagnostic { Column = 0, File = "---auto-generated---", Line = 0, Offset = 0 }),
+                        Range = new Parsing.Multiplicity(1,
+                            new Parsing.Diagnostic {Column = 0, File = "---auto-generated---", Line = 0, Offset = 0}),
                         Parts = new List<Parsing.IStatement>
                         {
                             new Parsing.Word("\n")
@@ -217,7 +235,8 @@ namespace XCG
                     new Parsing.TokenStatements.Require
                     {
                         Negated = false,
-                        Range = new Parsing.Multiplicity(1, new Parsing.Diagnostic { Column = 0, File = "---auto-generated---", Line = 0, Offset = 0 }),
+                        Range = new Parsing.Multiplicity(1,
+                            new Parsing.Diagnostic {Column = 0, File = "---auto-generated---", Line = 0, Offset = 0}),
                         Parts = new List<Parsing.IStatement>
                         {
                             new Parsing.Word("\0")
@@ -228,16 +247,17 @@ namespace XCG
             foreach (var reference in parser.References)
             {
                 generatedReferences++;
-                if (reference.CaptureName is null)
-                {
-                    reference.CaptureName =  $"capture{generatedReferences}";
-                }
+                reference.CaptureName ??= $"capture{generatedReferences}";
                 Parsing.IStatement? possibleActual;
 
                 if (reference.IsAlias)
                 {
                     possibleActual = parser.Tokens.FirstOrDefault((q) => q.Alias == reference.Text);
-                    if (possibleActual is not null) { reference.Refered = possibleActual; continue; }
+                    if (possibleActual is not null)
+                    {
+                        reference.Refered = possibleActual;
+                        continue;
+                    }
                 }
                 else
                 {
@@ -248,8 +268,10 @@ namespace XCG
                         {
                             parser.Tokens.Add(endOfLineToken);
                         }
+
                         continue;
                     }
+
                     if (reference.Text.Equals("eof", StringComparison.InvariantCultureIgnoreCase))
                     {
                         reference.Refered = endOfFileToken;
@@ -257,62 +279,84 @@ namespace XCG
                         {
                             parser.Tokens.Add(endOfFileToken);
                         }
+
                         continue;
                     }
 
                     possibleActual = parser.Tokens.FirstOrDefault((q) => q.Identifier == reference.Text);
-                    if (possibleActual is not null) { reference.Refered = possibleActual; continue; }
+                    if (possibleActual is not null)
+                    {
+                        reference.Refered = possibleActual;
+                        continue;
+                    }
 
                     possibleActual = parser.Productions.FirstOrDefault((q) => q.Identifier == reference.Text);
-                    if (possibleActual is not null) { reference.Refered = possibleActual; continue; }
+                    if (possibleActual is not null)
+                    {
+                        reference.Refered = possibleActual;
+                        continue;
+                    }
 
-                    possibleActual = parser.LeftRecursives.FirstOrDefault((q) => q.Identifier == reference.Text);
-                    if (possibleActual is not null) { reference.Refered = possibleActual; continue; }
+                    possibleActual = parser.LeftRecursiveItems.FirstOrDefault((q) => q.Identifier == reference.Text);
+                    if (possibleActual is not null)
+                    {
+                        reference.Refered = possibleActual;
+                        continue;
+                    }
 
                     possibleActual = parser.Messages.FirstOrDefault((q) => q.Identifier == reference.Text);
-                    if (possibleActual is not null) { reference.Refered = possibleActual; continue; }
+                    if (possibleActual is not null)
+                    {
+                        reference.Refered = possibleActual;
+                        continue;
+                    }
                 }
 
-                if (reference.IsAlias)
+                if (!reference.IsAlias) continue;
+                string identifier;
+                if (reference.Text.All((c) => ToStringRepresentation(c) != null))
                 {
-                    string identifier;
-                    if (reference.Text.All((c) => ToStringRepresentation(c) != null))
+                    identifier = string.Concat("@",
+                        string.Join("-", reference.Text.Select(ToStringRepresentation)));
+                }
+                else if (reference.Text.All((c) => char.IsLetterOrDigit(c) || c == '-'))
+                {
+                    identifier = string.Concat("@", reference.Text.ToLower());
+                }
+                else
+                {
+                    identifier = $"@auto-{generatedReferences}";
+                }
+
+                var token = new Parsing.Token
+                {
+                    Alias = reference.Text,
+                    Identifier = identifier,
+                    Children = new List<Parsing.ITokenStatement>
                     {
-                        identifier = string.Concat("@", String.Join("-", reference.Text.Select(ToStringRepresentation)));
-                    }
-                    else if (reference.Text.All((c) => char.IsLetterOrDigit(c) || c == '-'))
-                    {
-                        identifier = String.Concat("@", reference.Text.ToLower());
-                    }
-                    else
-                    {
-                        identifier = $"@auto-{generatedReferences}";
-                    }
-                    var token = new Parsing.Token
-                    {
-                        Alias = reference.Text,
-                        Identifier = identifier,
-                        Children = new List<Parsing.ITokenStatement>
+                        new Parsing.TokenStatements.Require
                         {
-                            new Parsing.TokenStatements.Require
+                            Negated = false,
+                            Range = new Parsing.Multiplicity(1,
+                                new Parsing.Diagnostic
+                                    {Column = 0, File = "---auto-generated---", Line = 0, Offset = 0}),
+                            Parts = new List<Parsing.IStatement>
                             {
-                                Negated = false,
-                                Range = new Parsing.Multiplicity(1, new Parsing.Diagnostic { Column = 0, File = "---auto-generated---", Line = 0, Offset = 0 }),
-                                Parts = new List<Parsing.IStatement>
-                                {
-                                    new Parsing.Word(reference.Text)
-                                }
+                                new Parsing.Word(reference.Text)
                             }
                         }
-                    };
-                    reference.Refered = token;
-                    parser.Tokens.Add(token);
-                }
+                    }
+                };
+                reference.Refered = token;
+                parser.Tokens.Add(token);
             }
+
             #endregion
+
             #region Create Generator
+
             // Pick the correct generator
-            IGenerator? generator = null;
+            IGenerator? generator;
             switch (cliOptions.Generator?.ToLower())
             {
                 case "cpp":
@@ -321,25 +365,29 @@ namespace XCG
                     break;
                 case null: return -1;
                 default:
-                    string? generatorAbsolute = System.IO.Path.GetFullPath(cliOptions.Generator);
+                    var generatorAbsolute = System.IO.Path.GetFullPath(cliOptions.Generator);
                     if (System.IO.File.Exists(generatorAbsolute))
                     {
                         try
                         {
-                            var reflectionOnlyAssembly = System.Reflection.Assembly.ReflectionOnlyLoadFrom(generatorAbsolute);
-                            if (reflectionOnlyAssembly.GetExportedTypes().Any((t) => t.IsAssignableTo(typeof(IGenerator))))
+                            var reflectionOnlyAssembly =
+                                System.Reflection.Assembly.ReflectionOnlyLoadFrom(generatorAbsolute);
+                            if (reflectionOnlyAssembly.GetExportedTypes()
+                                .Any((t) => t.IsAssignableTo(typeof(IGenerator))))
                             {
                                 var assembly = System.Reflection.Assembly.Load(generatorAbsolute);
-                                var generatorType = assembly.GetExportedTypes().First((t) => t.IsAssignableFrom(typeof(IGenerator)));
+                                var generatorType = assembly.GetExportedTypes()
+                                    .First((t) => t.IsAssignableFrom(typeof(IGenerator)));
                                 try
                                 {
-                                    generator = (IGenerator)Activator.CreateInstance(generatorType)!;
+                                    generator = (IGenerator) Activator.CreateInstance(generatorType)!;
                                 }
                                 catch (Exception ex)
                                 {
                                     Console.BackgroundColor = ConsoleColor.Red;
                                     Console.ForegroundColor = ConsoleColor.White;
-                                    Console.WriteLine($"Failed to create instance of IGenerator with {generatorAbsolute} ({cliOptions.Generator}):");
+                                    Console.WriteLine(
+                                        $"Failed to create instance of IGenerator with {generatorAbsolute} ({cliOptions.Generator}):");
                                     Console.WriteLine(ex.Message);
                                     Console.ResetColor();
                                     return -1;
@@ -349,8 +397,10 @@ namespace XCG
                             {
                                 Console.BackgroundColor = ConsoleColor.Red;
                                 Console.ForegroundColor = ConsoleColor.White;
-                                Console.WriteLine($"Assembly {generatorAbsolute} ({cliOptions.Generator}) is not containing a usible IGenerator implementation.");
+                                Console.WriteLine(
+                                    $"Assembly {generatorAbsolute} ({cliOptions.Generator}) is not containing a usable IGenerator implementation.");
                                 Console.ResetColor();
+                                return -1;
                             }
                         }
                         catch (Exception ex)
@@ -369,11 +419,16 @@ namespace XCG
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.WriteLine($"File {generatorAbsolute} ({cliOptions.Generator}) not found.");
                         Console.ResetColor();
+                        return -1;
                     }
-                    return -1;
+
+                    break;
             }
+
             #endregion
+
             #region List Generator Options
+
             if (cliOptions.ListOptions)
             {
                 foreach (var it in generator.GetOptions())
@@ -381,13 +436,16 @@ namespace XCG
                     Console.WriteLine($"{it.option}:{it.value}");
                 }
             }
+
             #endregion
+
             #region Set Generator Options
+
             // Set generator options
-            bool optionError = false;
-            foreach (string? option in cliOptions.Settings ?? Array.Empty<string>())
+            var optionError = false;
+            foreach (var option in cliOptions.Settings ?? Array.Empty<string>())
             {
-                string key = String.Empty;
+                string key;
                 string? value = null;
                 var splitterIndex = option.IndexOf(':');
                 if (splitterIndex == -1)
@@ -399,6 +457,7 @@ namespace XCG
                     key = option[..splitterIndex];
                     value = option[(splitterIndex + 1)..];
                 }
+
                 try
                 {
                     generator.SetOption(key, value);
@@ -406,11 +465,12 @@ namespace XCG
                 catch (Exception ex)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Error.WriteLine(String.Concat(ex.GetType().Name, ": ", ex.Message));
+                    Console.Error.WriteLine(string.Concat(ex.GetType().Name, ": ", ex.Message));
                     Console.ResetColor();
                     optionError = true;
                 }
             }
+
             if (optionError)
             {
                 Console.BackgroundColor = ConsoleColor.Red;
@@ -419,22 +479,31 @@ namespace XCG
                 Console.ResetColor();
                 return -1;
             }
+
             #endregion
+
             #region Validation
+
             var validator = new Validation.Validator();
             RegisterDefaultValidatorRules(validator);
             generator.RegisterRules(validator);
 
             if (!validator.Validate(parser, (rule, hint) => Colored(rule.Severity,
-                () => Console.WriteLine($"[{rule.Realm}{rule.Code:000}][{SeverityString(rule.Severity)}][{hint.File}][L{hint.Line}]: {hint.Message}"))))
+                () => Console.WriteLine(
+                    $"[{rule.Realm}{rule.Code:000}][{SeverityString(rule.Severity)}][{hint.File}][L{hint.Line}]: {hint.Message}"))))
             {
                 return -1;
             }
+
             #endregion
 
-            if (cliOptions.DryRun) { return 0; }
+            if (cliOptions.DryRun)
+            {
+                return 0;
+            }
+
             // Tell the generator to generate the parser
-            string? outputPath = System.IO.Path.GetFullPath(cliOptions.Output ?? System.Environment.CurrentDirectory);
+            var outputPath = System.IO.Path.GetFullPath(cliOptions.Output ?? Environment.CurrentDirectory);
             try
             {
                 generator.Generate(parser, outputPath);
@@ -451,7 +520,8 @@ namespace XCG
                 Console.WriteLine("Looks like you found a pattern that is not yet implemented.");
                 Console.WriteLine("XCG is not a finished product.");
                 Console.WriteLine("Either try to use a different pattern,");
-                Console.WriteLine("or raise an issue (or comment under some existing with your pattern) at https://github.com/X39/XCG.");
+                Console.WriteLine(
+                    "or raise an issue (or comment under some existing with your pattern) at https://github.com/X39/XCG.");
                 Console.WriteLine("Sorry for the inconvenience.");
                 Console.ResetColor();
                 return -1;
@@ -497,17 +567,17 @@ namespace XCG
             {
                 var hints = new List<Validation.Hint>();
                 var identifiers = parser.Tokens.Select((q) => q.Identifier)
-                .Concat(parser.Productions.Select((q) => q.Identifier))
-                .Concat(parser.LeftRecursives.Select((q) => q.Identifier))
-                .Concat(parser.Messages.Select((q) => q.Identifier))
-                .GroupBy((q) => q)
-                .Where((q) => q.Count() > 1)
-                .Select((q) => q.Key)
-                .ToHashSet();
+                    .Concat(parser.Productions.Select((q) => q.Identifier))
+                    .Concat(parser.LeftRecursiveItems.Select((q) => q.Identifier))
+                    .Concat(parser.Messages.Select((q) => q.Identifier))
+                    .GroupBy((q) => q)
+                    .Where((q) => q.Count() > 1)
+                    .Select((q) => q.Key)
+                    .ToHashSet();
                 foreach (var tuple in parser.Tokens.Select((q) => (diag: q.Diagnostics, ident: q.Identifier))
-                .Concat(parser.Productions.Select((q) => (diag: q.Diagnostics, ident: q.Identifier)))
-                .Concat(parser.LeftRecursives.Select((q) => (diag: q.Diagnostics, ident: q.Identifier)))
-                .Concat(parser.Messages.Select((q) => (diag: q.Diagnostics, ident: q.Identifier))))
+                    .Concat(parser.Productions.Select((q) => (diag: q.Diagnostics, ident: q.Identifier)))
+                    .Concat(parser.LeftRecursiveItems.Select((q) => (diag: q.Diagnostics, ident: q.Identifier)))
+                    .Concat(parser.Messages.Select((q) => (diag: q.Diagnostics, ident: q.Identifier))))
                 {
                     if (identifiers.Contains(tuple.ident))
                     {
@@ -519,31 +589,32 @@ namespace XCG
                         });
                     }
                 }
+
                 return hints;
             });
-            // All references have refered
+            // All references have referred
             validator.Register("XCG", ESeverity.Error, (parser) =>
             {
-                return parser.Productions.Concat<Parsing.IStatement>(parser.LeftRecursives)
-                .SelectMany((reference) => reference.FindChildren<Parsing.Reference>())
-                .Where((reference) => reference.Refered is null)
-                .Select((reference) => new Validation.Hint
-                {
-                    File = reference.Diagnostics.File,
-                    Line = reference.Diagnostics.Line,
-                    Message = $@"Reference {{ {reference.Text} }} is not refering to anything existing."
-                });
+                return parser.Productions.Concat<Parsing.IStatement>(parser.LeftRecursiveItems)
+                    .SelectMany((reference) => reference.FindChildren<Parsing.Reference>())
+                    .Where((reference) => reference.Refered is null)
+                    .Select((reference) => new Validation.Hint
+                    {
+                        File = reference.Diagnostics.File,
+                        Line = reference.Diagnostics.Line,
+                        Message = $@"Reference {{ {reference.Text} }} is not referring to anything existing."
+                    });
             });
             // Alias Collision
             validator.Register("XCG", ESeverity.Warning, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
                 var identifiers = parser.Tokens.Select((q) => q.Identifier)
-                .Concat(parser.Tokens.Select((q) => q.Alias).Where((q) => !String.IsNullOrWhiteSpace(q)))
-                .GroupBy((q) => q)
-                .Where((q) => q.Count() > 1)
-                .Select((q) => q.Key)
-                .ToHashSet();
+                    .Concat(parser.Tokens.Select((q) => q.Alias).Where((q) => !string.IsNullOrWhiteSpace(q)))
+                    .GroupBy((q) => q)
+                    .Where((q) => q.Count() > 1)
+                    .Select((q) => q.Key)
+                    .ToHashSet();
                 foreach (var token in parser.Tokens)
                 {
                     if (identifiers.Contains(token.Alias))
@@ -556,6 +627,7 @@ namespace XCG
                         });
                     }
                 }
+
                 return hints;
             });
             // Left-recursion in production at top level
@@ -563,32 +635,37 @@ namespace XCG
             {
                 var hints = new List<Validation.Hint>();
                 var recursiveMatches = (from q in parser.Productions
-                                        where q.Children.Any()
-                                        select (q.Children.First() switch
-                                        {
-                                            Parsing.Statements.Alternatives alternatives => alternatives.Matches
-                                            .Where((q2) => q2.Matches.First() is Parsing.Reference),
-                                            Parsing.Statements.Match match => match.Matches.First() is Parsing.Reference reference
-                                            && reference.Refered == q ? new[] { match } : Array.Empty<Parsing.Statements.Match>(),
-                                            _ => Array.Empty<Parsing.Statements.Match>()
-                                        }).Where((match) => match.Matches.First() is Parsing.Reference reference && reference.Refered == q))
-                                       .SelectMany((q) => q);
+                        where q.Children.Any()
+                        select (q.Children.First() switch
+                        {
+                            Parsing.Statements.Alternatives alternatives => alternatives.Matches
+                                .Where((q2) => q2.Matches.First() is Parsing.Reference),
+                            Parsing.Statements.Match match => match.Matches.First() is Parsing.Reference reference
+                                                              && reference.Refered == q
+                                ? new[] {match}
+                                : Array.Empty<Parsing.Statements.Match>(),
+                            _ => Array.Empty<Parsing.Statements.Match>()
+                        }).Where((match) =>
+                            match.Matches.First() is Parsing.Reference reference && reference.Refered == q))
+                    .SelectMany((q) => q);
                 foreach (var match in recursiveMatches)
                 {
                     hints.Add(new Validation.Hint
                     {
                         File = match.Diagnostics.File,
                         Line = match.Diagnostics.Line,
-                        Message = $@"left recusion with top-level matches are not allowed in productions. Consider using left-recursive instead."
+                        Message =
+                            $@"left recursion with top-level matches are not allowed in productions. Consider using left-recursive instead."
                     });
                 }
+
                 return hints;
             });
             // left-recursive has at least two matches
             validator.Register("XCG", ESeverity.Error, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
-                foreach (var leftRecursive in parser.LeftRecursives)
+                foreach (var leftRecursive in parser.LeftRecursiveItems)
                 {
                     if (leftRecursive.Children.Count < 2)
                     {
@@ -600,6 +677,7 @@ namespace XCG
                         });
                     }
                 }
+
                 return hints;
             });
 
@@ -607,7 +685,7 @@ namespace XCG
             validator.Register("XCG", ESeverity.Error, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
-                foreach (var leftRecursive in parser.LeftRecursives)
+                foreach (var leftRecursive in parser.LeftRecursiveItems)
                 {
                     if (leftRecursive.Children.Count < 2)
                     {
@@ -619,15 +697,19 @@ namespace XCG
                         });
                     }
                 }
+
                 return hints;
             });
             // left-recursive matches (but last) start with the containing left-recursive
             validator.Register("XCG", ESeverity.Error, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
-                foreach (var leftRecursive in parser.LeftRecursives.Where((q) => q.Children.Count >= 2))
+                foreach (var leftRecursive in parser.LeftRecursiveItems.Where((q) => q.Children.Count >= 2))
                 {
-                    var matches = leftRecursive.Children.Where((q) => q is Parsing.Statements.Match).Cast<Parsing.Statements.Match>();
+                    var matches = leftRecursive.Children
+                        .Where((q) => q is Parsing.Statements.Match)
+                        .Cast<Parsing.Statements.Match>()
+                        .ToArray();
                     var count = matches.Count();
                     foreach (var match in matches.Take(count - 1))
                     {
@@ -649,15 +731,17 @@ namespace XCG
                         }
                     }
                 }
+
                 return hints;
             });
             // left-recursive last match refers to anything but the containing left-recursive
             validator.Register("XCG", ESeverity.Error, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
-                foreach (var leftRecursive in parser.LeftRecursives.Where((q) => q.Children.Count >= 2))
+                foreach (var leftRecursive in parser.LeftRecursiveItems.Where((q) => q.Children.Count >= 2))
                 {
-                    var match = leftRecursive.Children.Where((q) => q is Parsing.Statements.Match).Cast<Parsing.Statements.Match>().Last();
+                    var match = leftRecursive.Children.Where((q) => q is Parsing.Statements.Match)
+                        .Cast<Parsing.Statements.Match>().Last();
                     if (match.Matches.Last() is Parsing.Reference reference)
                     {
                         if (reference.Refered == leftRecursive)
@@ -666,7 +750,8 @@ namespace XCG
                             {
                                 File = leftRecursive.Diagnostics.File,
                                 Line = leftRecursive.Diagnostics.Line,
-                                Message = $@"Last match of left-recursive must refer to anything but the left-recursive."
+                                Message =
+                                    $@"Last match of left-recursive must refer to anything but the left-recursive."
                             });
                         }
                     }
@@ -675,15 +760,17 @@ namespace XCG
                         throw new FatalException();
                     }
                 }
+
                 return hints;
             });
             // left-recursive last match has exactly one part
             validator.Register("XCG", ESeverity.Error, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
-                foreach (var leftRecursive in parser.LeftRecursives.Where((q) => q.Children.Count >= 2))
+                foreach (var leftRecursive in parser.LeftRecursiveItems.Where((q) => q.Children.Count >= 2))
                 {
-                    var match = leftRecursive.Children.Where((q) => q is Parsing.Statements.Match).Cast<Parsing.Statements.Match>().Last();
+                    var match = leftRecursive.Children.Where((q) => q is Parsing.Statements.Match)
+                        .Cast<Parsing.Statements.Match>().Last();
                     if (match.Matches.Count != 1)
                     {
                         hints.Add(new Validation.Hint
@@ -694,6 +781,7 @@ namespace XCG
                         });
                     }
                 }
+
                 return hints;
             });
 
@@ -713,11 +801,12 @@ namespace XCG
                             {
                                 Line = require.Diagnostics.Line,
                                 File = require.Diagnostics.File,
-                                Message = $@"Reference {{ {reference.Text} }} is not refering to anything."
+                                Message = $@"Reference {{ {reference.Text} }} is not referring to anything."
                             });
                         }
                     }
                 }
+
                 return hints;
             });
 
@@ -737,11 +826,13 @@ namespace XCG
                             {
                                 Line = require.Diagnostics.Line,
                                 File = require.Diagnostics.File,
-                                Message = $@"Reference {{ {reference.Text} }} may only refer to tokens but refers to a {reference.Refered.GetType().FullName}."
+                                Message =
+                                    $@"Reference {{ {reference.Text} }} may only refer to tokens but refers to a {reference.Refered.GetType().FullName}."
                             });
                         }
                     }
                 }
+
                 return hints;
             });
 
@@ -749,7 +840,8 @@ namespace XCG
             validator.Register("XCG", ESeverity.Error, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
-                var backtracks = parser.Tokens.SelectMany((q) => q.Children.WhereIs<Parsing.TokenStatements.Backtrack>());
+                var backtracks =
+                    parser.Tokens.SelectMany((q) => q.Children.WhereIs<Parsing.TokenStatements.Backtrack>());
                 foreach (var backtrack in backtracks)
                 {
                     var references = backtrack.Parts.WhereIs<Parsing.Reference>();
@@ -761,22 +853,23 @@ namespace XCG
                             {
                                 Line = backtrack.Diagnostics.Line,
                                 File = backtrack.Diagnostics.File,
-                                Message = $@"Reference {{ {reference.Text} }} may only refer to tokens but refers to a {reference.Refered.GetType().FullName}."
+                                Message =
+                                    $@"Reference {{ {reference.Text} }} may only refer to tokens but refers to a {reference.Refered.GetType().FullName}."
                             });
                         }
                     }
                 }
+
                 return hints;
             });
             // alternatives with error is always direct child of while
             validator.Register("XCG", ESeverity.Error, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
-                foreach (var production in parser.Productions)
+                foreach (var result in parser.Productions.Select(production =>
+                    production.FindChildrenWithParents<Parsing.Statements.Alternatives>()))
                 {
-                    var result = production.FindChildrenWithParents<Parsing.Statements.Alternatives>();
-                    
-                    foreach ((var alternatives, var parents) in result)
+                    foreach (var (alternatives, parents) in result)
                     {
                         if (alternatives.CatchesErrors && parents.First() is not Parsing.Statements.While)
                         {
@@ -789,6 +882,7 @@ namespace XCG
                         }
                     }
                 }
+
                 return hints;
             });
             // while with alternatives having error may only have that single alternatives entry
@@ -798,34 +892,45 @@ namespace XCG
                 foreach (var production in parser.Productions)
                 {
                     var result = production.FindChildrenWithParents<Parsing.Statements.Alternatives>();
-                    
-                    foreach ((var alternatives, var parents) in result)
+
+                    foreach (var (alternatives, parents) in result)
                     {
-                        if (alternatives.CatchesErrors && parents.First() is Parsing.Statements.While @while && @while.Children.Count != 1)
+                        if (alternatives.CatchesErrors && parents.First() is Parsing.Statements.While @while &&
+                            @while.Children.Count != 1)
                         {
                             hints.Add(new Validation.Hint
                             {
                                 Line = @while.Diagnostics.Line,
                                 File = @while.Diagnostics.File,
-                                Message = $@"A while containing alternatives catching errors may not contain anything but that alternatives."
+                                Message =
+                                    $@"A while containing alternatives catching errors may not contain anything but that alternatives."
                             });
                         }
                     }
                 }
+
                 return hints;
             });
             // find unused productions
             validator.Register("XCG", ESeverity.Warning, (parser) =>
             {
                 var mainProduction = parser.Productions.FirstOrDefault((q) => q.Identifier == "main");
-                if (mainProduction is null) { return Array.Empty<Validation.Hint>(); }
+                if (mainProduction is null)
+                {
+                    return Array.Empty<Validation.Hint>();
+                }
 
-                var productionDictionary = parser.Productions.ToDictionary((q) => q, (q) => 0);
+                var productionDictionary = parser.Productions.ToDictionary((q) => q, (_) => 0);
                 productionDictionary[mainProduction]++;
                 var visited = new HashSet<Parsing.IStatement>();
+
                 void Walk(Parsing.IStatement statement)
                 {
-                    if (visited.Contains(statement)) { return; }
+                    if (visited.Contains(statement))
+                    {
+                        return;
+                    }
+
                     visited.Add(statement);
                     var references = statement.FindChildren<Parsing.Reference>();
                     foreach (var reference in references)
@@ -834,32 +939,43 @@ namespace XCG
                         {
                             productionDictionary[production]++;
                         }
-                        if (reference.Refered is Parsing.IStatement childStatement)
+
+                        if (reference.Refered is { } childStatement)
                         {
                             Walk(childStatement);
                         }
                     }
                 }
+
                 Walk(mainProduction);
 
-                return productionDictionary.Where((kvp) => kvp.Value == 0).Where((kvp) => kvp.Key.Identifier.ToLower() != "main").Select((kvp) => new Validation.Hint
-                {
-                    Line = kvp.Key.Diagnostics.Line,
-                    File = kvp.Key.Diagnostics.File,
-                    Message = $@"Production {kvp.Key.Identifier} is unused."
-                });
+                return productionDictionary.Where((kvp) => kvp.Value == 0)
+                    .Where((kvp) => kvp.Key.Identifier.ToLower() != "main").Select((kvp) => new Validation.Hint
+                    {
+                        Line = kvp.Key.Diagnostics.Line,
+                        File = kvp.Key.Diagnostics.File,
+                        Message = $@"Production {kvp.Key.Identifier} is unused."
+                    });
             });
-            // find unused left-recursives
+            // find unused left-recursive
             validator.Register("XCG", ESeverity.Warning, (parser) =>
             {
                 var mainProduction = parser.Productions.FirstOrDefault((q) => q.Identifier == "main");
-                if (mainProduction is null) { return Array.Empty<Validation.Hint>(); }
+                if (mainProduction is null)
+                {
+                    return Array.Empty<Validation.Hint>();
+                }
 
-                var leftRecursiveDictionary = parser.LeftRecursives.ToDictionary((q) => q, (q) => 0);
+                var leftRecursiveDictionary = parser.LeftRecursiveItems.ToDictionary((q) => q, (_) => 0);
                 var visited = new HashSet<Parsing.IStatement>();
+
                 void Walk(Parsing.IStatement statement)
                 {
-                    if (visited.Contains(statement)) { return; }
+                    if (visited.Contains(statement))
+                    {
+                        return;
+                    }
+
                     visited.Add(statement);
                     var references = statement.FindChildren<Parsing.Reference>();
                     foreach (var reference in references)
@@ -868,43 +984,41 @@ namespace XCG
                         {
                             leftRecursiveDictionary[leftRecursive]++;
                         }
-                        if (reference.Refered is Parsing.IStatement childStatement)
+
+                        if (reference.Refered is { } childStatement)
                         {
                             Walk(childStatement);
                         }
                     }
                 }
+
                 Walk(mainProduction);
 
-                return leftRecursiveDictionary.Where((kvp) => kvp.Value == 0).Where((kvp) => kvp.Key.Identifier.ToLower() != "main").Select((kvp) => new Validation.Hint
-                {
-                    Line = kvp.Key.Diagnostics.Line,
-                    File = kvp.Key.Diagnostics.File,
-                    Message = $@"Left-Recursive {kvp.Key.Identifier} is unused."
-                });
+                return leftRecursiveDictionary.Where((kvp) => kvp.Value == 0)
+                    .Where((kvp) => kvp.Key.Identifier.ToLower() != "main").Select((kvp) => new Validation.Hint
+                    {
+                        Line = kvp.Key.Diagnostics.Line,
+                        File = kvp.Key.Diagnostics.File,
+                        Message = $@"Left-Recursive {kvp.Key.Identifier} is unused."
+                    });
             });
 
-            // references with print instructions only ever have message as refered
+            // references with print instructions only ever have message as referred
             validator.Register("XCG", ESeverity.Error, (parser) =>
             {
                 var hints = new List<Validation.Hint>();
-                foreach (var production in parser.Productions)
+                foreach (var result in parser.Productions.Select(production =>
+                    production.FindChildren<Parsing.Statements.Print>()))
                 {
-                    var result = production.FindChildren<Parsing.Statements.Print>();
-
-                    foreach (var print in result)
-                    {
-                        if (print.Reference.Refered is not Parsing.Message)
+                    hints.AddRange(from print in result
+                        where print.Reference.Refered is not Parsing.Message
+                        select new Validation.Hint
                         {
-                            hints.Add(new Validation.Hint
-                            {
-                                Line = print.Diagnostics.Line,
-                                File = print.Diagnostics.File,
-                                Message = $@"The print instruction must always refer to a message."
-                            });
-                        }
-                    }
+                            Line = print.Diagnostics.Line, File = print.Diagnostics.File,
+                            Message = $@"The print instruction must always refer to a message."
+                        });
                 }
+
                 return hints;
             });
             // ensure all comments have start
@@ -931,19 +1045,20 @@ namespace XCG
             validator.Register("XCG", ESeverity.Error, (parser) =>
             {
                 return parser.Productions
-                .Where((production) => production.Children.All(
-                    (q) => q is Parsing.Statements.While
-                    || q is Parsing.Statements.If 
-                    || q is Parsing.Statements.Set
-                    || q is Parsing.Statements.Get 
-                    || q is Parsing.Statements.Print))
-                .Where((production) => !production.Identifier.Equals("main", StringComparison.InvariantCultureIgnoreCase))
-                .Select((production) => new Validation.Hint
-                {
-                    Line = production.Diagnostics.Line,
-                    File = production.Diagnostics.File,
-                    Message = $@"Possibly empty productions are not allowed."
-                });
+                    .Where((production) => production.Children.All(
+                        (q) => q is Parsing.Statements.While
+                            or Parsing.Statements.If
+                            or Parsing.Statements.Set
+                            or Parsing.Statements.Get
+                            or Parsing.Statements.Print))
+                    .Where((production) =>
+                        !production.Identifier.Equals("main", StringComparison.InvariantCultureIgnoreCase))
+                    .Select((production) => new Validation.Hint
+                    {
+                        Line = production.Diagnostics.Line,
+                        File = production.Diagnostics.File,
+                        Message = $@"Possibly empty productions are not allowed."
+                    });
             });
         }
     }

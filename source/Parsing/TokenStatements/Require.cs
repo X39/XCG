@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace XCG.Parsing.TokenStatements
 {
-    public class Require : ITokenStatement
+    public class Require : ITokenStatement, IHasDiagnostics
     {
         public Multiplicity Range { get; set; }
         public List<IStatement> Parts { get; set; }
@@ -13,7 +12,7 @@ namespace XCG.Parsing.TokenStatements
 
         public Require()
         {
-            this.Parts = new List<IStatement>();
+            Parts = new List<IStatement>();
         }
     }
 }

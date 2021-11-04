@@ -17,32 +17,32 @@ namespace XCG.Generators.Cpp.Extensive
                         {
                             yield return yielded;
                         }
-                        yield return cppOptions.FromCacheOrCreate(obj, (m) => alternatives.CreateMethodDefinition(cppOptions, cppTypeName.ToCppSharedPtrType(), cppStateTypeName));
+                        yield return cppOptions.FromCacheOrCreate(obj, (_) => alternatives.CreateMethodDefinition(cppOptions, cppTypeName.ToCppSharedPtrType(), cppStateTypeName));
                         break;
                     case Parsing.Statements.Match match:
                         foreach (var yielded in PrepareStatementMethods(match, cppTypeName, cppStateTypeName, cppOptions))
                         {
                             yield return yielded;
                         }
-                        yield return cppOptions.FromCacheOrCreate(obj, (m) => match.CreateMethodDefinition(cppOptions, 0, cppTypeName.ToCppSharedPtrType(), cppStateTypeName));
+                        yield return cppOptions.FromCacheOrCreate(obj, (_) => match.CreateMethodDefinition(cppOptions, 0, cppTypeName.ToCppSharedPtrType(), cppStateTypeName));
                         break;
                     case Parsing.Statements.While @while:
                         foreach (var yielded in PrepareStatementMethods(@while, cppTypeName, cppStateTypeName, cppOptions).Concat(switcharoo(@while.Condition!)))
                         {
                             yield return yielded;
                         }
-                        yield return cppOptions.FromCacheOrCreate(obj, (m) => @while.CreateMethodDefinition(cppOptions, cppTypeName.ToCppSharedPtrType(), cppStateTypeName));
+                        yield return cppOptions.FromCacheOrCreate(obj, (_) => @while.CreateMethodDefinition(cppOptions, cppTypeName.ToCppSharedPtrType(), cppStateTypeName));
                         break;
                     case Parsing.Statements.If @if:
                         foreach (var yielded in PrepareStatementMethods(@if, cppTypeName, cppStateTypeName, cppOptions).Concat(switcharoo(@if.Condition!)))
                         {
                             yield return yielded;
                         }
-                        yield return cppOptions.FromCacheOrCreate(obj, (m) => @if.CreateMethodDefinition(cppOptions, cppTypeName.ToCppSharedPtrType(), cppStateTypeName));
+                        yield return cppOptions.FromCacheOrCreate(obj, (_) => @if.CreateMethodDefinition(cppOptions, cppTypeName.ToCppSharedPtrType(), cppStateTypeName));
                         break;
-                    case Parsing.Statements.Print print:
-                    case Parsing.Statements.Set set:
-                    case Parsing.Statements.Get get:
+                    case Parsing.Statements.Print:
+                    case Parsing.Statements.Set:
+                    case Parsing.Statements.Get:
                     case Parsing.EndOfFile:
                     case Parsing.EndOfLine:
                     case Parsing.Reference:
@@ -70,9 +70,9 @@ namespace XCG.Generators.Cpp.Extensive
                 .Where((q) => q.Reference.IsCaptured)
                 .ToArray();
             var captureDefinitions = new Dictionary<string, CaptureDefinition>();
-            foreach ((var captureModifyingSet, var parents) in captureModifyingSetTuples)
+            foreach (var (captureModifyingSet, parents) in captureModifyingSetTuples)
             {
-                string? captureName = captureModifyingSet.Property.ToCppName();
+                var captureName = captureModifyingSet.Property.ToCppName();
                 if (!captureDefinitions.TryGetValue(captureName, out var captureDefinition))
                 {
                     captureDefinition = new CaptureDefinition(captureName);
@@ -101,16 +101,16 @@ namespace XCG.Generators.Cpp.Extensive
                 }
                 cppOptions.ClassCaptureDefinitionsMap.Add(captureModifyingSet, captureDefinition);
             }
-            foreach ((var captureContainingReference, var parents)  in captureContainingReferenceTuples)
+            foreach (var (captureContainingReference, parents)  in captureContainingReferenceTuples)
             {
-                TypeImpl typeImpl = captureContainingReference.Refered switch
+                var typeImpl = captureContainingReference.Refered switch
                 {
-                    Parsing.Token token => new TypeImpl { Type = EType.Token },
+                    Parsing.Token => new TypeImpl { Type = EType.Token },
                     Parsing.Production production => new TypeImpl { TypeString = production.ToCppTypeName(cppOptions, false).ToCppSharedPtrType() },
                     Parsing.LeftRecursive leftRecursion => new TypeImpl { TypeString = leftRecursion.ToCppTypeName(cppOptions, false).ToCppSharedPtrType() },
                     _ => throw new FatalException()
                 };
-                string? captureName = captureContainingReference.CaptureName?.ToCppName() ?? throw new FatalException();
+                var captureName = captureContainingReference.CaptureName?.ToCppName() ?? throw new FatalException();
                 if (!captureDefinitions.TryGetValue(captureName, out var captureDefinition))
                 {
                     captureDefinition = new CaptureDefinition(captureName);
@@ -147,7 +147,7 @@ namespace XCG.Generators.Cpp.Extensive
                 .Where((q) => q.ActiveScope == Parsing.EActiveScope.local)
                 .ToArray();
             var captureDefinitions = new Dictionary<string, CaptureDefinition>();
-            string stateClassName = statement switch
+            var stateClassName = statement switch
             {
                 Parsing.Production production => production.ToCppStateTypeName(cppOptions, false),
                 Parsing.LeftRecursive leftRecursion => leftRecursion.ToCppStateTypeName(cppOptions, false),
@@ -155,7 +155,7 @@ namespace XCG.Generators.Cpp.Extensive
             };
             foreach (var captureModifyingSet in captureModifyingSets)
             {
-                string? captureName = captureModifyingSet.Property.ToCppName();
+                var captureName = captureModifyingSet.Property.ToCppName();
                 if (!captureDefinitions.TryGetValue(captureName, out var captureDefinition))
                 {
                     captureDefinition = new CaptureDefinition(captureName);
@@ -283,7 +283,7 @@ namespace XCG.Generators.Cpp.Extensive
                         };
                         yield return new IfPart(IfPart.EIfScope.Else, null)
                         {
-                            $@"report(""Failed to match {{ {String.Join(", ", match.Matches.Select((q) => q.ToString()))} }}"", {Constants.depthVariable});",
+                            $@"report(""Failed to match {{ {string.Join(", ", match.Matches.Select((q) => q.ToString()))} }}"", {Constants.depthVariable});",
                             new DebugPart { $@"trace(""Returning false on {match}"", {Constants.depthVariable});" },
                             new ReturnPart(EValueConstant.False),
                         };
@@ -300,15 +300,15 @@ namespace XCG.Generators.Cpp.Extensive
                             }
                             else
                             {
-                                var resetable = toUnique("resetable");
+                                var resettable = toUnique("resettable");
                                 yield return new IfPart(IfPart.EIfScope.If, $@"!{cppOptions.FromCache(alternatives).Name}(false, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable}, {Constants.depthVariable} + 1)")
                                 {
                                     new WhilePart($@"current() != '\0'")
                                     {
-                                        $@"resetable {resetable}(*this);",
+                                        $@"resettable {resettable}(*this);",
                                         new IfPart(IfPart.EIfScope.If, $@"{cppOptions.FromCache(alternatives).Name}(true, {Constants.classInstanceVariable}, {Constants.stateInstanceVariable}, {Constants.depthVariable} + 1)")
                                         {
-                                            $@"{resetable}.reset();",
+                                            $@"{resettable}.reset();",
                                             $@"break;",
                                         },
                                         "next();"

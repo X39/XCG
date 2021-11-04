@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace XCG.Parsing
 {
-    public struct AnyCharacter : IStatement
+    public struct AnyCharacter : IStatement, IHasDiagnostics
     {
         public Diagnostic Diagnostics { get; internal set; }
 

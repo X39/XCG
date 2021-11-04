@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace XCG
 {
@@ -96,7 +95,7 @@ namespace XCG
         /// <returns></returns>
         public static string FullStackTrace(this Exception exception)
         {
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             void recurse(Exception ex, int intendation)
             {
                 var tab = new string(' ', intendation * 4);
@@ -106,7 +105,7 @@ namespace XCG
                 builder.Append(tab);
                 builder.AppendLine(ex.Message ?? "unavailable");
 
-                foreach (System.Collections.DictionaryEntry dictionaryEntry in ex.Data)
+                foreach (DictionaryEntry dictionaryEntry in ex.Data)
                 {
                     builder.Append(tab);
                     builder.Append(Convert.ToString(dictionaryEntry.Key));
@@ -115,7 +114,7 @@ namespace XCG
                 }
 
                 var stackTrace = ex.StackTrace ?? "unavailable";
-                builder.AppendLine(stackTrace.Replace("\n", String.Concat("\n", tab)));
+                builder.AppendLine(stackTrace.Replace("\n", string.Concat("\n", tab)));
                 if (ex.InnerException is not null)
                 {
                     recurse(ex.InnerException, intendation + 1);

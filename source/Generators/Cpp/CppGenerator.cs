@@ -9,45 +9,50 @@ namespace XCG.Generators.Cpp
 {
     public class CppGenerator : IGenerator
     {
-        private CppOptions Options { get; } = new CppOptions();
+        private CppOptions Options { get; } = new();
+
         public void Generate(Parser parser, string output)
         {
             var capturedSetters = parser.Setters.Where((q) => q.ActiveScope == EActiveScope.capture).ToArray();
             var mainProduction = parser.Productions.First((q) => q.Identifier == "main");
-            var instanceClass = new ClassDefinition(String.Concat(Options.TypePrefix, Options.ClassName))
+            var instanceClass = new ClassDefinition(string.Concat(Options.TypePrefix, Options.ClassName))
             {
                 PublicParts = new List<ICppPart>
                 {
-                    new MethodDefinition(String.Empty, String.Concat(Options.TypePrefix, Options.ClassName),
-                    " : m_contents(contents), m_file(file), m_line(1), m_column(1), m_offset(0)",
-                    new ArgImpl { Type = EType.StringView, Name = "contents" },
-                    new ArgImpl { Type = EType.String, Name = "file" })
+                    new MethodDefinition(string.Empty, string.Concat(Options.TypePrefix, Options.ClassName),
+                        " : m_contents(contents), m_file(file), m_line(1), m_column(1), m_offset(0)",
+                        new ArgImpl {Type = EType.StringView, Name = "contents"},
+                        new ArgImpl {Type = EType.String, Name = "file"})
                     {
                         HeaderOnly = true
                     },
-                    new EnumDefinition(String.Concat(Options.TypePrefix, Options.TokenEnumName))
+                    new EnumDefinition(string.Concat(Options.TypePrefix, Options.TokenEnumName))
                     {
                         Entries = parser.Tokens.Select((q) => q.GetCppEnumName()).ToList()
                     },
-                    new ClassDefinition(String.Concat(Options.TypePrefix, Options.TokenName))
+                    new ClassDefinition(string.Concat(Options.TypePrefix, Options.TokenName))
                     {
                         PublicParts = new List<ICppPart>
                         {
-                            new FieldDefinition(new ArgImpl { Name = "type", TypeString = String.Concat(Options.TypePrefix, Options.TokenEnumName) }),
-                            new FieldDefinition(new ArgImpl { Name = "file", Type = EType.String }),
-                            new FieldDefinition(new ArgImpl { Name = "line", Type = EType.SizeT }),
-                            new FieldDefinition(new ArgImpl { Name = "column", Type = EType.SizeT }),
-                            new FieldDefinition(new ArgImpl { Name = "offset", Type = EType.SizeT }),
-                            new FieldDefinition(new ArgImpl { Name = "length", Type = EType.SizeT }),
+                            new FieldDefinition(new ArgImpl
+                                {Name = "type", TypeString = string.Concat(Options.TypePrefix, Options.TokenEnumName)}),
+                            new FieldDefinition(new ArgImpl {Name = "file", Type = EType.String}),
+                            new FieldDefinition(new ArgImpl {Name = "line", Type = EType.SizeT}),
+                            new FieldDefinition(new ArgImpl {Name = "column", Type = EType.SizeT}),
+                            new FieldDefinition(new ArgImpl {Name = "offset", Type = EType.SizeT}),
+                            new FieldDefinition(new ArgImpl {Name = "length", Type = EType.SizeT}),
                         }
                     },
                     new MethodDefinition(
-                        String.Concat(Options.RootClassName, Options.TypePrefix, Options.TokenName),
+                        string.Concat(Options.RootClassName, Options.TypePrefix, Options.TokenName),
                         "create_token",
-                        new ArgImpl { Type = EType.SizeT, Name = "length" },
-                        new ArgImpl { TypeString = String.Concat(Options.TypePrefix, Options.TokenEnumName), Name = "type" })
+                        new ArgImpl {Type = EType.SizeT, Name = "length"},
+                        new ArgImpl
+                        {
+                            TypeString = string.Concat(Options.TypePrefix, Options.TokenEnumName), Name = "type"
+                        })
                     {
-                        $@"{String.Concat(Options.TypePrefix, Options.TokenName)} t;",
+                        $@"{string.Concat(Options.TypePrefix, Options.TokenName)} t;",
                         $@"t.file = m_file;",
                         $@"t.line = m_line;",
                         $@"t.column = m_column;",
@@ -63,12 +68,13 @@ namespace XCG.Generators.Cpp
                 },
                 ProtectedParts = new List<ICppPart>
                 {
-                    new FieldDefinition(new ArgImpl { Name = "m_contents", Type = EType.StringView }),
-                    new FieldDefinition(new ArgImpl { Name = "m_file", Type = EType.String }),
-                    new FieldDefinition(new ArgImpl { Name = "m_line", Type = EType.SizeT }),
-                    new FieldDefinition(new ArgImpl { Name = "m_column", Type = EType.SizeT }),
-                    new FieldDefinition(new ArgImpl { Name = "m_offset", Type = EType.SizeT }),
-                    new MethodDefinition(EType.Void, "report", new ArgImpl { Name = "message", Type = EType.StringView }, new ArgImpl { Name = "depth", Type = EType.SizeT })
+                    new FieldDefinition(new ArgImpl {Name = "m_contents", Type = EType.StringView}),
+                    new FieldDefinition(new ArgImpl {Name = "m_file", Type = EType.String}),
+                    new FieldDefinition(new ArgImpl {Name = "m_line", Type = EType.SizeT}),
+                    new FieldDefinition(new ArgImpl {Name = "m_column", Type = EType.SizeT}),
+                    new FieldDefinition(new ArgImpl {Name = "m_offset", Type = EType.SizeT}),
+                    new MethodDefinition(EType.Void, "report", new ArgImpl {Name = "message", Type = EType.StringView},
+                        new ArgImpl {Name = "depth", Type = EType.SizeT})
                     {
                         IsVirtual = true,
                         Parts = new List<ICppPart>
@@ -81,7 +87,9 @@ namespace XCG.Generators.Cpp
                     },
                     new DebugPart
                     {
-                        new MethodDefinition(EType.Void, "trace", new ArgImpl { Name = "message", Type = EType.StringView }, new ArgImpl { Name = "depth", Type = EType.SizeT })
+                        new MethodDefinition(EType.Void, "trace",
+                            new ArgImpl {Name = "message", Type = EType.StringView},
+                            new ArgImpl {Name = "depth", Type = EType.SizeT})
                         {
                             IsVirtual = true,
                             Parts = new List<ICppPart>
@@ -96,17 +104,26 @@ namespace XCG.Generators.Cpp
                 },
                 PrivateParts = new List<ICppPart>
                 {
-                    new ClassDefinition("resetable")
+                    new ClassDefinition("resettable")
                     {
                         PublicParts = new List<ICppPart>
                         {
-                            new FieldDefinition(new ArgImpl { Name = "m_ref", ReferenceCount = 1, TypeString = String.Concat(Options.TypePrefix, Options.ClassName) }),
-                            new FieldDefinition(new ArgImpl { Name = "m_contents", Type = EType.StringView }),
-                            new FieldDefinition(new ArgImpl { Name = "m_file", Type = EType.String }),
-                            new FieldDefinition(new ArgImpl { Name = "m_line", Type = EType.SizeT }),
-                            new FieldDefinition(new ArgImpl { Name = "m_column", Type = EType.SizeT }),
-                            new FieldDefinition(new ArgImpl { Name = "m_offset", Type = EType.SizeT }),
-                            new MethodDefinition(EType.None, "resetable", ": m_ref(ref)", new ArgImpl{ TypeString = String.Concat(Options.TypePrefix, Options.ClassName), ReferenceCount = 1, Name = "ref" })
+                            new FieldDefinition(new ArgImpl
+                            {
+                                Name = "m_ref", ReferenceCount = 1,
+                                TypeString = string.Concat(Options.TypePrefix, Options.ClassName)
+                            }),
+                            new FieldDefinition(new ArgImpl {Name = "m_contents", Type = EType.StringView}),
+                            new FieldDefinition(new ArgImpl {Name = "m_file", Type = EType.String}),
+                            new FieldDefinition(new ArgImpl {Name = "m_line", Type = EType.SizeT}),
+                            new FieldDefinition(new ArgImpl {Name = "m_column", Type = EType.SizeT}),
+                            new FieldDefinition(new ArgImpl {Name = "m_offset", Type = EType.SizeT}),
+                            new MethodDefinition(EType.None, "resettable", ": m_ref(ref)",
+                                new ArgImpl
+                                {
+                                    TypeString = string.Concat(Options.TypePrefix, Options.ClassName),
+                                    ReferenceCount = 1, Name = "ref"
+                                })
                             {
                                 new FullBody
                                 {
@@ -130,7 +147,7 @@ namespace XCG.Generators.Cpp
                             }
                         }
                     },
-                    new FullBody(EUsage.Header) { $@"friend class resetable;" },
+                    new FullBody(EUsage.Header) {$@"friend class resettable;"},
                     new MethodDefinition(EType.Boolean, "next")
                     {
                         new IfPart(IfPart.EIfScope.If, "m_contents.length() > m_offset")
@@ -166,16 +183,16 @@ namespace XCG.Generators.Cpp
             };
 
 
-            var captureClasses = Array.Empty<Parsing.IStatement>()
-                .Concat(parser.Productions.Cast<Parsing.IStatement>())
-                .Concat(parser.LeftRecursives.Cast<Parsing.IStatement>())
-                .Select((q) => q.GetClassDefinition(this.Options))
+            var captureClasses = Array.Empty<IStatement>()
+                .Concat(parser.Productions)
+                .Concat(parser.LeftRecursiveItems)
+                .Select((q) => q.GetClassDefinition(Options))
                 .NotNull()
                 .ToArray();
-            var stateClasses = Array.Empty<Parsing.IStatement>()
-                .Concat(parser.Productions.Cast<Parsing.IStatement>())
-                .Concat(parser.LeftRecursives.Cast<Parsing.IStatement>())
-                .Select((q) => q.GetStateDefinition(this.Options))
+            var stateClasses = Array.Empty<IStatement>()
+                .Concat(parser.Productions)
+                .Concat(parser.LeftRecursiveItems)
+                .Select((q) => q.GetStateDefinition(Options))
                 .NotNull()
                 .ToArray();
             instanceClass.PublicParts.AddRange(captureClasses);
@@ -193,33 +210,36 @@ namespace XCG.Generators.Cpp
             })));
             instanceClass.PrivateParts.AddRange(
                 Array.Empty<object>()
-                .Concat(parser.Tokens)
-                .Concat(parser.Productions)
-                .Concat(parser.LeftRecursives)
-                .SelectMany((q) => q switch
-                {
-                    Parsing.LeftRecursive leftRecursive => leftRecursive.ToParts(this.Options),
-                    Parsing.Production production => production.ToParts(this.Options),
-                    Parsing.Token token => token.ToParts(this.Options),
-                    _ => throw new NotImplementedException(),
-                }).Distinct());
+                    .Concat(parser.Tokens)
+                    .Concat(parser.Productions)
+                    .Concat(parser.LeftRecursiveItems)
+                    .SelectMany((q) => q switch
+                    {
+                        LeftRecursive leftRecursive => leftRecursive.ToParts(Options),
+                        Production production => production.ToParts(Options),
+                        Token token => token.ToParts(Options),
+                        _ => throw new NotImplementedException(),
+                    }).Distinct());
 
-            instanceClass.PublicParts.Add(new MethodDefinition(mainProduction.ToCppTypeName(this.Options, true).ToCppSharedPtrType(), "parse")
-            {
-                $@"skip();",
-                $@"return {mainProduction.ToCppMatchMethodName(this.Options)}(0);"
-            });
+            instanceClass.PublicParts.Add(
+                new MethodDefinition(mainProduction.ToCppTypeName(Options, true).ToCppSharedPtrType(), "parse")
+                {
+                    $@"skip();",
+                    $@"return {mainProduction.ToCppMatchMethodName(Options)}(0);"
+                });
             instanceClass.PublicParts.AddRange(parser.Productions
                 .SelectMany((q) => q.FindChildren<Parsing.Statements.Set>())
                 .Where((q) => q.ActiveScope == EActiveScope.global)
                 .GroupBy((q) => q.Key)
-                .Select((g) => new CaptureDefinition(g.Key, g.Select((q) => q.ToTypeImpl(this.Options)))));
+                .Select((g) => new CaptureDefinition(g.Key, g.Select((q) => q.ToTypeImpl(Options)))));
 
-            if (this.Options.CreateStringTree)
+            if (Options.CreateStringTree)
             {
-                instanceClass.PublicParts.AddRange(captureClasses.Select((q) => q.CreatePrintTreeMethodDefinition(this.Options)));
+                instanceClass.PublicParts.AddRange(captureClasses.Select((q) =>
+                    q.CreatePrintTreeMethodDefinition(Options)));
             }
-            if (this.Options.CreateVisitor)
+
+            if (Options.CreateVisitor)
             {
                 var visitorClass = new ClassDefinition("visitor");
                 visitorClass.ProtectedParts.AddRange(
@@ -227,8 +247,8 @@ namespace XCG.Generators.Cpp
                     {
                         var methodDefinition = new MethodDefinition(
                             EType.Boolean,
-                            String.Concat(this.Options.MethodsPrefix, "visit_enter"),
-                            new ArgImpl { Name = "node", TypeString = q.FullName.ToCppSharedPtrType() })
+                            string.Concat(Options.MethodsPrefix, "visit_enter"),
+                            new ArgImpl {Name = "node", TypeString = q.FullName.ToCppSharedPtrType()})
                         {
                             new ReturnPart(EValueConstant.True),
                         };
@@ -240,23 +260,27 @@ namespace XCG.Generators.Cpp
                     {
                         var methodDefinition = new MethodDefinition(
                             EType.Boolean,
-                            String.Concat( this.Options.MethodsPrefix, "visit_leave"),
-                            new ArgImpl { Name = "node", TypeString = q.FullName.ToCppSharedPtrType() })
+                            string.Concat(Options.MethodsPrefix, "visit_leave"),
+                            new ArgImpl {Name = "node", TypeString = q.FullName.ToCppSharedPtrType()})
                         {
                             new ReturnPart(EValueConstant.True),
                         };
                         methodDefinition.IsVirtual = true;
                         return methodDefinition;
                     }));
-                visitorClass.PublicParts.AddRange(captureClasses.Where((q) => q.Name == "main").Select((q) => q.CreateVisitTreeMethodDefinition(this.Options)));
-                visitorClass.PrivateParts.AddRange(captureClasses.Where((q) => q.Name != "main").Select((q) => q.CreateVisitTreeMethodDefinition(this.Options)));
+                visitorClass.PublicParts.AddRange(captureClasses.Where((q) => q.Name == "main")
+                    .Select((q) => q.CreateVisitTreeMethodDefinition(Options)));
+                visitorClass.PrivateParts.AddRange(captureClasses.Where((q) => q.Name != "main")
+                    .Select((q) => q.CreateVisitTreeMethodDefinition(Options)));
                 instanceClass.PublicParts.Add(visitorClass);
             }
-            instanceClass.PrivateParts.Add(GetSkipMethod(parser, this.Options));
+
+            instanceClass.PrivateParts.Add(GetSkipMethod(parser));
             System.IO.Directory.CreateDirectory(output);
-            using (var writer = new System.IO.StreamWriter(System.IO.Path.Combine(output, this.Options.HeaderFileName)))
+            using (var writer = new System.IO.StreamWriter(System.IO.Path.Combine(output, Options.HeaderFileName)))
             {
-                var guardName = String.Concat("INCLUDE_GUARD_", this.Options.ImplementationFileName.Replace('.', '_'),Options.TypePrefix, "_", Options.ClassName).ToUpper();
+                var guardName = string.Concat("INCLUDE_GUARD_", Options.ImplementationFileName.Replace('.', '_'),
+                    Options.TypePrefix, "_", Options.ClassName).ToUpper();
                 writer.WriteLine($@"#ifndef {guardName}");
                 writer.WriteLine($@"#define {guardName}");
                 writer.WriteLine($@"#include <memory>");
@@ -267,44 +291,47 @@ namespace XCG.Generators.Cpp
                 writer.WriteLine($@"#include <sstream>");
                 writer.WriteLine($@"#include <vector>");
                 writer.WriteLine();
-                if (this.Options.NamespaceName is null)
+                if (Options.NamespaceName is null)
                 {
-                    instanceClass.WriteHeader(this.Options, writer, String.Empty);
+                    instanceClass.WriteHeader(Options, writer, string.Empty);
                 }
                 else
                 {
-                    var ns = new NamespaceDefinition(this.Options.NamespaceName)
+                    var ns = new NamespaceDefinition(Options.NamespaceName)
                     {
                         instanceClass
                     };
-                    ns.WriteHeader(this.Options, writer, String.Empty);
+                    ns.WriteHeader(Options, writer, string.Empty);
                 }
+
                 writer.WriteLine($@"#endif // {guardName}");
             }
-            using (var writer = new System.IO.StreamWriter(System.IO.Path.Combine(output, this.Options.ImplementationFileName)))
+
+            using (var writer =
+                new System.IO.StreamWriter(System.IO.Path.Combine(output, Options.ImplementationFileName)))
             {
-                writer.WriteLine($@"#include ""{this.Options.HeaderFileName}""");
+                writer.WriteLine($@"#include ""{Options.HeaderFileName}""");
                 writer.WriteLine($@"#include <iostream>");
                 writer.WriteLine();
-                if (this.Options.NamespaceName is null)
+                if (Options.NamespaceName is null)
                 {
-                    instanceClass.WriteImplementation(this.Options, writer, String.Empty);
+                    instanceClass.WriteImplementation(Options, writer, string.Empty);
                 }
                 else
                 {
-                    var ns = new NamespaceDefinition(this.Options.NamespaceName)
+                    var ns = new NamespaceDefinition(Options.NamespaceName)
                     {
                         instanceClass
                     };
-                    ns.WriteImplementation(this.Options, writer, String.Empty);
+                    ns.WriteImplementation(Options, writer, string.Empty);
                 }
             }
         }
 
-        private static MethodDefinition GetSkipMethod(Parser parser, CppOptions cppOptions)
+        private static MethodDefinition GetSkipMethod(Parser parser)
         {
-            int ___localsCount = 0;
-            string toUnique(string str) => String.Concat(str, (++___localsCount).ToString());
+            var localsCount = 0;
+            string ToUnique(string str) => string.Concat(str, (++localsCount).ToString());
 
             var scopePart = new ScopePart();
             var method = new MethodDefinition(EType.Void, "skip")
@@ -324,7 +351,7 @@ namespace XCG.Generators.Cpp
                     }
                 }
             };
-            var wasMatchedVariable = toUnique("wasMatched");
+            var wasMatchedVariable = ToUnique("wasMatched");
             scopePart.Add(new VariableDefinition(EType.Boolean, wasMatchedVariable, "false"));
             foreach (var comment in parser.Comments)
             {
@@ -340,13 +367,13 @@ namespace XCG.Generators.Cpp
                     "eol" => "\n",
                     _ => comment.End!
                 };
-                var indexVariable = toUnique("i");
+                var indexVariable = ToUnique("i");
                 var ifPart = new IfPart(
                     IfPart.EIfScope.If,
-                    String.Concat(
+                    string.Concat(
                         $@"m_contents.length() > m_offset + {start.Length} && ",
-                        String.Join(" && ", start.Select((c, i) => $@"m_contents[m_offset + {i}] == '{c.Escape()}'"))
-                        ))
+                        string.Join(" && ", start.Select((c, i) => $@"m_contents[m_offset + {i}] == '{c.Escape()}'"))
+                    ))
                 {
                     $@"{wasMatchedVariable} = true;",
                     $@"for (size_t {indexVariable} = 0; {indexVariable} < {start.Length}; {indexVariable}++)",
@@ -362,11 +389,11 @@ namespace XCG.Generators.Cpp
                             @"default: m_column++; m_offset++; break;"
                         }
                     },
-                    new WhilePart(String.Concat(
+                    new WhilePart(string.Concat(
                         $@"m_contents.length() > m_offset + {start.Length} && !(",
-                        String.Join(" && ", end.Select((c, i) => $@"m_contents[m_offset + {i}] == '{c.Escape()}'")),
+                        string.Join(" && ", end.Select((c, i) => $@"m_contents[m_offset + {i}] == '{c.Escape()}'")),
                         ")"
-                        ))
+                    ))
                     {
                         @"switch (m_contents[m_offset])",
                         new ScopePart
@@ -394,7 +421,8 @@ namespace XCG.Generators.Cpp
                 };
                 scopePart.Add(ifPart);
             }
-            scopePart.Add(new IfPart(IfPart.EIfScope.If, String.Concat('!', wasMatchedVariable))
+
+            scopePart.Add(new IfPart(IfPart.EIfScope.If, string.Concat('!', wasMatchedVariable))
             {
                 $@"return;",
             });
@@ -406,57 +434,70 @@ namespace XCG.Generators.Cpp
             validator.Register("CPP", ESeverity.Error, (parser) =>
             {
                 var hints = new List<Hint>();
-                foreach (var setter in Array.Empty<Parsing.IStatement>()
-                .Concat(parser.Productions)
-                .Concat(parser.LeftRecursives)
-                .SelectMany((q) => q.FindChildren<Parsing.Statements.Set>())
-                .Concat(parser.Setters)
-                .Where((q) => q.ActiveScope == EActiveScope.capture))
+                foreach (var setter in Array.Empty<IStatement>()
+                    .Concat(parser.Productions)
+                    .Concat(parser.LeftRecursiveItems)
+                    .SelectMany((q) => q.FindChildren<Parsing.Statements.Set>())
+                    .Concat(parser.Setters)
+                    .Where((q) => q.ActiveScope == EActiveScope.capture))
                 {
                     if (setter.Mode != EMode.SetProperty)
                     {
-                        hints.Add(new Hint { File = setter.Diagnostics.File, Line = setter.Diagnostics.Line, Message = "Set with capture scope cannot must set a property directly." });
+                        hints.Add(new Hint
+                        {
+                            File = setter.Diagnostics.File, Line = setter.Diagnostics.Line,
+                            Message = "Set with capture scope cannot must set a property directly."
+                        });
                     }
                 }
+
                 return hints;
             });
             validator.Register("CPP", ESeverity.Error, (parser) =>
             {
                 var hints = new List<Hint>();
-                foreach (var setter in Array.Empty<Parsing.IStatement>()
-                .Concat(parser.Productions)
-                .Concat(parser.LeftRecursives)
-                .SelectMany((q) => q.FindChildren<Parsing.Statements.Set>())
-                .Concat(parser.Setters)
-                .Where((q) => q.ActiveScope == EActiveScope.capture))
+                foreach (var setter in Array.Empty<IStatement>()
+                    .Concat(parser.Productions)
+                    .Concat(parser.LeftRecursiveItems)
+                    .SelectMany((q) => q.FindChildren<Parsing.Statements.Set>())
+                    .Concat(parser.Setters)
+                    .Where((q) => q.ActiveScope == EActiveScope.capture))
                 {
                     if (setter.Children.Count != 1
-                    || !setter.Children.All((q) => q switch
+                        || !setter.Children.All((q) => q switch
+                        {
+                            Parsing.Expressions.CreateNewBoolean => true,
+                            Parsing.Expressions.Bool => true,
+                            Parsing.Expressions.CreateNewCharacter => true,
+                            Parsing.Expressions.Character => true,
+                            Parsing.Expressions.CreateNewNumber => true,
+                            Parsing.Expressions.Number => true,
+                            _ => false
+                        }))
                     {
-                        Parsing.Expressions.CreateNewBoolean => true,
-                        Parsing.Expressions.Bool => true,
-                        Parsing.Expressions.CreateNewCharacter => true,
-                        Parsing.Expressions.Character => true,
-                        Parsing.Expressions.CreateNewNumber => true,
-                        Parsing.Expressions.Number => true,
-                        _ => false
-                    }))
-                    {
-                        hints.Add(new Hint { File = setter.Diagnostics.File, Line = setter.Diagnostics.Line, Message = "Set with capture scope must always be comprised of a single expression." });
+                        hints.Add(new Hint
+                        {
+                            File = setter.Diagnostics.File, Line = setter.Diagnostics.Line,
+                            Message = "Set with capture scope must always be comprised of a single expression."
+                        });
                     }
                 }
+
                 return hints;
             });
         }
 
         public void SetOption(string key, string? value)
         {
-            var properties = this.Options.GetType().GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+            var properties = Options.GetType()
+                .GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
             var dict = properties.Select((q) => new
-            {
-                prop = q,
-                att = q.GetCustomAttributes(true).Where((q) => q is CppOptionAttribute).Cast<CppOptionAttribute>().FirstOrDefault()
-            }).Where((q) => q.att is not null).ToDictionary((q) => q.att!.Name.ToLower(), (q) => new { att = q.att!, q.prop });
+                {
+                    att = q.GetCustomAttributes(true).OfType<CppOptionAttribute>()
+                        .FirstOrDefault(),
+                    prop = q
+                }).Where((q) => q.att is not null)
+                .ToDictionary((q) => q.att!.Name.ToLower(), (q) => new {att = q.att!, q.prop});
 
             if (dict.TryGetValue(key.ToLower(), out var a))
             {
@@ -464,7 +505,8 @@ namespace XCG.Generators.Cpp
                 {
                     throw new NullReferenceException($@"The option ""{a.att.Name}"" cannot be null.");
                 }
-                a.prop.SetValue(this.Options, value is null ? null : Convert.ChangeType(value, a.prop.PropertyType));
+
+                a.prop.SetValue(Options, value is null ? null : Convert.ChangeType(value, a.prop.PropertyType));
             }
             else
             {
@@ -474,12 +516,15 @@ namespace XCG.Generators.Cpp
 
         public IEnumerable<(string option, object? value)> GetOptions()
         {
-            var properties = this.Options.GetType().GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+            var properties = Options.GetType()
+                .GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
             return properties.Select((q) => new
-            {
-                prop = q,
-                att = q.GetCustomAttributes(true).Where((q) => q is CppOptionAttribute).Cast<CppOptionAttribute>().FirstOrDefault()
-            }).Where((q) => q.att is not null).Select((q) => (option: q.att!.Name.ToLower(), value: q.prop.GetValue(this.Options)));
+                {
+                    prop = q,
+                    att = q.GetCustomAttributes(true).OfType<CppOptionAttribute>()
+                        .FirstOrDefault()
+                }).Where((q) => q.att is not null)
+                .Select((q) => (option: q.att!.Name.ToLower(), value: q.prop.GetValue(Options)));
         }
     }
 }

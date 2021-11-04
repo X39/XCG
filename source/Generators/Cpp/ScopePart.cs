@@ -1,45 +1,44 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 
 namespace XCG.Generators.Cpp
 {
     internal class ScopePart : CppContainerBase
     {
         private readonly EUsage usage;
+
         public ScopePart(EUsage usage = EUsage.Implementation)
         {
             this.usage = usage;
         }
+
         public override void WriteHeader(CppOptions options, StreamWriter writer, string whitespace)
         {
-            if (usage.HasFlag(EUsage.Header))
+            if (!usage.HasFlag(EUsage.Header)) return;
+            writer.Write(whitespace);
+            writer.WriteLine("{");
+            var subWhitespace = string.Concat("    ", whitespace);
+            foreach (var part in Parts)
             {
-                writer.Write(whitespace);
-                writer.WriteLine("{");
-                var subWhitespace = string.Concat("    ", whitespace);
-                foreach (var part in this.Parts)
-                {
-                    part.WriteHeader(options, writer, subWhitespace);
-                }
-                writer.Write(whitespace);
-                writer.WriteLine("}");
+                part.WriteHeader(options, writer, subWhitespace);
             }
+
+            writer.Write(whitespace);
+            writer.WriteLine("}");
         }
+
         public override void WriteImplementation(CppOptions options, StreamWriter writer, string whitespace)
         {
-            if (usage.HasFlag(EUsage.Implementation))
+            if (!usage.HasFlag(EUsage.Implementation)) return;
+            writer.Write(whitespace);
+            writer.WriteLine("{");
+            var subWhitespace = string.Concat("    ", whitespace);
+            foreach (var part in Parts)
             {
-                writer.Write(whitespace);
-                writer.WriteLine("{");
-                var subWhitespace = string.Concat("    ", whitespace);
-                foreach (var part in this.Parts)
-                {
-                    part.WriteImplementation(options, writer, subWhitespace);
-                }
-                writer.Write(whitespace);
-                writer.WriteLine("}");
+                part.WriteImplementation(options, writer, subWhitespace);
             }
+
+            writer.Write(whitespace);
+            writer.WriteLine("}");
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace XCG.Generators.Cpp.Extensive
@@ -8,24 +7,24 @@ namespace XCG.Generators.Cpp.Extensive
     {
         public static string ToCppTypeName(this Parsing.LeftRecursive leftRecursive, CppOptions cppOptions, bool full)
         {
-            return String.Concat(full ? cppOptions.RootClassName : String.Empty, cppOptions.TypePrefix, leftRecursive.Identifier.ToCppName());
+            return string.Concat(full ? cppOptions.RootClassName : string.Empty, cppOptions.TypePrefix, leftRecursive.Identifier.ToCppName());
         }
         public static string ToCppStateTypeName(this Parsing.LeftRecursive leftRecursive, CppOptions cppOptions, bool full)
         {
-            return String.Concat(leftRecursive.ToCppTypeName(cppOptions, full), "_state");
+            return string.Concat(leftRecursive.ToCppTypeName(cppOptions, full), "_state");
         }
         public static string ToCppCanMatchMethodName(this Parsing.LeftRecursive leftRecursive, CppOptions cppOptions)
         {
-            return String.Concat(cppOptions.MethodsPrefix, "lr_can_", leftRecursive.Identifier.ToCppName());
+            return string.Concat(cppOptions.MethodsPrefix, "lr_can_", leftRecursive.Identifier.ToCppName());
         }
         public static string ToCppMatchMethodName(this Parsing.LeftRecursive leftRecursive, CppOptions cppOptions)
         {
-            return String.Concat(cppOptions.MethodsPrefix, "lr_match_", leftRecursive.Identifier.ToCppName());
+            return string.Concat(cppOptions.MethodsPrefix, "lr_match_", leftRecursive.Identifier.ToCppName());
         }
         public static IEnumerable<ICppPart> ToParts(this Parsing.LeftRecursive leftRecursive, CppOptions cppOptions)
         {
-            int ___localsCount = 0;
-            string toUnique(string str) => String.Concat(str, (++___localsCount).ToString());
+            var ___localsCount = 0;
+            string toUnique(string str) => string.Concat(str, (++___localsCount).ToString());
             // Output matches
             var matches = leftRecursive.Children.Cast<Parsing.Statements.Match>().ToArray();
             var lastMatch = matches.Last();
@@ -39,7 +38,7 @@ namespace XCG.Generators.Cpp.Extensive
                     {
                         yield return yielded;
                     }
-                    yield return cppOptions.FromCacheOrCreate(match, (m) => match.CreateMethodDefinition(cppOptions, 0, cppTypeName.ToCppSharedPtrType(), cppStateTypeName));
+                    yield return cppOptions.FromCacheOrCreate(match, (_) => match.CreateMethodDefinition(cppOptions, 0, cppTypeName.ToCppSharedPtrType(), cppStateTypeName));
                 }
                 else
                 {
@@ -47,22 +46,22 @@ namespace XCG.Generators.Cpp.Extensive
                     {
                         yield return yielded;
                     }
-                    yield return cppOptions.FromCacheOrCreate(match, (m) => match.CreateMethodDefinition(cppOptions, 1, cppTypeName.ToCppSharedPtrType(), cppStateTypeName));
+                    yield return cppOptions.FromCacheOrCreate(match, (_) => match.CreateMethodDefinition(cppOptions, 1, cppTypeName.ToCppSharedPtrType(), cppStateTypeName));
                 }
             }
 
             // Generate can method
             #region CanMatch method
-            string? resetable = toUnique("resetable");
+            var resettable = toUnique("resettable");
             var whileScope = new WhilePart
             {
                 $@"skip();",
-                $@"resetable {resetable}(*this);",
+                $@"resettable {resettable}(*this);",
             };
             var canMatchMethodDefinition = new MethodDefinition(EType.Boolean, leftRecursive.ToCppCanMatchMethodName(cppOptions),
                 new ArgImpl { Name = Constants.depthVariable, Type = EType.SizeT })
             {
-                $@"resetable {resetable}(*this);",
+                $@"resettable {resettable}(*this);",
                 new VariableDefinition(new TypeImpl {  TypeString = leftRecursive.ToCppTypeName(cppOptions, true).ToCppSharedPtrType() }, Constants.classInstanceFakeVariable),
                 new VariableDefinition(new TypeImpl {  TypeString = leftRecursive.ToCppStateTypeName(cppOptions, false) }, Constants.stateInstanceVariable),
                 new IfPart(IfPart.EIfScope.If, $@"!{cppOptions.FromCache(lastMatch).Name}(true, {Constants.classInstanceFakeVariable}, {Constants.stateInstanceVariable}, {Constants.depthVariable} + 1)")
@@ -72,7 +71,7 @@ namespace XCG.Generators.Cpp.Extensive
                 },
                 whileScope
             };
-            bool isFirst = true;
+            var isFirst = true;
             foreach (var match in matches.Take(matches.Length - 1))
             {
                 whileScope.Add(new IfPart(isFirst, $"{cppOptions.FromCache(match).Name}(true, {Constants.classInstanceFakeVariable}, {Constants.stateInstanceVariable}, {Constants.depthVariable} + 1)"));
@@ -91,7 +90,7 @@ namespace XCG.Generators.Cpp.Extensive
             whileScope = new WhilePart
             {
                 $@"skip();",
-                $@"resetable {resetable}(*this);",
+                $@"resettable {resettable}(*this);",
             };
             var isFirstVariable = toUnique($@"is_first");
             var tmpActualVariable = toUnique($@"tmp_{Constants.classInstanceVariable}");
@@ -115,7 +114,7 @@ namespace XCG.Generators.Cpp.Extensive
             {
                 whileScope.Add(new IfPart(isFirst, $"{cppOptions.FromCache(match).Name}(true, {Constants.classInstanceFakeVariable}, {Constants.stateInstanceVariable}, {Constants.depthVariable} + 1)")
                 {
-                    $@"{resetable}.reset();",
+                    $@"{resettable}.reset();",
                     new IfPart(IfPart.EIfScope.If, $"!{isFirstVariable}")
                     {
                         new VariableDefinition(EType.Auto, tmpActualVariable, Constants.classInstanceVariable),
@@ -130,7 +129,7 @@ namespace XCG.Generators.Cpp.Extensive
             whileScope.Add("else");
             whileScope.Add(new ScopePart
             {
-                $@"{resetable}.reset();",
+                $@"{resettable}.reset();",
                 "break;",
             });
             matchMethodDefinition.Add($@"return {Constants.classInstanceVariable};");

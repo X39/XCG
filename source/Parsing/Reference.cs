@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace XCG.Parsing
 {
-    public class Reference : IMatchPart, IStatement
+    public class Reference : IMatchPart, IStatement, IHasDiagnostics
     {
         public IStatement? Refered { get; set; }
         public string Text { get; set; }

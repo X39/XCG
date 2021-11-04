@@ -1,62 +1,64 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 
 namespace XCG.Generators.Cpp
 {
     internal class WhilePart : CppContainerBase
     {
-        private readonly EUsage usage;
-        private readonly string condition;
+        private readonly EUsage _usage;
+        private readonly string _condition;
+
         #region ICppPart
+
         public WhilePart(EUsage usage = EUsage.Implementation)
         {
-            this.condition = "true";
-            this.usage = usage;
+            _condition = "true";
+            this._usage = usage;
         }
+
         public WhilePart(string condition, EUsage usage = EUsage.Implementation)
         {
-            this.condition = condition;
-            this.usage = usage;
+            this._condition = condition;
+            this._usage = usage;
         }
+
         public override void WriteHeader(CppOptions options, StreamWriter writer, string whitespace)
         {
-            if (this.usage.HasFlag(EUsage.Header))
+            if (!_usage.HasFlag(EUsage.Header)) return;
+            writer.Write(whitespace);
+            writer.Write("while (");
+            writer.Write(_condition);
+            writer.WriteLine(")");
+            writer.Write(whitespace);
+            writer.WriteLine("{");
+            var subWhitespace = string.Concat("    ", whitespace);
+            foreach (var part in Parts)
             {
-                writer.Write(whitespace);
-                writer.Write("while (");
-                writer.Write(this.condition);
-                writer.WriteLine(")");
-                writer.Write(whitespace);
-                writer.WriteLine("{");
-                string? subWhitespace = System.String.Concat("    ", whitespace);
-                foreach (var part in this.Parts)
-                {
-                    part.WriteHeader(options, writer, subWhitespace);
-                }
-                writer.Write(whitespace);
-                writer.WriteLine("}");
+                part.WriteHeader(options, writer, subWhitespace);
             }
+
+            writer.Write(whitespace);
+            writer.WriteLine("}");
         }
+
         public override void WriteImplementation(CppOptions options, StreamWriter writer, string whitespace)
         {
-            if (this.usage.HasFlag(EUsage.Implementation))
+            if (!_usage.HasFlag(EUsage.Implementation)) return;
+            writer.Write(whitespace);
+            writer.Write("while (");
+            writer.Write(_condition);
+            writer.WriteLine(")");
+            writer.Write(whitespace);
+            writer.WriteLine("{");
+            var subWhitespace = string.Concat("    ", whitespace);
+            foreach (var part in Parts)
             {
-                writer.Write(whitespace);
-                writer.Write("while (");
-                writer.Write(this.condition);
-                writer.WriteLine(")");
-                writer.Write(whitespace);
-                writer.WriteLine("{");
-                string? subWhitespace = System.String.Concat("    ", whitespace);
-                foreach (var part in this.Parts)
-                {
-                    part.WriteImplementation(options, writer, subWhitespace);
-                }
-                writer.Write(whitespace);
-                writer.WriteLine("}");
+                part.WriteImplementation(options, writer, subWhitespace);
             }
+
+            writer.Write(whitespace);
+            writer.WriteLine("}");
         }
+
         #endregion
     }
 }

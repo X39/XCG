@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace XCG.Parsing.Statements
 {
-    public class Get : IStatement
+    public class Get : IStatement, IHasDiagnostics
     {
-        public List<IStatement> Children { get; set; } = new List<IStatement>();
+        public List<IStatement> Children { get; set; } = new();
         public EActiveScope ActiveScope { get; set; }
         public EMode Mode { get; internal set; }
         public string Property { get; internal set; }
@@ -18,8 +14,8 @@ namespace XCG.Parsing.Statements
 
         public Get()
         {
-            this.Property = string.Empty;
-            this.Key = string.Empty;
+            Property = string.Empty;
+            Key = string.Empty;
         }
     }
 }

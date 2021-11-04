@@ -12,21 +12,21 @@ namespace XCG.Validation
         public KeyAlreadyPresentException(string realm, int code)
             : base($"Cannot add rule as another one with the same realm and code already exists.")
         {
-            this.Realm = realm;
-            this.Code = code;
+            Realm = realm;
+            Code = code;
         }
 
         protected KeyAlreadyPresentException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
-            this.Realm = (string)info.GetValue(nameof(Realm), typeof(string))!;
-            this.Code = (int)info.GetValue(nameof(Code), typeof(int))!;
+            Realm = (string) info.GetValue(nameof(Realm), typeof(string))!;
+            Code = (int) info.GetValue(nameof(Code), typeof(int))!;
         }
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
-            info.AddValue(nameof(Realm), this.Realm);
-            info.AddValue(nameof(Code), this.Code);
+            info.AddValue(nameof(Realm), Realm);
+            info.AddValue(nameof(Code), Code);
         }
     }
 }

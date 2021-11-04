@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace XCG.Parsing
 {
-    public class Word : IStatement
+    public class Word : IStatement, IHasDiagnostics
     {
         public string Text { get; set; }
         public Diagnostic Diagnostics { get; internal set; }
@@ -12,7 +12,7 @@ namespace XCG.Parsing
 
         public Word(string text)
         {
-            this.Text = text;
+            Text = text;
         }
 
 
@@ -28,7 +28,7 @@ namespace XCG.Parsing
 
         public override string ToString()
         {
-            return $@"word: ""{this.Text}""";
+            return $@"word: ""{Text}""";
         }
     }
 }

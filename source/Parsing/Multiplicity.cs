@@ -1,6 +1,6 @@
 ﻿namespace XCG.Parsing
 {
-    public struct Multiplicity
+    public struct Multiplicity : IHasDiagnostics
     {
         /// <summary>
         /// The inclusive from value.
@@ -13,21 +13,21 @@
         /// </summary>
         public int To { get; set; }
 
-        public bool IsOnce => this.To - this.From == 1;
+        public bool IsOnce => To - From == 1;
 
         public Diagnostic Diagnostics { get; internal set; }
 
         public Multiplicity(int fromInclusive, int toExclusive, Diagnostic diagnostic)
         {
-            this.From = fromInclusive;
-            this.To = toExclusive;
-            this.Diagnostics = diagnostic;
+            From = fromInclusive;
+            To = toExclusive;
+            Diagnostics = diagnostic;
         }
         public Multiplicity(int exact, Diagnostic diagnostic)
         {
-            this.From = exact;
-            this.To = exact;
-            this.Diagnostics = diagnostic;
+            From = exact;
+            To = exact;
+            Diagnostics = diagnostic;
         }
     }
 }
