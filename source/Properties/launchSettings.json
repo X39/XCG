@@ -2,7 +2,7 @@
   "profiles": {
     "leaf": {
       "commandName": "Project",
-      "commandLineArgs": "-i leaf.*.xcg -g c++ -o parser",
+      "commandLineArgs": "-i leaf.* -g c++ -o parser -v",
       "workingDirectory": "D:\\dev\\git\\leaf\\syntax"
     },
     "xcg": {

@@ -1,6 +1,7 @@
 ﻿using CommandLine;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using JetBrains.Annotations;
 
@@ -34,6 +35,9 @@ namespace XCG
 
             [Option('d', "dry-run", HelpText = "Will not generate any output files if set.")]
             public bool DryRun { get; [UsedImplicitly] set; }
+
+            [Option('v', "verbose", HelpText = "Enables additional output.")]
+            public bool Verbose { get; [UsedImplicitly] set; }
         }
 
         private static void Colored(ESeverity severity, Action action)
@@ -100,23 +104,47 @@ namespace XCG
             };
         }
 
-        private static IEnumerable<string> ResolveWildcards(IEnumerable<string> strings)
+        private static IEnumerable<string> ResolveWildcards(IEnumerable<string> strings, bool verbose)
         {
+            void VerboseLog(string s)
+            {
+                if (!verbose) return;
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine(s);
+                Console.ResetColor();
+            }
             foreach (var filePathWithPossibleWildcard in strings)
             {
+                VerboseLog($"Solving for {filePathWithPossibleWildcard}:");
                 if (filePathWithPossibleWildcard.Contains('*'))
                 {
+                    VerboseLog($"    file contains wildcard");
                     var splatted = filePathWithPossibleWildcard.Split('*');
+                    VerboseLog($"    With parts: {{ \"{string.Join("\", \"", splatted)}\" }}");
                     var root = splatted.First();
-                    var rootDir = System.IO.Path.GetDirectoryName(root);
+                    if (string.IsNullOrWhiteSpace(root))
+                    {
+                        root = Environment.CurrentDirectory;
+                        VerboseLog($"    no root found, changed to {root}");
+                    }
+                    VerboseLog($"    using root {root}");
+                    var rootDir = Path.GetDirectoryName(root);
                     if (rootDir is null)
                         throw new FatalException(
                             "Failed to apply wildcard - System.IO.Path.GetDirectoryName returned NULL.");
-                    var files = System.IO.Directory.GetFiles(rootDir);
+                    if (string.IsNullOrWhiteSpace(rootDir))
+                    {
+                        rootDir = Environment.CurrentDirectory;
+                        VerboseLog($"    no rootDir found, changed to {rootDir}");
+                        root = Path.Combine(rootDir, root);
+                        VerboseLog($"    adjusted root to {root}");
+                    }
+                    VerboseLog($"    using rootDir {rootDir}");
+                    var files = Directory.GetFiles(rootDir);
                     foreach (var filePath in files.Where((q) => q.StartsWith(root)))
                     {
                         var part = filePath[root.Length..];
-                        var aborted = false;
+                        var skip = false;
                         foreach (var s in splatted.Skip(1).Where((q) => !string.IsNullOrWhiteSpace(q)))
                         {
                             var index = part.IndexOf(s, StringComparison.Ordinal);
@@ -126,19 +154,26 @@ namespace XCG
                             }
                             else
                             {
-                                aborted = true;
+                                skip = true;
                                 break;
                             }
                         }
 
-                        if (!aborted)
+                        if (skip)
                         {
+                            VerboseLog($"    skipping file {filePath}");
+                        }
+                        else
+                        {
+                            VerboseLog($"    found file {filePath}");
                             yield return filePath;
                         }
                     }
+                    Console.WriteLine($"    --done-- with wildcard");
                 }
                 else
                 {
+                    Console.WriteLine($"    --done-- no wildcard");
                     yield return filePathWithPossibleWildcard;
                 }
             }
@@ -158,12 +193,14 @@ namespace XCG
 
             var parser = new Parsing.Parser();
             var parseOk = true;
-            foreach (var s in ResolveWildcards(cliOptions.Input ?? Array.Empty<string>()))
+            var parsedFiles = 0;
+            foreach (var s in ResolveWildcards(cliOptions.Input ?? Array.Empty<string>(), cliOptions.Verbose))
             {
-                var filePath = System.IO.Path.GetFullPath(s);
-                if (System.IO.File.Exists(filePath))
+                parsedFiles++;
+                var filePath = Path.GetFullPath(s);
+                if (File.Exists(filePath))
                 {
-                    var contents = System.IO.File.ReadAllText(s);
+                    var contents = File.ReadAllText(s);
                     var parseResult = parser.Parse(filePath, contents, out var parseNotes);
                     foreach (var it in parseNotes)
                     {
@@ -193,6 +230,16 @@ namespace XCG
                     Console.ResetColor();
                     parseOk = false;
                 }
+            }
+
+            if (parsedFiles is 0)
+            {
+                Console.WriteLine();
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("Aborting as no file was found to parse.");
+                Console.ResetColor();
+                return -1;
             }
 
             if (!parseOk)
@@ -365,8 +412,8 @@ namespace XCG
                     break;
                 case null: return -1;
                 default:
-                    var generatorAbsolute = System.IO.Path.GetFullPath(cliOptions.Generator);
-                    if (System.IO.File.Exists(generatorAbsolute))
+                    var generatorAbsolute = Path.GetFullPath(cliOptions.Generator);
+                    if (File.Exists(generatorAbsolute))
                     {
                         try
                         {
@@ -503,10 +550,17 @@ namespace XCG
             }
 
             // Tell the generator to generate the parser
-            var outputPath = System.IO.Path.GetFullPath(cliOptions.Output ?? Environment.CurrentDirectory);
+            var outputPath = Path.GetFullPath(cliOptions.Output ?? Environment.CurrentDirectory);
             try
             {
                 generator.Generate(parser, outputPath);
+                if (cliOptions.Verbose)
+                {
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.BackgroundColor = ConsoleColor.Green;
+                    Console.WriteLine(@"Done!");
+                    Console.ResetColor();
+                }
                 return 0;
             }
             catch (NotImplementedException ex)

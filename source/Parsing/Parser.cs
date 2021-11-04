@@ -31,7 +31,7 @@ namespace XCG.Parsing
 
         private string Formatted(string msg)
         {
-            return $"[L{_line}|C{_column}] {msg}";
+            return $"[L{_line}|C{_column}] {msg.Replace("\r", "")}";
         }
 
         [PublicAPI]
