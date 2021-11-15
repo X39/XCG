@@ -5,6 +5,21 @@
       "commandLineArgs": "-i leaf.* -g c++ -o D:\\dev\\git\\leaf\\generator-test -v -s namespace:leaf::parsing create-string-tree-spaces:0 debug:false",
       "workingDirectory": "D:\\dev\\git\\leaf\\syntax"
     },
+    "leaf with *.xcg": {
+      "commandName": "Project",
+      "commandLineArgs": "-i *.xcg -g c++ -o D:\\dev\\git\\leaf\\generator-test -v -s namespace:leaf::parsing create-string-tree-spaces:0 debug:false",
+      "workingDirectory": "D:\\dev\\git\\leaf\\syntax"
+    },
+    "leaf with ./*.xcg": {
+      "commandName": "Project",
+      "commandLineArgs": "-i ./*.xcg -g c++ -o D:\\dev\\git\\leaf\\generator-test -v -s namespace:leaf::parsing create-string-tree-spaces:0 debug:false",
+      "workingDirectory": "D:\\dev\\git\\leaf\\syntax"
+    },
+    "leaf with *": {
+      "commandName": "Project",
+      "commandLineArgs": "-i * -g c++ -o D:\\dev\\git\\leaf\\generator-test -v -s namespace:leaf::parsing create-string-tree-spaces:0 debug:false",
+      "workingDirectory": "D:\\dev\\git\\leaf\\syntax"
+    },
     "xcg": {
       "commandName": "Project",
       "commandLineArgs": "-i ..\\..\\..\\..\\examples\\yaoosl.*xcg -o ..\\..\\..\\..\\generator-test\\generator-test -g cpp -s namespace:yaoosl::parsing create-string-tree-spaces:0 debug:false",

@@ -113,6 +113,15 @@ namespace XCG
                 Console.WriteLine(s);
                 Console.ResetColor();
             }
+
+            (string directory, string inputRemaining) GetDirectory(string input)
+            {
+                if (string.IsNullOrWhiteSpace(input))
+                    return (Environment.CurrentDirectory, string.Empty);
+                var fullPath = Path.GetFullPath(input);
+                var root = Path.GetDirectoryName(fullPath) ?? string.Empty;
+                return (root, Path.GetFileName(fullPath));
+            }
             foreach (var filePathWithPossibleWildcard in strings)
             {
                 VerboseLog($"Solving for {filePathWithPossibleWildcard}:");
@@ -120,32 +129,16 @@ namespace XCG
                 {
                     VerboseLog($"    file contains wildcard");
                     var splatted = filePathWithPossibleWildcard.Split('*');
+                    var (rootDirectory, remainingFirstSplatted) = GetDirectory(splatted.First());
+                    splatted[0] = remainingFirstSplatted;
+                    VerboseLog($"    using root {rootDirectory}");
                     VerboseLog($"    With parts: {{ \"{string.Join("\", \"", splatted)}\" }}");
-                    var root = splatted.First();
-                    if (string.IsNullOrWhiteSpace(root))
+                    var files = Directory.GetFiles(rootDirectory);
+                    foreach (var filePath in files)
                     {
-                        root = Environment.CurrentDirectory;
-                        VerboseLog($"    no root found, changed to {root}");
-                    }
-                    VerboseLog($"    using root {root}");
-                    var rootDir = Path.GetDirectoryName(root);
-                    if (rootDir is null)
-                        throw new FatalException(
-                            "Failed to apply wildcard - System.IO.Path.GetDirectoryName returned NULL.");
-                    if (string.IsNullOrWhiteSpace(rootDir))
-                    {
-                        rootDir = Environment.CurrentDirectory;
-                        VerboseLog($"    no rootDir found, changed to {rootDir}");
-                        root = Path.Combine(rootDir, root);
-                        VerboseLog($"    adjusted root to {root}");
-                    }
-                    VerboseLog($"    using rootDir {rootDir}");
-                    var files = Directory.GetFiles(rootDir);
-                    foreach (var filePath in files.Where((q) => q.StartsWith(root)))
-                    {
-                        var part = filePath[root.Length..];
+                        var part = filePath[(rootDirectory.Length + 1)..];
                         var skip = false;
-                        foreach (var s in splatted.Skip(1).Where((q) => !string.IsNullOrWhiteSpace(q)))
+                        foreach (var s in splatted.Where((q) => !string.IsNullOrWhiteSpace(q)))
                         {
                             var index = part.IndexOf(s, StringComparison.Ordinal);
                             if (index != -1)
