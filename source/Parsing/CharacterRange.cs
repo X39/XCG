@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace XCG.Parsing
 {
-    public struct CharacterRange : IStatement, IHasDiagnostics
+    public readonly record struct CharacterRange : IStatement, IHasDiagnostics
     {
-        public char Start { get; set; }
-        public char End { get; set; }
-        public Diagnostic Diagnostics { get; set; }
+        public char Start { get; }
+        public char End { get; }
+        public Diagnostic Diagnostics { get; }
 
         IEnumerable<IStatement> IStatement.Statements => Array.Empty<IStatement>();
 

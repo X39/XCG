@@ -8,7 +8,7 @@ namespace XCG.Parsing.Statements
         public IStatement? Condition { get; set; } = null;
         public List<IStatement> Children { get; set; } = new();
         public bool Negated { get; internal set; }
-        public Diagnostic Diagnostics { get; internal set; }
+        public Diagnostic Diagnostics { get; internal init; }
         IEnumerable<IStatement> IStatement.Statements => Condition is null ? Children : Children.Prepend(Condition);
     }
 }

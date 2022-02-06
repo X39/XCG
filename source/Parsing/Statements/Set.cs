@@ -9,7 +9,7 @@ namespace XCG.Parsing.Statements
         public EMode Mode { get; internal set; }
         public string Property { get; internal set; }
         public string Key { get; internal set; }
-        public Diagnostic Diagnostics { get; internal set; }
+        public Diagnostic Diagnostics { get; internal init; }
         IEnumerable<IStatement> IStatement.Statements => Children;
 
         public Set()

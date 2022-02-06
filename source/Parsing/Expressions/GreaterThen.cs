@@ -6,7 +6,7 @@ namespace XCG.Parsing.Expressions
     {
         public List<IStatement> Children { get; }
         IEnumerable<IStatement> IStatement.Statements => Children;
-        public Diagnostic Diagnostics { get; internal set; }
+        public Diagnostic Diagnostics { get; internal init; }
 
         public GreaterThen(params IStatement[] statements)
         {

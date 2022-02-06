@@ -6,7 +6,7 @@ namespace XCG.Parsing.Statements
     {
         IEnumerable<IStatement> IStatement.Statements => Matches;
         public List<Match> Matches { get; set; } = new();
-        public Diagnostic Diagnostics { get; internal set; }
+        public Diagnostic Diagnostics { get; internal init; }
 
         /// <summary>
         /// Indicates whether this <see cref="Alternatives"/> is supposed

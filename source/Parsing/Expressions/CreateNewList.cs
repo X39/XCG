@@ -6,6 +6,6 @@ namespace XCG.Parsing.Expressions
     public class CreateNewList : IStatement, ICreateNew, IHasDiagnostics
     {
         IEnumerable<IStatement> IStatement.Statements => Array.Empty<IStatement>();
-        public Diagnostic Diagnostics { get; internal set; }
+        public Diagnostic Diagnostics { get; internal init; }
     }
 }

@@ -483,7 +483,7 @@ namespace XCG.Parsing
                 else if (TryMatch("with"))
                 {
                     var res = ReadToEndOfLine();
-                    message.Text = res;
+                    message.Text = res.Trim();
                 }
                 else if (TryMatch("level"))
                 {

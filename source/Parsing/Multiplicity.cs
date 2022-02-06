@@ -15,7 +15,7 @@
 
         public bool IsOnce => To - From == 1;
 
-        public Diagnostic Diagnostics { get; internal set; }
+        public Diagnostic Diagnostics { get; internal init; }
 
         public Multiplicity(int fromInclusive, int toExclusive, Diagnostic diagnostic)
         {

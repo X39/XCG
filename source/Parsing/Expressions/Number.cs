@@ -7,7 +7,7 @@ namespace XCG.Parsing.Expressions
     {
         public double Value { get; }
         IEnumerable<IStatement> IStatement.Statements => Array.Empty<IStatement>();
-        public Diagnostic Diagnostics { get; internal set; }
+        public Diagnostic Diagnostics { get; internal init; }
         public Number(double number)
         {
             Value = number;

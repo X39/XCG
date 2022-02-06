@@ -8,6 +8,6 @@ namespace XCG.Parsing
         public string? Start { get; set; }
         public string? End { get; set; }
         IEnumerable<IStatement> IStatement.Statements => Array.Empty<IStatement>();
-        public Diagnostic Diagnostics { get; internal set; }
+        public Diagnostic Diagnostics { get; internal init; }
     }
 }

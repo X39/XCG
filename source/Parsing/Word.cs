@@ -6,7 +6,7 @@ namespace XCG.Parsing
     public class Word : IStatement, IHasDiagnostics
     {
         public string Text { get; set; }
-        public Diagnostic Diagnostics { get; internal set; }
+        public Diagnostic Diagnostics { get; internal init; }
 
         IEnumerable<IStatement> IStatement.Statements => Array.Empty<IStatement>();
 

@@ -5,9 +5,9 @@ namespace XCG.Parsing.TokenStatements
     public class Require : ITokenStatement, IHasDiagnostics
     {
         public Multiplicity Range { get; set; }
-        public List<IStatement> Parts { get; set; }
+        public List<IStatement> Parts { get; init; }
         public bool Negated { get; set; }
-        public Diagnostic Diagnostics { get; internal set; }
+        public Diagnostic Diagnostics { get; internal init; }
         IEnumerable<IStatement> IStatement.Statements => Parts;
 
         public Require()
