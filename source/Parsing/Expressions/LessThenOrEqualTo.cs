@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
 
-namespace XCG.Parsing.Expressions
-{
-    public class LessThenOrEqualTo : IStatement, IHasDiagnostics
-    {
-        public List<IStatement> Children { get; }
-        IEnumerable<IStatement> IStatement.Statements => Children;
-        public Diagnostic Diagnostics { get; internal init; }
+namespace XCG.Parsing.Expressions;
 
-        public LessThenOrEqualTo(params IStatement[] statements)
-        {
-            Children = new List<IStatement>(statements);
-        }
+public class LessThenOrEqualTo : IStatement, IHasDiagnostics
+{
+    public List<IStatement> Children { get; }
+    IEnumerable<IStatement> IStatement.Statements => Children;
+    public Diagnostic Diagnostics { get; internal init; }
+
+    public LessThenOrEqualTo(params IStatement[] statements)
+    {
+        Children = new List<IStatement>(statements);
     }
 }

@@ -1,8 +1,7 @@
-﻿namespace XCG.Parsing
+﻿namespace XCG.Parsing;
+
+public struct ParseNote
 {
-    public struct ParseNote
-    {
-        public ESeverity Severity { get; init; }
-        public string Message { get; init; }
-    }
+    public ESeverity Severity { get; init; }
+    public string Message { get; init; }
 }

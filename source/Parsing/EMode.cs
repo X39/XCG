@@ -1,14 +1,13 @@
-﻿namespace XCG.Parsing
+﻿namespace XCG.Parsing;
+
+public enum EMode
 {
-    public enum EMode
-    {
-        GetProperty,
-        SetProperty,
-        GetMapProperty,
-        SetMapProperty,
-        GetListIndex,
-        GetListPop,
-        SetListIndex,
-        SetListPush
-    }
+    GetProperty,
+    SetProperty,
+    GetMapProperty,
+    SetMapProperty,
+    GetListIndex,
+    GetListPop,
+    SetListIndex,
+    SetListPush
 }

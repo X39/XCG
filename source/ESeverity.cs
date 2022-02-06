@@ -1,9 +1,8 @@
-﻿namespace XCG
+﻿namespace XCG;
+
+public enum ESeverity
 {
-    public enum ESeverity
-    {
-        Error,
-        Warning,
-        Info
-    }
+    Error,
+    Warning,
+    Info
 }

@@ -1,6 +1,5 @@
-﻿namespace XCG.Parsing.Expressions
+﻿namespace XCG.Parsing.Expressions;
+
+internal interface ICreateNew
 {
-    internal interface ICreateNew
-    {
-    }
 }

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace XCG.Parsing
-{
-    public struct AnyCharacter : IStatement, IHasDiagnostics
-    {
-        public Diagnostic Diagnostics { get; internal init; }
+namespace XCG.Parsing;
 
-        IEnumerable<IStatement> IStatement.Statements => Array.Empty<IStatement>();
-        public override string ToString() => "any";
-    }
+public struct AnyCharacter : IStatement, IHasDiagnostics
+{
+    public Diagnostic Diagnostics { get; internal init; }
+
+    IEnumerable<IStatement> IStatement.Statements => Array.Empty<IStatement>();
+    public override string ToString() => "any";
 }

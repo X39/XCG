@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace XCG.Parsing
+namespace XCG.Parsing;
+
+public readonly record struct CharacterRange : IStatement, IHasDiagnostics
 {
-    public readonly record struct CharacterRange : IStatement, IHasDiagnostics
+    public char Start { get; }
+    public char End { get; }
+    public Diagnostic Diagnostics { get; }
+
+    IEnumerable<IStatement> IStatement.Statements => Array.Empty<IStatement>();
+
+    public CharacterRange(char start, char end, Diagnostic diagnostic)
     {
-        public char Start { get; }
-        public char End { get; }
-        public Diagnostic Diagnostics { get; }
-
-        IEnumerable<IStatement> IStatement.Statements => Array.Empty<IStatement>();
-
-        public CharacterRange(char start, char end, Diagnostic diagnostic)
-        {
-            Start = start;
-            End = end;
-            Diagnostics = diagnostic;
-        }
-        public override string ToString() => $@"range: `{Start}-{End}`";
+        Start = start;
+        End = end;
+        Diagnostics = diagnostic;
     }
+    public override string ToString() => $@"range: `{Start}-{End}`";
 }

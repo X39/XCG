@@ -1,6 +1,5 @@
-﻿namespace XCG.Parsing
+﻿namespace XCG.Parsing;
+
+public interface ITokenStatement : IStatement
 {
-    public interface ITokenStatement : IStatement
-    {
-    }
 }

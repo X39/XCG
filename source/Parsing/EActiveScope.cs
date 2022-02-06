@@ -1,11 +1,10 @@
 ﻿// ReSharper disable InconsistentNaming
-namespace XCG.Parsing
+namespace XCG.Parsing;
+
+public enum EActiveScope
 {
-    public enum EActiveScope
-    {
-        auto,
-        global,
-        local,
-        capture
-    }
+    auto,
+    global,
+    local,
+    capture
 }

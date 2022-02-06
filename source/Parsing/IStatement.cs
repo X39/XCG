@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace XCG.Parsing
+namespace XCG.Parsing;
+
+public interface IStatement
 {
-    public interface IStatement
-    {
-        IEnumerable<IStatement> Statements { get; }
-    }
+    IEnumerable<IStatement> Statements { get; }
 }

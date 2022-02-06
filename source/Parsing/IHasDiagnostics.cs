@@ -1,7 +1,6 @@
-﻿namespace XCG.Parsing
+﻿namespace XCG.Parsing;
+
+public interface IHasDiagnostics
 {
-    public interface IHasDiagnostics
-    {
-        Diagnostic Diagnostics { get; }
-    }
+    Diagnostic Diagnostics { get; }
 }

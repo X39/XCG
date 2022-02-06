@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace XCG.Validation
+namespace XCG.Validation;
+
+internal class Rule : IRule
 {
-    internal class Rule : IRule
-    {
-        public string Realm { get; init; } = string.Empty;
+    public string Realm { get; init; } = string.Empty;
 
-        public int Code { get; init; }
+    public int Code { get; init; }
 
-        public ESeverity Severity { get; init; }
+    public ESeverity Severity { get; init; }
 
-        public Func<Parsing.Parser, IEnumerable<Hint>> ValidationFunc { get; init; } = (_) => Array.Empty<Hint>();
+    public Func<Parsing.Parser, IEnumerable<Hint>> ValidationFunc { get; init; } = (_) => Array.Empty<Hint>();
 
-        public IEnumerable<Hint> IsValid(Parsing.Parser parser) => ValidationFunc(parser);
-    }
+    public IEnumerable<Hint> IsValid(Parsing.Parser parser) => ValidationFunc(parser);
 }

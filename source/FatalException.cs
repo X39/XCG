@@ -1,25 +1,24 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace XCG
+namespace XCG;
+
+[Serializable]
+internal class FatalException : Exception
 {
-    [Serializable]
-    internal class FatalException : Exception
+    public FatalException()
     {
-        public FatalException()
-        {
-        }
+    }
 
-        public FatalException(string? message) : base(message)
-        {
-        }
+    public FatalException(string? message) : base(message)
+    {
+    }
 
-        public FatalException(string? message, Exception? innerException) : base(message, innerException)
-        {
-        }
+    public FatalException(string? message, Exception? innerException) : base(message, innerException)
+    {
+    }
 
-        protected FatalException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
+    protected FatalException(SerializationInfo info, StreamingContext context) : base(info, context)
+    {
     }
 }

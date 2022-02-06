@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace XCG.Parsing
+namespace XCG.Parsing;
+
+internal class EndOfFile : IStatement
 {
-    internal class EndOfFile : IStatement
-    {
-        IEnumerable<IStatement> IStatement.Statements => Array.Empty<IStatement>();
-    }
+    IEnumerable<IStatement> IStatement.Statements => Array.Empty<IStatement>();
 }
