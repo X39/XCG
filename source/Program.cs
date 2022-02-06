@@ -410,6 +410,7 @@ namespace XCG
                     {
                         try
                         {
+                            // ToDo: Rewrite to utilize custom AppDomain.
                             var reflectionOnlyAssembly =
                                 System.Reflection.Assembly.ReflectionOnlyLoadFrom(generatorAbsolute);
                             if (reflectionOnlyAssembly.GetExportedTypes()
