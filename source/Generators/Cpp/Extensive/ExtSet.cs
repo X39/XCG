@@ -40,7 +40,7 @@ namespace XCG.Generators.Cpp.Extensive
                                 scope.Add(new FullBody { $"{Constants.ClassInstanceVariable}->{set.Property.ToCppName()} = false;" });
                                 break;
                             case Parsing.Expressions.Character @char:
-                                scope.Add(new FullBody { $"{Constants.ClassInstanceVariable}->{set.Property.ToCppName()} = '{@char.Value}';" });
+                                scope.Add(new FullBody { $"{Constants.ClassInstanceVariable}->{set.Property.ToCppName()} = '{@char.Value.Escape()}';" });
                                 break;
                             case Parsing.Expressions.CreateNewCharacter:
                                 scope.Add(new FullBody { $"{Constants.ClassInstanceVariable}->{set.Property.ToCppName()} = '\0';" });
@@ -68,7 +68,7 @@ namespace XCG.Generators.Cpp.Extensive
                                 scope.Add(new FullBody { $"this->{set.Property.ToCppName()} = false;" });
                                 break;
                             case Parsing.Expressions.Character @char:
-                                scope.Add(new FullBody { $"this->{set.Property.ToCppName()} = '{@char.Value}';" });
+                                scope.Add(new FullBody { $"this->{set.Property.ToCppName()} = '{@char.Value.Escape()}';" });
                                 break;
                             case Parsing.Expressions.CreateNewCharacter:
                                 scope.Add(new FullBody { $"this->{set.Property.ToCppName()} = '\0';" });
@@ -97,7 +97,7 @@ namespace XCG.Generators.Cpp.Extensive
                                 scope.Add(new FullBody { $"{Constants.StateInstanceVariable}.{set.Property.ToCppName()} = false;" });
                                 break;
                             case Parsing.Expressions.Character @char:
-                                scope.Add(new FullBody { $"{Constants.StateInstanceVariable}.{set.Property.ToCppName()} = '{@char.Value}';" });
+                                scope.Add(new FullBody { $"{Constants.StateInstanceVariable}.{set.Property.ToCppName()} = '{@char.Value.Escape()}';" });
                                 break;
                             case Parsing.Expressions.CreateNewCharacter:
                                 scope.Add(new FullBody { $"{Constants.StateInstanceVariable}.{set.Property.ToCppName()} = '\0';" });

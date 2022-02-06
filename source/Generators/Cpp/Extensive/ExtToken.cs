@@ -67,7 +67,7 @@ namespace XCG.Generators.Cpp.Extensive
                                     });
                                     break;
                                 case Parsing.CharacterRange range:
-                                    localLoop.Add(new IfPart(isFirst, $@"{(require.Negated ? "!" : string.Empty)}('{range.Start}' <= current() && current() <= '{range.End}')")
+                                    localLoop.Add(new IfPart(isFirst, $@"{(require.Negated ? "!" : string.Empty)}('{range.Start.Escape()}' <= current() && current() <= '{range.End.Escape()}')")
                                     {
                                         $@"{countVariable}++;",
                                         $@"next();",
@@ -135,13 +135,13 @@ namespace XCG.Generators.Cpp.Extensive
                                     break;
                                 }
                                 case Parsing.Word word:
-                                    localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"m_offset >= 1 && m_contents[m_offset - 1] {(!backtrack.Negated ? "!" : "=")}= '{word.Text.First()}'")
+                                    localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"m_offset >= 1 && m_contents[m_offset - 1] {(!backtrack.Negated ? "!" : "=")}= '{word.Text.First().Escape()}'")
                                     {
                                         $@"break;"
                                     });
                                     break;
                                 case Parsing.CharacterRange range:
-                                    localLoop.Add(new IfPart(isFirst, $@"'m_offset >= 1 && {(!backtrack.Negated ? "!" : string.Empty)}({range.Start}' <= m_contents[m_offset - 1] && m_contents[m_offset - 1] <= '{range.End}')")
+                                    localLoop.Add(new IfPart(isFirst, $@"'m_offset >= 1 && {(!backtrack.Negated ? "!" : string.Empty)}({range.Start.Escape()}' <= m_contents[m_offset - 1] && m_contents[m_offset - 1] <= '{range.End.Escape()}')")
                                     {
                                         $@"break;"
                                     });
