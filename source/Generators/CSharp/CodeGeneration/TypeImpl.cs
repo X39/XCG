@@ -30,6 +30,6 @@ internal readonly struct TypeImpl : IEquatable<TypeImpl>
 
     public string ToString(CSharpOptions cSharpOptions)
     {
-        return TypeString ?? Type.ToCppString(cSharpOptions);
+        return TypeString ?? Type.ToCSharpString(cSharpOptions);
     }
 }

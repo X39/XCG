@@ -29,7 +29,7 @@ internal enum EType
 }
 internal static class ETypeExtensions
 {
-    internal static string ToCppString(this EType type, CSharpOptions cSharpOptions) =>
+    internal static string ToCSharpString(this EType type, CSharpOptions cSharpOptions) =>
         type switch
         {
             EType.None => string.Empty,

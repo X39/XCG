@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using XCG.Generators.CSharp.CodeGeneration;
 
 namespace XCG.Generators.CSharp.CstParsing;
 
@@ -43,8 +44,8 @@ internal static class ExtMatch
             EType.Boolean,
             cSharpOptions.ToUnique(string.Concat(cSharpOptions.MethodsPrefix, matchName, "_")),
             new ArgImpl {Name = Constants.IsCanVariable, Type = EType.Boolean},
-            new ArgImpl {Name = Constants.ClassInstanceVariable, TypeString = typeName, ReferenceCount = 1},
-            new ArgImpl {Name = Constants.StateInstanceVariable, TypeString = stateTypeName, ReferenceCount = 1},
+            new ArgImpl {Name = Constants.ClassInstanceVariable, TypeString = typeName},
+            new ArgImpl {Name = Constants.StateInstanceVariable, TypeString = stateTypeName},
             new ArgImpl {Name = Constants.DepthVariable, Type = EType.SizeT}
         )
         {
@@ -131,14 +132,14 @@ internal static class ExtMatch
                     // Match the different possible referred things into proper conditions
                     Parsing.Token token => string.Concat("create_token(", token.GetMethodName(),
                         $@"({Constants.DepthVariable} + 1).value(), ", cSharpOptions.TokenEnumName, "::",
-                        token.GetCppEnumName(), ")"),
+                        token.GetCSharpEnumName(), ")"),
                     Parsing.Production production => string.Concat(production.ToCppMatchMethodName(cSharpOptions),
                         $@"({Constants.DepthVariable} + 1)"),
                     Parsing.LeftRecursive leftRecursive => string.Concat(
                         leftRecursive.ToCppMatchMethodName(cSharpOptions), $@"({Constants.DepthVariable} + 1)"),
                     _ => throw new FatalException()
                 };
-                methodDefinition.Add(new VariableDefinition(EType.Auto, valueVariable, call));
+                methodDefinition.Add(new VariableDefinition(EType.Var, valueVariable, call));
                 methodDefinition.Add(captureDefinition.IsSingleHit
                     ? $"{Constants.ClassInstanceVariable}->{reference.CaptureName?.ToCppName() ?? throw new FatalException()} = {valueVariable};"
                     : $"{Constants.ClassInstanceVariable}->{reference.CaptureName?.ToCppName() ?? throw new FatalException()}.push_back({valueVariable});");

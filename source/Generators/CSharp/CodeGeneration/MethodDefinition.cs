@@ -98,7 +98,7 @@ internal class MethodDefinition : ICSharpContainerBase, IHasName
         writer.Write(whitespace);
         if (ReturnTypeString is null)
         {
-            writer.Write(ReturnType.ToCppString(cSharpOptions));
+            writer.Write(ReturnType.ToCSharpString(cSharpOptions));
             writer.Write(" ");
         }
         else if (!string.IsNullOrWhiteSpace(ReturnTypeString))

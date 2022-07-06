@@ -1,4 +1,6 @@
-﻿namespace XCG.Generators.CSharp.CstParsing;
+﻿using XCG.Generators.CSharp.CodeGeneration;
+
+namespace XCG.Generators.CSharp.CstParsing;
 
 internal static class ExtWhile
 {
@@ -28,8 +30,8 @@ internal static class ExtWhile
             EType.Boolean,
             cSharpOptions.ToUnique(string.Concat(cSharpOptions.MethodsPrefix, whileName, "_")),
             new ArgImpl {Name = Constants.IsCanVariable, Type = EType.Boolean},
-            new ArgImpl {Name = Constants.ClassInstanceVariable, TypeString = typeName, ReferenceCount = 1},
-            new ArgImpl {Name = Constants.StateInstanceVariable, TypeString = stateTypeName, ReferenceCount = 1},
+            new ArgImpl {Name = Constants.ClassInstanceVariable, TypeString = typeName},
+            new ArgImpl {Name = Constants.StateInstanceVariable, TypeString = stateTypeName},
             new ArgImpl {Name = Constants.DepthVariable, Type = EType.SizeT}
         )
         {

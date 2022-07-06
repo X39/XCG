@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using XCG.Generators.CSharp.CodeGeneration;
 
 namespace XCG.Generators.CSharp;
 
@@ -12,11 +13,9 @@ public class CSharpOptions
     [CSharpOption("token-enum", Nullable = false)]
     public string TokenEnumName { get; set; } = "tok";
 
-    [CSharpOption("file-header", Nullable = false)]
-    public string HeaderFileName { get; set; } = "parser.hpp";
 
     [CSharpOption("file-impl", Nullable = false)]
-    public string ImplementationFileName { get; set; } = "parser.cpp";
+    public string ImplementationFileName { get; set; } = "parser.cs";
 
     [CSharpOption("namespace", Nullable = true)]
     public string? NamespaceName { get; set; } = null;

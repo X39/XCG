@@ -31,18 +31,18 @@ production expC
         match @[value]integer
 
 left-recursive expB
-	match @[left]expB "/" @[right]expC
-		set capture op '/'
-	match @[left]expB "*" @[right]expC
-		set capture op '*'
-	match @[left]expC
+    match @[left]expB "/" @[right]expC
+        set capture op '/'
+    match @[left]expB "*" @[right]expC
+        set capture op '*'
+    match @[left]expC
 
 left-recursive expA
-	match @[left]expA "+" @[right]expB
-		set capture op '+'
-	match @[left]expA "-" @[right]expB
-		set capture op '-'
-	match @[left]expB
+    match @[left]expA "+" @[right]expB
+        set capture op '+'
+    match @[left]expA "-" @[right]expB
+        set capture op '-'
+    match @[left]expB
 
 production main
     match @[root]expA

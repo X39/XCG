@@ -13,6 +13,6 @@ internal readonly struct ArgImpl : IHasName
 
     public string ToString(CSharpOptions cSharpOptions)
     {
-        return $"public {(TypeString ?? Type.ToCppString(cSharpOptions))} {Name}";
+        return $"public {(TypeString ?? Type.ToCSharpString(cSharpOptions))} {Name}";
     }
 }

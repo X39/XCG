@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using XCG.Generators.CSharp.CodeGeneration;
 
 namespace XCG.Generators.CSharp.CstParsing;
 
@@ -22,7 +23,7 @@ internal static class ExtSet
             }
         };
     }
-    public static IEnumerable<ICppPart> ToParts(this Parsing.Statements.Set set, CSharpOptions cSharpOptions)
+    public static IEnumerable<ICSharpPart> ToParts(this Parsing.Statements.Set set, CSharpOptions cSharpOptions)
     {
         yield return new FullBody { $"if (!{Constants.IsCanVariable})" };
         var scope = new ScopePart();

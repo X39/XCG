@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using XCG.Generators.CSharp.CodeGeneration;
 
 namespace XCG.Generators.CSharp.CstParsing;
 
@@ -9,15 +10,15 @@ internal static class ExtToken
     {
         return string.Concat("token_", token.Identifier.ToCppName().ToLower());
     }
-    public static string GetCppEnumName(this Parsing.Token token)
+    public static string GetCSharpEnumName(this Parsing.Token token)
     {
         return token.Identifier.ToCppName().ToUpper();
     }
-    public static string ToCppTypeName(this Parsing.Token token, CSharpOptions cSharpOptions, bool full)
+    public static string ToCSharpTypeName(this Parsing.Token token, CSharpOptions cSharpOptions, bool full)
     {
         return string.Concat(full ? cSharpOptions.RootClassName : string.Empty, cSharpOptions.TypePrefix, cSharpOptions.TokenName);
     }
-    public static IEnumerable<ICppPart> ToParts(this Parsing.Token token, CSharpOptions cSharpOptions)
+    public static IEnumerable<ICSharpPart> ToParts(this Parsing.Token token, CSharpOptions cSharpOptions)
     {
         var localsCount = 0;
         string ToUnique(string str) => string.Concat(str, (++localsCount).ToString());
@@ -46,8 +47,8 @@ internal static class ExtToken
                             case Parsing.Word word when word.Text.Length > 1:
                             {
                                 var wordHolderVariable = ToUnique("str");
-                                localLoop.Add(new VariableDefinition(new TypeImpl { Type = EType.Char, PointerCount = 1, IsConst = true }, wordHolderVariable, $@"""{string.Concat(word.Text.Select((c) => c.Escape()))}"""));
-                                localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"m_contents.length() - m_offset >= {word.Text.Length} && {(require.Negated ? "!" : string.Empty)}std::equal(m_contents.begin() + m_offset, m_contents.begin() + m_offset + {word.Text.Length}, {wordHolderVariable}, {wordHolderVariable} + {word.Text.Length})")
+                                localLoop.Add(new VariableDefinition(new TypeImpl { Type = EType.Char }, wordHolderVariable, $@"""{string.Concat(word.Text.Select((c) => c.Escape()))}"""));
+                                localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"_contents.length() - _offset >= {word.Text.Length} && {(require.Negated ? "!" : string.Empty)}std::equal(_contents.begin() + _offset, _contents.begin() + _offset + {word.Text.Length}, {wordHolderVariable}, {wordHolderVariable} + {word.Text.Length})")
                                 {
                                     $@"{countVariable}++;",
                                     $@"for (size_t i = 0; i < {word.Text.Length}; i++)",
@@ -127,21 +128,21 @@ internal static class ExtToken
                             case Parsing.Word word when word.Text.Length > 1:
                             {
                                 var wordHolderVariable = ToUnique("str");
-                                localLoop.Add(new VariableDefinition(new TypeImpl { Type = EType.Char, PointerCount = 1, IsConst = true }, wordHolderVariable, $@"""{word.Text.Replace("\"", "\\\"")}"""));
-                                localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"m_offset >= {word.Text.Length} && {(!backtrack.Negated ? "!" : string.Empty)}std::equal(m_contents.begin() + m_offset - {word.Text.Length}, m_contents.begin() + m_offset, l{localsCount2}, l{localsCount2} + {word.Text.Length})")
+                                localLoop.Add(new VariableDefinition(new TypeImpl { Type = EType.Char }, wordHolderVariable, $@"""{word.Text.Replace("\"", "\\\"")}"""));
+                                localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"_offset >= {word.Text.Length} && {(!backtrack.Negated ? "!" : string.Empty)}std::equal(_contents.begin() + _offset - {word.Text.Length}, _contents.begin() + _offset, l{localsCount2}, l{localsCount2} + {word.Text.Length})")
                                 {
                                     $@"break;"
                                 });
                                 break;
                             }
                             case Parsing.Word word:
-                                localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"m_offset >= 1 && m_contents[m_offset - 1] {(!backtrack.Negated ? "!" : "=")}= '{word.Text.First().Escape()}'")
+                                localLoop.Add(new IfPart(IfPart.EIfScope.If, $@"_offset >= 1 && _contents[_offset - 1] {(!backtrack.Negated ? "!" : "=")}= '{word.Text.First().Escape()}'")
                                 {
                                     $@"break;"
                                 });
                                 break;
                             case Parsing.CharacterRange range:
-                                localLoop.Add(new IfPart(isFirst, $@"'m_offset >= 1 && {(!backtrack.Negated ? "!" : string.Empty)}({range.Start.Escape()}' <= m_contents[m_offset - 1] && m_contents[m_offset - 1] <= '{range.End.Escape()}')")
+                                localLoop.Add(new IfPart(isFirst, $@"'_offset >= 1 && {(!backtrack.Negated ? "!" : string.Empty)}({range.Start.Escape()}' <= _contents[_offset - 1] && _contents[_offset - 1] <= '{range.End.Escape()}')")
                                 {
                                     $@"break;"
                                 });
@@ -167,7 +168,7 @@ internal static class ExtToken
         }
 
         var resultVariable = cSharpOptions.ToUnique("resultVariable");
-        methodDefinition.Add($@"auto {resultVariable} = m_offset - {resettable}.m_offset;");
+        methodDefinition.Add($@"auto {resultVariable} = _offset - {resettable}._offset;");
         methodDefinition.Add($@"{resettable}.reset();");
         methodDefinition.Add(new DebugPart { $@"trace((std::string(""Returning "") + std::to_string({resultVariable}) + "" on {token.Identifier}"").c_str(), {Constants.DepthVariable});" });
         methodDefinition.Add(new ReturnPart(resultVariable));

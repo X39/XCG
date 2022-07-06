@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using XCG.Generators.CSharp.CodeGeneration;
 
 namespace XCG.Generators.CSharp.CstParsing;
 
@@ -21,7 +22,7 @@ internal static class ExtLeftRecursive
     {
         return string.Concat(cSharpOptions.MethodsPrefix, "lr_match_", leftRecursive.Identifier.ToCppName());
     }
-    public static IEnumerable<ICppPart> ToParts(this Parsing.LeftRecursive leftRecursive, CSharpOptions cSharpOptions)
+    public static IEnumerable<ICSharpPart> ToParts(this Parsing.LeftRecursive leftRecursive, CSharpOptions cSharpOptions)
     {
         var localsCount = 0;
         string ToUnique(string str) => string.Concat(str, (++localsCount).ToString());
@@ -38,7 +39,7 @@ internal static class ExtLeftRecursive
                 {
                     yield return yielded;
                 }
-                yield return cSharpOptions.FromCacheOrCreate(match, (_) => match.CreateMethodDefinition(cSharpOptions, 0, cppTypeName.ToCppSharedPtrType(), cppStateTypeName));
+                yield return cSharpOptions.FromCacheOrCreate(match, (_) => match.CreateMethodDefinition(cSharpOptions, 0, cppTypeName, cppStateTypeName));
             }
             else
             {
@@ -46,7 +47,7 @@ internal static class ExtLeftRecursive
                 {
                     yield return yielded;
                 }
-                yield return cSharpOptions.FromCacheOrCreate(match, (_) => match.CreateMethodDefinition(cSharpOptions, 1, cppTypeName.ToCppSharedPtrType(), cppStateTypeName));
+                yield return cSharpOptions.FromCacheOrCreate(match, (_) => match.CreateMethodDefinition(cSharpOptions, 1, cppTypeName, cppStateTypeName));
             }
         }
 
@@ -62,7 +63,7 @@ internal static class ExtLeftRecursive
             new ArgImpl { Name = Constants.DepthVariable, Type = EType.SizeT })
         {
             $@"resettable {resettable}(*this);",
-            new VariableDefinition(new TypeImpl {  TypeString = leftRecursive.ToCppTypeName(cSharpOptions, true).ToCppSharedPtrType() }, Constants.ClassInstanceFakeVariable),
+            new VariableDefinition(new TypeImpl {  TypeString = leftRecursive.ToCppTypeName(cSharpOptions, true) }, Constants.ClassInstanceFakeVariable),
             new VariableDefinition(new TypeImpl {  TypeString = leftRecursive.ToCppStateTypeName(cSharpOptions, false) }, Constants.StateInstanceVariable),
             new IfPart(IfPart.EIfScope.If, $@"!{cSharpOptions.FromCache(lastMatch).Name}(true, {Constants.ClassInstanceFakeVariable}, {Constants.StateInstanceVariable}, {Constants.DepthVariable} + 1)")
             {
@@ -94,11 +95,11 @@ internal static class ExtLeftRecursive
         };
         var isFirstVariable = ToUnique($@"is_first");
         var tmpActualVariable = ToUnique($@"tmp_{Constants.ClassInstanceVariable}");
-        var matchMethodDefinition = new MethodDefinition(leftRecursive.ToCppTypeName(cSharpOptions, true).ToCppSharedPtrType(), leftRecursive.ToCppMatchMethodName(cSharpOptions),
+        var matchMethodDefinition = new MethodDefinition(leftRecursive.ToCppTypeName(cSharpOptions, true), leftRecursive.ToCppMatchMethodName(cSharpOptions),
             new ArgImpl { Name = Constants.DepthVariable, Type = EType.SizeT })
         {
-            new VariableDefinition(EType.Auto, Constants.ClassInstanceVariable, leftRecursive.ToCppTypeName(cSharpOptions, true).ToCppSharedPtrMake()),
-            new VariableDefinition(new TypeImpl {  TypeString = leftRecursive.ToCppTypeName(cSharpOptions, true).ToCppSharedPtrType() }, Constants.ClassInstanceFakeVariable),
+            new VariableDefinition(EType.Var, Constants.ClassInstanceVariable, leftRecursive.ToCppTypeName(cSharpOptions, true)),
+            new VariableDefinition(new TypeImpl {  TypeString = leftRecursive.ToCppTypeName(cSharpOptions, true) }, Constants.ClassInstanceFakeVariable),
             new VariableDefinition(new TypeImpl {  TypeString = leftRecursive.ToCppStateTypeName(cSharpOptions, false) }, Constants.StateInstanceVariable),
             new IfPart(IfPart.EIfScope.If, $@"!{cSharpOptions.FromCache(lastMatch).Name}(false, {Constants.ClassInstanceVariable}, {Constants.StateInstanceVariable}, {Constants.DepthVariable} + 1)")
             {
@@ -117,8 +118,8 @@ internal static class ExtLeftRecursive
                 $@"{resettable}.reset();",
                 new IfPart(IfPart.EIfScope.If, $"!{isFirstVariable}")
                 {
-                    new VariableDefinition(EType.Auto, tmpActualVariable, Constants.ClassInstanceVariable),
-                    $@"{Constants.ClassInstanceVariable} = {leftRecursive.ToCppTypeName(cSharpOptions, true).ToCppSharedPtrMake()};",
+                    new VariableDefinition(EType.Var, tmpActualVariable, Constants.ClassInstanceVariable),
+                    $@"{Constants.ClassInstanceVariable} = {leftRecursive.ToCppTypeName(cSharpOptions, true)};",
                     $@"{Constants.ClassInstanceVariable}->{(lastMatch.Matches.First() as Parsing.Reference)?.CaptureName ?? throw new FatalException()} = {tmpActualVariable};",
                 },
                 $"{isFirstVariable} = false;",

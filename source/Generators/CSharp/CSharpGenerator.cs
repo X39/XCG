@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using XCG.Generators.CSharp.CodeGeneration;
+using XCG.Generators.CSharp.CstParsing;
 using XCG.Parsing;
 using XCG.Validation;
 
@@ -16,22 +18,21 @@ public class CSharpGenerator : IGenerator
         var mainProduction = parser.Productions.First((q) => q.Identifier == "main");
         var instanceClass = new ClassDefinition(string.Concat(Options.TypePrefix, Options.ClassName))
         {
-            PublicParts = new List<ICppPart>
+            PublicParts = new List<ICSharpPart>
             {
                 new MethodDefinition(string.Empty, string.Concat(Options.TypePrefix, Options.ClassName),
-                    " : m_contents(contents), m_file(file), m_line(1), m_column(1), m_offset(0)",
+                    " : _contents(contents), _file(file), _line(1), _column(1), _offset(0)",
                     new ArgImpl {Type = EType.StringView, Name = "contents"},
                     new ArgImpl {Type = EType.String, Name = "file"})
                 {
-                    HeaderOnly = true
                 },
                 new EnumDefinition(string.Concat(Options.TypePrefix, Options.TokenEnumName))
                 {
-                    Entries = parser.Tokens.Select<Token, string>((q) => q.GetCppEnumName()).ToList()
+                    Entries = parser.Tokens.Select<Token, string>((q) => q.GetCSharpEnumName()).ToList()
                 },
                 new ClassDefinition(string.Concat(Options.TypePrefix, Options.TokenName))
                 {
-                    PublicParts = new List<ICppPart>
+                    PublicParts = new List<ICSharpPart>
                     {
                         new FieldDefinition(new ArgImpl
                             {Name = "type", TypeString = string.Concat(Options.TypePrefix, Options.TokenEnumName)}),
@@ -52,10 +53,10 @@ public class CSharpGenerator : IGenerator
                     })
                 {
                     $@"{string.Concat(Options.TypePrefix, Options.TokenName)} t;",
-                    $@"t.file = m_file;",
-                    $@"t.line = m_line;",
-                    $@"t.column = m_column;",
-                    $@"t.offset = m_offset;",
+                    $@"t.file = _file;",
+                    $@"t.line = _line;",
+                    $@"t.column = _column;",
+                    $@"t.offset = _offset;",
                     $@"t.length = length;",
                     $@"t.type = type;",
                     $@"for (auto i = 0; i < length; i++)",
@@ -65,22 +66,22 @@ public class CSharpGenerator : IGenerator
                     $@"return t;",
                 }
             },
-            ProtectedParts = new List<ICppPart>
+            ProtectedParts = new List<ICSharpPart>
             {
-                new FieldDefinition(new ArgImpl {Name = "m_contents", Type = EType.StringView}),
-                new FieldDefinition(new ArgImpl {Name = "m_file", Type = EType.String}),
-                new FieldDefinition(new ArgImpl {Name = "m_line", Type = EType.SizeT}),
-                new FieldDefinition(new ArgImpl {Name = "m_column", Type = EType.SizeT}),
-                new FieldDefinition(new ArgImpl {Name = "m_offset", Type = EType.SizeT}),
+                new FieldDefinition(new ArgImpl {Name = "_contents", Type = EType.StringView}),
+                new FieldDefinition(new ArgImpl {Name = "_file", Type = EType.String}),
+                new FieldDefinition(new ArgImpl {Name = "_line", Type = EType.SizeT}),
+                new FieldDefinition(new ArgImpl {Name = "_column", Type = EType.SizeT}),
+                new FieldDefinition(new ArgImpl {Name = "_offset", Type = EType.SizeT}),
                 new MethodDefinition(EType.Void, "report", new ArgImpl {Name = "message", Type = EType.StringView},
                     new ArgImpl {Name = "depth", Type = EType.SizeT})
                 {
                     IsVirtual = true,
-                    Parts = new List<ICppPart>
+                    Parts = new List<ICSharpPart>
                     {
                         new FullBody
                         {
-                            $@"std::cout << ""[L"" << m_line << ""]"" << ""[C"" << m_column << ""] "" << message << ""\n"";"
+                            $@"std::cout << ""[L"" << _line << ""]"" << ""[C"" << _column << ""] "" << message << ""\n"";"
                         }
                     }
                 },
@@ -91,74 +92,74 @@ public class CSharpGenerator : IGenerator
                         new ArgImpl {Name = "depth", Type = EType.SizeT})
                     {
                         IsVirtual = true,
-                        Parts = new List<ICppPart>
+                        Parts = new List<ICSharpPart>
                         {
                             new FullBody
                             {
-                                $@"std::cout << std::string(depth, ' ') << ""[L"" << m_line << ""]"" << ""[C"" << m_column << ""] "" << message << ""\n"";"
+                                $@"std::cout << std::string(depth, ' ') << ""[L"" << _line << ""]"" << ""[C"" << _column << ""] "" << message << ""\n"";"
                             }
                         }
                     }
                 }
             },
-            PrivateParts = new List<ICppPart>
+            PrivateParts = new List<ICSharpPart>
             {
                 new ClassDefinition("resettable")
                 {
-                    PublicParts = new List<ICppPart>
+                    PublicParts = new List<ICSharpPart>
                     {
                         new FieldDefinition(new ArgImpl
                         {
-                            Name = "m_ref", ReferenceCount = 1,
+                            Name = "_ref",
                             TypeString = string.Concat(Options.TypePrefix, Options.ClassName)
                         }),
-                        new FieldDefinition(new ArgImpl {Name = "m_contents", Type = EType.StringView}),
-                        new FieldDefinition(new ArgImpl {Name = "m_file", Type = EType.String}),
-                        new FieldDefinition(new ArgImpl {Name = "m_line", Type = EType.SizeT}),
-                        new FieldDefinition(new ArgImpl {Name = "m_column", Type = EType.SizeT}),
-                        new FieldDefinition(new ArgImpl {Name = "m_offset", Type = EType.SizeT}),
-                        new MethodDefinition(EType.None, "resettable", ": m_ref(ref)",
+                        new FieldDefinition(new ArgImpl {Name = "_contents", Type = EType.StringView}),
+                        new FieldDefinition(new ArgImpl {Name = "_file", Type = EType.String}),
+                        new FieldDefinition(new ArgImpl {Name = "_line", Type = EType.SizeT}),
+                        new FieldDefinition(new ArgImpl {Name = "_column", Type = EType.SizeT}),
+                        new FieldDefinition(new ArgImpl {Name = "_offset", Type = EType.SizeT}),
+                        new MethodDefinition(EType.None, "resettable", ": _ref(ref)",
                             new ArgImpl
                             {
                                 TypeString = string.Concat(Options.TypePrefix, Options.ClassName),
-                                ReferenceCount = 1, Name = "ref"
+                                Name = "ref"
                             })
                         {
                             new FullBody
                             {
-                                $@"m_contents = ref.m_contents;",
-                                $@"m_file = ref.m_file;",
-                                $@"m_line = ref.m_line;",
-                                $@"m_column = ref.m_column;",
-                                $@"m_offset = ref.m_offset;",
+                                $@"_contents = ref._contents;",
+                                $@"_file = ref._file;",
+                                $@"_line = ref._line;",
+                                $@"_column = ref._column;",
+                                $@"_offset = ref._offset;",
                             }
                         },
                         new MethodDefinition(EType.Void, "reset")
                         {
                             new FullBody
                             {
-                                $@"m_ref.m_contents   = m_contents;",
-                                $@"m_ref.m_file       = m_file;",
-                                $@"m_ref.m_line       = m_line;",
-                                $@"m_ref.m_column     = m_column;",
-                                $@"m_ref.m_offset     = m_offset;",
+                                $@"_ref._contents   = _contents;",
+                                $@"_ref._file       = _file;",
+                                $@"_ref._line       = _line;",
+                                $@"_ref._column     = _column;",
+                                $@"_ref._offset     = _offset;",
                             }
                         }
                     }
                 },
-                new FullBody(EUsage.Header) {$@"friend class resettable;"},
+                new FullBody() {$@"friend class resettable;"},
                 new MethodDefinition(EType.Boolean, "next")
                 {
-                    new IfPart(IfPart.EIfScope.If, "m_contents.length() > m_offset")
+                    new IfPart(IfPart.EIfScope.If, "_contents.length() > _offset")
                     {
-                        new VariableDefinition(EType.Char, "c", "m_contents[m_offset]"),
+                        new VariableDefinition(EType.Char, "c", "_contents[_offset]"),
                         @"switch (c)",
                         @"{",
                         @"    case '\r':",
                         @"    case '\t':",
                         @"    case ' ':",
-                        @"    default: m_column++; m_offset++; break;",
-                        @"    case '\n': m_line++; m_column = 1; m_offset++; break;",
+                        @"    default: _column++; _offset++; break;",
+                        @"    case '\n': _line++; _column = 1; _offset++; break;",
                         @"}",
                         new ReturnPart(EValueConstant.True)
                     },
@@ -169,9 +170,9 @@ public class CSharpGenerator : IGenerator
                 },
                 new MethodDefinition(EType.Char, "current")
                 {
-                    new IfPart(IfPart.EIfScope.If, "m_contents.length() > m_offset")
+                    new IfPart(IfPart.EIfScope.If, "_contents.length() > _offset")
                     {
-                        new ReturnPart("m_contents[m_offset]"),
+                        new ReturnPart("_contents[_offset]"),
                     },
                     new IfPart(IfPart.EIfScope.Else, null)
                     {
@@ -221,7 +222,7 @@ public class CSharpGenerator : IGenerator
                 }).Distinct());
 
         instanceClass.PublicParts.Add(
-            new MethodDefinition(mainProduction.ToCppTypeName(Options, true).ToCppSharedPtrType(), "parse")
+            new MethodDefinition(mainProduction.ToCppTypeName(Options, true), "parse")
             {
                 $@"skip();",
                 $@"return {mainProduction.ToCppMatchMethodName(Options)}(0);"
@@ -247,7 +248,7 @@ public class CSharpGenerator : IGenerator
                     var methodDefinition = new MethodDefinition(
                         EType.Boolean,
                         string.Concat(Options.MethodsPrefix, "visit_enter"),
-                        new ArgImpl {Name = "node", TypeString = q.FullName.ToCppSharedPtrType()})
+                        new ArgImpl {Name = "node", TypeString = q.FullName})
                     {
                         new ReturnPart(EValueConstant.True),
                     };
@@ -260,7 +261,7 @@ public class CSharpGenerator : IGenerator
                     var methodDefinition = new MethodDefinition(
                         EType.Boolean,
                         string.Concat(Options.MethodsPrefix, "visit_leave"),
-                        new ArgImpl {Name = "node", TypeString = q.FullName.ToCppSharedPtrType()})
+                        new ArgImpl {Name = "node", TypeString = q.FullName})
                     {
                         new ReturnPart(EValueConstant.True),
                     };
@@ -276,41 +277,10 @@ public class CSharpGenerator : IGenerator
 
         instanceClass.PrivateParts.Add(GetSkipMethod(parser));
         System.IO.Directory.CreateDirectory(output);
-        using (var writer = new System.IO.StreamWriter(System.IO.Path.Combine(output, Options.HeaderFileName)))
-        {
-            var guardName = string.Concat("INCLUDE_GUARD_", Options.ImplementationFileName.Replace('.', '_'),
-                Options.TypePrefix, "_", Options.ClassName).ToUpper();
-            writer.WriteLine($@"#ifndef {guardName}");
-            writer.WriteLine($@"#define {guardName}");
-            writer.WriteLine($@"#include <memory>");
-            writer.WriteLine($@"#include <string>");
-            writer.WriteLine($@"#include <string_view>");
-            writer.WriteLine($@"#include <optional>");
-            writer.WriteLine($@"#include <variant>");
-            writer.WriteLine($@"#include <sstream>");
-            writer.WriteLine($@"#include <vector>");
-            writer.WriteLine();
-            if (Options.NamespaceName is null)
-            {
-                instanceClass.WriteHeader(Options, writer, string.Empty);
-            }
-            else
-            {
-                var ns = new NamespaceDefinition(Options.NamespaceName)
-                {
-                    instanceClass
-                };
-                ns.WriteHeader(Options, writer, string.Empty);
-            }
-
-            writer.WriteLine($@"#endif // {guardName}");
-        }
 
         using (var writer =
                new System.IO.StreamWriter(System.IO.Path.Combine(output, Options.ImplementationFileName)))
         {
-            writer.WriteLine($@"#include ""{Options.HeaderFileName}""");
-            writer.WriteLine($@"#include <iostream>");
             writer.WriteLine();
             if (Options.NamespaceName is null)
             {
@@ -335,16 +305,16 @@ public class CSharpGenerator : IGenerator
         var scopePart = new ScopePart();
         var method = new MethodDefinition(EType.Void, "skip")
         {
-            new WhilePart("m_contents.length() > m_offset")
+            new WhilePart("_contents.Length > _offset")
             {
-                new VariableDefinition(EType.Char, "c", "m_contents[m_offset]"),
+                new VariableDefinition(EType.Char, "c", "_contents[_offset]"),
                 @"switch (c)",
                 new ScopePart
                 {
                     @"case '\r':",
                     @"case '\t':",
-                    @"case ' ': m_column++; m_offset++; break;",
-                    @"case '\n': m_line++; m_column = 1; m_offset++; break;",
+                    @"case ' ': _column++; _offset++; break;",
+                    @"case '\n': _line++; _column = 1; _offset++; break;",
                     @"default:",
                     scopePart,
                 }
@@ -370,51 +340,51 @@ public class CSharpGenerator : IGenerator
             var ifPart = new IfPart(
                 IfPart.EIfScope.If,
                 string.Concat(
-                    $@"m_contents.length() > m_offset + {start.Length} && ",
-                    string.Join(" && ", start.Select((c, i) => $@"m_contents[m_offset + {i}] == '{c.Escape()}'"))
+                    $@"_contents.length() > _offset + {start.Length} && ",
+                    string.Join(" && ", start.Select((c, i) => $@"_contents[_offset + {i}] == '{c.Escape()}'"))
                 ))
             {
                 $@"{wasMatchedVariable} = true;",
                 $@"for (size_t {indexVariable} = 0; {indexVariable} < {start.Length}; {indexVariable}++)",
                 new ScopePart
                 {
-                    @"switch (m_contents[m_offset])",
+                    @"switch (_contents[_offset])",
                     new ScopePart
                     {
                         @"case '\r':",
                         @"case '\t':",
-                        @"case ' ': m_column++; m_offset++; break;",
-                        @"case '\n': m_line++; m_column = 1; m_offset++; break;",
-                        @"default: m_column++; m_offset++; break;"
+                        @"case ' ': _column++; _offset++; break;",
+                        @"case '\n': _line++; _column = 1; _offset++; break;",
+                        @"default: _column++; _offset++; break;"
                     }
                 },
                 new WhilePart(string.Concat(
-                    $@"m_contents.length() > m_offset + {start.Length} && !(",
-                    string.Join(" && ", end.Select((c, i) => $@"m_contents[m_offset + {i}] == '{c.Escape()}'")),
+                    $@"_contents.length() > _offset + {start.Length} && !(",
+                    string.Join(" && ", end.Select((c, i) => $@"_contents[_offset + {i}] == '{c.Escape()}'")),
                     ")"
                 ))
                 {
-                    @"switch (m_contents[m_offset])",
+                    @"switch (_contents[_offset])",
                     new ScopePart
                     {
                         @"case '\r':",
                         @"case '\t':",
-                        @"case ' ': m_column++; m_offset++; break;",
-                        @"case '\n': m_line++; m_column = 1; m_offset++; break;",
-                        @"default: m_column++; m_offset++; break;"
+                        @"case ' ': _column++; _offset++; break;",
+                        @"case '\n': _line++; _column = 1; _offset++; break;",
+                        @"default: _column++; _offset++; break;"
                     }
                 },
                 $@"for (size_t {indexVariable} = 0; {indexVariable} < {end.Length}; {indexVariable}++)",
                 new ScopePart
                 {
-                    @"switch (m_contents[m_offset])",
+                    @"switch (_contents[_offset])",
                     new ScopePart
                     {
                         @"case '\r':",
                         @"case '\t':",
-                        @"case ' ': m_column++; m_offset++; break;",
-                        @"case '\n': m_line++; m_column = 1; m_offset++; break;",
-                        @"default: m_column++; m_offset++; break;"
+                        @"case ' ': _column++; _offset++; break;",
+                        @"case '\n': _line++; _column = 1; _offset++; break;",
+                        @"default: _column++; _offset++; break;"
                     }
                 },
             };

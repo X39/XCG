@@ -50,8 +50,7 @@ internal class CaptureDefinition : ICSharpPart, IHasName
             {
                 writer.Write(whitespace);
                 if (!IsSingleHit) { writer.Write("List<"); }
-                if (IsOptional && IsSingleHit) { writer.Write("std::optional<"); }
-                writer.Write($"std::variant<");
+                writer.Write($"List<");
                 var isFirst = true;
                 foreach (var typeImpl in Types)
                 {
@@ -59,7 +58,7 @@ internal class CaptureDefinition : ICSharpPart, IHasName
                     writer.Write(typeImpl.ToString(cSharpOptions));
                 }
                 writer.Write($">");
-                if (IsOptional && IsSingleHit) { writer.Write(">"); }
+                if (IsOptional && IsSingleHit) { writer.Write("?"); }
                 if (!IsSingleHit) { writer.Write(">"); }
                 writer.Write($" ");
                 writer.Write(Name);

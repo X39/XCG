@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using XCG.Generators.CSharp.CodeGeneration;
 
 namespace XCG.Generators.CSharp.CstParsing;
 
 internal static class ExtIStatement
 {
-    public static IEnumerable<ICppPart> PrepareStatementMethods(this Parsing.IStatement statement,
+    public static IEnumerable<ICSharpPart> PrepareStatementMethods(this Parsing.IStatement statement,
         string cppTypeName, string cppStateTypeName, CSharpOptions cSharpOptions)
     {
         // ReSharper disable once IdentifierTypo
-        IEnumerable<ICppPart> Switcharoo(object obj)
+        IEnumerable<ICSharpPart> Switcharoo(object obj)
         {
             switch (obj)
             {
@@ -22,7 +23,7 @@ internal static class ExtIStatement
                     }
 
                     yield return cSharpOptions.FromCacheOrCreate(obj,
-                        (_) => alternatives.CreateMethodDefinition(cSharpOptions, cppTypeName.ToCppSharedPtrType(),
+                        (_) => alternatives.CreateMethodDefinition(cSharpOptions, cppTypeName,
                             cppStateTypeName));
                     break;
                 case Parsing.Statements.Match match:
@@ -33,7 +34,7 @@ internal static class ExtIStatement
                     }
 
                     yield return cSharpOptions.FromCacheOrCreate(obj,
-                        (_) => match.CreateMethodDefinition(cSharpOptions, 0, cppTypeName.ToCppSharedPtrType(),
+                        (_) => match.CreateMethodDefinition(cSharpOptions, 0, cppTypeName,
                             cppStateTypeName));
                     break;
                 case Parsing.Statements.While @while:
@@ -44,7 +45,7 @@ internal static class ExtIStatement
                     }
 
                     yield return cSharpOptions.FromCacheOrCreate(obj,
-                        (_) => @while.CreateMethodDefinition(cSharpOptions, cppTypeName.ToCppSharedPtrType(),
+                        (_) => @while.CreateMethodDefinition(cSharpOptions, cppTypeName,
                             cppStateTypeName));
                     break;
                 case Parsing.Statements.If @if:
@@ -55,7 +56,7 @@ internal static class ExtIStatement
                     }
 
                     yield return cSharpOptions.FromCacheOrCreate(obj,
-                        (_) => @if.CreateMethodDefinition(cSharpOptions, cppTypeName.ToCppSharedPtrType(),
+                        (_) => @if.CreateMethodDefinition(cSharpOptions, cppTypeName,
                             cppStateTypeName));
                     break;
                 case Parsing.Statements.Print:
@@ -133,9 +134,9 @@ internal static class ExtIStatement
             {
                 Parsing.Token => new TypeImpl {Type = EType.Token},
                 Parsing.Production production => new TypeImpl
-                    {TypeString = production.ToCppTypeName(cSharpOptions, false).ToCppSharedPtrType()},
+                    {TypeString = production.ToCppTypeName(cSharpOptions, false)},
                 Parsing.LeftRecursive leftRecursion => new TypeImpl
-                    {TypeString = leftRecursion.ToCppTypeName(cSharpOptions, false).ToCppSharedPtrType()},
+                    {TypeString = leftRecursion.ToCppTypeName(cSharpOptions, false)},
                 _ => throw new FatalException()
             };
             var captureName = captureContainingReference.CaptureName?.ToCppName() ?? throw new FatalException();
@@ -163,13 +164,13 @@ internal static class ExtIStatement
 
         return new ClassDefinition(statement switch
         {
-            Parsing.Token token => token.ToCppTypeName(cSharpOptions, false),
+            Parsing.Token token => token.ToCSharpTypeName(cSharpOptions, false),
             Parsing.Production production => production.ToCppTypeName(cSharpOptions, false),
             Parsing.LeftRecursive leftRecursion => leftRecursion.ToCppTypeName(cSharpOptions, false),
             _ => throw new FatalException()
         })
         {
-            PublicParts = new List<ICppPart>(captureDefinitions.Values)
+            PublicParts = new List<ICSharpPart>(captureDefinitions.Values)
         };
     }
 
@@ -209,11 +210,11 @@ internal static class ExtIStatement
 
         return new ClassDefinition(stateClassName)
         {
-            PublicParts = new List<ICppPart>(captureDefinitions.Values)
+            PublicParts = new List<ICSharpPart>(captureDefinitions.Values)
         };
     }
 
-    public static IEnumerable<ICppPart> GetEvaluationResult(this Parsing.IStatement statement,
+    public static IEnumerable<ICSharpPart> GetEvaluationResult(this Parsing.IStatement statement,
         CSharpOptions cSharpOptions, string stateTypeName, string variable, bool createVariable,
         Func<string, string> toUnique)
     {
@@ -314,7 +315,7 @@ internal static class ExtIStatement
         }
     }
 
-    public static IEnumerable<ICppPart> Handle(this IEnumerable<Parsing.IStatement> statements,
+    public static IEnumerable<ICSharpPart> Handle(this IEnumerable<Parsing.IStatement> statements,
         CSharpOptions cSharpOptions, bool isCan, Func<string, string> toUnique)
     {
         foreach (var it in statements)

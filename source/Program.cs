@@ -403,6 +403,11 @@ internal static class Program
             case "c++":
                 generator = new Generators.Cpp.CppGenerator();
                 break;
+            case "cs":
+            case "csharp":
+            case "c#":
+                generator = new Generators.CSharp.CSharpGenerator();
+                break;
             case null: return -1;
             default:
                 var generatorAbsolute = Path.GetFullPath(cliOptions.Generator);

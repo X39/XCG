@@ -2,18 +2,6 @@
 
 internal static class ExtString
 {
-    public static string ToCppSharedPtrType(this string str)
-    {
-        return string.Concat("std::shared_ptr<", str, ">");
-    }
-    public static ICppPart ToCppPart(this string str, EUsage usage = EUsage.Implementation)
-    {
-        return new FullBody(usage) { str };
-    }
-    public static string ToCppSharedPtrMake(this string str, params string[] args)
-    {
-        return string.Concat("std::make_shared<", str, ">(", string.Join(", ", args), ")");
-    }
     public static string ToCppName(this string str)
     {
         var name = str.Replace('-', '_').Replace('@', '_').ToLower();

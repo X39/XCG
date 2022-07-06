@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using XCG.Generators.CSharp.CodeGeneration;
 
 namespace XCG.Generators.CSharp.CstParsing;
 
@@ -26,7 +27,7 @@ internal static class ExtProduction
         return string.Concat(cSharpOptions.MethodsPrefix, "p_match_", production.Identifier.ToCppName());
     }
 
-    public static IEnumerable<ICppPart> ToParts(this Parsing.Production production, CSharpOptions cSharpOptions)
+    public static IEnumerable<ICSharpPart> ToParts(this Parsing.Production production, CSharpOptions cSharpOptions)
     {
         var localsCount = 0;
 
@@ -46,7 +47,7 @@ internal static class ExtProduction
         {
             $@"resettable {resettable}(*this);",
             new VariableDefinition(
-                new TypeImpl {TypeString = production.ToCppTypeName(cSharpOptions, true).ToCppSharedPtrType()},
+                new TypeImpl {TypeString = production.ToCppTypeName(cSharpOptions, true)},
                 Constants.ClassInstanceFakeVariable),
             new VariableDefinition(new TypeImpl {TypeString = production.ToCppStateTypeName(cSharpOptions, false)},
                 Constants.StateInstanceVariable),
@@ -112,14 +113,14 @@ internal static class ExtProduction
 
         // Generate match method
         var matchMethodDefinition = new MethodDefinition(
-            production.ToCppTypeName(cSharpOptions, true).ToCppSharedPtrType(),
+            production.ToCppTypeName(cSharpOptions, true),
             production.ToCppMatchMethodName(cSharpOptions),
             new ArgImpl {Name = Constants.DepthVariable, Type = EType.SizeT})
         {
-            new VariableDefinition(EType.Auto, Constants.ClassInstanceVariable,
-                production.ToCppTypeName(cSharpOptions, true).ToCppSharedPtrMake()),
+            new VariableDefinition(EType.Var, Constants.ClassInstanceVariable,
+                production.ToCppTypeName(cSharpOptions, true)),
             new VariableDefinition(
-                new TypeImpl {TypeString = production.ToCppTypeName(cSharpOptions, true).ToCppSharedPtrType()},
+                new TypeImpl {TypeString = production.ToCppTypeName(cSharpOptions, true)},
                 Constants.ClassInstanceFakeVariable),
             new VariableDefinition(new TypeImpl {TypeString = production.ToCppStateTypeName(cSharpOptions, false)},
                 Constants.StateInstanceVariable),
