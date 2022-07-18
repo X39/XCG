@@ -3,7 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
+using X39.Util.Console;
 
 namespace XCG;
 
@@ -172,16 +175,15 @@ internal static class Program
         }
     }
 
-    private static int Main(string[] args)
+    private static async Task<int> Main(string[] args)
     {
         CliOptions? cliOptions = null;
         var cliResult = Parser.Default.ParseArguments<CliOptions>(args)
             .WithParsed((options) => cliOptions = options);
         if (cliResult.Tag == ParserResultType.NotParsed || cliOptions is null)
-        {
             return -1;
-        }
 
+        var cancellationTokenSource = new CancellationTokenSource();
         #region Parsing
 
         var parser = new Parsing.Parser();
@@ -193,7 +195,7 @@ internal static class Program
             var filePath = Path.GetFullPath(s);
             if (File.Exists(filePath))
             {
-                var contents = File.ReadAllText(s);
+                var contents = await File.ReadAllTextAsync(s, cancellationTokenSource.Token);
                 var parseResult = parser.Parse(filePath, contents, out var parseNotes);
                 foreach (var it in parseNotes)
                 {
@@ -211,7 +213,7 @@ internal static class Program
                 {
                     Console.BackgroundColor = ConsoleColor.Red;
                     Console.ForegroundColor = ConsoleColor.White;
-                    Console.Error.WriteLine($"Parsing {filePath} ({s}) failed.");
+                    await Console.Error.WriteLineAsync($"Parsing {filePath} ({s}) failed.");
                     Console.ResetColor();
                     parseOk = false;
                 }
@@ -219,7 +221,7 @@ internal static class Program
             else
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Error.WriteLine($"File not found: {filePath} ({s})");
+                await Console.Error.WriteLineAsync($"File not found: {filePath} ({s})");
                 Console.ResetColor();
                 parseOk = false;
             }
@@ -511,7 +513,7 @@ internal static class Program
             catch (Exception ex)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Error.WriteLine(string.Concat(ex.GetType().Name, ": ", ex.Message));
+                await Console.Error.WriteLineAsync(string.Concat(ex.GetType().Name, ": ", ex.Message));
                 Console.ResetColor();
                 optionError = true;
             }
@@ -552,7 +554,7 @@ internal static class Program
         var outputPath = Path.GetFullPath(cliOptions.Output ?? Environment.CurrentDirectory);
         try
         {
-            generator.Generate(parser, outputPath);
+            await generator.GenerateAsync(parser, outputPath, cancellationTokenSource.Token);
             if (cliOptions.Verbose)
             {
                 Console.ForegroundColor = ConsoleColor.Black;

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using XCG.Generators.Cpp.CodeGeneration;
 using XCG.Generators.Cpp.CstParsing;
 using XCG.Parsing;
@@ -12,7 +14,7 @@ public class CppGenerator : IGenerator
 {
     private CppOptions Options { get; } = new();
 
-    public void Generate(Parser parser, string output)
+    public Task GenerateAsync(Parser parser, string output, CancellationToken cancellationToken)
     {
         var capturedSetters = parser.Setters.Where((q) => q.ActiveScope == EActiveScope.capture).ToArray();
         var mainProduction = parser.Productions.First((q) => q.Identifier == "main");
@@ -327,6 +329,8 @@ public class CppGenerator : IGenerator
                 ns.WriteImplementation(Options, writer, string.Empty);
             }
         }
+
+        return Task.CompletedTask;
     }
 
     private static MethodDefinition GetSkipMethod(Parser parser)
