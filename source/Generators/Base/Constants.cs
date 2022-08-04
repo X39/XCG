@@ -25,4 +25,15 @@ public static class Constants
     public static class Parameters
     {
     }
+
+    public static class VariablePrefixes
+    {
+        public const string ResetHolder = "ResetHolder";
+        public const string Temporary = "Temporary";
+    }
+
+    public static class Variables
+    {
+        public const string Count = "count";
+    }
 }

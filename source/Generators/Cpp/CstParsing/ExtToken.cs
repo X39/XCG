@@ -37,7 +37,9 @@ internal static class ExtToken
                 {
                     var countVariable = ToUnique("count");
                     methodDefinition.Add(new VariableDefinition(EType.SizeT, countVariable, "0"));
-                    var localLoop = require.Range.To != int.MaxValue ? new WhilePart($"current() != '\\0' && {countVariable} < {require.Range.To}") : new WhilePart("current() != '\\0'");
+                    var localLoop = require.Range.To != int.MaxValue
+                        ? new WhilePart($"current() != '\\0' && {countVariable} < {require.Range.To}")
+                        : new WhilePart("current() != '\\0'");
                     methodDefinition.Add(localLoop);
                     var isFirst = true;
                     foreach (var part in require.Parts)

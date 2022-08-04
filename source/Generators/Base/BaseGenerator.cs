@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using XCG.Generators.CSharp;
+using X39.Util;
+using XCG.Generators.Base.Parts;
 using XCG.Parsing;
 using XCG.Validation;
 
@@ -12,16 +13,29 @@ namespace XCG.Generators.Base;
 public abstract class BaseGenerator<TOptions> : IGenerator
     where TOptions : class
 {
-    protected abstract TOptions Options { get; }
+    protected TOptions Options { get; }
+
+    protected BaseGenerator()
+        : this(typeof(TOptions).CreateInstance<TOptions>())
+    {
+    }
+
+    protected BaseGenerator(TOptions options)
+    {
+        Options = options;
+    }
 
     public Task GenerateAsync(Parser parser, string output, CancellationToken cancellationToken)
     {
         var cstVisitor = new CstVisitor(parser);
-        var ast = cstVisitor.Accumulate();
-        throw new NotImplementedException();
+        cstVisitor.Accumulate();
+        return WriteFiles(cstVisitor.Groups, output, cancellationToken);
     }
 
-    protected abstract Task WriteFiles(IEnumerable<Group> functionGroups, string output);
+    protected abstract Task WriteFiles(
+        IEnumerable<Group> functionGroups,
+        string output,
+        CancellationToken cancellationToken);
 
     public void SetOption(string key, string? value)
     {
@@ -29,7 +43,7 @@ public abstract class BaseGenerator<TOptions> : IGenerator
             .GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
         var dict = properties.Select((q) => new
             {
-                att = q.GetCustomAttributes(true).OfType<CSharpOptionAttribute>()
+                att = q.GetCustomAttributes(true).OfType<OptionAttribute>()
                     .FirstOrDefault(),
                 prop = q
             }).Where((q) => q.att is not null)
@@ -61,7 +75,7 @@ public abstract class BaseGenerator<TOptions> : IGenerator
         return properties.Select((q) => new
             {
                 prop = q,
-                att = q.GetCustomAttributes(true).OfType<CSharpOptionAttribute>()
+                att = q.GetCustomAttributes(true).OfType<OptionAttribute>()
                     .FirstOrDefault()
             }).Where((q) => q.att is not null)
             .Select((q) => (option: q.att!.Name.ToLower(), value: q.prop.GetValue(Options)));
