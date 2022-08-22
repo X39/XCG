@@ -1,33 +1,12 @@
 {
   "profiles": {
-    "leaf": {
-      "commandName": "Project",
-      "commandLineArgs": "-i leaf.* -g c++ -o D:\\dev\\git\\leaf\\generator-test -v -s namespace:leaf::parsing create-string-tree-spaces:0 debug:false",
-      "workingDirectory": "D:\\dev\\git\\leaf\\syntax"
-    },
-    "leaf with *.xcg": {
-      "commandName": "Project",
-      "commandLineArgs": "-i *.xcg -g c++ -o D:\\dev\\git\\leaf\\generator-test -v -s namespace:leaf::parsing create-string-tree-spaces:0 debug:false",
-      "workingDirectory": "D:\\dev\\git\\leaf\\syntax"
-    },
-    "leaf with ./*.xcg": {
-      "commandName": "Project",
-      "commandLineArgs": "-i ./*.xcg -g c++ -o D:\\dev\\git\\leaf\\generator-test -v -s namespace:leaf::parsing create-string-tree-spaces:0 debug:false",
-      "workingDirectory": "D:\\dev\\git\\leaf\\syntax"
-    },
-    "leaf with *": {
-      "commandName": "Project",
-      "commandLineArgs": "-i * -g c++ -o D:\\dev\\git\\leaf\\generator-test -v -s namespace:leaf::parsing create-string-tree-spaces:0 debug:false",
-      "workingDirectory": "D:\\dev\\git\\leaf\\syntax"
-    },
-    "xcg": {
-      "commandName": "Project",
-      "commandLineArgs": "-i ..\\..\\..\\..\\examples\\yaoosl.*xcg -o ..\\..\\..\\..\\generator-test\\generator-test -g cpp -s namespace:yaoosl::parsing create-string-tree-spaces:0 debug:false",
-      "workingDirectory": "D:\\dev\\git\\leaf\\syntax"
-    },
     "XCG C# (calculator)": {
       "commandName": "Project",
-      "commandLineArgs": "-i  ..\\..\\..\\..\\examples\\calculator.xcg -o generator-test -g cs -s namespace:XCG.Sample.Calculator create-string-tree-spaces:0 debug:false"
+      "commandLineArgs": "-i  ..\\..\\..\\..\\examples\\calculator.xcg -o generated/calculator -g cs -s namespace:XCG.Sample.Calculator"
+    },
+    "XCG C++ (calculator)": {
+      "commandName": "Project",
+      "commandLineArgs": "-i  ..\\..\\..\\..\\examples\\calculator.xcg -o generated/calculator/parser -g cpp -s namespace:XCG.Sample.Calculator"
     }
   }
 }

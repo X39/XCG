@@ -4,10 +4,10 @@ namespace XCG.Generators.Base.Expressions;
 
 public class LogicalNotExpression : ICodeExpression
 {
-    public LogicalNotExpression(ICodeExpression self)
+    public LogicalNotExpression(ICodeExpression expression)
     {
-        Self = self;
+        Expression = expression;
     }
 
-    public ICodeExpression Self { get; }
+    public ICodeExpression Expression { get; }
 }

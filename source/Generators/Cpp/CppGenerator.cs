@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using X39.Util.Collections;
 using XCG.Generators.Cpp.CodeGeneration;
 using XCG.Generators.Cpp.CstParsing;
 using XCG.Parsing;

@@ -4,10 +4,10 @@ namespace XCG.Generators.Base.Expressions;
 
 public class IncreaseExpression : ICodeExpression
 {
-    public IncreaseExpression(ICodeExpression self)
+    public IncreaseExpression(ICodeExpression expression)
     {
-        Self = self;
+        Expression = expression;
     }
 
-    public ICodeExpression Self { get; }
+    public ICodeExpression Expression { get; }
 }

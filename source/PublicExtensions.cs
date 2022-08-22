@@ -1,44 +1,31 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace XCG;
 
 public static class PublicExtensions
 {
-    /// <summary>
-    /// Returns all <typeparamref name="T"/> in <paramref name="ts"/>
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="ts"></param>
-    /// <returns></returns>
-    public static IEnumerable<T> WhereIs<T>(this IEnumerable ts) where T : class
+    
+    public static Task WriteAsync(this TextWriter writer, string value, CancellationToken cancellationToken)
     {
-        foreach (var it in ts)
-        {
-            if (it is T t)
-            {
-                yield return t;
-            }
-        }
+        return writer.WriteAsync(value.AsMemory(), cancellationToken);
     }
-
-    /// <summary>
-    /// Ensures that only non-null elements are returned.
-    /// Equivalent to calling
-    /// <code>ts.Where((t) => t is not null)</code>
-    /// and dropping the nullability afterwards.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="ts"></param>
-    /// <returns></returns>
-    public static IEnumerable<T> NotNull<T>(this IEnumerable<T?> ts) where T : class
+    public static Task WriteLineAsync(this TextWriter writer, string value, CancellationToken cancellationToken)
     {
-        return ts.Where((t) => t is not null)!;
+        return writer.WriteLineAsync(value.AsMemory(), cancellationToken);
     }
-
+    public static async Task WriteLineAsync(this TextWriter writer, int indent, string value, CancellationToken cancellationToken)
+    {
+        if (indent > 0)
+            await writer.WriteAsync(new string(' ', 4 * indent).AsMemory(), cancellationToken);
+        await writer.WriteLineAsync(value.AsMemory(), cancellationToken);
+    }
     /// <summary>
     /// Returns all occurrences of <typeparamref name="T"/> inside of the <see cref="Parsing.IStatement"/>.
     /// Will not descend into the found ones.

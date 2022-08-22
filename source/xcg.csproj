@@ -19,4 +19,10 @@
     <PackageReference Include="X39.Util" Version="1.0.0.29" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="..\.editorconfig">
+      <Link>Properties\.editorconfig</Link>
+    </Content>
+  </ItemGroup>
+
 </Project>

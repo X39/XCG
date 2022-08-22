@@ -844,10 +844,10 @@ internal static class Program
         validator.Register("XCG", ESeverity.Error, (parser) =>
         {
             var hints = new List<Validation.Hint>();
-            var requires = parser.Tokens.SelectMany((q) => q.Children.WhereIs<Parsing.TokenStatements.Require>());
+            var requires = parser.Tokens.SelectMany((q) => q.Children.OfType<Parsing.TokenStatements.Require>());
             foreach (var require in requires)
             {
-                var references = require.Parts.WhereIs<Parsing.Reference>();
+                var references = require.Parts.OfType<Parsing.Reference>();
                 foreach (var reference in references)
                 {
                     if (reference.Referred is null)
@@ -869,10 +869,10 @@ internal static class Program
         validator.Register("XCG", ESeverity.Error, (parser) =>
         {
             var hints = new List<Validation.Hint>();
-            var requires = parser.Tokens.SelectMany((q) => q.Children.WhereIs<Parsing.TokenStatements.Require>());
+            var requires = parser.Tokens.SelectMany((q) => q.Children.OfType<Parsing.TokenStatements.Require>());
             foreach (var require in requires)
             {
-                var references = require.Parts.WhereIs<Parsing.Reference>();
+                var references = require.Parts.OfType<Parsing.Reference>();
                 foreach (var reference in references)
                 {
                     if (reference.Referred is not null && reference.Referred is not Parsing.Token)
@@ -896,10 +896,10 @@ internal static class Program
         {
             var hints = new List<Validation.Hint>();
             var backtracks =
-                parser.Tokens.SelectMany((q) => q.Children.WhereIs<Parsing.TokenStatements.Backtrack>());
+                parser.Tokens.SelectMany((q) => q.Children.OfType<Parsing.TokenStatements.Backtrack>());
             foreach (var backtrack in backtracks)
             {
-                var references = backtrack.Parts.WhereIs<Parsing.Reference>();
+                var references = backtrack.Parts.OfType<Parsing.Reference>();
                 foreach (var reference in references)
                 {
                     if (reference.Referred is not null && reference.Referred is not Parsing.Token)

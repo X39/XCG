@@ -41,17 +41,20 @@ public abstract class BaseGenerator<TOptions> : IGenerator
     {
         var properties = typeof(TOptions)
             .GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-        var dict = properties.Select((q) => new
-            {
-                att = q.GetCustomAttributes(true).OfType<OptionAttribute>()
-                    .FirstOrDefault(),
-                prop = q
-            }).Where((q) => q.att is not null)
+        var dict = properties.Select(
+                (q) => new
+                {
+                    att = q.GetCustomAttributes(true)
+                        .OfType<GeneratorOptionAttribute>()
+                        .FirstOrDefault(),
+                    prop = q,
+                })
+            .Where((q) => q.att is not null)
             .ToDictionary((q) => q.att!.Name.ToLower(), (q) => new {att = q.att!, q.prop});
 
         if (dict.TryGetValue(key.ToLower(), out var a))
         {
-            if (!a.att.Nullable && value is null)
+            if (!a.prop.IsNullable() && value is null)
             {
                 throw new NullReferenceException($@"The option ""{a.att.Name}"" cannot be null.");
             }
@@ -72,12 +75,15 @@ public abstract class BaseGenerator<TOptions> : IGenerator
     {
         var properties = typeof(TOptions)
             .GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-        return properties.Select((q) => new
-            {
-                prop = q,
-                att = q.GetCustomAttributes(true).OfType<OptionAttribute>()
-                    .FirstOrDefault()
-            }).Where((q) => q.att is not null)
+        return properties.Select(
+                (q) => new
+                {
+                    prop = q,
+                    att = q.GetCustomAttributes(true)
+                        .OfType<GeneratorOptionAttribute>()
+                        .FirstOrDefault(),
+                })
+            .Where((q) => q.att is not null)
             .Select((q) => (option: q.att!.Name.ToLower(), value: q.prop.GetValue(Options)));
     }
 }

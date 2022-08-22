@@ -54,9 +54,9 @@ internal class ResetData
         }
 
         var o = new ResetData();
-        Variable(ref o.ColumnVariable, ref o.ColumnState, Constants.States.ParsingColumn, EType.Size);
-        Variable(ref o.LineVariable, ref o.LineState, Constants.States.ParsingLine, EType.Size);
-        Variable(ref o.OffsetVariable, ref o.OffsetState, Constants.States.ParsingOffset, EType.Size);
+        Variable(ref o.ColumnVariable, ref o.ColumnState, Constants.States.ParsingColumn, EType.FileOffset);
+        Variable(ref o.LineVariable, ref o.LineState, Constants.States.ParsingLine, EType.FileOffset);
+        Variable(ref o.OffsetVariable, ref o.OffsetState, Constants.States.ParsingOffset, EType.FileOffset);
         Variable(ref o.ContentsLengthVariable, ref o.ContentsLengthState, Constants.States.ParsingContentsLength, EType.Size);
         Variable(ref o.ContentsVariable, ref o.ContentsState, Constants.States.ParsingContents, EType.CharacterCollection);
         return o;

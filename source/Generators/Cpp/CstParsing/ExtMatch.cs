@@ -33,7 +33,7 @@ internal static class ExtMatch
 
         var references = match.Matches.Cast<Parsing.Reference>().Skip(skip).ToArray();
 
-        var matchName = string.Join("_", match.Matches.WhereIs<Parsing.Reference>().Select((q) => q.Referred switch
+        var matchName = string.Join("_", match.Matches.OfType<Parsing.Reference>().Select((q) => q.Referred switch
         {
             Parsing.Token token => token.Identifier,
             Parsing.Production production => production.Identifier,

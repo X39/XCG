@@ -32,7 +32,7 @@ public class Group
     {
         if (_states.TryGetValue(identifier, out var state))
             return state.Type != type
-                ? throw new InvalidOperationException("State type mismatch")
+                ? throw new InvalidOperationException($"State type mismatch. Got {type} but expected {state.Type}.")
                 : state;
         _states[identifier] = state = new State(identifier, type);
         return state;

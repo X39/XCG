@@ -30,11 +30,11 @@ internal class ClassDefinition : ICppPart, IHasName
         writer.WriteLine("{");
 
         var subWhitespace = string.Concat(whitespace, "    ");
-        if (PrivateParts.WhereIs<ClassDefinition>().Any())
+        if (PrivateParts.OfType<ClassDefinition>().Any())
         {
             writer.Write(whitespace);
             writer.WriteLine("private:");
-            foreach (var generatorPart in PrivateParts.WhereIs<ClassDefinition>())
+            foreach (var generatorPart in PrivateParts.OfType<ClassDefinition>())
             {
                 writer.Write(subWhitespace);
                 writer.Write("class ");
@@ -43,11 +43,11 @@ internal class ClassDefinition : ICppPart, IHasName
             }
         }
 
-        if (ProtectedParts.WhereIs<ClassDefinition>().Any())
+        if (ProtectedParts.OfType<ClassDefinition>().Any())
         {
             writer.Write(whitespace);
             writer.WriteLine("protected:");
-            foreach (var generatorPart in ProtectedParts.WhereIs<ClassDefinition>())
+            foreach (var generatorPart in ProtectedParts.OfType<ClassDefinition>())
             {
                 writer.Write(subWhitespace);
                 writer.Write("class ");
@@ -56,11 +56,11 @@ internal class ClassDefinition : ICppPart, IHasName
             }
         }
 
-        if (PublicParts.WhereIs<ClassDefinition>().Any())
+        if (PublicParts.OfType<ClassDefinition>().Any())
         {
             writer.Write(whitespace);
             writer.WriteLine("public:");
-            foreach (var generatorPart in PublicParts.WhereIs<ClassDefinition>())
+            foreach (var generatorPart in PublicParts.OfType<ClassDefinition>())
             {
                 writer.Write(subWhitespace);
                 writer.Write("class ");
@@ -137,7 +137,7 @@ internal class ClassDefinition : ICppPart, IHasName
             $@"if (!visit_enter(node)) {{ return false; }}",
         };
 
-        var captureDefinitions = PublicParts.Concat(ProtectedParts).Concat(PrivateParts).WhereIs<CaptureDefinition>().ToArray();
+        var captureDefinitions = PublicParts.Concat(ProtectedParts).Concat(PrivateParts).OfType<CaptureDefinition>().ToArray();
         foreach (var t in captureDefinitions)
         {
             void HandleSingle(CppContainerBase container, TypeImpl type, string nav)
@@ -208,7 +208,7 @@ internal class ClassDefinition : ICppPart, IHasName
         var captureNameColoringStart = !cppOptions.ConsoleColorCaptureName ? string.Empty : string.Concat("\"", TerminalColor.ForegroundBrightBlack, "\"");
         var captureNameColoringEnd = !cppOptions.ConsoleColorCaptureName ? string.Empty : string.Concat("\"", TerminalColor.Reset, "\"");
 
-        var captureDefinitions = PublicParts.Concat(ProtectedParts).Concat(PrivateParts).WhereIs<CaptureDefinition>().ToArray();
+        var captureDefinitions = PublicParts.Concat(ProtectedParts).Concat(PrivateParts).OfType<CaptureDefinition>().ToArray();
         foreach (var t in captureDefinitions)
         {
             void HandleSingle(CppContainerBase container, TypeImpl type, string nav, string captureName)

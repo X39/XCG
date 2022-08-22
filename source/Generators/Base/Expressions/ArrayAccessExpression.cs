@@ -4,12 +4,12 @@ namespace XCG.Generators.Base.Expressions;
 
 public class ArrayAccessExpression : ICodeExpression
 {
-    public ICodeExpression Self { get; }
+    public ICodeExpression Expression { get; }
     public ICodeExpression Index { get; }
 
-    public ArrayAccessExpression(ICodeExpression self, ICodeExpression index)
+    public ArrayAccessExpression(ICodeExpression expression, ICodeExpression index)
     {
-        Self = self;
+        Expression = expression;
         Index = index;
     }
 }

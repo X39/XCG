@@ -4,10 +4,10 @@ namespace XCG.Generators.Base.Expressions;
 
 public class DecrementExpression : ICodeExpression
 {
-    public DecrementExpression(ICodeExpression self)
+    public DecrementExpression(ICodeExpression expression)
     {
-        Self = self;
+        Expression = expression;
     }
 
-    public ICodeExpression Self { get; }
+    public ICodeExpression Expression { get; }
 }

@@ -225,7 +225,7 @@ public class CstVisitor
             var temporaryOffset = function.AddVariable(
                 Constants.VariablePrefixes.Temporary + Constants.States.ParsingOffset,
                 EType.Size,
-                group.State(Constants.States.ParsingOffset, EType.Size));
+                group.State(Constants.States.ParsingOffset, EType.FileOffset));
             resetData.PerformReset(function);
             function.AddReturn(temporaryOffset.Ref());
         });
@@ -247,7 +247,11 @@ public class CstVisitor
                 whileStatement.ConsumeCharacter(group, (caseStatement) =>
                 {
                     if (!_parser.Comments.Any())
+                    {
+                        caseStatement.AddReturn();
                         return;
+                    }
+
                     var wasMatched = caseStatement.AddVariable("commentMatched", false);
                     foreach (var parserComment in _parser.Comments)
                     {

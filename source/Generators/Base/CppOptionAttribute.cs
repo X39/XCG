@@ -3,13 +3,13 @@
 namespace XCG.Generators.Base;
 
 [AttributeUsage(AttributeTargets.Property)]
-internal class OptionAttribute : Attribute
+internal class GeneratorOptionAttribute : Attribute
 {
-    public OptionAttribute(string v)
+    public GeneratorOptionAttribute(string v)
     {
         Name = v;
     }
 
     public string Name { get; }
-    public bool Nullable { get; set; }
+    public string Description { get; set; }
 }
