@@ -3,7 +3,41 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xcg", "source\xcg.csproj", "{783CE46E-9395-49F3-B3D4-125CC4999A44}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "source", "source", "{E3727283-1F89-4BC2-85D0-B0D96C776E6C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{17F6DFAD-2A3F-4577-9A47-66ADD41D07CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "X39.Systems.XCG", "source\X39.Systems.XCG\X39.Systems.XCG.csproj", "{759B0789-8534-4DA8-9828-1C601A23268F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "X39.Systems.XCG.Test", "test\X39.Systems.XCG.Test\X39.Systems.XCG.Test.csproj", "{63629707-664A-431A-89B5-ABEB1E0025EA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{6DA8783B-CE69-4DDE-B60D-5D31FB767E93}"
+	ProjectSection(SolutionItems) = preProject
+		sample\calculator.xcg = sample\calculator.xcg
+		sample\easyscript.xcg = sample\easyscript.xcg
+		sample\example.ys = sample\example.ys
+		sample\test.easyscript = sample\test.easyscript
+		sample\yaoosl.attribute.xcg = sample\yaoosl.attribute.xcg
+		sample\yaoosl.contract.xcg = sample\yaoosl.contract.xcg
+		sample\yaoosl.control-structure.xcg = sample\yaoosl.control-structure.xcg
+		sample\yaoosl.expression.xcg = sample\yaoosl.expression.xcg
+		sample\yaoosl.higher-structure.xcg = sample\yaoosl.higher-structure.xcg
+		sample\yaoosl.messages.xcg = sample\yaoosl.messages.xcg
+		sample\yaoosl.other.xcg = sample\yaoosl.other.xcg
+		sample\yaoosl.pragma.xcg = sample\yaoosl.pragma.xcg
+		sample\yaoosl.template.xcg = sample\yaoosl.template.xcg
+		sample\yaoosl.xcg = sample\yaoosl.xcg
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "files", "files", "{AF00A570-1F0C-4E1B-A5BE-6696520D298A}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
+		documentation.yaml = documentation.yaml
+		notepad++.xml = notepad++.xml
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +45,23 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{783CE46E-9395-49F3-B3D4-125CC4999A44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{783CE46E-9395-49F3-B3D4-125CC4999A44}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{783CE46E-9395-49F3-B3D4-125CC4999A44}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{783CE46E-9395-49F3-B3D4-125CC4999A44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{759B0789-8534-4DA8-9828-1C601A23268F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{759B0789-8534-4DA8-9828-1C601A23268F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{759B0789-8534-4DA8-9828-1C601A23268F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{759B0789-8534-4DA8-9828-1C601A23268F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63629707-664A-431A-89B5-ABEB1E0025EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63629707-664A-431A-89B5-ABEB1E0025EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63629707-664A-431A-89B5-ABEB1E0025EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63629707-664A-431A-89B5-ABEB1E0025EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35C85B78-BD39-4F47-8EBD-89C19B6741DF}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{759B0789-8534-4DA8-9828-1C601A23268F} = {E3727283-1F89-4BC2-85D0-B0D96C776E6C}
+		{63629707-664A-431A-89B5-ABEB1E0025EA} = {17F6DFAD-2A3F-4577-9A47-66ADD41D07CB}
 	EndGlobalSection
 EndGlobal
